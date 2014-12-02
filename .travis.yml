@@ -3,3 +3,6 @@ rvm:
   - 2.1.4
 before_install:
   - travis_retry gem install bundler
+before_script:
+  - cp config/database.yml.travis config/database.yml
+  - psql -c 'create database annex-ims_test;' -U postgres
