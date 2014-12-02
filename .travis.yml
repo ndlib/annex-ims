@@ -5,4 +5,4 @@ before_install:
   - travis_retry gem install bundler
 before_script:
   - cp config/database.yml.travis config/database.yml
-  - psql -c 'create database annex-ims_test;' -U postgres
+  - psql -c 'create database travis_ci_test;' -U postgres
