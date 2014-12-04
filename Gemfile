@@ -56,3 +56,9 @@ gem 'autoprefixer-rails'
 # Devise for authentication
 gem 'devise'
 
+
+# Simple generators for layouts
+group :development do
+  gem 'rails_layout'
+end
+
