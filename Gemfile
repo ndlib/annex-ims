@@ -44,6 +44,12 @@ group :development, :test do
 
   # We test with Rspec
   gem 'rspec-rails', '~> 3.0'
+
+  # For mocking up objects
+  gem 'factory_girl_rails', '~> 4.5'
+
+  # Feature testing
+  gem 'capybara', '~> 2.4'
 end
 
 # Use Haml for markup because I like it.

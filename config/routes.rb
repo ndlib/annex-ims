@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
+
+  get 'trays', to: 'trays#index', as: 'trays'
+  post 'trays', to: 'trays#scan', as: 'scan_trays'
+  get 'trays/:id', to: 'trays#show', as: 'show_trays'
 
   # You can have the root of your site routed with "root"
   root 'welcome#index'
