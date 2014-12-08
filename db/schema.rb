@@ -11,18 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141207180912) do
+ActiveRecord::Schema.define(version: 20141208175533) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "pgcrypto"
 
   create_table "items", force: true do |t|
-    t.string   "barcode"
+    t.string   "barcode",    null: false
     t.string   "title"
     t.string   "author"
     t.string   "chron"
-    t.integer  "width"
+    t.integer  "thickness"
     t.integer  "tray_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(version: 20141207180912) do
   add_index "items", ["tray_id"], name: "index_items_on_tray_id", using: :btree
 
   create_table "shelves", force: true do |t|
-    t.string   "barcode"
+    t.string   "barcode",    null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -40,7 +40,7 @@ ActiveRecord::Schema.define(version: 20141207180912) do
   add_index "shelves", ["barcode"], name: "index_shelves_on_barcode", unique: true, using: :btree
 
   create_table "trays", force: true do |t|
-    t.string   "barcode"
+    t.string   "barcode",    null: false
     t.integer  "shelf_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
