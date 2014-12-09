@@ -44,6 +44,15 @@ group :development, :test do
 
   # We test with Rspec
   gem 'rspec-rails', '~> 3.0'
+
+  # For mocking up objects
+  gem 'factory_girl_rails', '~> 4.5'
+
+  # For cleaning up the test database
+  gem 'database_cleaner', '~> 1.3'
+
+  # Feature testing
+  gem 'capybara', '~> 2.4'
 end
 
 # Use Haml for markup because I like it.
@@ -55,4 +64,13 @@ gem 'autoprefixer-rails'
 
 # Devise for authentication
 gem 'devise'
+
+group :development do
+  # Simple generators for layouts
+  gem 'rails_layout'
+
+  # Better error page
+  gem 'better_errors'
+  gem 'binding_of_caller'
+end
 
