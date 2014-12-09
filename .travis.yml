@@ -1,0 +1,13 @@
+language: ruby
+rvm:
+- 2.1.4
+before_install:
+- travis_retry gem install bundler
+before_script:
+- cp config/secrets.yml.travis config/secrets.yml
+- cp config/database.yml.travis config/database.yml
+- psql -c 'create database travis_ci_test;' -U postgres
+notifications:
+  hipchat:
+    rooms:
+      secure: OyEdFv6sc/KWWxhfECcTJVkgXZl0YsFCh2K6EyZd+ULcjsJcfboAHYQpSb+3fnagpvxELeb2bB0ZDCSQZWAjysGbUuS/lRyCE2KwytX1GJZenzuTZJL/Kd9ucK9bGNYfHldog9X3bQ5OomARsVB6dgQyXLkbtNgrwERtanztX6E=
