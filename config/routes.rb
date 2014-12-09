@@ -4,8 +4,9 @@ Rails.application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   get 'trays', to: 'trays#index', as: 'trays'
-  post 'trays', to: 'trays#scan', as: 'scan_trays'
-  get 'trays/:id', to: 'trays#show', as: 'show_trays'
+  post 'trays', to: 'trays#scan', as: 'scan_tray'
+  get 'trays/:id', to: 'trays#show', as: 'show_tray'
+  post 'trays/:id', to: 'trays#associate', as: 'associate_tray'
 
   # You can have the root of your site routed with "root"
   root 'welcome#index'

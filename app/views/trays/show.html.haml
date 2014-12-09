@@ -1,1 +1,17 @@
 = @tray.barcode
+%br
+= form_tag :url => associate_tray_path(@tray) do |f|
+  - if @tray.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@tray.errors.count, "error")} prohibited this tray from being saved:"
+      %ul
+        - @tray.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = label_tag :barcode
+    = text_field_tag :barcode
+  .actions
+    = submit_tag 'Save'
+%br
+= @tray.shelf.nil? ? "STAGING" : "Location: #{@tray.shelf.barcode}"
