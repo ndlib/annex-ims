@@ -48,6 +48,9 @@ group :development, :test do
   # For mocking up objects
   gem 'factory_girl_rails', '~> 4.5'
 
+  # For cleaning up the test database
+  gem 'database_cleaner', '~> 1.3'
+
   # Feature testing
   gem 'capybara', '~> 2.4'
 end
