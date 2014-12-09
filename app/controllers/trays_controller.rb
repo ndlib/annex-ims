@@ -7,7 +7,13 @@ class TraysController < ApplicationController
   end
 
   def scan
-    @tray = Tray.where(barcode: params[:tray][:barcode]).first_or_create!
+    begin
+      @tray = Tray.where(barcode: params[:tray][:barcode]).first_or_create!
+    rescue ActiveRecord::RecordInvalid => e
+      flash[:error] = e.message
+      redirect_to trays_path
+      return
+    end
     redirect_to show_trays_path(:id => @tray.id)
   end
 
