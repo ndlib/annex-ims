@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :tray do
-    barcode "MyString"
+    barcode "TRAY-A1234"
     shelf nil
   end
 
