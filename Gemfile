@@ -62,9 +62,12 @@ gem 'autoprefixer-rails'
 # Devise for authentication
 gem 'devise'
 
-
-# Simple generators for layouts
 group :development do
+  # Simple generators for layouts
   gem 'rails_layout'
+
+  # Better error page
+  gem 'better_errors'
+  gem 'binding_of_caller'
 end
 
