@@ -1,7 +1,6 @@
 module BarcodePrefix
   TRAY_PREFIX = 'TRAY-'
   SHELF_PREFIX = 'SHELF-'
-  ITEM_PREFIX = 'ITEM-'
   TOTE_PREFIX = 'TOTE-'
 
   def is_tray(barcode)
@@ -13,7 +12,7 @@ module BarcodePrefix
   end
 
   def is_item(barcode)
-    (barcode =~ /^#{ITEM_PREFIX}(.*)/ ) ? true : false
+    (barcode =~ /[0-9]/ ) ? true : false
   end
 
   def is_tote(barcode)
