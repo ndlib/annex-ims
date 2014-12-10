@@ -12,7 +12,7 @@ module BarcodePrefix
   end
 
   def is_item(barcode)
-    (barcode =~ /[0-9]/ ) ? true : false
+    !(is_tray(barcode) || is_shelf(barcode) || is_tote(barcode))
   end
 
   def is_tote(barcode)
