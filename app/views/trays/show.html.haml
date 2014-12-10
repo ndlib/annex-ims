@@ -1,6 +1,6 @@
 = @tray.barcode
 %br
-= form_tag :url => associate_tray_path(@tray) do |f|
+= form_tag associate_tray_path(@tray) do |f|
   - if @tray.errors.any?
     #error_explanation
       %h2= "#{pluralize(@tray.errors.count, "error")} prohibited this tray from being saved:"
@@ -15,3 +15,8 @@
     = submit_tag 'Save'
 %br
 = @tray.shelf.nil? ? "STAGING" : "Location: #{@tray.shelf.barcode}"
+%br
+- if !@tray.shelf.nil?
+  = form_tag dissociate_tray_path(@tray) do |f|
+    .actions
+      = submit_tag 'DISSOCIATE'
