@@ -12,11 +12,13 @@
     = label_tag :barcode
     = text_field_tag :barcode
   .actions
-    = submit_tag 'Save'
+    = submit_tag 'Save', class: 'btn'
 %br
 = @tray.shelf.nil? ? "STAGING" : "Location: #{@tray.shelf.barcode}"
 %br
 - if !@tray.shelf.nil?
   = form_tag dissociate_tray_path(@tray) do |f|
     .actions
-      = submit_tag 'DISSOCIATE'
+      = submit_tag 'DISSOCIATE', class: 'btn'
+%br
+= button_to "Done", trays_path, method: :get, class: 'btn pull-right'

@@ -53,6 +53,23 @@ feature "Trays", :type => :feature do
       expect(page).to have_content "STAGING"
     end
 
+    it "starts a new tray when finished with the current" do
+      @tray = FactoryGirl.create(:tray)
+      @shelf = FactoryGirl.create(:shelf)
+      visit trays_path
+      fill_in "Barcode", :with => @tray.barcode
+      click_button "Save"
+      expect(current_path).to eq(show_tray_path(:id => @tray.id))
+      expect(page).to have_content @tray.barcode
+      expect(page).to have_content "STAGING"
+      fill_in "Barcode", :with => @shelf.barcode
+      click_button "Save"
+      expect(current_path).to eq(show_tray_path(:id => @tray.id))
+      expect(page).to have_content @tray.barcode
+      expect(page).to have_content "Location: #{@shelf.barcode}"
+      click_button "Done"
+      expect(current_path).to eq(trays_path)
+    end
 
   end
 
