@@ -48,9 +48,11 @@ class TraysController < ApplicationController
   # The only reason to get here is to set the tray's shelf to nil, so let's do that.
   def dissociate
     @tray = Tray.find(params[:id])
-    @tray.shelf = nil
-    @tray.save!
 
-    redirect_to show_tray_path(:id => @tray.id)
+    if DissociateTray.call(@tray)
+      redirect_to show_tray_path(:id => @tray.id)
+    else
+      raise "unable to dissociate tray"
+    end
   end
 end
