@@ -1,7 +1,4 @@
 class BarcodeProcessor
-  require 'barcode_prefix'
-  include BarcodePrefix
-
   attr_reader :obj, :barcode
 
   def self.call(obj, barcode)
@@ -16,7 +13,7 @@ class BarcodeProcessor
   def associate!
     case @obj.class.to_s
     when "Tray"
-      if is_shelf(barcode)
+      if IsShelfBarcode.call(barcode)
         begin
           @shelf = Shelf.where(barcode: barcode).first_or_create!
 
@@ -28,7 +25,7 @@ class BarcodeProcessor
         end
       end
 
-      if is_item(barcode)
+      if IsItemBarcode.call(barcode)
 
       end
     else

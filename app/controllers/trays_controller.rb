@@ -1,7 +1,4 @@
 class TraysController < ApplicationController
-  require 'barcode_prefix'
-  include BarcodePrefix
-
   def index
     @tray = Tray.new
   end
