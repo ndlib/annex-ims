@@ -11,7 +11,7 @@ RSpec.describe DissociateTray do
     subject
   end
 
-  it "saves the disassicated tray" do
+  it "saves the dissociated tray" do
     expect(tray).to receive(:save)
     subject
   end
@@ -27,7 +27,7 @@ RSpec.describe DissociateTray do
   end
 
   it "registers the call with the transaction log" do
-    #expect(TransactionLog).to recieve(:call).with("disassociate", "itemid")
-    #subjet
+    #expect(TransactionLog).to recieve(:call).with("dissociate", "itemid")
+    #subject
   end
 end

@@ -16,7 +16,7 @@ class DissociateTray
       transaction_log
       tray
     else
-      nil
+      false
     end
   end
 
