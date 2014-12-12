@@ -37,6 +37,9 @@ class TraysController < ApplicationController
       end
     end
 
+    if is_item(barcode)
+
+    end
 
     redirect_to show_tray_path(:id => @tray.id)
     return
