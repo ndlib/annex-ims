@@ -22,7 +22,7 @@ class BarcodeProcessor
 
           @obj.shelf = @shelf
           @obj.save!
-p "Got here"
+
         rescue ActiveRecord::RecordInvalid => e
           return false
         end
