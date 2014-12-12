@@ -1,5 +1,5 @@
 class  AssociateTrayWithShelfBarcode
-  attr_reader :tray
+  attr_reader :tray, :barcode
 
   def self.call(tray, barcode)
     new(tray, barcode).associate!
