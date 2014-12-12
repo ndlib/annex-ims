@@ -26,19 +26,11 @@ class TraysController < ApplicationController
 
     barcode = params[:barcode]
 
-    if is_shelf(barcode)
-      begin
-        @shelf = Shelf.where(barcode: barcode).first_or_create!
-
-        @tray.shelf = @shelf
-        @tray.save!
-      rescue ActiveRecord::RecordInvalid => e
-        flash[:error] = e.message
-      end
-    end
-
-    if is_item(barcode)
-
+    if BarcodeProcessor.call(@tray, barcode)
+      redirect_to show_tray_path(:id => @tray.id)
+      return
+    else
+      raise "unable to process barcode"
     end
 
     redirect_to show_tray_path(:id => @tray.id)

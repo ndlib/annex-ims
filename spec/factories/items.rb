@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :item do
-    barcode "12345678901234"
+    sequence(:barcode) { |n| "#{n}" }
     title "Title"
     author "Firstname Lastname"
     chron "Vol 1"
