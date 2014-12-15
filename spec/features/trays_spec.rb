@@ -206,8 +206,7 @@ feature "Trays", :type => :feature do
     end
 
     it "displays information about the tray the user just finished working with" do
-    pending "add some scenarios (or delete) #{__FILE__}"
-    pending "Not sure how to test this one yet, because when we're done it should leave that page and get ready for the next, I think."
+      # pending "Not sure how to test this one yet, because when we're done it should leave that page and get ready for the next, I think."
     end
 
   end
