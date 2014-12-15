@@ -9,6 +9,7 @@ RSpec.describe AssociateTrayWithShelfBarcode do
   before(:each) do
     # setup a shelf to come back from this class.
     allow(GetShelfFromBarcode).to receive(:call).with(barcode).and_return(shelf)
+    allow(IsObjectTray).to receive(:call).with(tray).and_return(true)
   end
 
 

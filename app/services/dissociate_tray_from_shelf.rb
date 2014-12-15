@@ -1,4 +1,4 @@
-class DissociateTray
+class DissociateTrayFromShelf
   attr_reader :tray
 
   def self.call(tray)

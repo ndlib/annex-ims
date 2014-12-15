@@ -26,8 +26,11 @@ class  AssociateTrayWithShelfBarcode
   private
 
     def validate_input!
-      #test if it is a tray and raise if not
-      true
+      if IsObjectTray.call(tray)
+        true
+      else
+        raise "object is not a tray"
+      end
     end
 
   end

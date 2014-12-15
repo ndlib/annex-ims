@@ -1,4 +1,4 @@
-class GetShelfFromBarcode
+class GetItemFromBarcode
   attr_reader :barcode
 
   def self.call(barcode)
@@ -11,15 +11,15 @@ class GetShelfFromBarcode
 
   def get
     if valid?
-      Shelf.where(barcode: barcode).first_or_create!
+      Item.where(barcode: barcode).first
     else
-      raise "barcode is not a shelf"
+      raise "barcode is not an item"
     end
   end
 
   private
 
     def valid?
-      IsShelfBarcode.call(barcode)
+      IsItemBarcode.call(barcode)
     end
 end

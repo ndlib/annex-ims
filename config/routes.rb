@@ -3,11 +3,19 @@ Rails.application.routes.draw do
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
-  get 'trays', to: 'trays#index', as: 'trays'
-  post 'trays', to: 'trays#scan', as: 'scan_tray'
-  get 'trays/:id', to: 'trays#show', as: 'show_tray'
-  post 'trays/:id', to: 'trays#associate', as: 'associate_tray'
-  post 'trays/:id/dissociate', to: 'trays#dissociate', as: 'dissociate_tray'
+  # These could be better organized, maybe. Nested resource routes might be better.
+
+  get 'trays/shelves', to: 'trays#index', as: 'trays'
+  post 'trays/shelves', to: 'trays#scan', as: 'scan_tray'
+  get 'trays/shelves/:id', to: 'trays#show', as: 'show_tray'
+  post 'trays/shelves/:id', to: 'trays#associate', as: 'associate_tray'
+  post 'trays/shelves/:id/dissociate', to: 'trays#dissociate', as: 'dissociate_tray'
+
+  get 'trays/items', to: 'trays#items', as: 'trays_items'
+  post 'trays/items', to: 'trays#scan_item', as: 'scan_tray_item'
+  get 'trays/items/:id', to: 'trays#show_item', as: 'show_tray_item'
+  post 'trays/items/:id', to: 'trays#associate_item', as: 'associate_tray_item'
+  post 'trays/items/:id/dissociate', to: 'trays#dissociate_item', as: 'dissociate_tray_item'
 
   # You can have the root of your site routed with "root"
   root 'welcome#index'
