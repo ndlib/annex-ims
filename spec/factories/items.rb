@@ -1,10 +1,10 @@
 FactoryGirl.define do
   factory :item do
-    barcode "12345678901234"
-    title "Title"
-    author "Firstname Lastname"
+    sequence(:barcode) { |n| "#{n}" }
+    title Faker::Lorem.sentence
+    author Faker::Name.name
     chron "Vol 1"
-    width 1
+    thickness nil
     tray nil
   end
 

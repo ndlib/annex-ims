@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :shelf do
-    barcode "SHELF-1234"
+    sequence(:barcode) { |n| "SHELF-#{n}" }
   end
 
 end

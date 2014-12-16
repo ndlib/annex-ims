@@ -1,2 +1,15 @@
-%h1 Welcome#index
-%p Find me in app/views/welcome/index.html.haml
+#MainMenu
+  .list-group.panel
+    %a.list-group-item.list-group-item-success{"data-parent" => "#MainMenu", "data-toggle" => "collapse", :href => "#trays"} Trays
+    #trays.collapse
+      %a.list-group-item{:href => trays_path} Shelf Processing
+      %a.list-group-item{:href => trays_items_path} Item Processing
+      %a.list-group-item{:href => ""} Subitem 3
+    %a.list-group-item.list-group-item-success{"data-parent" => "#MainMenu", "data-toggle" => "collapse", :href => "#totes"} Totes
+    #totes.collapse
+      %a.list-group-item{:href => ""} Item Processing
+      %a.list-group-item{:href => ""} Subitem 2
+    %a.list-group-item.list-group-item-success{"data-parent" => "#MainMenu", "data-toggle" => "collapse", :href => "#batches"} Batches
+    #batches.collapse
+      %a.list-group-item{:href => trays_items_path} Item Processing
+      %a.list-group-item{:href => ""} Subitem 2

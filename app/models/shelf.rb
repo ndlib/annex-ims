@@ -1,7 +1,4 @@
 class Shelf < ActiveRecord::Base
-  require 'barcode_prefix'
-  include BarcodePrefix
-
   validates_presence_of :barcode
   validates :barcode, uniqueness: true
   validate :has_correct_prefix
@@ -9,8 +6,8 @@ class Shelf < ActiveRecord::Base
   has_many :trays
 
   def has_correct_prefix
-    if !is_shelf(barcode)
-      errors.add(:barcode, "must begin with #{SHELF_PREFIX}")
+    if !IsShelfBarcode.call(barcode)
+      errors.add(:barcode, "must begin with #{IsShelfBarcode::PREFIX}")
     end
   end
 end

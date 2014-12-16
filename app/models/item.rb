@@ -1,16 +1,14 @@
 class Item < ActiveRecord::Base
-  require 'barcode_prefix'
-  include BarcodePrefix
-
   validates_presence_of :barcode
+  validates_presence_of :thickness, on: :update  # Items are going to be programmatically created, humans will be required to enter thickness.
   validates :barcode, uniqueness: true
   validate :has_correct_prefix
 
   belongs_to :tray
 
   def has_correct_prefix
-    if !is_item(barcode)
-      errors.add(:barcode, "must not begin with #{SHELF_PREFIX}, #{TRAY_PREFIX}, or #{TOTE_PREFIX}")
+    if !IsItemBarcode.call(barcode)
+      errors.add(:barcode, "must not begin with #{IsShelfBarcode::PREFIX}, #{IsTrayBarcode::PREFIX}, or #{IsToteBarcode::PREFIX}")
     end
   end
 end

@@ -5,3 +5,11 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+
+# This is just for development purposes. Do not seed the production system with this. We need Items in the system.
+
+100.times do |i|
+  Item.create(barcode: Faker::Number.number(14),
+    title: Faker::Lorem.sentence,
+    author: Faker::Name.name)
+end
