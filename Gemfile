@@ -55,8 +55,12 @@ group :development, :test do
   # Feature testing
   gem 'capybara', '~> 2.4'
 
+end
+
+group :development, :test, :staging do
   # For realistic fake data
   gem 'faker', '~> 1.4'
+
 end
 
 # Use Haml for markup because I like it.
