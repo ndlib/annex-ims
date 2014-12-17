@@ -18,7 +18,7 @@ role :app, %w{app@annex-staging.library.nd.edu}
 # server 'example.com', user: 'deploy', roles: %w{web app}, my_property: :my_value
 
 set :rack_env, :staging
-set :branch, fetch(:branch, "staging")
+set :branch, "staging"
 
 # Custom SSH Options
 # ==================
