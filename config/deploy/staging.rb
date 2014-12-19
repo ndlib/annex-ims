@@ -4,7 +4,7 @@
 # is considered to be the first unless any hosts have the primary
 # property set.  Don't declare `role :all`, it's a meta role.
 
-role :app, %w{app@annex-staging.library.nd.edu}
+# role :app, %w{app@annex-staging.library.nd.edu}
 # role :web, %w{deploy@example.com}
 # role :db,  %w{deploy@example.com}
 
@@ -16,6 +16,7 @@ role :app, %w{app@annex-staging.library.nd.edu}
 # used to set extended properties on the server.
 
 # server 'example.com', user: 'deploy', roles: %w{web app}, my_property: :my_value
+server 'annex-staging.library.nd.edu', user: 'app', roles: %w{web app db}
 
 set :rack_env, :staging
 set :branch, "staging"
