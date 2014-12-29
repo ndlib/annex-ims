@@ -15,13 +15,16 @@ class  AssociateTrayWithItemBarcode
     validate_input!
 
     item = GetItemFromBarcode.call(barcode)
-    item.tray = tray
-    item.thickness = thickness
-
-    if item.save
-      item
+    if !item.nil?
+      item.tray = tray
+      item.thickness = thickness
+      if item.save
+        return item
+      else
+        return false
+      end
     else
-      false
+      raise "item not found"
     end
   end
 
