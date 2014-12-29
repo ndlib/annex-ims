@@ -23,6 +23,11 @@ class TraysController < ApplicationController
 
     barcode = params[:barcode]
 
+    if barcode == @tray.barcode
+      redirect_to trays_path
+      return
+    end
+
     begin
       AssociateTrayWithShelfBarcode.call(@tray, barcode)
       redirect_to show_tray_path(:id => @tray.id)
@@ -72,6 +77,13 @@ class TraysController < ApplicationController
     @tray = Tray.find(params[:id])
 
     barcode = params[:barcode]
+
+    if barcode == @tray.barcode
+      redirect_to trays_items_path
+      return
+    end
+
+
     if IsValidThickness.call(params[:thickness])
       thickness = params[:thickness]
     else
