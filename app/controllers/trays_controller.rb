@@ -23,11 +23,14 @@ class TraysController < ApplicationController
 
     barcode = params[:barcode]
 
-    if AssociateTrayWithShelfBarcode.call(@tray, barcode)
+    begin
+      AssociateTrayWithShelfBarcode.call(@tray, barcode)
       redirect_to show_tray_path(:id => @tray.id)
       return
-    else
-      raise "unable to process barcode"
+    rescue StandardError => e
+      flash[:error] = e.message
+      redirect_to show_tray_path(:id => @tray.id)
+      return
     end
 
     redirect_to show_tray_path(:id => @tray.id)
