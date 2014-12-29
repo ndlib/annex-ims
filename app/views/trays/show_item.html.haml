@@ -15,9 +15,9 @@
     = label_tag :thickness
     = select_tag :thickness, options_for_select(Array(1..10)), include_blank: true
   .actions
-    = submit_tag 'Save', class: 'btn'
+    = submit_tag 'Save', class: 'btn btn-primary'
 %br
-= button_to "Done", trays_items_path, method: :get, class: 'btn pull-right'
+= button_to "Done", trays_items_path, method: :get, class: 'btn pull-right btn-primary'
 %table.table.table-striped.condensed{"data-toggle" => "table"}
   %thead
     %tr
@@ -37,5 +37,5 @@
           = form_tag dissociate_tray_item_path(@tray) do |f|
             = hidden_field_tag :item_id, item.id
             .actions
-              = submit_tag 'Remove', class: 'btn'
+              = submit_tag 'Remove', class: 'btn btn-primary'
 
