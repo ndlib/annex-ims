@@ -53,6 +53,26 @@ class TraysController < ApplicationController
     end
   end
 
+  def shelve
+    @tray = Tray.find(params[:id])
+
+    if ShelveTray.call(@tray)
+      redirect_to show_tray_path(:id => @tray.id)
+    else
+      raise "unable to shelve tray"
+    end
+  end
+
+  def unshelve
+    @tray = Tray.find(params[:id])
+
+    if UnshelveTray.call(@tray)
+      redirect_to show_tray_path(:id => @tray.id)
+    else
+      raise "unable to unshelve tray"
+    end
+  end
+
   # Should this area be pulled out into a separate controller? It's all about trays, but with items. 
   def items
     @tray = Tray.new

@@ -10,6 +10,8 @@ Rails.application.routes.draw do
   get 'trays/shelves/:id', to: 'trays#show', as: 'show_tray'
   post 'trays/shelves/:id', to: 'trays#associate', as: 'associate_tray'
   post 'trays/shelves/:id/dissociate', to: 'trays#dissociate', as: 'dissociate_tray'
+  post 'trays/shelves/:id/shelve', to: 'trays#shelve', as: 'shelve_tray'
+  post 'trays/shelves/:id/unshelve', to: 'trays#unshelve', as: 'unshelve_tray'
 
   get 'trays/items', to: 'trays#items', as: 'trays_items'
   post 'trays/items', to: 'trays#scan_item', as: 'scan_tray_item'

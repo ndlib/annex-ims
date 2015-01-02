@@ -14,9 +14,20 @@
   .actions
     = submit_tag 'Save', class: 'btn btn-primary'
 %br
+= @tray.shelved ? "Shelved" : "Unshelved"
+%br
 = @tray.shelf.nil? ? "STAGING" : "Location: #{@tray.shelf.barcode}"
 %br
 - if !@tray.shelf.nil?
+  - if @tray.shelved
+    = form_tag unshelve_tray_path(@tray) do |f|
+      .actions
+        = submit_tag 'Unshelve', class: 'btn btn-primary'
+  - else
+    = form_tag shelve_tray_path(@tray) do |f|
+      .actions
+        = submit_tag 'Shelve', class: 'btn btn-primary'
+  %br
   = form_tag dissociate_tray_path(@tray) do |f|
     .actions
       = submit_tag 'DISSOCIATE', class: 'btn btn-primary'

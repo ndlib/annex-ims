@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141208175533) do
+ActiveRecord::Schema.define(version: 20150101124603) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,10 +40,11 @@ ActiveRecord::Schema.define(version: 20141208175533) do
   add_index "shelves", ["barcode"], name: "index_shelves_on_barcode", unique: true, using: :btree
 
   create_table "trays", force: true do |t|
-    t.string   "barcode",    null: false
+    t.string   "barcode",                    null: false
     t.integer  "shelf_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.boolean  "shelved",    default: false, null: false
   end
 
   add_index "trays", ["barcode"], name: "index_trays_on_barcode", unique: true, using: :btree
