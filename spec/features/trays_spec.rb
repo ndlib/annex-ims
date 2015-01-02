@@ -90,6 +90,74 @@ feature "Trays", :type => :feature do
       expect(current_path).to eq(trays_path)
     end
 
+    it "lets you mark a tray as being shelved" do
+      @tray = FactoryGirl.create(:tray)
+      @shelf = FactoryGirl.create(:shelf)
+      visit trays_path
+      fill_in "Barcode", :with => @tray.barcode
+      click_button "Save"
+      expect(current_path).to eq(show_tray_path(:id => @tray.id))
+      expect(page).to have_content @tray.barcode
+      expect(page).to have_content "STAGING"
+      fill_in "Barcode", :with => @shelf.barcode
+      click_button "Save"
+      expect(current_path).to eq(show_tray_path(:id => @tray.id))
+      expect(page).to have_content @tray.barcode
+      expect(page).to have_content "Location: #{@shelf.barcode}"
+      click_button "Shelve"
+      expect(current_path).to eq(show_tray_path(:id => @tray.id))
+      expect(page).to have_content @tray.barcode
+      expect(page).to have_content "Location: #{@shelf.barcode}"
+      expect(page).to have_content "Shelved"
+    end
+
+    it "lets you mark a tray as unshelved without losing its association to a shelf" do
+      @tray = FactoryGirl.create(:tray)
+      @shelf = FactoryGirl.create(:shelf)
+      visit trays_path
+      fill_in "Barcode", :with => @tray.barcode
+      click_button "Save"
+      expect(current_path).to eq(show_tray_path(:id => @tray.id))
+      expect(page).to have_content @tray.barcode
+      expect(page).to have_content "STAGING"
+      fill_in "Barcode", :with => @shelf.barcode
+      click_button "Save"
+      expect(current_path).to eq(show_tray_path(:id => @tray.id))
+      expect(page).to have_content @tray.barcode
+      expect(page).to have_content "Location: #{@shelf.barcode}"
+      click_button "Shelve"
+      expect(current_path).to eq(show_tray_path(:id => @tray.id))
+      expect(page).to have_content @tray.barcode
+      expect(page).to have_content "Location: #{@shelf.barcode}"
+      expect(page).to have_content "Shelved"
+      click_button "Unshelve"
+      expect(current_path).to eq(show_tray_path(:id => @tray.id))
+      expect(page).to have_content @tray.barcode
+      expect(page).to have_content "Location: #{@shelf.barcode}"
+      expect(page).to have_content "Unshelved"
+    end
+
+    it "unshelves a tray when you dissociate it from a shelf" do
+      @tray = FactoryGirl.create(:tray)
+      @shelf = FactoryGirl.create(:shelf)
+      visit trays_path
+      fill_in "Barcode", :with => @tray.barcode
+      click_button "Save"
+      expect(current_path).to eq(show_tray_path(:id => @tray.id))
+      expect(page).to have_content @tray.barcode
+      expect(page).to have_content "STAGING"
+      fill_in "Barcode", :with => @shelf.barcode
+      click_button "Save"
+      expect(current_path).to eq(show_tray_path(:id => @tray.id))
+      expect(page).to have_content @tray.barcode
+      expect(page).to have_content "Location: #{@shelf.barcode}"
+      click_button "DISSOCIATE"
+      expect(current_path).to eq(show_tray_path(:id => @tray.id))
+      expect(page).to have_content @tray.barcode
+      expect(page).to have_content "STAGING"
+      expect(page).to have_content "Unshelved"
+    end
+
 
     it "can scan a new tray for processing items" do
       @tray = FactoryGirl.create(:tray)

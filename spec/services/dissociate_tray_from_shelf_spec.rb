@@ -3,7 +3,12 @@ require 'rails_helper'
 RSpec.describe DissociateTrayFromShelf do
   subject { described_class.call(tray)}
 
-  let(:tray) { double(Tray, save: true, "shelf=" => nil)}
+  let(:tray) { double(Tray, save: true, "shelf=" => nil, "shelved=" => false)}
+
+  before(:each) do
+    allow(IsObjectTray).to receive(:call).with(tray).and_return(true)
+    allow(UnshelveTray).to receive(:call).with(tray).and_return(tray)
+  end
 
   it "removes the tray" do
     expect(tray).to receive("shelf=")

@@ -12,6 +12,10 @@ class DissociateTrayFromShelf
   def dissociate!
     tray.shelf = nil
 
+    unless UnshelveTray.call(@tray)
+      raise "unable to unshelve tray"
+    end
+
     if tray.save
       transaction_log
       tray
