@@ -12,6 +12,10 @@ class DissociateTrayFromItem
   def dissociate!
     item.tray = nil
 
+    unless UnstockItem.call(@item)
+      raise "unable to unstock item"
+    end
+
     if item.save
       transaction_log
       item

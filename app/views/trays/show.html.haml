@@ -32,4 +32,8 @@
     .actions
       = submit_tag 'DISSOCIATE', class: 'btn btn-primary'
 %br
+= form_tag withdraw_tray_path(@tray) do |f|
+  .actions
+    = submit_tag 'Withdraw', class: 'btn btn-primary'
+%br
 = button_to "Done", trays_path, method: :get, class: 'btn pull-right btn-primary'

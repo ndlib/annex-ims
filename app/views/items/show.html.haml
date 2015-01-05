@@ -1,5 +1,5 @@
 %h2 Scan Item/Tray
-= form_tag scan_item_path(@item), method: :get do |f|
+= form_tag item_multex_path(@item) do |f|
   .field
     = label_tag :barcode
     = text_field_tag :barcode
