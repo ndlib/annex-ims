@@ -19,6 +19,10 @@ Rails.application.routes.draw do
   post 'trays/items/:id', to: 'trays#associate_item', as: 'associate_tray_item'
   post 'trays/items/:id/dissociate', to: 'trays#dissociate_item', as: 'dissociate_tray_item'
 
+  get 'items', to: 'items#index', as: 'items'
+  get 'items/scan', to: 'items#scan', as: 'scan_item'
+  get 'items/:id', to: 'items#show', as: 'show_item'
+
   # You can have the root of your site routed with "root"
   root 'welcome#index'
 
