@@ -6,17 +6,22 @@ RSpec.describe DissociateTrayFromItem do
   let(:tray) { double(Tray)}
   let(:item) { double(Item, save: true, "tray=" => nil)}
 
+  before(:each) do
+    allow(IsObjectItem).to receive(:call).with(item).and_return(true)
+    allow(UnstockItem).to receive(:call).with(item).and_return(item)
+  end
+
   it "removes the item" do
     expect(item).to receive("tray=")
     subject
   end
 
-  it "saves the dissociated tray" do
+  it "saves the dissociated item" do
     expect(item).to receive(:save)
     subject
   end
 
-  it "returns the tray on success" do
+  it "returns the item on success" do
     expect(item).to receive(:save).and_return(item)
     expect(subject).to be(item)
   end

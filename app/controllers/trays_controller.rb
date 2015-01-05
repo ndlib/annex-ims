@@ -147,4 +147,13 @@ class TraysController < ApplicationController
       raise "unable to dissociate tray"
     end
   end
+
+  def withdraw
+    @tray = Tray.find(params[:id])
+
+    WithdrawTray.call(@tray)
+
+    redirect_to show_tray_path(:id => @tray.id)
+    return
+  end
 end
