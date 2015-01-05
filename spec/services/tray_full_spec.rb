@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe TrayUtilization do
+RSpec.describe TrayFull do
 
   it "does nothing yet" do
 

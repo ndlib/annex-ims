@@ -328,6 +328,24 @@ feature "Trays", :type => :feature do
       expect(current_path).to eq(trays_items_path)
     end
 
+    it "warns when a try is probably full" do
+      @tray = FactoryGirl.create(:tray)
+      @items = []
+      5.times do
+        @items << FactoryGirl.create(:item)
+      end
+      visit trays_items_path
+      fill_in "Barcode", :with => @tray.barcode
+      click_button "Save"
+      expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
+      @items.each do |item|
+        fill_in "Barcode", :with => item.barcode
+        select(10, :from => "Thickness")
+        click_button "Save"
+      end
+      expect(page).to have_content 'warning - tray may be full'
+    end
+
     it "displays information about the tray the user just finished working with" do
       # pending "Not sure how to test this one yet, because when we're done it should leave that page and get ready for the next, I think."
     end
