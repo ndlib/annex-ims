@@ -1,0 +1,24 @@
+%h2 Scan Item/Tray
+= form_tag scan_item_path(@item), method: :get do |f|
+  .field
+    = label_tag :barcode
+    = text_field_tag :barcode
+  .actions
+    = submit_tag 'Scan', class: 'btn btn-primary'
+%br
+%p
+  Shelf Location:
+  = (@item.tray.nil? ? 'STAGING' : (@item.tray.shelf.nil? ? 'STAGING' : @item.tray.shelf.barcode))
+%p
+  Tray Number:
+  = (@item.tray.nil? ? 'STAGING' : @item.tray.barcode)
+%p
+  Title:
+  = @item.title
+%p
+  Author:
+  = @item.author
+%p
+  Chron:
+  = @item.chron
+%br
