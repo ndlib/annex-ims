@@ -6,6 +6,7 @@ class TraysController < ApplicationController
   def scan
     begin
       @tray = GetTrayFromBarcode.call(params[:tray][:barcode])
+      @size = TraySize.call(@tray.barcode)
     rescue StandardError => e
       flash[:error] = e.message
       redirect_to trays_path
@@ -16,10 +17,12 @@ class TraysController < ApplicationController
 
   def show
     @tray = Tray.find(params[:id])
+    @size = TraySize.call(@tray.barcode)
   end
 
   def associate
     @tray = Tray.find(params[:id])
+    @size = TraySize.call(@tray.barcode)
 
     barcode = params[:barcode]
 
@@ -45,6 +48,7 @@ class TraysController < ApplicationController
   # The only reason to get here is to set the tray's shelf to nil, so let's do that.
   def dissociate
     @tray = Tray.find(params[:id])
+    @size = TraySize.call(@tray.barcode)
 
     if DissociateTrayFromShelf.call(@tray)
       redirect_to show_tray_path(:id => @tray.id)
@@ -55,6 +59,7 @@ class TraysController < ApplicationController
 
   def shelve
     @tray = Tray.find(params[:id])
+    @size = TraySize.call(@tray.barcode)
 
     if ShelveTray.call(@tray)
       redirect_to show_tray_path(:id => @tray.id)
@@ -65,6 +70,7 @@ class TraysController < ApplicationController
 
   def unshelve
     @tray = Tray.find(params[:id])
+    @size = TraySize.call(@tray.barcode)
 
     if UnshelveTray.call(@tray)
       redirect_to show_tray_path(:id => @tray.id)
@@ -81,9 +87,10 @@ class TraysController < ApplicationController
   def scan_item
     begin
       @tray = GetTrayFromBarcode.call(params[:tray][:barcode])
+      @size = TraySize.call(@tray.barcode)
     rescue StandardError => e
       flash[:error] = e.message
-      redirect_to trays_path
+      redirect_to trays_items_path
       return
     end
     redirect_to show_tray_item_path(:id => @tray.id)
@@ -91,10 +98,12 @@ class TraysController < ApplicationController
 
   def show_item
     @tray = Tray.find(params[:id])
+    @size = TraySize.call(@tray.barcode)
   end
 
   def associate_item
     @tray = Tray.find(params[:id])
+    @size = TraySize.call(@tray.barcode)
 
     barcode = params[:barcode]
 
@@ -129,6 +138,7 @@ class TraysController < ApplicationController
   def dissociate_item
     @tray = Tray.find(params[:id])
     @item = Item.find(params[:item_id])
+    @size = TraySize.call(@tray.barcode)
 
     if DissociateTrayFromItem.call(@item)
       redirect_to show_tray_item_path(:id => @tray.id)

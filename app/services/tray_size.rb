@@ -1,18 +1,18 @@
-class IsTrayBarcode
+class TraySize
   PREFIX = '(TRAY-)([A-Z])'
 
   attr_reader :barcode
 
   def self.call(barcode)
-    new(barcode).compare
+    new(barcode).size
   end
 
   def initialize(barcode)
     @barcode = barcode
   end
 
-  def compare
-    (barcode =~ /^#{PREFIX}(.*)/ ) ? true : false
+  def size
+    /#{PREFIX}/.match(barcode)[2]
   end
 
 end
