@@ -222,6 +222,24 @@ feature "Trays", :type => :feature do
       expect(page).to have_content @item.chron
     end
 
+   it "displays information about a successful association made" do
+      @tray = FactoryGirl.create(:tray)
+      @item = FactoryGirl.create(:item)
+      visit trays_items_path
+      fill_in "Barcode", :with => @tray.barcode
+      click_button "Save"
+      expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
+      fill_in "Barcode", :with => @item.barcode
+      select(Faker::Number.number(1), :from => "Thickness")
+      click_button "Save"
+      expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
+      expect(page).to have_content @item.barcode
+      expect(page).to have_content @item.title
+      expect(page).to have_content @item.author
+      expect(page).to have_content @item.chron
+      expect(page).to have_content "Item #{@item.barcode} associated with Tray #{@tray.barcode}."
+   end
+
     it "displays a tray's barcode while processing an item" do
       @tray = FactoryGirl.create(:tray)
       @item = FactoryGirl.create(:item)
