@@ -9,8 +9,8 @@
           %li= msg
 
   .field
-    = label_tag :barcode
-    = text_field_tag :barcode
+    = label_tag :barcode, "Shelf"
+    = text_field_tag :barcode, nil, autofocus: "autofocus"
   .actions
     = submit_tag 'Save', class: 'btn btn-primary'
 %br

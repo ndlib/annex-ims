@@ -17,6 +17,7 @@ class  AssociateTrayWithShelfBarcode
     tray.shelf = shelf
 
     if tray.save
+      ShelveTray.call(tray)
       tray
     else
       false

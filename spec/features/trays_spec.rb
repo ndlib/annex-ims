@@ -10,7 +10,7 @@ feature "Trays", :type => :feature do
     it "can scan a new tray" do
       @tray = FactoryGirl.create(:tray)
       visit trays_path
-      fill_in "Barcode", :with => @tray.barcode
+      fill_in "Tray", :with => @tray.barcode
       click_button "Save"
       expect(current_path).to eq(show_tray_path(:id => @tray.id))
       expect(page).to have_content @tray.barcode
@@ -21,28 +21,29 @@ feature "Trays", :type => :feature do
       @tray = FactoryGirl.create(:tray)
       @shelf = FactoryGirl.create(:shelf)
       visit trays_path
-      fill_in "Barcode", :with => @tray.barcode
+      fill_in "Tray", :with => @tray.barcode
       click_button "Save"
       expect(current_path).to eq(show_tray_path(:id => @tray.id))
       expect(page).to have_content @tray.barcode
       expect(page).to have_content "STAGING"
-      fill_in "Barcode", :with => @shelf.barcode
+      fill_in "Shelf", :with => @shelf.barcode
       click_button "Save"
       expect(current_path).to eq(show_tray_path(:id => @tray.id))
       expect(page).to have_content @tray.barcode
       expect(page).to have_content "Location: #{@shelf.barcode}"
+      expect(page).to have_content "Shelved"
     end
 
     it "can dissociate a shelf from a tray" do
       @tray = FactoryGirl.create(:tray)
       @shelf = FactoryGirl.create(:shelf)
       visit trays_path
-      fill_in "Barcode", :with => @tray.barcode
+      fill_in "Tray", :with => @tray.barcode
       click_button "Save"
       expect(current_path).to eq(show_tray_path(:id => @tray.id))
       expect(page).to have_content @tray.barcode
       expect(page).to have_content "STAGING"
-      fill_in "Barcode", :with => @shelf.barcode
+      fill_in "Shelf", :with => @shelf.barcode
       click_button "Save"
       expect(current_path).to eq(show_tray_path(:id => @tray.id))
       expect(page).to have_content @tray.barcode
@@ -57,12 +58,12 @@ feature "Trays", :type => :feature do
       @tray = FactoryGirl.create(:tray)
       @shelf = FactoryGirl.create(:shelf)
       visit trays_path
-      fill_in "Barcode", :with => @tray.barcode
+      fill_in "Tray", :with => @tray.barcode
       click_button "Save"
       expect(current_path).to eq(show_tray_path(:id => @tray.id))
       expect(page).to have_content @tray.barcode
       expect(page).to have_content "STAGING"
-      fill_in "Barcode", :with => @shelf.barcode
+      fill_in "Shelf", :with => @shelf.barcode
       click_button "Save"
       expect(current_path).to eq(show_tray_path(:id => @tray.id))
       expect(page).to have_content @tray.barcode
@@ -75,57 +76,54 @@ feature "Trays", :type => :feature do
       @tray = FactoryGirl.create(:tray)
       @shelf = FactoryGirl.create(:shelf)
       visit trays_path
-      fill_in "Barcode", :with => @tray.barcode
+      fill_in "Tray", :with => @tray.barcode
       click_button "Save"
       expect(current_path).to eq(show_tray_path(:id => @tray.id))
       expect(page).to have_content @tray.barcode
       expect(page).to have_content "STAGING"
-      fill_in "Barcode", :with => @shelf.barcode
+      fill_in "Shelf", :with => @shelf.barcode
       click_button "Save"
       expect(current_path).to eq(show_tray_path(:id => @tray.id))
       expect(page).to have_content @tray.barcode
       expect(page).to have_content "Location: #{@shelf.barcode}"
-      fill_in "Barcode", :with => @tray.barcode
+      fill_in "Shelf", :with => @tray.barcode
       click_button "Save"
       expect(current_path).to eq(trays_path)
     end
 
-    it "lets you mark a tray as being shelved" do
+    it "lets you mark a tray as being unshelved" do
       @tray = FactoryGirl.create(:tray)
       @shelf = FactoryGirl.create(:shelf)
       visit trays_path
-      fill_in "Barcode", :with => @tray.barcode
+      fill_in "Tray", :with => @tray.barcode
       click_button "Save"
       expect(current_path).to eq(show_tray_path(:id => @tray.id))
       expect(page).to have_content @tray.barcode
       expect(page).to have_content "STAGING"
-      fill_in "Barcode", :with => @shelf.barcode
+      fill_in "Shelf", :with => @shelf.barcode
       click_button "Save"
       expect(current_path).to eq(show_tray_path(:id => @tray.id))
       expect(page).to have_content @tray.barcode
       expect(page).to have_content "Location: #{@shelf.barcode}"
-      click_button "Shelve"
+      expect(page).to have_content "Shelved"
+      click_button "Unshelve"
       expect(current_path).to eq(show_tray_path(:id => @tray.id))
       expect(page).to have_content @tray.barcode
       expect(page).to have_content "Location: #{@shelf.barcode}"
-      expect(page).to have_content "Shelved"
+      expect(page).to have_content "Unshelved"
     end
 
     it "lets you mark a tray as unshelved without losing its association to a shelf" do
       @tray = FactoryGirl.create(:tray)
       @shelf = FactoryGirl.create(:shelf)
       visit trays_path
-      fill_in "Barcode", :with => @tray.barcode
+      fill_in "Tray", :with => @tray.barcode
       click_button "Save"
       expect(current_path).to eq(show_tray_path(:id => @tray.id))
       expect(page).to have_content @tray.barcode
       expect(page).to have_content "STAGING"
-      fill_in "Barcode", :with => @shelf.barcode
+      fill_in "Shelf", :with => @shelf.barcode
       click_button "Save"
-      expect(current_path).to eq(show_tray_path(:id => @tray.id))
-      expect(page).to have_content @tray.barcode
-      expect(page).to have_content "Location: #{@shelf.barcode}"
-      click_button "Shelve"
       expect(current_path).to eq(show_tray_path(:id => @tray.id))
       expect(page).to have_content @tray.barcode
       expect(page).to have_content "Location: #{@shelf.barcode}"
@@ -141,12 +139,12 @@ feature "Trays", :type => :feature do
       @tray = FactoryGirl.create(:tray)
       @shelf = FactoryGirl.create(:shelf)
       visit trays_path
-      fill_in "Barcode", :with => @tray.barcode
+      fill_in "Tray", :with => @tray.barcode
       click_button "Save"
       expect(current_path).to eq(show_tray_path(:id => @tray.id))
       expect(page).to have_content @tray.barcode
       expect(page).to have_content "STAGING"
-      fill_in "Barcode", :with => @shelf.barcode
+      fill_in "Shelf", :with => @shelf.barcode
       click_button "Save"
       expect(current_path).to eq(show_tray_path(:id => @tray.id))
       expect(page).to have_content @tray.barcode
@@ -162,7 +160,7 @@ feature "Trays", :type => :feature do
     it "can scan a new tray for processing items" do
       @tray = FactoryGirl.create(:tray)
       visit trays_items_path
-      fill_in "Barcode", :with => @tray.barcode
+      fill_in "Tray", :with => @tray.barcode
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
     end
@@ -171,10 +169,10 @@ feature "Trays", :type => :feature do
       @tray = FactoryGirl.create(:tray)
       @item = FactoryGirl.create(:item)
       visit trays_items_path
-      fill_in "Barcode", :with => @tray.barcode
+      fill_in "Tray", :with => @tray.barcode
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
-      fill_in "Barcode", :with => @item.barcode
+      fill_in "Item", :with => @item.barcode
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
     end
@@ -183,10 +181,10 @@ feature "Trays", :type => :feature do
       @tray = FactoryGirl.create(:tray)
       @item = FactoryGirl.create(:item)
       visit trays_items_path
-      fill_in "Barcode", :with => @tray.barcode
+      fill_in "Tray", :with => @tray.barcode
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
-      fill_in "Barcode", :with => @item.barcode
+      fill_in "Item", :with => @item.barcode
       select(Faker::Number.number(1), :from => "Thickness")
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
@@ -196,10 +194,10 @@ feature "Trays", :type => :feature do
       @tray = FactoryGirl.create(:tray)
       @item = FactoryGirl.create(:item)
       visit trays_items_path
-      fill_in "Barcode", :with => @tray.barcode
+      fill_in "Tray", :with => @tray.barcode
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
-      fill_in "Barcode", :with => @item.barcode
+      fill_in "Item", :with => @item.barcode
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
       expect(page).to have_content 'select a valid thickness'
@@ -209,10 +207,10 @@ feature "Trays", :type => :feature do
       @tray = FactoryGirl.create(:tray)
       @item = FactoryGirl.create(:item)
       visit trays_items_path
-      fill_in "Barcode", :with => @tray.barcode
+      fill_in "Tray", :with => @tray.barcode
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
-      fill_in "Barcode", :with => @item.barcode
+      fill_in "Item", :with => @item.barcode
       select(Faker::Number.number(1), :from => "Thickness")
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
@@ -226,10 +224,10 @@ feature "Trays", :type => :feature do
       @tray = FactoryGirl.create(:tray)
       @item = FactoryGirl.create(:item)
       visit trays_items_path
-      fill_in "Barcode", :with => @tray.barcode
+      fill_in "Tray", :with => @tray.barcode
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
-      fill_in "Barcode", :with => @item.barcode
+      fill_in "Item", :with => @item.barcode
       select(Faker::Number.number(1), :from => "Thickness")
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
@@ -244,10 +242,10 @@ feature "Trays", :type => :feature do
       @tray = FactoryGirl.create(:tray)
       @item = FactoryGirl.create(:item)
       visit trays_items_path
-      fill_in "Barcode", :with => @tray.barcode
+      fill_in "Tray", :with => @tray.barcode
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
-      fill_in "Barcode", :with => @item.barcode
+      fill_in "Item", :with => @item.barcode
       select(Faker::Number.number(1), :from => "Thickness")
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
@@ -261,11 +259,11 @@ feature "Trays", :type => :feature do
         @items << FactoryGirl.create(:item)
       end
       visit trays_items_path
-      fill_in "Barcode", :with => @tray.barcode
+      fill_in "Tray", :with => @tray.barcode
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
       @items.each do |item|
-        fill_in "Barcode", :with => item.barcode
+        fill_in "Item", :with => item.barcode
         select(Faker::Number.number(1), :from => "Thickness")
         click_button "Save"
         expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
@@ -282,10 +280,10 @@ feature "Trays", :type => :feature do
       @tray = FactoryGirl.create(:tray)
       @item = FactoryGirl.create(:item)
       visit trays_items_path
-      fill_in "Barcode", :with => @tray.barcode
+      fill_in "Tray", :with => @tray.barcode
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
-      fill_in "Barcode", :with => @item.barcode
+      fill_in "Item", :with => @item.barcode
       select(Faker::Number.number(1), :from => "Thickness")
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
@@ -299,10 +297,10 @@ feature "Trays", :type => :feature do
       @tray = FactoryGirl.create(:tray)
       @item = FactoryGirl.create(:item)
       visit trays_items_path
-      fill_in "Barcode", :with => @tray.barcode
+      fill_in "Tray", :with => @tray.barcode
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
-      fill_in "Barcode", :with => @item.barcode
+      fill_in "Item", :with => @item.barcode
       select(Faker::Number.number(1), :from => "Thickness")
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
@@ -315,15 +313,15 @@ feature "Trays", :type => :feature do
       @tray = FactoryGirl.create(:tray)
       @item = FactoryGirl.create(:item)
       visit trays_items_path
-      fill_in "Barcode", :with => @tray.barcode
+      fill_in "Tray", :with => @tray.barcode
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
-      fill_in "Barcode", :with => @item.barcode
+      fill_in "Item", :with => @item.barcode
       select(Faker::Number.number(1), :from => "Thickness")
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
       expect(page).to have_content @item.barcode
-      fill_in "Barcode", :with => @tray.barcode
+      fill_in "Item", :with => @tray.barcode
       click_button "Save"
       expect(current_path).to eq(trays_items_path)
     end
@@ -335,11 +333,11 @@ feature "Trays", :type => :feature do
         @items << FactoryGirl.create(:item)
       end
       visit trays_items_path
-      fill_in "Barcode", :with => @tray.barcode
+      fill_in "Tray", :with => @tray.barcode
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
       @items.each do |item|
-        fill_in "Barcode", :with => item.barcode
+        fill_in "Item", :with => item.barcode
         select(10, :from => "Thickness")
         click_button "Save"
       end
