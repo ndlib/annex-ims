@@ -10,7 +10,7 @@ feature "Items", :type => :feature do
     it "can scan a new item" do
       @item = FactoryGirl.create(:item, chron: 'TEST CHRON')
       visit items_path
-      fill_in "Barcode", :with => @item.barcode
+      fill_in "Item", :with => @item.barcode
       click_button "Find"
       expect(current_path).to eq(show_item_path(:id => @item.id))
       expect(page).to have_content @item.title
@@ -22,10 +22,10 @@ feature "Items", :type => :feature do
       @item = FactoryGirl.create(:item, chron: 'TEST CHRON')
       @item2 = FactoryGirl.create(:item, chron: 'TEST CHRON 2')
       visit items_path
-      fill_in "Barcode", :with => @item.barcode
+      fill_in "Item", :with => @item.barcode
       click_button "Find"
       expect(current_path).to eq(show_item_path(:id => @item.id))
-      fill_in "Barcode", :with => @item2.barcode
+      fill_in "Item", :with => @item2.barcode
       click_button "Scan"
       expect(current_path).to eq(show_item_path(:id => @item2.id))
       expect(page).to have_content @item2.title
@@ -37,10 +37,10 @@ feature "Items", :type => :feature do
       @tray = FactoryGirl.create(:tray)
       @item = FactoryGirl.create(:item, chron: 'TEST CHRON', tray: @tray)
       visit items_path
-      fill_in "Barcode", :with => @item.barcode
+      fill_in "Item", :with => @item.barcode
       click_button "Find"
       expect(current_path).to eq(show_item_path(:id => @item.id))
-      fill_in "Barcode", :with => @tray.barcode
+      fill_in "Tray", :with => @tray.barcode
       click_button "Scan"
       expect(current_path).to eq(items_path)
       expect(page).to have_content "Item #{@item.barcode} stocked."
@@ -51,10 +51,10 @@ feature "Items", :type => :feature do
       @item = FactoryGirl.create(:item, chron: 'TEST CHRON', tray: @tray)
       @tray2 = FactoryGirl.create(:tray)
       visit items_path
-      fill_in "Barcode", :with => @item.barcode
+      fill_in "Item", :with => @item.barcode
       click_button "Find"
       expect(current_path).to eq(show_item_path(:id => @item.id))
-      fill_in "Barcode", :with => @tray2.barcode
+      fill_in "Tray", :with => @tray2.barcode
       click_button "Scan"
       expect(current_path).to eq(show_item_path(:id => @item.id))
       expect(page).to have_content 'incorrect tray for this item'
