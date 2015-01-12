@@ -1,0 +1,35 @@
+= form_tag search_path, method: :get do |f|
+  .input-group
+    = select_tag :criteria_type, options_for_select(["Barcode", "Bib Number"]), include_blank: true
+    = text_field_tag :criteria
+  .actions
+    = submit_tag 'Search', class: 'btn pull-right btn-primary'
+%hr
+= @result.count 'results found'
+%table.table.table-striped.condensed
+  %thead
+    %tr
+      %th= 'Barcode'
+      %th= 'Bib Number'
+      %th= 'ISBN'
+      %th= 'ISSN'
+      %th= 'Title'
+      %th= 'Author'
+      %th= 'Chron'
+      %th= 'Tray'
+      %th= 'Shelf'
+      %th= 'Condition'
+  %tbody
+    - @result.each do |item|
+      %tr
+        %td= item.barcode
+        %td= item.bib_number
+        %td= item.isbn
+        %td= item.issn
+        %td= item.title
+        %td= item.author
+        %td= item.chron
+        %td= item.tray.barcode
+        %td= item.shelf.barcode
+        %td= item.condition
+

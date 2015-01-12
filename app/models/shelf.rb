@@ -4,6 +4,7 @@ class Shelf < ActiveRecord::Base
   validate :has_correct_prefix
 
   has_many :trays
+  has_many :items, through: :trays
 
   def has_correct_prefix
     if !IsShelfBarcode.call(barcode)

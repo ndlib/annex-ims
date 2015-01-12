@@ -5,6 +5,7 @@ class Item < ActiveRecord::Base
   validate :has_correct_prefix
 
   belongs_to :tray
+  has_one :shelf, through: :tray
 
   def has_correct_prefix
     if !IsItemBarcode.call(barcode)
