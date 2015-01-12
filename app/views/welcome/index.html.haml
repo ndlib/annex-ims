@@ -1,13 +1,13 @@
 #MainMenu
   .list-group.panel
-    %a.list-group-item.list-group-item-success{"data-parent" => "#MainMenu", "data-toggle" => "collapse", :href => "#trays"} Trays
-    #trays.collapse
-      %a.list-group-item{:href => trays_path} Shelf Processing
-      %a.list-group-item{:href => trays_items_path} Mass Item Processing
+    %a.list-group-item.list-group-item-success{"data-parent" => "#MainMenu", "data-toggle" => "collapse", :href => "#stocking"} Stocking
+    #stocking.collapse
+      %a.list-group-item{:href => items_path} Item Look-Up / Directed Put Away
+      %a.list-group-item{:href => trays_path} Tray to Shelf
+      %a.list-group-item{:href => trays_items_path} Items to Tray
       %a.list-group-item{:href => ""} Subitem 3
     %a.list-group-item.list-group-item-success{"data-parent" => "#MainMenu", "data-toggle" => "collapse", :href => "#items"} Items
     #items.collapse
-      %a.list-group-item{:href => items_path} Individual Item Processing
       %a.list-group-item{:href => ""} Item Search
       %a.list-group-item{:href => ""} Subitem 3
     %a.list-group-item.list-group-item-success{"data-parent" => "#MainMenu", "data-toggle" => "collapse", :href => "#totes"} Totes
@@ -16,5 +16,5 @@
       %a.list-group-item{:href => ""} Subitem 2
     %a.list-group-item.list-group-item-success{"data-parent" => "#MainMenu", "data-toggle" => "collapse", :href => "#batches"} Batches
     #batches.collapse
-      %a.list-group-item{:href => trays_items_path} Item Processing
+      %a.list-group-item{:href => ""} Item Processing
       %a.list-group-item{:href => ""} Subitem 2
