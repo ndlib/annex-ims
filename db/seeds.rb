@@ -11,5 +11,9 @@
 100.times do |i|
   Item.create(barcode: Faker::Number.number(14),
     title: Faker::Lorem.sentence,
-    author: Faker::Name.name)
+    author: Faker::Name.name,
+    bib_number: "0037612#{Faker::Number.number(2)}",
+    isbn: Faker::Code.isbn,
+    issn: "#{Faker::Number.number(4)}-#{Faker::Number.number(4)}",
+    conditions: [Item::CONDITIONS.sample, Item::CONDITIONS.sample, Item::CONDITIONS.sample, Item::CONDITIONS.sample].uniq)
 end

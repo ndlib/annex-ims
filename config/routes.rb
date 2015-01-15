@@ -26,6 +26,8 @@ Rails.application.routes.draw do
   get 'items/:id', to: 'items#show', as: 'show_item'
   post 'items/:id/multex', to: 'items#multex', as: 'item_multex'
 
+  get 'search', to: 'search#index', as: 'search'
+
   # You can have the root of your site routed with "root"
   root 'welcome#index'
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150105075430) do
+ActiveRecord::Schema.define(version: 20150112042827) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,6 +27,10 @@ ActiveRecord::Schema.define(version: 20150105075430) do
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
     t.boolean  "stocked",    default: false, null: false
+    t.string   "bib_number"
+    t.string   "isbn"
+    t.string   "issn"
+    t.text     "conditions", default: [],                 array: true
   end
 
   add_index "items", ["barcode"], name: "index_items_on_barcode", unique: true, using: :btree
