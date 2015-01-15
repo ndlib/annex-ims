@@ -14,10 +14,24 @@ class SearchItems
 
     if filter.has_key?(:criteria_type) && filter.has_key?(:criteria)
       case filter[:criteria_type]
-      when "Barcode"
+      when "barcode"
         results = results.where(barcode: filter[:criteria])
-      when "Bib Number"
+      when "bib_number"
         results = results.where(bib_number: filter[:criteria])
+      when "call_number"
+        results = results.where(call_number: filter[:criteria])
+      when "isbn"
+        results = results.where(isbn: filter[:criteria])
+      when "issn"
+        results = results.where(issn: filter[:criteria])
+      when "title"
+        results = results.where(title: filter[:criteria])
+      when "author"
+        results = results.where(author: filter[:criteria])
+      when "tray"
+        results = results.joins(:tray).where(trays: {barcode: filter[:criteria]})
+      when "shelf"
+        results = results.joins(tray: :shelf).where(shelves: {barcode: filter[:criteria]})
       end
     end
 

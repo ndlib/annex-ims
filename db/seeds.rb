@@ -15,5 +15,6 @@
     bib_number: "0037612#{Faker::Number.number(2)}",
     isbn: Faker::Code.isbn,
     issn: "#{Faker::Number.number(4)}-#{Faker::Number.number(4)}",
-    conditions: [Item::CONDITIONS.sample, Item::CONDITIONS.sample, Item::CONDITIONS.sample, Item::CONDITIONS.sample].uniq)
+    conditions: [Item::CONDITIONS.sample, Item::CONDITIONS.sample, Item::CONDITIONS.sample, Item::CONDITIONS.sample].uniq,
+    call_number: "#{('A'..'Z').to_a.sample}#{('A'..'Z').to_a.sample}#{Faker::Number.number(4)}.#{('A'..'Z').to_a.sample}#{Faker::Number.number(2)} #{(1900..2014).to_a.sample}")
 end
