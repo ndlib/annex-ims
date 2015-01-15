@@ -6,14 +6,20 @@ Annex Test API is a inventory management synchronization service
 
 ## Item Retrieval [/1.0/resources/catalog/item{?barcode,auth_token}]
 
-+ Parameters
-    + barcode (required, number) ... The scanned barcode of an individual item
-    + auth_token (required, string) ... Required auth token for security purposes
-
 ### Item retrieved [GET]
-+ Request
+
++ Parameters
     
-        { barcode = 6547893210, auth_token = "QRt65I943BN32" }
+    + barcode (required, number) ... The scanned barcode of an individual item
+    
+        + Values
+            + `4567329801`
+    
+    + auth_token (required, string) ... Required auth token for security purposes
+    
+        + Values
+            + `QT853UT9hkj23`
+
 
 + Response 200 (application/json)
 
