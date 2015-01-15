@@ -6,7 +6,7 @@ Annex Test API is a inventory management synchronization service
 
 ## Item Retrieval [/1.0/resources/catalog/item{?barcode,auth_token}]
 
-### Item retrieved [GET]
+### Item requests [GET]
 
 + Parameters
     
@@ -19,6 +19,12 @@ Annex Test API is a inventory management synchronization service
     
         + Values
             + `QT853UT9hkj23`
+            
++ Request success
+
+    + Body
+            
+            { }
 
 
 + Response 200 (application/json)
@@ -33,7 +39,33 @@ Annex Test API is a inventory management synchronization service
             "pub_date": "2014",
             "volume": ""
         }
+        
++ Request record_not_found
 
+    + Body
+            
+            { }
+
+
++ Response 404 (application/json)
+
+        {
+            "error": "Record not found"
+        }
+
++ Request server_error
+
+    + Body
+            
+            { }
+
+
++ Response 500 (application/json)
+
+        {
+            "error": "Server error"
+        }
+        
 ## Note [/notes/{id}]
 A single Note object with all its details
 
