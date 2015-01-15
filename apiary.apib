@@ -3,29 +3,17 @@ FORMAT: 1A
 # Annex Test API
 Annex Test API is a inventory management synchronization service
 
+# Group Item Retrieval
 
-## Item Retrieval [/1.0/resources/catalog/item{?barcode,auth_token}]
+## Successful Request [/1.0/resources/catalog/item?barcode=123456&auth_token=qt56fur8b32]
 
-### Item requests [GET]
+### Request with valid params [GET]
 
-+ Parameters
-    
-    + barcode (required, number) ... The scanned barcode of an individual item
-    
-        + Values
-            + `4567329801`
-    
-    + auth_token (required, string) ... Required auth token for security purposes
-    
-        + Values
-            + `QT853UT9hkj23`
-            
 + Request success
 
     + Body
             
             { }
-
 
 + Response 200 (application/json)
 
@@ -40,6 +28,10 @@ Annex Test API is a inventory management synchronization service
             "volume": ""
         }
         
+## Failed Request [/1.0/resources/catalog/item?barcode=123456&auth_token=qt56fur8b3]
+
+### Request with invalid params [GET]
+        
 + Request record_not_found
 
     + Body
@@ -52,6 +44,10 @@ Annex Test API is a inventory management synchronization service
         {
             "error": "Record not found"
         }
+        
+## Failed Request [/1.0/resources/catalog/item?barcode=12345&auth_token=qt56fur8b32]
+
+### Request fails due to server error [GET]
 
 + Request server_error
 
@@ -66,22 +62,3 @@ Annex Test API is a inventory management synchronization service
             "error": "Server error"
         }
         
-## Note [/notes/{id}]
-A single Note object with all its details
-
-+ Parameters
-    + id (required, number, `1`) ... Numeric `id` of the Note to perform action with. Has example value.
-
-### Retrieve a Note [GET]
-+ Response 200 (application/json)
-
-    + Header
-
-            X-My-Header: The Value
-
-    + Body
-
-            { "id": 2, "title": "Pick-up posters from post-office" }
-
-### Remove a Note [DELETE]
-+ Response 204
