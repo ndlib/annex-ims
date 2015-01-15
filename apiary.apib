@@ -1,29 +1,32 @@
 FORMAT: 1A
 
 # Annex Test API
-Notes API is a *short texts saving* service similar to its physical paper presence on your table.
+Annex Test API is a inventory management synchronization service
 
-# Group Notes
-Notes related resources of the **Notes API**
 
-## Notes Collection [/notes]
-### List all Notes [GET]
+## Item Retrieval [/1.0/resources/catalog/item{?barcode,auth_token}]
+
++ Parameters
+    + barcode (required, number) ... The scanned barcode of an individual item
+    + auth_token (required, string) ... Required auth token for security purposes
+
+### Item retrieved [GET]
++ Request
+    
+        { "barcode" : "6547893210" }
+
 + Response 200 (application/json)
 
-        [{
-          "id": 1, "title": "Jogging in park"
-        }, {
-          "id": 2, "title": "Pick-up posters from post-office"
-        }]
-
-### Create a Note [POST]
-+ Request (application/json)
-
-        { "title": "Buy cheese and bread for breakfast." }
-
-+ Response 201 (application/json)
-
-        { "id": 3, "title": "Buy cheese and bread for breakfast." }
+        {
+            "item_id": 123456789,
+            "bib_id": 987654321,
+            "isbn": 543216789,
+            "issn": "",
+            "title": "Hartzler's Guide to Eternal Wisdom",
+            "author": "Jonathan Hartzler",
+            "pub_date": "2014",
+            "volume": ""
+        }
 
 ## Note [/notes/{id}]
 A single Note object with all its details
