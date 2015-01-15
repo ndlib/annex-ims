@@ -9,10 +9,6 @@ Annex Test API is a inventory management synchronization service
 
 ### Item equest with valid params [GET]
 
-+ Parameters
-    + barcode (required, number, `123456789`)
-    + auth_token (required, string, `qt453gf094gfe`)
-
 + Request success
 
     + Body
@@ -38,10 +34,6 @@ Annex Test API is a inventory management synchronization service
 ## Failed Item Request [/1.0/resources/catalog/item?barcode=12345678&auth_token=qt453gf094gfe]
 
 ### Request with invalid params [GET]
-
-+ Parameters
-    + barcode (required, number, `12345678`)
-    + auth_token (required, string, `qt453gf094gfe`)
         
 + Request record_not_found
 
@@ -56,6 +48,8 @@ Annex Test API is a inventory management synchronization service
             "error": "Record not found"
         }
         
+# Group Requests Returning 500
+
 ## Internal Server Error [/1.0/resources/catalog/item?barcode=12345&auth_token=qt56fur8b32]
 
 ### Request fails due to server error [GET]
