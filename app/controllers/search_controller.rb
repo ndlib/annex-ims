@@ -1,6 +1,6 @@
 class SearchController < ApplicationController
   def index
-    @result = Item.find([1, 10])
+    @result = SearchItems.call(params)
   end
 
 end

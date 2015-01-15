@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(version: 20150112042827) do
     t.string   "bib_number"
     t.string   "isbn"
     t.string   "issn"
-    t.string   "condition"
+    t.text     "conditions", default: [],                 array: true
   end
 
   add_index "items", ["barcode"], name: "index_items_on_barcode", unique: true, using: :btree

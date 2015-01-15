@@ -5,7 +5,7 @@
   .actions
     = submit_tag 'Search', class: 'btn pull-right btn-primary'
 %hr
-= @result.count 'results found'
+= "#{@result.count} results found"
 %table.table.table-striped.condensed
   %thead
     %tr
@@ -29,7 +29,7 @@
         %td= item.title
         %td= item.author
         %td= item.chron
-        %td= item.tray.barcode
-        %td= item.shelf.barcode
-        %td= item.condition
+        %td= item.tray.present? ? item.tray.barcode : ''
+        %td= item.shelf.present? ? item.shelf.barcode : ''
+        %td= item.conditions.join(", ")
 
