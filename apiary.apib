@@ -3,15 +3,15 @@ FORMAT: 1A
 # Annex Test API
 Annex Test API is a inventory management synchronization service
 
-# Group Item Retrieval
+# Group Successful Requests
 
-## Successful Request [/1.0/resources/catalog/item{?barcode,auth_token}]
+## Item Request [/1.0/resources/catalog/item{?barcode,auth_token}]
+
+### Item equest with valid params [GET]
 
 + Parameters
     + barcode (required, number, `123456789`)
     + auth_token (required, string, `qt453gf094gfe`)
-
-### Request with valid params [GET]
 
 + Request success
 
@@ -32,9 +32,16 @@ Annex Test API is a inventory management synchronization service
             "volume": ""
         }
         
-## Record Not Found [/1.0/resources/catalog/item?barcode=123456&auth_token=qt56fur8b3]
+        
+# Group Requests Returning 404
+
+## Failed Item Request [/1.0/resources/catalog/item?barcode=12345678&auth_token=qt453gf094gfe]
 
 ### Request with invalid params [GET]
+
++ Parameters
+    + barcode (required, number, `12345678`)
+    + auth_token (required, string, `qt453gf094gfe`)
         
 + Request record_not_found
 
