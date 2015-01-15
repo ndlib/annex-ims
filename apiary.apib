@@ -5,7 +5,11 @@ Annex Test API is a inventory management synchronization service
 
 # Group Item Retrieval
 
-## Successful Request [/1.0/resources/catalog/item?barcode=123456&auth_token=qt56fur8b32]
+## Successful Request [/1.0/resources/catalog/item{?barcode,auth_token}]
+
++ Parameters
+    + barcode (required, number, `123456789`)
+    + auth_token (required, string, `qt453gf094gfe`)
 
 ### Request with valid params [GET]
 
