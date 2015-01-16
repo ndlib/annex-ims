@@ -68,6 +68,12 @@ gem 'autoprefixer-rails'
 # Devise for authentication
 gem 'devise'
 
+# For consuming the API for items
+gem 'faraday'
+gem 'faraday_middleware'
+gem 'excon'
+gem 'typhoeus'
+
 group :development do
   # Simple generators for layouts
   gem 'rails_layout'
