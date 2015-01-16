@@ -46,9 +46,11 @@ class SearchItems
     end
 
     if filter.has_key?(:conditions)
-      results = results.where("conditions && ARRAY[?]", filter[:conditions].keys)
-
-#      results = results.where("conditions @> ARRAY[?]", filter[:conditions].keys)
+      if filter.has_key?(:condition_bool) && filter[:condition_bool] == "all"
+        results = results.where("conditions @> ARRAY[?]", filter[:conditions].keys)
+      else
+        results = results.where("conditions && ARRAY[?]", filter[:conditions].keys)
+      end
     end
 
     if results

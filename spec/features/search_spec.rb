@@ -137,12 +137,30 @@ feature "Search", :type => :feature do
     it "can search for items by condition" do
       @item = FactoryGirl.create(:item, chron: 'TEST CHRON')
       visit search_path
+      find(:css, "#condition_bool_any").set(true)
       find(:css, "#conditions_#{@item.conditions.sample}").set(true)
       click_button "Search"
       expect(current_path).to eq(search_path)
       expect(page).to have_content @item.title
       expect(page).to have_content @item.author
       expect(page).to have_content @item.chron
+    end
+
+    it "can search for items by mutliple condition" do
+      @item = FactoryGirl.create(:item, author: 'JOHN DOE', title: 'SOME TITLE', chron: 'TEST CHRN', conditions: ["COVER-TORN","COVER-DET"])
+      @item2 = FactoryGirl.create(:item, author: 'BOB SMITH', title: 'SOME OTHER TITLE', chron: 'TEST CHRON 2', conditions: ["COVER-TORN","PAGES-DET"])
+      visit search_path
+      find(:css, "#condition_bool_all").set(true)
+      find(:css, "#conditions_#{@item.conditions[0]}").set(true)
+      find(:css, "#conditions_#{@item.conditions[1]}").set(true)
+      click_button "Search"
+      expect(current_path).to eq(search_path)
+      expect(page).to have_content @item.title
+      expect(page).to have_content @item.author
+      expect(page).to have_content @item.chron
+      expect(page).to_not have_content @item2.title
+      expect(page).to_not have_content @item2.author
+      expect(page).to_not have_content @item2.chron
     end
 
   end

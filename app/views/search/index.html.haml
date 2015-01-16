@@ -3,6 +3,11 @@
     = select_tag :criteria_type, options_for_select(SearchItems::CRITERIA_TYPES), include_blank: true
     = text_field_tag :criteria
   .input-group
+    .input-group
+      = label_tag :condition_bool_any, "Any"
+      = radio_button_tag :condition_bool, :any
+      = label_tag :condition_bool_all, "All"
+      = radio_button_tag :condition_bool, :all
     %ul
       - Item::CONDITIONS.each do |condition|
         %li
