@@ -21,7 +21,7 @@ class SearchItems
 
   def search!
     results = Item.where(nil)
-p filter.inspect
+
     if filter.has_key?(:criteria_type) && filter.has_key?(:criteria)
       case filter[:criteria_type]
       when "barcode"
@@ -47,9 +47,9 @@ p filter.inspect
 
     if filter.has_key?(:conditions)
       results = results.where("conditions && ARRAY[?]", filter[:conditions].keys)
-    end
 
-# .where("'PAGES-DET' = ANY (conditions)")
+#      results = results.where("conditions @> ARRAY[?]", filter[:conditions].keys)
+    end
 
     if results
       results

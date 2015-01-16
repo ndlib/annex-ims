@@ -134,5 +134,16 @@ feature "Search", :type => :feature do
       expect(page).to have_content @item.chron
     end
 
+    it "can search for items by condition" do
+      @item = FactoryGirl.create(:item, chron: 'TEST CHRON')
+      visit search_path
+      find(:css, "#conditions_#{@item.conditions.sample}").set(true)
+      click_button "Search"
+      expect(current_path).to eq(search_path)
+      expect(page).to have_content @item.title
+      expect(page).to have_content @item.author
+      expect(page).to have_content @item.chron
+    end
+
   end
 end
