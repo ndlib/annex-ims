@@ -33,8 +33,6 @@ class TraysController < ApplicationController
 
     begin
       AssociateTrayWithShelfBarcode.call(@tray, barcode)
-      redirect_to show_tray_path(:id => @tray.id)
-      return
     rescue StandardError => e
       flash[:error] = e.message
       redirect_to show_tray_path(:id => @tray.id)

@@ -17,6 +17,7 @@ feature "Search", :type => :feature do
       expect(page).to have_content @item.title
       expect(page).to have_content @item.author
       expect(page).to have_content @item.chron
+      @item.destroy!
     end
 
     it "can search for an item by bib number" do
@@ -29,6 +30,7 @@ feature "Search", :type => :feature do
       expect(page).to have_content @item.title
       expect(page).to have_content @item.author
       expect(page).to have_content @item.chron
+      @item.destroy!
     end
 
     it "can search for 2 items with the same bib number" do
@@ -45,6 +47,8 @@ feature "Search", :type => :feature do
       expect(page).to have_content @item2.title
       expect(page).to have_content @item2.author
       expect(page).to have_content @item2.chron
+      @item.destroy!
+      @item2.destroy!
     end
 
     it "can search for an item by call number" do
@@ -57,6 +61,7 @@ feature "Search", :type => :feature do
       expect(page).to have_content @item.title
       expect(page).to have_content @item.author
       expect(page).to have_content @item.chron
+      @item.destroy!
     end
 
     it "can search for an item by isbn" do
@@ -69,6 +74,7 @@ feature "Search", :type => :feature do
       expect(page).to have_content @item.title
       expect(page).to have_content @item.author
       expect(page).to have_content @item.chron
+      @item.destroy!
     end
 
     it "can search for an item by issn" do
@@ -81,6 +87,7 @@ feature "Search", :type => :feature do
       expect(page).to have_content @item.title
       expect(page).to have_content @item.author
       expect(page).to have_content @item.chron
+      @item.destroy!
     end
 
     it "can search for an item by title" do
@@ -93,6 +100,7 @@ feature "Search", :type => :feature do
       expect(page).to have_content @item.title
       expect(page).to have_content @item.author
       expect(page).to have_content @item.chron
+      @item.destroy!
     end
 
     it "can search for an item by author" do
@@ -105,6 +113,7 @@ feature "Search", :type => :feature do
       expect(page).to have_content @item.title
       expect(page).to have_content @item.author
       expect(page).to have_content @item.chron
+      @item.destroy!
     end
 
     it "can search for an item by tray" do
@@ -118,6 +127,7 @@ feature "Search", :type => :feature do
       expect(page).to have_content @item.title
       expect(page).to have_content @item.author
       expect(page).to have_content @item.chron
+      @item.destroy!
     end
 
     it "can search for an item by shelf" do
@@ -132,6 +142,7 @@ feature "Search", :type => :feature do
       expect(page).to have_content @item.title
       expect(page).to have_content @item.author
       expect(page).to have_content @item.chron
+      @item.destroy!
     end
 
     it "can search for items by condition" do
@@ -144,9 +155,10 @@ feature "Search", :type => :feature do
       expect(page).to have_content @item.title
       expect(page).to have_content @item.author
       expect(page).to have_content @item.chron
+      @item.destroy!
     end
 
-    it "can search for items by mutliple condition" do
+    it "can search for items by multiple conditions" do
       @item = FactoryGirl.create(:item, author: 'JOHN DOE', title: 'SOME TITLE', chron: 'TEST CHRN', conditions: ["COVER-TORN","COVER-DET"])
       @item2 = FactoryGirl.create(:item, author: 'BOB SMITH', title: 'SOME OTHER TITLE', chron: 'TEST CHRON 2', conditions: ["COVER-TORN","PAGES-DET"])
       visit search_path
@@ -161,6 +173,8 @@ feature "Search", :type => :feature do
       expect(page).to_not have_content @item2.title
       expect(page).to_not have_content @item2.author
       expect(page).to_not have_content @item2.chron
+      @item.destroy!
+      @item2.destroy!
     end
 
   end
