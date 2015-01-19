@@ -58,7 +58,7 @@ class SearchItems
       filter[:end] ||= Date::today.to_s # Seems unlikely that we'll have any requests or ingests in the future.
       case filter[:date_type]
       when "request"
-        results = results
+        results = results.joins(:requests).where(requests: {requested: filter[:start]..filter[:finish]})
       when "initial"
         results = results.where(:initial_ingest => filter[:start]..filter[:finish])
       when "last"

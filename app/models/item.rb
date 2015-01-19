@@ -19,6 +19,7 @@ class Item < ActiveRecord::Base
 
   belongs_to :tray
   has_one :shelf, through: :tray
+  has_many :requests
 
   def has_correct_prefix
     if !IsItemBarcode.call(barcode)

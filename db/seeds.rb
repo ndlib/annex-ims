@@ -20,3 +20,9 @@
     initial_ingest: Faker::Date.between(30.days.ago, Date.today),
     last_ingest: Time.now.strftime("%Y-%m-%d"))
 end
+
+50.times do |i|
+  Request.create(criteria_type: "barcode",
+    criteria: Item.order("RANDOM()").first.barcode,
+    requested: Faker::Date.between(30.days.ago, Date.today))
+end

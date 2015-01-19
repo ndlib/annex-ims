@@ -215,5 +215,28 @@ feature "Search", :type => :feature do
       @item2.destroy!
     end
 
+    it "can search for items by request date" do
+      @item = FactoryGirl.create(:item, author: 'JOHN DOE', title: 'SOME TITLE', chron: 'TEST CHRN', conditions: ["COVER-TORN","COVER-DET"])
+      @request = FactoryGirl.create(:request, criteria_type: 'barcode', criteria: @item.barcode, item: @item, requested: 3.days.ago.strftime("%Y-%m-%d"))
+      @item2 = FactoryGirl.create(:item, author: 'BOB SMITH', title: 'SOME OTHER TITLE', chron: 'TEST CHRON 2', conditions: ["COVER-TORN","PAGES-DET"])
+      @request2 = FactoryGirl.create(:request, criteria_type: 'barcode', criteria: @item2.barcode, item: @item2, requested: 1.day.ago.strftime("%Y-%m-%d"))
+      visit search_path
+      select("Request Date", :from => "date_type")
+      fill_in "start", :with => 4.days.ago.strftime("%m/%d/%Y")
+      fill_in "finish", :with => 2.days.ago.strftime("%m/%d/%Y")
+      click_button "Search"
+      expect(current_path).to eq(search_path)
+      expect(page).to have_content @item.title
+      expect(page).to have_content @item.author
+      expect(page).to have_content @item.chron
+      expect(page).to_not have_content @item2.title
+      expect(page).to_not have_content @item2.author
+      expect(page).to_not have_content @item2.chron
+      @request.destroy!
+      @request2.destroy!
+      @item.destroy!
+      @item2.destroy!
+    end
+
   end
 end
