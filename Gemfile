@@ -70,6 +70,9 @@ gem 'haml-rails'
 gem 'bootstrap-sass', '~> 3.3.1'
 gem 'autoprefixer-rails'
 
+# Someone already Rails-ified a nice datepicker for Bootstrap
+gem 'bootstrap-datepicker-rails'
+
 # Devise for authentication
 gem 'devise'
 
