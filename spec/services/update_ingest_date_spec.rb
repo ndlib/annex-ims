@@ -1,17 +1,11 @@
 require 'rails_helper'
 
-RSpec.describe StockItem do
+RSpec.describe UpdateIngestDate do
   subject { described_class.call(item)}
-  let(:item) { double(Item, "stocked=" => true, initial_ingest: true, save: true)} # insert used methods
+  let(:item) { double(Item, "last_ingest=" => Date.today.to_s, initial_ingest: true, save: true)} # insert used methods
 
   before(:each) do
     allow(IsObjectItem).to receive(:call).with(item).and_return(true)
-    allow(UpdateIngestDate).to receive(:call).and_return(item)
-  end
-
-  it "sets stocked" do
-    expect(item).to receive("stocked=").with(true)
-    subject
   end
 
   it "returns the item when it is successful" do
