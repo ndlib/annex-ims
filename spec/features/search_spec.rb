@@ -181,7 +181,7 @@ feature "Search", :type => :feature do
       @item = FactoryGirl.create(:item, author: 'JOHN DOE', title: 'SOME TITLE', chron: 'TEST CHRN', conditions: ["COVER-TORN","COVER-DET"], initial_ingest: 3.days.ago.strftime("%Y-%m-%d"))
       @item2 = FactoryGirl.create(:item, author: 'BOB SMITH', title: 'SOME OTHER TITLE', chron: 'TEST CHRON 2', conditions: ["COVER-TORN","PAGES-DET"], initial_ingest: 1.day.ago.strftime("%Y-%m-%d"))
       visit search_path
-      select("Initial Ingest", :from => "date_type")
+      select("Initial Ingest Date", :from => "date_type")
       fill_in "start", :with => 4.days.ago.strftime("%m/%d/%Y")
       fill_in "finish", :with => 2.days.ago.strftime("%m/%d/%Y")
       click_button "Search"
@@ -196,7 +196,24 @@ feature "Search", :type => :feature do
       @item2.destroy!
     end
 
-
+    it "can search for items by last ingest date" do
+      @item = FactoryGirl.create(:item, author: 'JOHN DOE', title: 'SOME TITLE', chron: 'TEST CHRN', conditions: ["COVER-TORN","COVER-DET"], last_ingest: 3.days.ago.strftime("%Y-%m-%d"))
+      @item2 = FactoryGirl.create(:item, author: 'BOB SMITH', title: 'SOME OTHER TITLE', chron: 'TEST CHRON 2', conditions: ["COVER-TORN","PAGES-DET"], last_ingest: 1.day.ago.strftime("%Y-%m-%d"))
+      visit search_path
+      select("Last Ingest Date", :from => "date_type")
+      fill_in "start", :with => 4.days.ago.strftime("%m/%d/%Y")
+      fill_in "finish", :with => 2.days.ago.strftime("%m/%d/%Y")
+      click_button "Search"
+      expect(current_path).to eq(search_path)
+      expect(page).to have_content @item.title
+      expect(page).to have_content @item.author
+      expect(page).to have_content @item.chron
+      expect(page).to_not have_content @item2.title
+      expect(page).to_not have_content @item2.author
+      expect(page).to_not have_content @item2.chron
+      @item.destroy!
+      @item2.destroy!
+    end
 
   end
 end
