@@ -53,6 +53,19 @@ class SearchItems
       end
     end
 
+    if filter.has_key?(:date_type)
+      filter[:start] ||= "2015-01-01"   # I needed a reasonable date before which there would be no requests or ingests. Can adjust if needed.
+      filter[:end] ||= Date::today.to_s # Seems unlikely that we'll have any requests or ingests in the future.
+      case filter[:date_type]
+      when "request"
+        results = results
+      when "initial"
+        results = results.where(:initial_ingest => filter[:start]..filter[:finish])
+      when "last"
+        results = results.where(:last_ingest => filter[:start]..filter[:finish])
+      end
+    end
+
     if results
       results
     else

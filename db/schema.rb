@@ -11,27 +11,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150115210821) do
+ActiveRecord::Schema.define(version: 20150119044850) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "pgcrypto"
 
   create_table "items", force: true do |t|
-    t.string   "barcode",                     null: false
+    t.string   "barcode",                        null: false
     t.string   "title"
     t.string   "author"
     t.string   "chron"
     t.integer  "thickness"
     t.integer  "tray_id"
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
-    t.boolean  "stocked",     default: false, null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.boolean  "stocked",        default: false, null: false
     t.string   "bib_number"
     t.string   "isbn"
     t.string   "issn"
-    t.text     "conditions",  default: [],                 array: true
+    t.text     "conditions",     default: [],                 array: true
     t.string   "call_number"
+    t.date     "initial_ingest"
+    t.date     "last_ingest"
   end
 
   add_index "items", ["barcode"], name: "index_items_on_barcode", unique: true, using: :btree
