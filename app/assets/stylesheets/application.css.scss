@@ -11,6 +11,8 @@
  * file per style scope.
  *
  *= require bootstrap-datepicker3
+ *= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
+ *= require dataTables/extras/dataTables.tableTools
  *= require_tree .
  *= require_self
  */

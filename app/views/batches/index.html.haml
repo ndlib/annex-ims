@@ -1,0 +1,42 @@
+= select_tag :source, options_for_select([["Aleph", "aleph"], ["ILLiad", "illiad"]]), onchange: "table.ajax.reload()"
+= select_tag :req_type, options_for_select([["Checkout", "checkout"], ["Scan", "scan"]]), onchange: "table.ajax.reload()"
+= label_tag :rapid, "ILLiad Rapid Requests"
+= check_box_tag :rapid, 1, false, onchange: "table.ajax.reload()"
+%table.table.table-striped.condensed.datatable{"id" => "requests", "data-source" => batches_url(:format => "json")}
+  %thead
+    %tr
+      %th= 'Rapid Request?'
+      %th= 'Shelf'
+      %th= 'Tray'
+      %th= 'Title'
+      %th= 'Author'
+      %th= 'Chron'
+  %tbody
+:javascript
+  var table = $('.datatable').DataTable({
+  "dom": 'T<"clear">lfrtip',
+  "ajax": {
+    "url": "#{batches_url(:format => "json")}",
+    "data": function ( d ) {
+        d.extra_search = {
+          "source": $('#source').val(),
+          "req_type": $('#req_type').val(),
+          "rapid": $('#rapid').is(":checked")
+        };
+    }
+  },
+  serverSide: true,
+  "columns": [
+    {"title": "Rapid Request?", "data": "rapid"},
+    {"title": "Shelf", "data": "shelf"},
+    {"title": "Tray", "data": "tray"},
+    {"title": "Title", "data": "title"},
+    {"title": "Author", "data": "author"},
+    {"title": "Chron", "data": "chron"},
+  ],
+  "processing": true,
+  "tableTools": {
+    "aButtons": [ "print" ]
+   }
+  });
+

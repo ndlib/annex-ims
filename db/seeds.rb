@@ -24,5 +24,8 @@ end
 50.times do |i|
   Request.create(criteria_type: "barcode",
     criteria: Item.order("RANDOM()").first.barcode,
-    requested: Faker::Date.between(30.days.ago, Date.today))
+    requested: Faker::Date.between(30.days.ago, Date.today),
+    rapid: false,
+    source: "Aleph",
+    req_type: "checkout")
 end
