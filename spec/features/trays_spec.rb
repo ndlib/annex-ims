@@ -103,7 +103,7 @@ feature "Trays", :type => :feature do
       click_button "Save"
       expect(current_path).to eq(wrong_tray_path(:id => @tray.id))
       expect(page).to have_content "#{@tray.barcode} belongs to #{@shelf.barcode}, but #{@shelf2.barcode} was scanned."
-      click_button "Shelve"
+      click_button "Shelve Anyway"
       expect(current_path).to eq(trays_path)
     end
 
@@ -162,8 +162,7 @@ feature "Trays", :type => :feature do
       expect(page).to have_content @tray.barcode
       expect{page.find_by_id("barcode")}.to raise_error
       click_button "Pull"
-      expect(current_path).to eq(show_tray_path(:id => @tray.id))
-      expect(page).to have_content "Unshelved"
+      expect(current_path).to eq(trays_path)
     end
 
 # End new workflow.

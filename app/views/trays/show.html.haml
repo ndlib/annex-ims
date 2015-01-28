@@ -24,10 +24,6 @@
     = form_tag unshelve_tray_path(@tray) do |f|
       .actions
         = submit_tag 'Pull', class: 'btn btn-primary', id: 'pull'
-  - else
-    = form_tag shelve_tray_path(@tray) do |f|
-      .actions
-        = submit_tag 'Shelve', class: 'btn btn-primary'
   %br
   = form_tag dissociate_tray_path(@tray) do |f|
     .actions
