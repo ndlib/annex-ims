@@ -13,7 +13,7 @@
     = select_tag :thickness, options_for_select(Array(1..10)), include_blank: true, onchange: "document.getElementById('barcode').focus()".html_safe
   .field
     = label_tag :barcode, "Item"
-    = text_field_tag :barcode
+    = text_field_tag :barcode, @barcode
   .actions
     = submit_tag 'Save', class: 'btn btn-primary'
 %br
