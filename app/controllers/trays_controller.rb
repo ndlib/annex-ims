@@ -31,10 +31,12 @@ class TraysController < ApplicationController
       return
     end
 
-    if !@tray.shelf.nil? and (@tray.shelf.barcode != barcode)
-      flash[:error] = "#{@tray.barcode} belongs to #{@tray.shelf.barcode}, but #{barcode} was scanned."
-      redirect_to wrong_tray_path(:id => @tray.id)
-      return
+    unless (params[:force] == "true")
+      if !@tray.shelf.nil? and (@tray.shelf.barcode != barcode)
+        flash[:error] = "#{@tray.barcode} belongs to #{@tray.shelf.barcode}, but #{barcode} was scanned."
+        redirect_to wrong_tray_path(:id => @tray.id, :barcode => barcode)
+        return
+      end
     end
 
     begin
@@ -77,7 +79,7 @@ class TraysController < ApplicationController
     @size = TraySize.call(@tray.barcode)
 
     if UnshelveTray.call(@tray)
-      redirect_to show_tray_path(:id => @tray.id)
+      redirect_to trays_path
     else
       raise "unable to unshelve tray"
     end
@@ -86,6 +88,7 @@ class TraysController < ApplicationController
   # The only way to get here is if you've scanned the wrong shelf after scanning a tray
   def wrong
     @tray = Tray.find(params[:id])
+    @barcode = params[:barcode]
   end
 
   # Should this area be pulled out into a separate controller? It's all about trays, but with items. 
