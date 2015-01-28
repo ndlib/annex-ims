@@ -31,17 +31,21 @@ class TraysController < ApplicationController
       return
     end
 
+    if !@tray.shelf.nil? and (@tray.shelf.barcode != barcode)
+      flash[:error] = "#{@tray.barcode} belongs to #{@tray.shelf.barcode}, but #{barcode} was scanned."
+      redirect_to wrong_tray_path(:id => @tray.id)
+      return
+    end
+
     begin
       AssociateTrayWithShelfBarcode.call(@tray, barcode)
-      redirect_to show_tray_path(:id => @tray.id)
-      return
     rescue StandardError => e
       flash[:error] = e.message
       redirect_to show_tray_path(:id => @tray.id)
       return
     end
 
-    redirect_to show_tray_path(:id => @tray.id)
+    redirect_to trays_path
     return
   end
 
@@ -51,7 +55,7 @@ class TraysController < ApplicationController
     @size = TraySize.call(@tray.barcode)
 
     if DissociateTrayFromShelf.call(@tray)
-      redirect_to show_tray_path(:id => @tray.id)
+      redirect_to trays_path
     else
       raise "unable to dissociate tray"
     end
@@ -62,7 +66,7 @@ class TraysController < ApplicationController
     @size = TraySize.call(@tray.barcode)
 
     if ShelveTray.call(@tray)
-      redirect_to show_tray_path(:id => @tray.id)
+      redirect_to trays_path
     else
       raise "unable to shelve tray"
     end
@@ -77,6 +81,11 @@ class TraysController < ApplicationController
     else
       raise "unable to unshelve tray"
     end
+  end
+
+  # The only way to get here is if you've scanned the wrong shelf after scanning a tray
+  def wrong
+    @tray = Tray.find(params[:id])
   end
 
   # Should this area be pulled out into a separate controller? It's all about trays, but with items. 

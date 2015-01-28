@@ -1,0 +1,14 @@
+= @tray.barcode
+%br
+= @tray.shelved ? "Shelved" : "Unshelved"
+%br
+= @tray.shelf.nil? ? "STAGING" : "Location: #{@tray.shelf.barcode}"
+%br
+- if !@tray.shelf.nil?
+  = form_tag shelve_tray_path(@tray) do |f|
+    .actions
+      = submit_tag 'Shelve', class: 'btn btn-primary'
+%br
+= button_to "Cancel", trays_path, method: :get, class: 'btn pull-left btn-primary', :form => { :id => "cancel" }
+%br
+= button_to "Done", trays_path, method: :get, class: 'btn pull-right btn-primary'

@@ -1,18 +1,19 @@
 = @tray.barcode
 %br
-= form_tag associate_tray_path(@tray) do |f|
-  - if @tray.errors.any?
-    #error_explanation
-      %h2= "#{pluralize(@tray.errors.count, "error")} prohibited this tray from being saved:"
-      %ul
-        - @tray.errors.full_messages.each do |msg|
-          %li= msg
+- if !(!@tray.shelf.nil? and @tray.shelved)
+  = form_tag associate_tray_path(@tray) do |f|
+    - if @tray.errors.any?
+      #error_explanation
+        %h2= "#{pluralize(@tray.errors.count, "error")} prohibited this tray from being saved:"
+        %ul
+          - @tray.errors.full_messages.each do |msg|
+            %li= msg
 
-  .field
-    = label_tag :barcode, "Shelf"
-    = text_field_tag :barcode, nil, autofocus: "autofocus"
-  .actions
-    = submit_tag 'Save', class: 'btn btn-primary'
+    .field
+      = label_tag :barcode, "Shelf"
+      = text_field_tag :barcode, nil, autofocus: "autofocus"
+    .actions
+      = submit_tag 'Save', class: 'btn btn-primary'
 %br
 = @tray.shelved ? "Shelved" : "Unshelved"
 %br
@@ -22,7 +23,7 @@
   - if @tray.shelved
     = form_tag unshelve_tray_path(@tray) do |f|
       .actions
-        = submit_tag 'Unshelve', class: 'btn btn-primary'
+        = submit_tag 'Pull', class: 'btn btn-primary', id: 'pull'
   - else
     = form_tag shelve_tray_path(@tray) do |f|
       .actions
@@ -30,10 +31,8 @@
   %br
   = form_tag dissociate_tray_path(@tray) do |f|
     .actions
-      = submit_tag 'DISSOCIATE', class: 'btn btn-primary'
+      = submit_tag 'Unassign', class: 'btn btn-primary', id: 'unassign'
 %br
-= form_tag withdraw_tray_path(@tray) do |f|
-  .actions
-    = submit_tag 'Withdraw', class: 'btn btn-primary'
+= button_to "Cancel", trays_path, method: :get, class: 'btn pull-left btn-primary', :form => { :id => "cancel" }
 %br
 = button_to "Done", trays_path, method: :get, class: 'btn pull-right btn-primary'
