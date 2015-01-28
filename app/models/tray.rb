@@ -4,7 +4,7 @@ class Tray < ActiveRecord::Base
   validate :has_correct_prefix
 
   belongs_to :shelf
-  has_many :items
+  has_many :items, -> { order "updated_at DESC" }
 
   def has_correct_prefix
     if !IsTrayBarcode.call(barcode)
