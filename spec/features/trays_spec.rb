@@ -17,7 +17,160 @@ feature "Trays", :type => :feature do
       expect(page).to have_content "STAGING"
     end
 
-    it "associate a shelf with a tray" do
+# New workflow from spreadsheet. Take priority over previous code.
+
+    it "runs through unassigned-unshelved-cancel flow" do
+      @tray = FactoryGirl.create(:tray)
+      visit trays_path
+      fill_in "Tray", :with => @tray.barcode
+      click_button "Save"
+      expect(current_path).to eq(show_tray_path(:id => @tray.id))
+      expect(page).to have_content @tray.barcode
+      expect(page).to have_content "STAGING"
+      expect{page.find_by_id("pull")}.to raise_error
+      expect{page.find_by_id("unassign")}.to raise_error
+      click_button "Cancel"
+      expect(current_path).to eq(trays_path)
+    end
+
+    it "runs through unassigned-unshelved-scan flow" do
+      @shelf = FactoryGirl.create(:shelf)
+      @tray = FactoryGirl.create(:tray, shelf: nil, shelved: false)
+      visit trays_path
+      fill_in "Tray", :with => @tray.barcode
+      click_button "Save"
+      expect(current_path).to eq(show_tray_path(:id => @tray.id))
+      expect(page).to have_content @tray.barcode
+      expect(page).to have_content "STAGING"
+      expect{page.find_by_id("pull")}.to raise_error
+      expect{page.find_by_id("unassign")}.to raise_error
+      fill_in "Shelf", :with => @shelf.barcode
+      click_button "Save"
+      expect(current_path).to eq(trays_path)
+    end
+
+    it "runs through assigned-unshelved-cancel flow" do
+      @shelf = FactoryGirl.create(:shelf)
+      @tray = FactoryGirl.create(:tray, shelf: @shelf, shelved: false)
+      visit trays_path
+      fill_in "Tray", :with => @tray.barcode
+      click_button "Save"
+      expect(current_path).to eq(show_tray_path(:id => @tray.id))
+      expect(page).to have_content @tray.barcode
+      expect{page.find_by_id("pull")}.to raise_error
+      click_button "Cancel"
+      expect(current_path).to eq(trays_path)
+    end
+
+    it "runs through assigned-unshelved-unassign flow" do
+      @shelf = FactoryGirl.create(:shelf)
+      @tray = FactoryGirl.create(:tray, shelf: @shelf, shelved: false)
+      visit trays_path
+      fill_in "Tray", :with => @tray.barcode
+      click_button "Save"
+      expect(current_path).to eq(show_tray_path(:id => @tray.id))
+      expect(page).to have_content @tray.barcode
+      expect{page.find_by_id("pull")}.to raise_error
+      click_button "Unassign"
+      expect(current_path).to eq(trays_path)
+    end
+
+    it "runs through assigned-unshelved-scan-same flow" do
+      @shelf = FactoryGirl.create(:shelf)
+      @tray = FactoryGirl.create(:tray, shelf: @shelf, shelved: false)
+      visit trays_path
+      fill_in "Tray", :with => @tray.barcode
+      click_button "Save"
+      expect(current_path).to eq(show_tray_path(:id => @tray.id))
+      expect(page).to have_content @tray.barcode
+      expect{page.find_by_id("pull")}.to raise_error
+      fill_in "Shelf", :with => @shelf.barcode
+      click_button "Save"
+      expect(current_path).to eq(trays_path)
+    end
+
+    it "runs through assigned-unshelved-scan-different-shelve flow" do
+      @shelf = FactoryGirl.create(:shelf)
+      @shelf2 = FactoryGirl.create(:shelf, barcode: "SHELF-11111")
+      @tray = FactoryGirl.create(:tray, shelf: @shelf, shelved: false)
+      visit trays_path
+      fill_in "Tray", :with => @tray.barcode
+      click_button "Save"
+      expect(current_path).to eq(show_tray_path(:id => @tray.id))
+      expect(page).to have_content @tray.barcode
+      expect{page.find_by_id("pull")}.to raise_error
+      fill_in "Shelf", :with => @shelf2.barcode
+      click_button "Save"
+      expect(current_path).to eq(wrong_tray_path(:id => @tray.id))
+      expect(page).to have_content "#{@tray.barcode} belongs to #{@shelf.barcode}, but #{@shelf2.barcode} was scanned."
+      click_button "Shelve"
+      expect(current_path).to eq(trays_path)
+    end
+
+    it "runs through assigned-unshelved-scan-different flow-cancel" do
+      @shelf = FactoryGirl.create(:shelf)
+      @shelf2 = FactoryGirl.create(:shelf, barcode: "SHELF-11112")
+      @tray = FactoryGirl.create(:tray, shelf: @shelf, shelved: false)
+      visit trays_path
+      fill_in "Tray", :with => @tray.barcode
+      click_button "Save"
+      expect(current_path).to eq(show_tray_path(:id => @tray.id))
+      expect(page).to have_content @tray.barcode
+      expect{page.find_by_id("pull")}.to raise_error
+      fill_in "Shelf", :with => @shelf2.barcode
+      click_button "Save"
+      expect(current_path).to eq(wrong_tray_path(:id => @tray.id))
+      expect(page).to have_content "#{@tray.barcode} belongs to #{@shelf.barcode}, but #{@shelf2.barcode} was scanned."
+      click_button "Cancel"
+      expect(current_path).to eq(trays_path)
+    end
+
+    it "runs through assigned-shelved-cancel flow" do
+      @shelf = FactoryGirl.create(:shelf)
+      @tray = FactoryGirl.create(:tray, shelf: @shelf, shelved: true)
+      visit trays_path
+      fill_in "Tray", :with => @tray.barcode
+      click_button "Save"
+      expect(current_path).to eq(show_tray_path(:id => @tray.id))
+      expect(page).to have_content @tray.barcode
+      expect{page.find_by_id("barcode")}.to raise_error
+      click_button "Cancel"
+      expect(current_path).to eq(trays_path)
+    end
+
+    it "runs through assigned-shelved-unassign flow" do
+      @shelf = FactoryGirl.create(:shelf)
+      @tray = FactoryGirl.create(:tray, shelf: @shelf, shelved: true)
+      visit trays_path
+      fill_in "Tray", :with => @tray.barcode
+      click_button "Save"
+      expect(current_path).to eq(show_tray_path(:id => @tray.id))
+      expect(page).to have_content @tray.barcode
+      expect{page.find_by_id("barcode")}.to raise_error
+      click_button "Unassign"
+      expect(current_path).to eq(trays_path)
+
+    end
+
+    it "runs through assigned-shelved-pull flow" do
+      @shelf = FactoryGirl.create(:shelf)
+      @tray = FactoryGirl.create(:tray, shelf: @shelf, shelved: true)
+      visit trays_path
+      fill_in "Tray", :with => @tray.barcode
+      click_button "Save"
+      expect(current_path).to eq(show_tray_path(:id => @tray.id))
+      expect(page).to have_content @tray.barcode
+      expect{page.find_by_id("barcode")}.to raise_error
+      click_button "Pull"
+      expect(current_path).to eq(show_tray_path(:id => @tray.id))
+      expect(page).to have_content "Unshelved"
+    end
+
+# End new workflow.
+
+#I'm not entirely sure what to do with these tests. Isn't all this behaviour encapsulated in the new work flow?
+=begin
+    it "can associate a shelf with a tray" do
       @tray = FactoryGirl.create(:tray)
       @shelf = FactoryGirl.create(:shelf)
       visit trays_path
@@ -155,7 +308,7 @@ feature "Trays", :type => :feature do
       expect(page).to have_content "STAGING"
       expect(page).to have_content "Unshelved"
     end
-
+=end
 
     it "can scan a new tray for processing items" do
       @tray = FactoryGirl.create(:tray)
