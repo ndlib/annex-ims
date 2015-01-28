@@ -2,7 +2,7 @@
 = form_tag item_multex_path(@item) do |f|
   .field
     = label_tag :barcode, "Item or Tray"
-    = text_field_tag :barcode, autofocus: "autofocus"
+    = text_field_tag :barcode, nil, autofocus: "autofocus"
   .actions
     = submit_tag 'Scan', class: 'btn btn-primary'
 %br

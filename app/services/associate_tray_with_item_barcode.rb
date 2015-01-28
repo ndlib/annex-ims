@@ -24,7 +24,7 @@ class  AssociateTrayWithItemBarcode
         return false
       end
     else
-      raise "item not found"
+      raise "item #{barcode} not found"
     end
   end
 

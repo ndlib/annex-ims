@@ -108,6 +108,7 @@ class TraysController < ApplicationController
   def show_item
     @tray = Tray.find(params[:id])
     @size = TraySize.call(@tray.barcode)
+    @barcode = params[:barcode]
   end
 
   def associate_item
@@ -126,7 +127,7 @@ class TraysController < ApplicationController
       thickness = params[:thickness]
     else
       flash[:error] = 'select a valid thickness'
-      redirect_to show_tray_item_path(:id => @tray.id)
+      redirect_to show_tray_item_path(:id => @tray.id, :barcode => barcode)
       return
     end
 

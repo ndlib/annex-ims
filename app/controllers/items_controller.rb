@@ -11,6 +11,13 @@ class ItemsController < ApplicationController
       redirect_to items_path
       return
     end
+
+    if @item.nil?
+      flash[:error] = "No item was found with barcode #{params[:item][:barcode]}"
+      redirect_to items_path
+      return
+    end
+
     redirect_to show_item_path(:id => @item.id)
   end
 
@@ -28,9 +35,16 @@ class ItemsController < ApplicationController
         @item = GetItemFromBarcode.call(barcode)
       rescue StandardError => e
         flash[:error] = e.message
-        redirect_to items_path
+        redirect_to show_item_path(:id => params[:id])
         return
       end
+
+      if @item.nil?
+        flash[:error] = "No item was found with barcode #{barcode}"
+        redirect_to show_item_path(:id => params[:id])
+        return
+      end
+
       redirect_to show_item_path(:id => @item.id)
     elsif IsTrayBarcode.call(barcode) # if this is a tray, do other stuff
       begin
