@@ -21,21 +21,19 @@
 %table.table.table-striped.condensed{"data-toggle" => "table"}
   %thead
     %tr
+      %th= ''
       %th= 'Barcode'
       %th= 'Title'
-      %th= 'Author'
       %th= 'Chron'
-      %th= 'Dissociate'
   %tbody
     - @tray.items.each do |item|
       %tr
-        %td= item.barcode
-        %td= item.title
-        %td= item.author
-        %td= item.chron
         %td
           = form_tag dissociate_tray_item_path(@tray) do |f|
             = hidden_field_tag :item_id, item.id
             .actions
               = submit_tag 'Remove', class: 'btn btn-primary'
+        %td= item.barcode
+        %td= item.title
+        %td= item.chron
 
