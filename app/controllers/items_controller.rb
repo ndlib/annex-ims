@@ -12,7 +12,7 @@ class ItemsController < ApplicationController
       return
     end
 
-    if @item.nil?
+    if @item.blank?
       flash[:error] = "No item was found with barcode #{params[:item][:barcode]}"
       redirect_to items_path
       return
@@ -39,7 +39,7 @@ class ItemsController < ApplicationController
         return
       end
 
-      if @item.nil?
+      if @item.blank?
         flash[:error] = "No item was found with barcode #{barcode}"
         redirect_to show_item_path(:id => params[:id])
         return
