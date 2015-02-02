@@ -19,6 +19,7 @@ class  AssociateTrayWithItemBarcode
       item.tray = tray
       item.thickness = thickness
       if item.save
+        StockItem.call(item)
         return item
       else
         return false
