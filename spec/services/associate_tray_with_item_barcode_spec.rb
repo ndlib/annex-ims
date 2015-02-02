@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe AssociateTrayWithItemBarcode do
   subject { described_class.call(tray, barcode, thickness)}
   let(:tray) { double(Tray, "item=" => true, save: true)} # insert used methods
-  let(:item) { double(Item, "tray=" => true, "thickness=" => true, save: true, "stocked=" => true)} # insert used methods
+  let(:item) { double(Item, "tray=" => true, "thickness=" => true, save: true, "stocked=" => true, initial_ingest: Date.today.to_s, last_ingest: Date.today.to_s)} # insert used methods
   let(:thickness) { Faker::Number.number(1) }
   let(:barcode) {  "examplebarcode" }
 
@@ -12,6 +12,7 @@ RSpec.describe AssociateTrayWithItemBarcode do
     allow(GetItemFromBarcode).to receive(:call).with(barcode).and_return(item)
     allow(IsObjectTray).to receive(:call).with(tray).and_return(true)
     allow(IsObjectItem).to receive(:call).with(item).and_return(true)
+    allow(UpdateIngestDate).to receive(:call).with(item).and_return(true)
   end
 
 
