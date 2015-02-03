@@ -25,7 +25,7 @@ Rails.application.routes.draw do
   get 'items', to: 'items#index', as: 'items'
   get 'items/scan', to: 'items#scan', as: 'scan_item'
   get 'items/:id', to: 'items#show', as: 'show_item'
-  post 'items/:id/multex', to: 'items#multex', as: 'item_multex'
+  post 'items/:id/multiplex', to: 'items#multiplex', as: 'item_multiplex'
 
   get 'search', to: 'search#index', as: 'search'
 
