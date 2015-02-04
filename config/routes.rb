@@ -25,7 +25,7 @@ Rails.application.routes.draw do
   get 'items', to: 'items#index', as: 'items'
   get 'items/scan', to: 'items#scan', as: 'scan_item'
   get 'items/:id', to: 'items#show', as: 'show_item'
-  post 'items/:id/multiplex', to: 'items#multiplex', as: 'item_multiplex'
+  post 'items/:id/restock', to: 'items#restock', as: 'item_restock'
 
   # You can have the root of your site routed with "root"
   root 'welcome#index'

@@ -1,6 +1,6 @@
 include Rails.application.routes.url_helpers
 
-class  ItemMultiplex
+class  ItemRestock
   attr_reader :item_id, :barcode
 
   def self.call(item_id, barcode)

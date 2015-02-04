@@ -25,12 +25,11 @@ class ItemsController < ApplicationController
     @item = Item.find(params[:id])
   end
 
-  # I don't like multi-purpose methods, but there's no other way to do this, hence the name.
-  def multiplex
+  def restock
     item_id = params[:id]
     barcode = params[:barcode]
 
-    results = ItemMultiplex.call(item_id, barcode)
+    results = ItemRestock.call(item_id, barcode)
 
     flash[:error] = results[:error]
     flash[:notice] = results[:notice]
