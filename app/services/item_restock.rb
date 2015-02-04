@@ -1,5 +1,3 @@
-include Rails.application.routes.url_helpers
-
 class  ItemRestock
   attr_reader :item_id, :barcode
 
@@ -24,9 +22,9 @@ class  ItemRestock
 
         if item.blank?
           results[:error] = "No item was found with barcode #{barcode}"
-          results[:path] = show_item_path(:id => @item_id)
+          results[:path] = h.show_item_path(:id => @item_id)
         else
-          results[:path] = show_item_path(:id => item.id)
+          results[:path] = h.show_item_path(:id => item.id)
         end
       elsif IsTrayBarcode.call(barcode)
         item = Item.find(@item_id)
@@ -38,17 +36,21 @@ class  ItemRestock
 
         StockItem.call(item)
         results[:notice] = "Item #{item.barcode} stocked."
-        results[:path] = items_path
+        results[:path] = h.items_path
       else
         results[:error] = "scan either a new item or a tray to stock to"
-        results[:path] = show_item_path(:id => @item_id)
+        results[:path] = h.show_item_path(:id => @item_id)
       end
     rescue StandardError => e
       results[:error] = e.message
-      results[:path] = show_item_path(:id => @item_id)
+      results[:path] = h.show_item_path(:id => @item_id)
     end
 
     return results
+  end
+
+  def h
+    Rails.application.routes.url_helpers
   end
 
 end
