@@ -1,4 +1,4 @@
-class ItemRestock
+class ItemPath
   attr_reader :item_id, :barcode
 
   def self.call(item_id, barcode)
@@ -16,15 +16,13 @@ class ItemRestock
     results[:notice] = nil
     results[:path] = nil
 
-    if IsItemBarcode.call(barcode)
-      results = ItemPath.call(item_id, barcode)
+    item = GetItemFromBarcode.call(barcode)
 
-    elsif IsTrayBarcode.call(barcode)
-      results = ItemRestockToTray.call(item_id, barcode)
-
-    else
-      results[:error] = "scan either a new item or a tray to stock to"
+    if item.blank?
+      results[:error] = "No item was found with barcode #{barcode}"
       results[:path] = h.show_item_path(:id => @item_id)
+    else
+      results[:path] = h.show_item_path(:id => item.id)
     end
 
     return results

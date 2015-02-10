@@ -1,5 +1,9 @@
 require 'rails_helper'
 
+def h
+  Rails.application.routes.url_helpers
+end
+
 RSpec.describe ItemRestock do
   before(:each) do
 
@@ -11,7 +15,7 @@ RSpec.describe ItemRestock do
     results = ItemRestock.call(item_id, barcode)
     expect(results[:error]).to eq("No item was found with barcode examplebarcode")
     expect(results[:notice]).to eq(nil)
-    expect(results[:path]).to eq(show_item_path(:id => item_id))
+    expect(results[:path]).to eq(h.show_item_path(:id => item_id))
   end
 
   it "scans an item and then switches to a different item" do
@@ -20,7 +24,7 @@ RSpec.describe ItemRestock do
     results = ItemRestock.call(@item.id, @item2.barcode)
     expect(results[:error]).to eq(nil)
     expect(results[:notice]).to eq(nil)
-    expect(results[:path]).to eq(show_item_path(:id => @item2.id))
+    expect(results[:path]).to eq(h.show_item_path(:id => @item2.id))
   end
 
   it "stocks an item to a tray" do
@@ -29,7 +33,7 @@ RSpec.describe ItemRestock do
     results = ItemRestock.call(@item.id, @tray.barcode)
     expect(results[:error]).to eq(nil)
     expect(results[:notice]).to eq("Item #{@item.barcode} stocked.")
-    expect(results[:path]).to eq(items_path)
+    expect(results[:path]).to eq(h.items_path)
   end
 
   it "rejects a wrong tray scan" do
@@ -39,7 +43,7 @@ RSpec.describe ItemRestock do
     results = ItemRestock.call(@item.id, @tray2.barcode)
     expect(results[:error]).to eq("incorrect tray for this item")
     expect(results[:notice]).to eq(nil)
-    expect(results[:path]).to eq(show_item_path(:id => @item.id))
+    expect(results[:path]).to eq(h.show_item_path(:id => @item.id))
   end
 
 
@@ -50,7 +54,7 @@ RSpec.describe ItemRestock do
     results = ItemRestock.call(@item.id, @shelf.barcode)
     expect(results[:error]).to eq("scan either a new item or a tray to stock to")
     expect(results[:notice]).to eq(nil)
-    expect(results[:path]).to eq(show_item_path(:id => @item.id))
+    expect(results[:path]).to eq(h.show_item_path(:id => @item.id))
   end
 
 
