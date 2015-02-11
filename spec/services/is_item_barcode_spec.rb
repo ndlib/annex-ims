@@ -17,8 +17,8 @@ RSpec.describe IsItemBarcode do
     expect(IsItemBarcode.call(barcode)).to eq(false)
   end
 
-  it "indicates 'TRAY-A1234' is an invalid barcode" do
-    barcode = 'TRAY-A1234'
+  it "indicates 'TRAY-AL1234' is an invalid barcode" do
+    barcode = 'TRAY-AL1234'
     expect(IsItemBarcode.call(barcode)).to eq(false)
   end
 

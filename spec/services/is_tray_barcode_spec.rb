@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe IsTrayBarcode do
 
-  it "recognizes 'TRAY-A1234' as a valid barcode" do
-    barcode = 'TRAY-A1234'
+  it "recognizes 'TRAY-AL1234' as a valid barcode" do
+    barcode = 'TRAY-AL1234'
     expect(IsTrayBarcode.call(barcode)).to eq(true)
   end
 
