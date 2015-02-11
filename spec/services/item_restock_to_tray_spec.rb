@@ -11,7 +11,7 @@ RSpec.describe ItemRestockToTray do
 
   it "runs a test and expect errors" do
     @item = FactoryGirl.create(:item)
-    barcode = "TRAY-A1234"
+    barcode = "TRAY-AL1234"
     results = ItemRestockToTray.call(@item.id, barcode)
     expect(results[:error]).to eq("This item has no tray to stock to.")
     expect(results[:notice]).to eq(nil)

@@ -1,6 +1,4 @@
 class TraySize
-  PREFIX = '(TRAY-)([A-Z])'
-
   attr_reader :barcode
 
   def self.call(barcode)
@@ -12,7 +10,7 @@ class TraySize
   end
 
   def size
-    /#{PREFIX}/.match(barcode)[2]
+    /#{IsTrayBarcode::PREFIX}/.match(barcode)[2]
   end
 
 end
