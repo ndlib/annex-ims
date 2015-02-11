@@ -32,7 +32,7 @@ RSpec.describe ItemRestock do
     @item = FactoryGirl.create(:item, tray: @tray)
     results = ItemRestock.call(@item.id, @tray.barcode)
     expect(results[:error]).to eq(nil)
-    expect(results[:notice]).to eq("Item #{@item.barcode} stocked.")
+    expect(results[:notice]).to eq("Item #{@item.barcode} stocked in #{@tray.barcode}.")
     expect(results[:path]).to eq(h.items_path)
   end
 

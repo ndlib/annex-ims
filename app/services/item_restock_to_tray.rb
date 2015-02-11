@@ -28,7 +28,7 @@ class ItemRestockToTray
         results[:path] = h.show_item_path(:id => @item_id)
       else
         StockItem.call(item)
-        results[:notice] = "Item #{item.barcode} stocked."
+        results[:notice] = "Item #{item.barcode} stocked in #{tray.barcode}."
         results[:path] = h.items_path
       end
     end

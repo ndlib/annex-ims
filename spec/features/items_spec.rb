@@ -43,7 +43,7 @@ feature "Items", :type => :feature do
       fill_in "Tray", :with => @tray.barcode
       click_button "Scan"
       expect(current_path).to eq(items_path)
-      expect(page).to have_content "Item #{@item.barcode} stocked."
+      expect(page).to have_content "Item #{@item.barcode} stocked in #{@tray.barcode}."
     end
 
     it "can scan an item and then scan a tray and show an error for the wrong tray" do
