@@ -1,5 +1,9 @@
 class TrayFull
-  TRAY_LIMIT = 40
+  TRAY_LIMIT = { "AH" => 40, "AL" => 40,
+                 "BH" => 40, "BL" => 40,
+                 "CH" => 40, "CL" => 40,
+                 "DH" => 40, "DL" => 40,
+                 "EH" => 30, "EL" => 30}
 
   attr_reader :tray
 
@@ -12,7 +16,8 @@ class TrayFull
   end
 
   def full?
-    (@tray.items.sum(:thickness) > (TRAY_LIMIT + @tray.items.count))
+    size = TraySize.call(@tray.barcode)
+    (@tray.items.sum(:thickness) >= (TRAY_LIMIT[size] + @tray.items.count))
   end
 
 end
