@@ -17,7 +17,9 @@ class TrayFull
 
   def full?
     size = TraySize.call(@tray.barcode)
-    (@tray.items.sum(:thickness) >= (TRAY_LIMIT[size] + @tray.items.count))
+    buffer = (@tray.items.count < 10) ? @tray.items.count : 10
+    capacity = TRAY_LIMIT[size] + buffer
+    @tray.items.sum(:thickness) >= capacity
   end
 
 end
