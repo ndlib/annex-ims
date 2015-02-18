@@ -1,5 +1,6 @@
 class SearchItems
-  CRITERIA_TYPES = [["Barcode", "barcode"],
+  CRITERIA_TYPES = [["Search All Fields", "any"],
+    ["Barcode", "barcode"],
     ["Bib Number", "bib_number"],
     ["Call Number", "call_number"],
     ["ISBN", "isbn"],
@@ -20,54 +21,68 @@ class SearchItems
   end
 
   def search!
-    results = Item.where(nil)
 
-    if filter.has_key?(:criteria_type) && filter.has_key?(:criteria)
-      case filter[:criteria_type]
-      when "barcode"
-        results = results.where(barcode: filter[:criteria])
-      when "bib_number"
-        results = results.where(bib_number: filter[:criteria])
-      when "call_number"
-        results = results.where(call_number: filter[:criteria])
-      when "isbn"
-        results = results.where(isbn: filter[:criteria])
-      when "issn"
-        results = results.where(issn: filter[:criteria])
-      when "title"
-        results = results.where(title: filter[:criteria])
-      when "author"
-        results = results.where(author: filter[:criteria])
-      when "tray"
-        results = results.joins(:tray).where(trays: {barcode: filter[:criteria]})
-      when "shelf"
-        results = results.joins(tray: :shelf).where(shelves: {barcode: filter[:criteria]})
+    results = Item.search do
+      if filter.has_key?(:criteria_type) && filter.has_key?(:criteria)
+        case filter[:criteria_type]
+          when "any"
+            fulltext(filter[:criteria], :fields => [:barcode, :bib_number, :call_number, :isbn, :issn, :title, :author, :tray_barcode, :shelf_barcode])
+          when "barcode"
+            fulltext(filter[:criteria], :fields => :barcode)
+          when "bib_number"
+            fulltext(filter[:criteria], :fields => :bib_number)
+          when "call_number"
+            fulltext(filter[:criteria], :fields => :call_number)
+          when "isbn"
+            fulltext(filter[:criteria], :fields => :isbn)
+          when "issn"
+            fulltext(filter[:criteria], :fields => :issn)
+          when "title"
+            fulltext(filter[:criteria], :fields => :title)
+          when "author"
+            fulltext(filter[:criteria], :fields => :author)
+          when "tray"
+            fulltext(filter[:criteria], :fields => :tray_barcode)
+          when "shelf"
+            fulltext(filter[:criteria], :fields => :shelf_barcode)
+        end
       end
+
+      if filter.has_key?(:conditions)
+        if filter.has_key?(:condition_bool) && filter[:condition_bool] == "all"
+          all_of do
+            filter[:conditions].keys.each do |condition|
+              with(:conditions, condition)
+            end
+          end
+        else
+          any_of do
+            with(:conditions, filter[:conditions].keys)
+          end
+        end
+      end
+
+      if filter.has_key?(:date_type)
+        filter[:start] ||= "2015-01-01"   # I needed a reasonable date before which there would be no requests or ingests. Can adjust if needed.
+        filter[:end] ||= Date::today.to_s # Seems unlikely that we'll have any requests or ingests in the future.
+        case filter[:date_type]
+          when "request"
+            any_of do
+              with(:requested, filter[:start]..filter[:finish])
+            end
+          when "initial"
+            with(:initial_ingest, filter[:start]..filter[:finish])
+          when "last"
+            with(:last_ingest, filter[:start]..filter[:finish])
+        end
+      end
+
     end
 
-    if filter.has_key?(:conditions)
-      if filter.has_key?(:condition_bool) && filter[:condition_bool] == "all"
-        results = results.where("conditions @> ARRAY[?]", filter[:conditions].keys)
-      else
-        results = results.where("conditions && ARRAY[?]", filter[:conditions].keys)
-      end
-    end
 
-    if filter.has_key?(:date_type)
-      filter[:start] ||= "2015-01-01"   # I needed a reasonable date before which there would be no requests or ingests. Can adjust if needed.
-      filter[:end] ||= Date::today.to_s # Seems unlikely that we'll have any requests or ingests in the future.
-      case filter[:date_type]
-      when "request"
-        results = results.joins(:requests).where(requests: {requested: filter[:start]..filter[:finish]})
-      when "initial"
-        results = results.where(:initial_ingest => filter[:start]..filter[:finish])
-      when "last"
-        results = results.where(:last_ingest => filter[:start]..filter[:finish])
-      end
-    end
 
     if results
-      results
+      results.results
     else
       false
     end

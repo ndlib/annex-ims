@@ -82,6 +82,11 @@ gem 'faraday_middleware'
 gem 'excon'
 gem 'typhoeus'
 
+# For item search
+gem 'sunspot_rails', :git => 'https://github.com/sunspot/sunspot.git'
+gem 'sunspot_solr', :git => 'https://github.com/sunspot/sunspot.git'
+gem 'progress_bar' # Because I want to see progress of reindexing
+
 group :development do
   # Simple generators for layouts
   gem 'rails_layout'

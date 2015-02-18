@@ -7,7 +7,7 @@ feature "Search", :type => :feature do
       # pending "add user sign in code"
     end
 
-    it "can search for an item by barcode" do
+    it "can search for an item by barcode", :search => true do
       @item = FactoryGirl.create(:item, chron: 'TEST CHRON')
       visit search_path
       select("Barcode", :from => "criteria_type")
@@ -20,7 +20,7 @@ feature "Search", :type => :feature do
       @item.destroy!
     end
 
-    it "can search for an item by bib number" do
+    it "can search for an item by bib number", :search => true do
       @item = FactoryGirl.create(:item, chron: 'TEST CHRON')
       visit search_path
       select("Bib Number", :from => "criteria_type")
@@ -33,7 +33,7 @@ feature "Search", :type => :feature do
       @item.destroy!
     end
 
-    it "can search for 2 items with the same bib number" do
+    it "can search for 2 items with the same bib number", :search => true do
       @item = FactoryGirl.create(:item, chron: 'TEST CHRON')
       @item2 = FactoryGirl.create(:item, chron: 'TEST CHRON 2', bib_number: @item.bib_number)
       visit search_path
@@ -51,7 +51,7 @@ feature "Search", :type => :feature do
       @item2.destroy!
     end
 
-    it "can search for an item by call number" do
+    it "can search for an item by call number", :search => true do
       @item = FactoryGirl.create(:item, chron: 'TEST CHRON')
       visit search_path
       select("Call Number", :from => "criteria_type")
@@ -64,7 +64,7 @@ feature "Search", :type => :feature do
       @item.destroy!
     end
 
-    it "can search for an item by isbn" do
+    it "can search for an item by isbn", :search => true do
       @item = FactoryGirl.create(:item, chron: 'TEST CHRON')
       visit search_path
       select("ISBN", :from => "criteria_type")
@@ -77,7 +77,7 @@ feature "Search", :type => :feature do
       @item.destroy!
     end
 
-    it "can search for an item by issn" do
+    it "can search for an item by issn", :search => true do
       @item = FactoryGirl.create(:item, chron: 'TEST CHRON')
       visit search_path
       select("ISSN", :from => "criteria_type")
@@ -90,7 +90,7 @@ feature "Search", :type => :feature do
       @item.destroy!
     end
 
-    it "can search for an item by title" do
+    it "can search for an item by title", :search => true do
       @item = FactoryGirl.create(:item, chron: 'TEST CHRON')
       visit search_path
       select("Title", :from => "criteria_type")
@@ -103,7 +103,7 @@ feature "Search", :type => :feature do
       @item.destroy!
     end
 
-    it "can search for an item by author" do
+    it "can search for an item by author", :search => true do
       @item = FactoryGirl.create(:item, chron: 'TEST CHRON')
       visit search_path
       select("Author", :from => "criteria_type")
@@ -116,7 +116,7 @@ feature "Search", :type => :feature do
       @item.destroy!
     end
 
-    it "can search for an item by tray" do
+    it "can search for an item by tray", :search => true do
       @tray = FactoryGirl.create(:tray)
       @item = FactoryGirl.create(:item, chron: 'TEST CHRON', tray: @tray)
       visit search_path
@@ -130,7 +130,7 @@ feature "Search", :type => :feature do
       @item.destroy!
     end
 
-    it "can search for an item by shelf" do
+    it "can search for an item by shelf", :search => true do
       @shelf = FactoryGirl.create(:shelf)
       @tray = FactoryGirl.create(:tray, shelf: @shelf)
       @item = FactoryGirl.create(:item, chron: 'TEST CHRON', tray: @tray)
@@ -145,7 +145,7 @@ feature "Search", :type => :feature do
       @item.destroy!
     end
 
-    it "can search for items by condition" do
+    it "can search for items by condition", :search => true do
       @item = FactoryGirl.create(:item, chron: 'TEST CHRON')
       visit search_path
       find(:css, "#condition_bool_any").set(true)
@@ -158,7 +158,7 @@ feature "Search", :type => :feature do
       @item.destroy!
     end
 
-    it "can search for items by multiple conditions" do
+    it "can search for items by multiple conditions", :search => true do
       @item = FactoryGirl.create(:item, author: 'JOHN DOE', title: 'SOME TITLE', chron: 'TEST CHRN', conditions: ["COVER-TORN","COVER-DET"])
       @item2 = FactoryGirl.create(:item, author: 'BOB SMITH', title: 'SOME OTHER TITLE', chron: 'TEST CHRON 2', conditions: ["COVER-TORN","PAGES-DET"])
       visit search_path
@@ -177,13 +177,13 @@ feature "Search", :type => :feature do
       @item2.destroy!
     end
 
-    it "can search for items by initial ingest date" do
+    it "can search for items by initial ingest date", :search => true do
       @item = FactoryGirl.create(:item, author: 'JOHN DOE', title: 'SOME TITLE', chron: 'TEST CHRN', conditions: ["COVER-TORN","COVER-DET"], initial_ingest: 3.days.ago.strftime("%Y-%m-%d"))
       @item2 = FactoryGirl.create(:item, author: 'BOB SMITH', title: 'SOME OTHER TITLE', chron: 'TEST CHRON 2', conditions: ["COVER-TORN","PAGES-DET"], initial_ingest: 1.day.ago.strftime("%Y-%m-%d"))
       visit search_path
       select("Initial Ingest Date", :from => "date_type")
-      fill_in "start", :with => 4.days.ago.strftime("%m/%d/%Y")
-      fill_in "finish", :with => 2.days.ago.strftime("%m/%d/%Y")
+      fill_in "start", :with => 4.days.ago.strftime("%Y-%m-%d")
+      fill_in "finish", :with => 2.days.ago.strftime("%Y-%m-%d")
       click_button "Search"
       expect(current_path).to eq(search_path)
       expect(page).to have_content @item.title
@@ -196,13 +196,13 @@ feature "Search", :type => :feature do
       @item2.destroy!
     end
 
-    it "can search for items by last ingest date" do
+    it "can search for items by last ingest date", :search => true do
       @item = FactoryGirl.create(:item, author: 'JOHN DOE', title: 'SOME TITLE', chron: 'TEST CHRN', conditions: ["COVER-TORN","COVER-DET"], last_ingest: 3.days.ago.strftime("%Y-%m-%d"))
       @item2 = FactoryGirl.create(:item, author: 'BOB SMITH', title: 'SOME OTHER TITLE', chron: 'TEST CHRON 2', conditions: ["COVER-TORN","PAGES-DET"], last_ingest: 1.day.ago.strftime("%Y-%m-%d"))
       visit search_path
       select("Last Ingest Date", :from => "date_type")
-      fill_in "start", :with => 4.days.ago.strftime("%m/%d/%Y")
-      fill_in "finish", :with => 2.days.ago.strftime("%m/%d/%Y")
+      fill_in "start", :with => 4.days.ago.strftime("%Y-%m-%d")
+      fill_in "finish", :with => 2.days.ago.strftime("%Y-%m-%d")
       click_button "Search"
       expect(current_path).to eq(search_path)
       expect(page).to have_content @item.title
@@ -215,15 +215,17 @@ feature "Search", :type => :feature do
       @item2.destroy!
     end
 
-    it "can search for items by request date" do
-      @item = FactoryGirl.create(:item, author: 'JOHN DOE', title: 'SOME TITLE', chron: 'TEST CHRN', conditions: ["COVER-TORN","COVER-DET"])
+    it "can search for items by request date", :search => true do
+      @item = FactoryGirl.create(:item, author: 'JOHN DOE', title: 'SOME TITLE', chron: 'TEST CHRN', thickness: 1, conditions: ["COVER-TORN","COVER-DET"])
       @request = FactoryGirl.create(:request, criteria_type: 'barcode', criteria: @item.barcode, item: @item, requested: 3.days.ago.strftime("%Y-%m-%d"))
-      @item2 = FactoryGirl.create(:item, author: 'BOB SMITH', title: 'SOME OTHER TITLE', chron: 'TEST CHRON 2', conditions: ["COVER-TORN","PAGES-DET"])
+      @item.save!
+      @item2 = FactoryGirl.create(:item, author: 'BOB SMITH', title: 'SOME OTHER TITLE', chron: 'TEST CHRON 2', thickness: 1, conditions: ["COVER-TORN","PAGES-DET"])
       @request2 = FactoryGirl.create(:request, criteria_type: 'barcode', criteria: @item2.barcode, item: @item2, requested: 1.day.ago.strftime("%Y-%m-%d"))
+      @item2.save!
       visit search_path
       select("Request Date", :from => "date_type")
-      fill_in "start", :with => 4.days.ago.strftime("%m/%d/%Y")
-      fill_in "finish", :with => 2.days.ago.strftime("%m/%d/%Y")
+      fill_in "start", :with => 4.days.ago.strftime("%Y-%m-%d")
+      fill_in "finish", :with => 2.days.ago.strftime("%Y-%m-%d")
       click_button "Search"
       expect(current_path).to eq(search_path)
       expect(page).to have_content @item.title
