@@ -136,7 +136,7 @@ class TraysController < ApplicationController
 
     begin
       AssociateTrayWithItemBarcode.call(@tray, barcode, thickness)
-      flash[:notice] = "Item #{barcode} associated with Tray #{@tray.barcode}."
+      flash[:notice] = "Item #{barcode} stocked in #{@tray.barcode}."
       if TrayFull.call(@tray)
         flash[:error] = 'warning - tray may be full'
       end

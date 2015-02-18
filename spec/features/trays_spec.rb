@@ -385,7 +385,7 @@ feature "Trays", :type => :feature do
       expect(page).to have_content @item.barcode
       expect(page).to have_content @item.title
       expect(page).to have_content @item.chron
-      expect(page).to have_content "Item #{@item.barcode} associated with Tray #{@tray.barcode}."
+      expect(page).to have_content "Item #{@item.barcode} stocked in #{@tray.barcode}."
    end
 
     it "displays a tray's barcode while processing an item" do
