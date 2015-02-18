@@ -1,10 +1,17 @@
 require 'rails_helper'
 
 feature "Search", :type => :feature do
+  include SolrSpecHelper
+
   describe "when signed in" do
     before(:each) do
+      solr_setup
       # signin_user @user
       # pending "add user sign in code"
+    end
+
+    after(:all) do
+      Item.remove_all_from_index!
     end
 
     it "can search for an item by barcode", :search => true do
