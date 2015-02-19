@@ -15,7 +15,8 @@ feature "Search", :type => :feature do
     end
 
     it "can search for an item by barcode", :search => true do
-      @item = FactoryGirl.create(:item, chron: 'TEST CHRON')
+      @item = FactoryGirl.create(:item, author: 'JOHN DOE', title: 'SOME TITLE', chron: 'TEST CHRN', thickness: 1, conditions: ["COVER-TORN","COVER-DET"], barcode: 12345)
+      @item.save!
       visit search_path
       select("Barcode", :from => "criteria_type")
       fill_in "criteria", :with => @item.barcode
@@ -28,7 +29,8 @@ feature "Search", :type => :feature do
     end
 
     it "can search for an item by bib number", :search => true do
-      @item = FactoryGirl.create(:item, chron: 'TEST CHRON')
+      @item = FactoryGirl.create(:item, author: 'JOHN DOE', title: 'SOME TITLE', chron: 'TEST CHRN', thickness: 1, conditions: ["COVER-TORN","COVER-DET"], bib_number: 12345)
+      @item.save!
       visit search_path
       select("Bib Number", :from => "criteria_type")
       fill_in "criteria", :with => @item.bib_number
@@ -41,8 +43,10 @@ feature "Search", :type => :feature do
     end
 
     it "can search for 2 items with the same bib number", :search => true do
-      @item = FactoryGirl.create(:item, chron: 'TEST CHRON')
-      @item2 = FactoryGirl.create(:item, chron: 'TEST CHRON 2', bib_number: @item.bib_number)
+      @item = FactoryGirl.create(:item, author: 'JOHN DOE', title: 'SOME TITLE', chron: 'TEST CHRN', thickness: 1, conditions: ["COVER-TORN","COVER-DET"], bib_number: 12345)
+      @item.save!
+      @item2 = FactoryGirl.create(:item, author: 'BOB SMITH', title: 'SOME OTHER TITLE', chron: 'TEST CHRON 2', thickness: 1, conditions: ["COVER-TORN","PAGES-DET"], bib_number: 12345)
+      @item2.save!
       visit search_path
       select("Bib Number", :from => "criteria_type")
       fill_in "criteria", :with => @item.bib_number
@@ -59,7 +63,8 @@ feature "Search", :type => :feature do
     end
 
     it "can search for an item by call number", :search => true do
-      @item = FactoryGirl.create(:item, chron: 'TEST CHRON')
+      @item = FactoryGirl.create(:item, author: 'JOHN DOE', title: 'SOME TITLE', chron: 'TEST CHRN', thickness: 1, conditions: ["COVER-TORN","COVER-DET"], call_number: 'A 123 .B6')
+      @item.save!
       visit search_path
       select("Call Number", :from => "criteria_type")
       fill_in "criteria", :with => @item.call_number
@@ -72,7 +77,8 @@ feature "Search", :type => :feature do
     end
 
     it "can search for an item by isbn", :search => true do
-      @item = FactoryGirl.create(:item, chron: 'TEST CHRON')
+      @item = FactoryGirl.create(:item, author: 'JOHN DOE', title: 'SOME TITLE', chron: 'TEST CHRN', thickness: 1, conditions: ["COVER-TORN","COVER-DET"], isbn: 12345)
+      @item.save!
       visit search_path
       select("ISBN", :from => "criteria_type")
       fill_in "criteria", :with => @item.isbn
@@ -85,7 +91,8 @@ feature "Search", :type => :feature do
     end
 
     it "can search for an item by issn", :search => true do
-      @item = FactoryGirl.create(:item, chron: 'TEST CHRON')
+      @item = FactoryGirl.create(:item, author: 'JOHN DOE', title: 'SOME TITLE', chron: 'TEST CHRN', thickness: 1, conditions: ["COVER-TORN","COVER-DET"], issn: 12345)
+      @item.save!
       visit search_path
       select("ISSN", :from => "criteria_type")
       fill_in "criteria", :with => @item.issn
@@ -98,7 +105,8 @@ feature "Search", :type => :feature do
     end
 
     it "can search for an item by title", :search => true do
-      @item = FactoryGirl.create(:item, chron: 'TEST CHRON')
+      @item = FactoryGirl.create(:item, author: 'JOHN DOE', title: 'SOME TITLE', chron: 'TEST CHRN', thickness: 1, conditions: ["COVER-TORN","COVER-DET"])
+      @item.save!
       visit search_path
       select("Title", :from => "criteria_type")
       fill_in "criteria", :with => @item.title
@@ -111,7 +119,8 @@ feature "Search", :type => :feature do
     end
 
     it "can search for an item by author", :search => true do
-      @item = FactoryGirl.create(:item, chron: 'TEST CHRON')
+      @item = FactoryGirl.create(:item, author: 'JOHN DOE', title: 'SOME TITLE', chron: 'TEST CHRN', thickness: 1, conditions: ["COVER-TORN","COVER-DET"])
+      @item.save!
       visit search_path
       select("Author", :from => "criteria_type")
       fill_in "criteria", :with => @item.author
@@ -124,8 +133,10 @@ feature "Search", :type => :feature do
     end
 
     it "can search for an item by tray", :search => true do
-      @tray = FactoryGirl.create(:tray)
-      @item = FactoryGirl.create(:item, chron: 'TEST CHRON', tray: @tray)
+      @tray = FactoryGirl.create(:tray, barcode: 'TRAY-AH12345')
+      @tray.save!
+      @item = FactoryGirl.create(:item, author: 'JOHN DOE', title: 'SOME TITLE', chron: 'TEST CHRN', thickness: 1, conditions: ["COVER-TORN","COVER-DET"], tray: @tray)
+      @item.save!
       visit search_path
       select("Tray", :from => "criteria_type")
       fill_in "criteria", :with => @tray.barcode
@@ -139,8 +150,11 @@ feature "Search", :type => :feature do
 
     it "can search for an item by shelf", :search => true do
       @shelf = FactoryGirl.create(:shelf)
+      @shelf.save!
       @tray = FactoryGirl.create(:tray, shelf: @shelf)
-      @item = FactoryGirl.create(:item, chron: 'TEST CHRON', tray: @tray)
+      @tray.save!
+      @item = FactoryGirl.create(:item, author: 'JOHN DOE', title: 'SOME TITLE', chron: 'TEST CHRN', thickness: 1, conditions: ["COVER-TORN","COVER-DET"], tray: @tray)
+      @item.save!
       visit search_path
       select("Shelf", :from => "criteria_type")
       fill_in "criteria", :with => @shelf.barcode
@@ -153,7 +167,8 @@ feature "Search", :type => :feature do
     end
 
     it "can search for items by condition", :search => true do
-      @item = FactoryGirl.create(:item, chron: 'TEST CHRON')
+      @item = FactoryGirl.create(:item, author: 'JOHN DOE', title: 'SOME TITLE', chron: 'TEST CHRN', thickness: 1, conditions: ["COVER-TORN","COVER-DET"])
+      @item.save!
       visit search_path
       find(:css, "#condition_bool_any").set(true)
       find(:css, "#conditions_#{@item.conditions.sample}").set(true)
@@ -166,8 +181,10 @@ feature "Search", :type => :feature do
     end
 
     it "can search for items by multiple conditions", :search => true do
-      @item = FactoryGirl.create(:item, author: 'JOHN DOE', title: 'SOME TITLE', chron: 'TEST CHRN', conditions: ["COVER-TORN","COVER-DET"])
-      @item2 = FactoryGirl.create(:item, author: 'BOB SMITH', title: 'SOME OTHER TITLE', chron: 'TEST CHRON 2', conditions: ["COVER-TORN","PAGES-DET"])
+      @item = FactoryGirl.create(:item, author: 'JOHN DOE', title: 'SOME TITLE', chron: 'TEST CHRN', thickness: 1, conditions: ["COVER-TORN","COVER-DET"])
+      @item.save!
+      @item2 = FactoryGirl.create(:item, author: 'BOB SMITH', title: 'SOME OTHER TITLE', chron: 'TEST CHRON 2', thickness: 1, conditions: ["COVER-TORN","PAGES-DET"])
+      @item2.save!
       visit search_path
       find(:css, "#condition_bool_all").set(true)
       find(:css, "#conditions_#{@item.conditions[0]}").set(true)
@@ -185,8 +202,10 @@ feature "Search", :type => :feature do
     end
 
     it "can search for items by initial ingest date", :search => true do
-      @item = FactoryGirl.create(:item, author: 'JOHN DOE', title: 'SOME TITLE', chron: 'TEST CHRN', conditions: ["COVER-TORN","COVER-DET"], initial_ingest: 3.days.ago.strftime("%Y-%m-%d"))
-      @item2 = FactoryGirl.create(:item, author: 'BOB SMITH', title: 'SOME OTHER TITLE', chron: 'TEST CHRON 2', conditions: ["COVER-TORN","PAGES-DET"], initial_ingest: 1.day.ago.strftime("%Y-%m-%d"))
+      @item = FactoryGirl.create(:item, author: 'JOHN DOE', title: 'SOME TITLE', chron: 'TEST CHRN', thickness: 1, conditions: ["COVER-TORN","COVER-DET"], initial_ingest: 3.days.ago.strftime("%Y-%m-%d"))
+      @item.save!
+      @item2 = FactoryGirl.create(:item, author: 'BOB SMITH', title: 'SOME OTHER TITLE', chron: 'TEST CHRON 2', thickness: 1, conditions: ["COVER-TORN","PAGES-DET"], initial_ingest: 1.day.ago.strftime("%Y-%m-%d"))
+      @item2.save!
       visit search_path
       select("Initial Ingest Date", :from => "date_type")
       fill_in "start", :with => 4.days.ago.strftime("%Y-%m-%d")
@@ -204,8 +223,11 @@ feature "Search", :type => :feature do
     end
 
     it "can search for items by last ingest date", :search => true do
-      @item = FactoryGirl.create(:item, author: 'JOHN DOE', title: 'SOME TITLE', chron: 'TEST CHRN', conditions: ["COVER-TORN","COVER-DET"], last_ingest: 3.days.ago.strftime("%Y-%m-%d"))
-      @item2 = FactoryGirl.create(:item, author: 'BOB SMITH', title: 'SOME OTHER TITLE', chron: 'TEST CHRON 2', conditions: ["COVER-TORN","PAGES-DET"], last_ingest: 1.day.ago.strftime("%Y-%m-%d"))
+      @item = FactoryGirl.create(:item, author: 'BOB SMITH', title: 'SOME OTHER TITLE', chron: 'TEST CHRON 2', thickness: 2, conditions: ["COVER-TORN","PAGES-DET"], last_ingest: 3.days.ago.strftime("%Y-%m-%d"))
+      @item.save!
+      @item2 = FactoryGirl.create(:item, author: 'JOHN DOE', title: 'SOME TITLE', chron: 'TEST CHRN', thickness: 1, conditions: ["COVER-TORN","COVER-DET"])
+      @item2.save!
+      @item.save!
       visit search_path
       select("Last Ingest Date", :from => "date_type")
       fill_in "start", :with => 4.days.ago.strftime("%Y-%m-%d")
@@ -229,6 +251,8 @@ feature "Search", :type => :feature do
       @item2 = FactoryGirl.create(:item, author: 'BOB SMITH', title: 'SOME OTHER TITLE', chron: 'TEST CHRON 2', thickness: 1, conditions: ["COVER-TORN","PAGES-DET"])
       @request2 = FactoryGirl.create(:request, criteria_type: 'barcode', criteria: @item2.barcode, item: @item2, requested: 1.day.ago.strftime("%Y-%m-%d"))
       @item2.save!
+      @item = Item.find(@item.id)
+      @item.save!
       visit search_path
       select("Request Date", :from => "date_type")
       fill_in "start", :with => 4.days.ago.strftime("%Y-%m-%d")
