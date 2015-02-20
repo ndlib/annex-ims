@@ -3,7 +3,7 @@ require 'rails_helper'
 feature "Search", :type => :feature, :search => true do
   include SolrSpecHelper
 
-  describe "when signed in" do
+  describe "when signed in", ignore: :travis do
 
     let(:shelf) { FactoryGirl.create(:shelf) }
     let(:tray) { FactoryGirl.create(:tray, barcode: 'TRAY-AH12345', shelf: shelf) }
