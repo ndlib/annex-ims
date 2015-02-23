@@ -5,6 +5,7 @@
       #criteria.input-group
         = select_tag :criteria_type, options_for_select(SearchItems::CRITERIA_TYPES, @params[:criteria_type])
         = text_field_tag :criteria, @params[:criteria]
+        = label_tag :criteria, 'Use * for wildcard matches.'
     %div.col-xs-8.col-md-6
       %a.list-group-item.list-group-item-success Conditions
       #conditions.input-group
