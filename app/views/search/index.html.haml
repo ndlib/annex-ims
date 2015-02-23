@@ -1,27 +1,30 @@
 = form_tag search_path, method: :get do |f|
   .row
     %div.col-xs-8.col-md-6
-      %a.list-group-item.list-group-item-success{"data-toggle" => "collapse", :href => "#criteria"} Criteria
+      %a.list-group-item.list-group-item-success Criteria
       #criteria.input-group
         = select_tag :criteria_type, options_for_select(SearchItems::CRITERIA_TYPES, @params[:criteria_type])
         = text_field_tag :criteria, @params[:criteria]
     %div.col-xs-8.col-md-6
-      %a.list-group-item.list-group-item-success{"data-toggle" => "collapse", :href => "#conditions"} Conditions
-      #conditions.collapse.input-group
+      %a.list-group-item.list-group-item-success Conditions
+      #conditions.input-group
         .input-group
+          = radio_button_tag :condition_bool, :any, @params[:condition_bool] == 'any'
           = label_tag :condition_bool_any, "Any"
-          = radio_button_tag :condition_bool, :any, @params[:condition_bool] != 'all'
           &nbsp;
-          = label_tag :condition_bool_all, "All"
           = radio_button_tag :condition_bool, :all, @params[:condition_bool] == 'all'
+          = label_tag :condition_bool_all, "All"
+          &nbsp;
+          = radio_button_tag :condition_bool, :none, @params[:condition_bool] == 'none'
+          = label_tag :condition_bool_none, "None"
         %ul.list-unstyled
           - Item::CONDITIONS.each do |condition|
             %li
-              = label_tag condition
               = check_box_tag "conditions[#{condition}]", 1, !@params[:conditions].blank? ? @params[:conditions][condition] : false
+              = label_tag condition, condition
   .row
     %div.col-xs-8.col-md-6
-      %a.list-group-item.list-group-item-success{"data-toggle" => "collapse", :href => "#date-range"} Date Range
+      %a.list-group-item.list-group-item-success Date Range
       #date-range.input-group
         = select_tag :date_type, options_for_select([["Request Date", "request"],["Initial Ingest Date", "initial"],["Last Ingest Date", "last"]], @params[:date_type]), include_blank: true
         %span.input-daterange{"data-provide" => "datepicker", "data-date-format" => "yyyy-mm-dd"}

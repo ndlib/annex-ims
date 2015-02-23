@@ -1,14 +1,14 @@
 class Item < ActiveRecord::Base
-  CONDITIONS = ["COVER-MISS",
+  CONDITIONS = ["COVER-DET",
+    "COVER-MISS",
     "COVER-TORN",
-    "COVER-DET",
-    "SPINE-DET",
-    "PAGES-DET",
-    "PAGES-TORN",
-    "PAGES-MISSING",
     "NEEDS-ENCLS",
     "PAGES-BRITTLE",
+    "PAGES-DET",
+    "PAGES-MISSING",
+    "PAGES-TORN",
     "REDROT",
+    "SPINE-DET",
     "UNBOUND",
     "OTHER"]
 

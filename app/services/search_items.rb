@@ -58,9 +58,15 @@ class SearchItems
                 with(:conditions, condition)
               end
             end
-          else
+          elsif filter.has_key?(:condition_bool) && filter[:condition_bool] == "any"
             any_of do
               with(:conditions, filter[:conditions].keys)
+            end
+          elsif filter.has_key?(:condition_bool) && filter[:condition_bool] == "none"
+            all_of do
+              filter[:conditions].keys.each do |condition|
+                without(:conditions, condition)
+              end
             end
           end
         end

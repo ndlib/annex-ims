@@ -211,6 +211,23 @@ feature "Search", :type => :feature, :search => true do
       expect(page).to_not have_content item2.chron
     end
 
+    it "can exclude specific conditions from search", :search => true do
+      item.index!
+      item2.index!
+      Sunspot.commit
+      Sunspot.commit
+      visit search_path
+      select("Tray", :from => "criteria_type")
+      fill_in "criteria", :with => "TRAY"
+      find(:css, "#condition_bool_none").set(true)
+      find(:css, "#conditions_PAGES-DET").set(true)
+      click_button "Search"
+      expect(current_path).to eq(search_path)
+      expect(page).to have_content item.title
+      expect(page).to have_content item.author
+      expect(page).to have_content item.chron
+    end
+
     it "can search for items by initial ingest date", :search => true do
       Sunspot.commit
       visit search_path
@@ -262,7 +279,9 @@ feature "Search", :type => :feature, :search => true do
       select("Tray", :from => "criteria_type")
       fill_in "criteria", :with => tray.barcode
       click_button "Export"
-      expect(page.text).to eq File.read("spec/fixtures/files/item-list.csv")
+      csv = CSV.parse(page.text)
+      expect(csv.first).to eq [item.barcode, item.bib_number, item.isbn, item.issn, item.title, item.author, item.chron, item.tray.present? ? item.tray.barcode : '', item.shelf.present? ? item.shelf.barcode : '', item.conditions.join(", ")]
+#      expect(page.text).to eq File.read("spec/fixtures/files/item-list.csv")
     end
 
     def destroy_all
