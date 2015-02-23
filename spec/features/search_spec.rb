@@ -257,6 +257,14 @@ feature "Search", :type => :feature, :search => true do
       expect(page).to_not have_content item2.chron
     end
 
+    it "can download a csv of search results", :search => true do
+      visit search_path
+      select("Tray", :from => "criteria_type")
+      fill_in "criteria", :with => tray.barcode
+      click_button "Export"
+      expect(page.text).to eq File.read("spec/fixtures/files/item-list.csv")
+    end
+
     def destroy_all
       request2.destroy!
       request1.destroy!
