@@ -1,6 +1,8 @@
 language: ruby
 rvm:
 - 2.1.4
+cache: bundler
+sudo: false
 before_install:
 - travis_retry gem install bundler
 before_script:
