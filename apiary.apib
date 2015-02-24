@@ -1,0 +1,70 @@
+FORMAT: 1A
+
+# Annex Test API
+Annex Test API is a inventory management synchronization service
+
+# Group Successful Requests
+
+## Item Request [/1.0/resources/catalog/item{?barcode,auth_token}]
+
+### Item equest with valid params [GET]
+
++ Request success
+
+    + Body
+            
+            { }
+
++ Response 200 (application/json)
+
+        {
+            "item_id": 123456789,
+            "bib_id": 987654321,
+            "isbn": 543216789,
+            "issn": "",
+            "call_number": "BC 123 .C456 1987"
+            "title": "Hartzler's Guide to Eternal Wisdom",
+            "author": "Jonathan Hartzler",
+            "pub_date": "2014",
+            "volume": ""
+        }
+        
+        
+# Group Requests Returning 404
+
+## Failed Item Request [/1.0/resources/catalog/item?barcode=12345678&auth_token=qt453gf094gfe]
+
+### Request with invalid params [GET]
+        
++ Request record_not_found
+
+    + Body
+            
+            { }
+
+
++ Response 404 (application/json)
+
+        {
+            "error": "Record not found"
+        }
+        
+# Group Requests Returning 500
+
+## Internal Server Error [/1.0/resources/catalog/item?barcode=12345&auth_token=qt56fur8b32]
+
+### Request fails due to server error [GET]
+
++ Request server_error
+
+    + Body
+            
+            { }
+
+
++ Response 500 (application/json)
+
+        {
+            "error": "Server error"
+        }
+        
