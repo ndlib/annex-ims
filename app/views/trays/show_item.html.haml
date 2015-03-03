@@ -33,6 +33,7 @@
             = hidden_field_tag :item_id, item.id
             .actions
               = submit_tag 'Remove', class: 'btn btn-primary'
+              = submit_tag 'Unstock', class: 'btn btn-secondary'
         %td= item.barcode
         %td= item.title
         %td= item.chron
