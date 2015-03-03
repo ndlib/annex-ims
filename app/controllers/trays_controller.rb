@@ -155,12 +155,19 @@ class TraysController < ApplicationController
   def dissociate_item
     @tray = Tray.find(params[:id])
     @item = Item.find(params[:item_id])
-    @size = TraySize.call(@tray.barcode)
 
-    if DissociateTrayFromItem.call(@item)
-      redirect_to show_tray_item_path(:id => @tray.id)
+    if params[:commit] == 'Unstock'
+      if UnstockItem.call(@item)
+        redirect_to show_tray_item_path(:id => @tray.id)
+      else
+        raise "unable to dissociate tray"
+      end
     else
-      raise "unable to dissociate tray"
+      if DissociateTrayFromItem.call(@item)
+        redirect_to show_tray_item_path(:id => @tray.id)
+      else
+        raise "unable to dissociate tray"
+      end
     end
   end
 
