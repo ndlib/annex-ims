@@ -1,10 +1,12 @@
-= select_tag :source, options_for_select([["Aleph", "aleph"], ["ILLiad", "illiad"]]), onchange: "table.ajax.reload()"
-= select_tag :req_type, options_for_select([["Checkout", "checkout"], ["Scan", "scan"]]), onchange: "table.ajax.reload()"
+= select_tag :source, options_for_select([["Aleph", "aleph"], ["ILLiad", "illiad"]]), onchange: "table.draw();"
+= select_tag :req_type, options_for_select([["Checkout", "checkout"], ["Scan", "scan"]]), onchange: "table.draw();"
 = label_tag :rapid, "ILLiad Rapid Requests"
-= check_box_tag :rapid, 1, false, onchange: "table.ajax.reload()"
-%table.table.table-striped.condensed.datatable{"id" => "requests", "data-source" => batches_url(:format => "json")}
+= check_box_tag :rapid, 1, false, onchange: "table.draw();"
+%table.table.table-striped.condensed.datatable{"id" => "requests"}
   %thead
     %tr
+      %th= 'Source'
+      %th= 'Request Type'
       %th= 'Rapid Request?'
       %th= 'Shelf'
       %th= 'Tray'
@@ -12,31 +14,33 @@
       %th= 'Author'
       %th= 'Chron'
   %tbody
+    - @data.each do |row|
+      %tr
+        %th= row['source']
+        %th= row['req_type']
+        %th= row['rapid']
+        %th= row['shelf']
+        %th= row['tray']
+        %th= row['title']
+        %th= row['author']
+        %th= row['chron']
 :javascript
-  var table = $('.datatable').DataTable({
-  "dom": 'T<"clear">lfrtip',
-  "ajax": {
-    "url": "#{batches_url(:format => "json")}",
-    "data": function ( d ) {
-        d.extra_search = {
-          "source": $('#source').val(),
-          "req_type": $('#req_type').val(),
-          "rapid": $('#rapid').is(":checked")
-        };
+  $.fn.dataTable.ext.search.push(
+    function( settings, data, dataIndex ) {
+      var select_source = $('#source').val().toLowerCase();
+      var data_source = data[0].toLowerCase();
+      if (select_source == data_source) {
+        return true;
+      }
+      return false;
     }
-  },
-  serverSide: true,
-  "columns": [
-    {"title": "Rapid Request?", "data": "rapid"},
-    {"title": "Shelf", "data": "shelf"},
-    {"title": "Tray", "data": "tray"},
-    {"title": "Title", "data": "title"},
-    {"title": "Author", "data": "author"},
-    {"title": "Chron", "data": "chron"},
-  ],
-  "processing": true,
-  "tableTools": {
-    "aButtons": [ "print" ]
-   }
-  });
+  );
+  $(document).ready(function() {
+    window.table = $('#requests').dataTable( {
+        "dom": 'T<"clear">lfrtip',
+        "tableTools": {
+          "aButtons": [ "print" ]
+        }        
+    } );
+  } );
 
