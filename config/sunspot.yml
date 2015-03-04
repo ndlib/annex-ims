@@ -21,3 +21,9 @@ test:
     log_level: WARNING
     path: /solr/test
     
+staging:
+  solr:
+    hostname: localhost
+    port: 8982
+    log_level: INFO
+    path: /solr/staging
