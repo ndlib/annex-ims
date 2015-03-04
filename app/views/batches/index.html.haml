@@ -35,8 +35,33 @@
       return false;
     }
   );
+  $.fn.dataTable.ext.search.push(
+    function( settings, data, dataIndex ) {
+      var select_req = $('#req_type').val().toLowerCase();
+      var data_req = data[1].toLowerCase();
+      if (select_req == data_req) {
+        return true;
+      }
+      return false;
+    }
+  );
+  $.fn.dataTable.ext.search.push(
+    function( settings, data, dataIndex ) {
+      var checkbox_rapid = $('#rapid').is(':checked');
+      var data_rapid = data[1].toLowerCase();
+      if (checkbox_rapid) {
+        if (data_rapid == "yes") {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return true;
+      }
+    }
+  );
   $(document).ready(function() {
-    window.table = $('#requests').dataTable( {
+    window.table = $('#requests').DataTable( {
         "dom": 'T<"clear">lfrtip',
         "tableTools": {
           "aButtons": [ "print" ]
