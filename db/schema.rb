@@ -11,11 +11,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150120044959) do
+ActiveRecord::Schema.define(version: 20150305190715) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "pgcrypto"
+
+  create_table "batches", force: true do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "batches_items", id: false, force: true do |t|
+    t.integer "batch_id", null: false
+    t.integer "item_id",  null: false
+  end
+
+  add_index "batches_items", ["item_id", "batch_id"], name: "index_batches_items_on_item_id_and_batch_id", unique: true, using: :btree
 
   create_table "items", force: true do |t|
     t.string   "barcode",                        null: false
@@ -49,8 +61,10 @@ ActiveRecord::Schema.define(version: 20150120044959) do
     t.boolean  "rapid"
     t.string   "source"
     t.string   "req_type"
+    t.integer  "batch_id"
   end
 
+  add_index "requests", ["batch_id"], name: "index_requests_on_batch_id", using: :btree
   add_index "requests", ["item_id"], name: "index_requests_on_item_id", using: :btree
 
   create_table "shelves", force: true do |t|
@@ -73,6 +87,7 @@ ActiveRecord::Schema.define(version: 20150120044959) do
   add_index "trays", ["shelf_id"], name: "index_trays_on_shelf_id", using: :btree
 
   add_foreign_key "items", "trays"
+  add_foreign_key "requests", "batches"
   add_foreign_key "requests", "items"
   add_foreign_key "trays", "shelves"
 end
