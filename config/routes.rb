@@ -30,6 +30,7 @@ Rails.application.routes.draw do
   get 'search', to: 'search#index', as: 'search'
 
   get 'batches', to: 'batches#index', as: 'batches'
+  post 'batches', to: 'batches#create', as: 'create_batch'
 
   # You can have the root of your site routed with "root"
   root 'welcome#index'

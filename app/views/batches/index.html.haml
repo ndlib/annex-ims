@@ -2,33 +2,38 @@
 = select_tag :req_type, options_for_select([["Checkout", "checkout"], ["Scan", "scan"]]), onchange: "table.draw();"
 = label_tag :rapid, "ILLiad Rapid Requests"
 = check_box_tag :rapid, 1, false, onchange: "table.draw();"
-%table.table.table-striped.condensed.datatable{"id" => "requests"}
-  %thead
-    %tr
-      %th= 'Source'
-      %th= 'Request Type'
-      %th= 'Rapid Request?'
-      %th= 'Shelf'
-      %th= 'Tray'
-      %th= 'Title'
-      %th= 'Author'
-      %th= 'Chron'
-  %tbody
-    - @data.each do |row|
+= form_tag create_batch_path do |f|
+  %table.table.table-striped.condensed.datatable{"id" => "requests"}
+    %thead
       %tr
-        %th= row['source']
-        %th= row['req_type']
-        %th= row['rapid']
-        %th= row['shelf']
-        %th= row['tray']
-        %th= row['title']
-        %th= row['author']
-        %th= row['chron']
+        %th= 'Add to Batch'
+        %th= 'Source'
+        %th= 'Request Type'
+        %th= 'Rapid Request?'
+        %th= 'Shelf'
+        %th= 'Tray'
+        %th= 'Title'
+        %th= 'Author'
+        %th= 'Chron'
+    %tbody
+      - @data.each do |row|
+        %tr
+          %th= check_box_tag 'batch[]', row['id']
+          %th= row['source']
+          %th= row['req_type']
+          %th= row['rapid']
+          %th= row['shelf']
+          %th= row['tray']
+          %th= row['title']
+          %th= row['author']
+          %th= row['chron']
+  .actions
+    = submit_tag 'Save', class: 'btn btn-primary'
 :javascript
   $.fn.dataTable.ext.search.push(
     function( settings, data, dataIndex ) {
       var select_source = $('#source').val().toLowerCase();
-      var data_source = data[0].toLowerCase();
+      var data_source = data[1].toLowerCase();
       if (select_source == data_source) {
         return true;
       }
@@ -38,7 +43,7 @@
   $.fn.dataTable.ext.search.push(
     function( settings, data, dataIndex ) {
       var select_req = $('#req_type').val().toLowerCase();
-      var data_req = data[1].toLowerCase();
+      var data_req = data[2].toLowerCase();
       if (select_req == data_req) {
         return true;
       }

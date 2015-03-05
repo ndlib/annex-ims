@@ -18,7 +18,7 @@ class BuildRequestData
       items = SearchItems.call(filter)
 
       items.each do |item|
-        data << {'source' => request.source, 'req_type' => request.req_type, 'rapid' => (request.rapid ? 'yes' : 'no'), 'shelf' => (!item.shelf.nil? ? item.shelf.barcode : ''), 'tray' => (!item.tray.nil? ? item.tray.barcode : ''), 'title' => item.title, 'author' => item.author, 'chron' => item.chron}
+        data << {'id' => "#{request.id}-#{item.id}", 'source' => request.source, 'req_type' => request.req_type, 'rapid' => (request.rapid ? 'yes' : 'no'), 'shelf' => (!item.shelf.nil? ? item.shelf.barcode : ''), 'tray' => (!item.tray.nil? ? item.tray.barcode : ''), 'title' => item.title, 'author' => item.author, 'chron' => item.chron}
       end
     end
 
