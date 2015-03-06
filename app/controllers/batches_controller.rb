@@ -1,6 +1,6 @@
 class BatchesController < ApplicationController
   def index
-    requests = Request.all
+    requests = Request.all.where(batch_id: nil)
     @data = BuildRequestData.call(requests)
 
     respond_to do |format|
