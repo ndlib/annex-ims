@@ -20,6 +20,7 @@ class Item < ActiveRecord::Base
   belongs_to :tray
   has_one :shelf, through: :tray
   has_many :requests
+  has_and_belongs_to_many :batches
 
   searchable do
     text :barcode
