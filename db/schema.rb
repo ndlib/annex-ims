@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150305190715) do
+ActiveRecord::Schema.define(version: 20150306134839) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,15 +52,15 @@ ActiveRecord::Schema.define(version: 20150305190715) do
   add_index "items", ["tray_id"], name: "index_items_on_tray_id", using: :btree
 
   create_table "requests", force: true do |t|
-    t.string   "criteria_type"
-    t.string   "criteria"
+    t.string   "criteria_type", null: false
+    t.string   "criteria",      null: false
     t.integer  "item_id"
     t.date     "requested"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
-    t.boolean  "rapid"
-    t.string   "source"
-    t.string   "req_type"
+    t.boolean  "rapid",         null: false
+    t.string   "source",        null: false
+    t.string   "req_type",      null: false
     t.integer  "batch_id"
   end
 
