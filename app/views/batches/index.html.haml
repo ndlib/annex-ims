@@ -6,7 +6,9 @@
   %table.table.table-striped.condensed.datatable{"id" => "requests"}
     %thead
       %tr
-        %th= 'Add to Batch'
+        %th
+          'Add to Batch'
+          = check_box_tag 'selectAll'
         %th= 'Source'
         %th= 'Request Type'
         %th= 'Rapid Request?'
@@ -18,7 +20,7 @@
     %tbody
       - @data.each do |row|
         %tr
-          %th= check_box_tag 'batch[]', row['id']
+          %th= check_box_tag 'batch[]', row['id'], false, class: 'item'
           %th= row['source']
           %th= row['req_type']
           %th= row['rapid']
@@ -72,5 +74,8 @@
           "aButtons": [ "print" ]
         }        
     } );
+    $("#selectAll").click(function() {
+      $(".item").prop("checked", $("#selectAll").prop("checked"));
+    });
   } );
 
