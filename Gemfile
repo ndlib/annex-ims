@@ -79,6 +79,9 @@ gem 'jquery-datatables-rails', '~> 3.1.1'
 # Devise for authentication
 gem 'devise'
 
+# For portably dumping the db to YAML
+gem 'yaml_db'
+
 # For consuming the API for items
 gem 'faraday'
 gem 'faraday_middleware'
