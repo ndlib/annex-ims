@@ -23,10 +23,9 @@ test:
     
 staging:
   solr:
-    url: http://localhost:8080/solr/annex_ims
-    # hostname: localhost
-    # port: 8080
+    hostname: localhost
+    port: 8080
     log_level: WARNING
-    # path: /solr/annex_ims
+    path: /solr/annex_ims
     read_timeout: 2
     open_timeout: 0.5
