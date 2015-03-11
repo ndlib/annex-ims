@@ -87,8 +87,12 @@ gem 'typhoeus'
 
 # For item search
 gem 'sunspot_rails', :git => 'https://github.com/sunspot/sunspot.git'
-gem 'sunspot_solr', :git => 'https://github.com/sunspot/sunspot.git'
 gem 'progress_bar' # Because I want to see progress of reindexing
+
+group :development, :test do
+  # So staging etc can use stand alone Solr
+  gem 'sunspot_solr', :git => 'https://github.com/sunspot/sunspot.git'
+end
 
 group :development do
   # Simple generators for layouts
