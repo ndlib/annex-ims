@@ -41,5 +41,5 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 
   # CAS auth
-  config.cas_base = 'https://cas.library.nd.edu/cas'
+  config.cas_base_url = 'https://cas.library.nd.edu/cas'
 end

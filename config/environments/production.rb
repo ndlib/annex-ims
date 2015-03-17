@@ -77,5 +77,5 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   # CAS auth
-  config.cas_base = 'https://login.nd.edu/cas'
+  config.cas_base_url = 'https://login.nd.edu/cas'
 end
