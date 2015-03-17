@@ -41,7 +41,9 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+end
 
+Devise.setup do |config|
   # CAS auth
-  config.cas_base_url = 'https://login-test.cc.nd.edu/cas'
+  config.cas_base_url = 'https://login.nd.edu/cas'
 end

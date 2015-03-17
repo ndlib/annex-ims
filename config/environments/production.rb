@@ -75,7 +75,9 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+end
 
+Devise.setup do |config|
   # CAS auth
   config.cas_base_url = 'https://login.nd.edu/cas'
 end
