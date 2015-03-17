@@ -1,10 +1,11 @@
 require 'rails_helper'
 
 feature "Items", :type => :feature do
+  include AuthenticationHelper
+
   describe "when signed in" do
     before(:each) do
-      # signin_user @user
-      # pending "add user sign in code"
+      login_user
     end
 
     it "can scan a new item" do

@@ -55,6 +55,11 @@ group :development, :test do
   # Feature testing
   gem 'capybara', '~> 2.4'
 
+  # So staging etc can use stand alone Solr
+  gem 'sunspot_solr', :git => 'https://github.com/sunspot/sunspot.git'
+
+  # For serving up ssl
+  gem 'thin'
 end
 
 group :development, :test, :staging do
@@ -76,8 +81,9 @@ gem 'bootstrap-datepicker-rails'
 # Someone else Rails-ified Datatables
 gem 'jquery-datatables-rails', '~> 3.1.1'
 
-# Devise for authentication
+# Devise for authentication, CAS for use in ND
 gem 'devise'
+gem 'devise_cas_authenticatable'
 
 # For consuming the API for items
 gem 'faraday'
@@ -88,11 +94,6 @@ gem 'typhoeus'
 # For item search
 gem 'sunspot_rails', :git => 'https://github.com/sunspot/sunspot.git'
 gem 'progress_bar' # Because I want to see progress of reindexing
-
-group :development, :test do
-  # So staging etc can use stand alone Solr
-  gem 'sunspot_solr', :git => 'https://github.com/sunspot/sunspot.git'
-end
 
 group :development do
   # Simple generators for layouts

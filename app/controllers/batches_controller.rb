@@ -1,4 +1,6 @@
 class BatchesController < ApplicationController
+  before_action :authenticate_user!
+
   def index
     requests = Request.all.where(batch_id: nil)
     @data = BuildRequestData.call(requests)

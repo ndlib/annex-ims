@@ -2,6 +2,7 @@ require 'rails_helper'
 
 feature "Build", :type => :feature, :search => true do
   include SolrSpecHelper
+  include AuthenticationHelper
 
   describe "when signed in", ignore: :travis do
 
@@ -54,12 +55,11 @@ feature "Build", :type => :feature, :search => true do
     
     before(:all) do
       solr_setup
-      # signin_user @user
-      # pending "add user sign in code"
     end
 
     before(:each) do
       save_all
+      login_user
     end
 
     after(:all) do

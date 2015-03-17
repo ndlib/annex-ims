@@ -11,11 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150306134839) do
+ActiveRecord::Schema.define(version: 20150315183630) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "pgcrypto"
 
   create_table "batches", force: true do |t|
     t.datetime "created_at", null: false
@@ -85,6 +84,19 @@ ActiveRecord::Schema.define(version: 20150306134839) do
 
   add_index "trays", ["barcode"], name: "index_trays_on_barcode", unique: true, using: :btree
   add_index "trays", ["shelf_id"], name: "index_trays_on_shelf_id", using: :btree
+
+  create_table "users", force: true do |t|
+    t.string   "username",                       null: false
+    t.integer  "sign_in_count",      default: 0, null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.inet     "current_sign_in_ip"
+    t.inet     "last_sign_in_ip"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
 
   add_foreign_key "items", "trays"
   add_foreign_key "requests", "batches"

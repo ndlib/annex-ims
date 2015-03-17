@@ -1,4 +1,6 @@
 class SearchController < ApplicationController
+  before_action :authenticate_user!
+
   def index
     @result = SearchItems.call(params)
     @params = params  # Because we need to fill in the form with previous values.
