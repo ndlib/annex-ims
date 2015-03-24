@@ -90,6 +90,7 @@ gem 'faraday'
 gem 'faraday_middleware'
 gem 'excon'
 gem 'typhoeus'
+gem 'multi_xml'
 
 # For item search
 gem 'sunspot_rails', :git => 'https://github.com/sunspot/sunspot.git'

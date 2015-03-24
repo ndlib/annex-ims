@@ -11,7 +11,16 @@ class GetItemFromBarcode
 
   def get
     if valid?
-      Item.where(barcode: barcode).first
+      item = Item.where(barcode: barcode).first_or_create!
+
+      data = ApiGetItemMetadata.call(barcode)
+      if data["status"] == 200
+Rails.logger.debug data["results"].inspect
+        item.attributes = data["results"]
+        item.thickness ||= 0
+        item.save!
+      end
+      item
     else
       raise "barcode is not an item"
     end
