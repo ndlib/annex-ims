@@ -374,7 +374,7 @@ feature "Trays", :type => :feature do
 
    it "displays information about a successful association made" do
       @tray = FactoryGirl.create(:tray)
-      @item = FactoryGirl.create(:item)
+      @item = FactoryGirl.create(:item, barcode: "123456", title: "TEST TITLE", chron: "VOL X")
       visit trays_items_path
       fill_in "Tray", :with => @tray.barcode
       click_button "Save"
