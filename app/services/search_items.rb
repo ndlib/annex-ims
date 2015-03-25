@@ -3,8 +3,7 @@ class SearchItems
     ["Barcode", "barcode"],
     ["Bib Number", "bib_number"],
     ["Call Number", "call_number"],
-    ["ISBN", "isbn"],
-    ["ISSN", "issn"],
+    ["ISBN/ISSN", "isbn_issn"],
     ["Title", "title"],
     ["Author", "author"],
     ["Tray", "tray"],
@@ -29,17 +28,15 @@ class SearchItems
         if filter.has_key?(:criteria_type) && filter.has_key?(:criteria)
             case filter[:criteria_type]
             when "any"
-              fulltext(filter[:criteria], :fields => [:barcode, :bib_number, :call_number, :isbn, :issn, :title, :author, :tray_barcode, :shelf_barcode])
+              fulltext(filter[:criteria], :fields => [:barcode, :bib_number, :call_number, :isbn_issn, :title, :author, :tray_barcode, :shelf_barcode])
             when "barcode"
               fulltext(filter[:criteria], :fields => :barcode)
             when "bib_number"
               fulltext(filter[:criteria], :fields => :bib_number)
             when "call_number"
               fulltext(filter[:criteria], :fields => :call_number)
-            when "isbn"
-              fulltext(filter[:criteria], :fields => :isbn)
-            when "issn"
-              fulltext(filter[:criteria], :fields => :issn)
+            when "isbn_issn"
+              fulltext(filter[:criteria], :fields => :isbn_issn)
             when "title"
               fulltext(filter[:criteria], :fields => :title)
             when "author"

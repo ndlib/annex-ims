@@ -9,6 +9,7 @@ RSpec.describe ItemRestock do
 
   end
 
+=begin
   it "runs a test and expect errors" do
     item_id = "03117208667242"
     barcode = "examplebarcode"
@@ -17,6 +18,7 @@ RSpec.describe ItemRestock do
     expect(results[:notice]).to eq(nil)
     expect(results[:path]).to eq(h.show_item_path(:id => item_id))
   end
+=end
 
   it "scans an item and then switches to a different item" do
     @item = FactoryGirl.create(:item)

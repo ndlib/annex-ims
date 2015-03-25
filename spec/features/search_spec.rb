@@ -16,8 +16,7 @@ feature "Search", :type => :feature, :search => true do
                                     chron: 'TEST CHRN', 
                                     bib_number: '12345',
                                     barcode: '9876543',
-                                    isbn: '987655432',
-                                    issn: '123459876',
+                                    isbn_issn: '987655432',
                                     call_number: 'A 123 .C654 1991',
                                     thickness: 1, 
                                     tray: tray,
@@ -31,8 +30,7 @@ feature "Search", :type => :feature, :search => true do
                                     chron: 'TEST CHRN 2', 
                                     bib_number: '12345',
                                     barcode: '4576839201',
-                                    isbn: '918273645',
-                                    issn: '129834765',
+                                    isbn_issn: '918273645',
                                     call_number: 'A 1234 .C654 1991',
                                     thickness: 1, 
                                     tray: tray2,
@@ -117,10 +115,10 @@ feature "Search", :type => :feature, :search => true do
       expect(page).to have_content item.chron
     end
 
-    it "can search for an item by isbn", :search => true do
+    it "can search for an item by isbn/issn", :search => true do
       visit search_path
-      select("ISBN", :from => "criteria_type")
-      fill_in "criteria", :with => item.isbn
+      select("ISBN/ISSN", :from => "criteria_type")
+      fill_in "criteria", :with => item.isbn_issn
       click_button "Search"
       expect(current_path).to eq(search_path)
       expect(page).to have_content item.title
@@ -280,7 +278,7 @@ feature "Search", :type => :feature, :search => true do
       fill_in "criteria", :with => tray.barcode
       click_button "Export"
       csv = CSV.parse(page.text)
-      expect(csv.first).to eq [item.barcode, item.bib_number, item.isbn, item.issn, item.title, item.author, item.chron, item.tray.present? ? item.tray.barcode : '', item.shelf.present? ? item.shelf.barcode : '', item.conditions.join(", ")]
+      expect(csv.first).to eq [item.barcode, item.bib_number, item.isbn_issn, item.title, item.author, item.chron, item.tray.present? ? item.tray.barcode : '', item.shelf.present? ? item.shelf.barcode : '', item.conditions.join(", ")]
 #      expect(page.text).to eq File.read("spec/fixtures/files/item-list.csv")
     end
 

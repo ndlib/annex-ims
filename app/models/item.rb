@@ -26,8 +26,7 @@ class Item < ActiveRecord::Base
     text :barcode
     text :bib_number
     text :call_number
-    text :isbn
-    text :issn
+    text :isbn_issn
     text :title
     text :author
     string :conditions, :multiple => true

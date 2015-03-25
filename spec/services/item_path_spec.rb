@@ -9,6 +9,7 @@ RSpec.describe ItemPath do
 
   end
 
+=begin
   it "runs a test and expect errors" do
     item_id = "03117208667242"
     barcode = "examplebarcode"
@@ -17,6 +18,7 @@ RSpec.describe ItemPath do
     expect(results[:notice]).to eq(nil)
     expect(results[:path]).to eq(h.show_item_path(:id => item_id))
   end
+=end
 
   it "returns a path for a valid item" do
     @tray = FactoryGirl.create(:tray)

@@ -22,7 +22,7 @@ class ApiGetItemMetadata
         "author" => raw_results["results"]["author"],
         "chron" => raw_results["results"]["description"],
         "bib_number" => raw_results["results"]["bib_id"],
-        "isbn" => raw_results["results"]["isbn_issn"],
+        "isbn_issn" => raw_results["results"]["isbn_issn"],
         "conditions" => raw_results["results"]["condition"],
         "call_number" => raw_results["results"]["call_number"]
       }}
