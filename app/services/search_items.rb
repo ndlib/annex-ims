@@ -24,7 +24,9 @@ class SearchItems
     if filter[:criteria].blank? && filter[:conditions].blank? && filter[:date_type].blank?
       results = []
     else
+      count = Item.count
       results = Item.search do
+        paginate :page => 1, :per_page => count
         if filter.has_key?(:criteria_type) && filter.has_key?(:criteria)
             case filter[:criteria_type]
             when "any"
