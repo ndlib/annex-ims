@@ -32,8 +32,8 @@ class ExternalRestConnection
   end
 
   # POST verb
-  def post(path, payload)
-    @response = connection.post(path, payload)
+  def post(path, headers, payload)
+    @response = connection.post(path, headers: headers, body: payload)
     process_response
   end
 

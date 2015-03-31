@@ -9,13 +9,56 @@ class ApiGetRequestList
 
   def get_data!
     params = nil
-    results = ApiHandler.call("GET", @path, params)
+    headers = nil
+    raw_results = ApiHandler.call("GET", @path, headers, params)
 
-    if true
-      results
-    else
-      false
+    requests = []
+
+    raw_results["results"]["requests"].each do |res|
+      if !res["barcode"].blank?
+        criteria_type = "barcode"
+        criteria = res["barcode"]
+        item = GetItemFromBarcode.call(res["barcode"]) # Hack to make sure data is present for display.
+      elsif !res["bib_number"].blank?
+        criteria_type = "bib_number"
+        criteria = res["bib_number"]
+      else
+        criteria_type = "ERROR" # Quick hack to cover when not available.
+        criteria = "ERROR"
+      end
+
+      if res["request_type"] == "Doc Del"
+        req_type = "checkout"
+      else
+        req_type = "scan"
+      end
+
+      if res["rush"] == "No"
+        rapid = false
+      else
+        rapid = true
+      end
+
+      if res["source"] == "Aleph"
+        source = "aleph"
+      else
+        source = "illiad"
+      end
+
+      requests << { # Will add more info when rebuilding the batch page. Needs a migration.
+        "trans" => res["transaction"],
+        "criteria_type" => criteria_type,
+        "criteria" => criteria,
+        "requested" => Date.today.to_s, # Should be date requested, but that doesn't seem available.
+        "rapid" => rapid,
+        "source" => source,
+        "req_type" => req_type
+      }
     end
+
+    results = {"status" => raw_results["status"], "results" => requests}
+
+    results
   end
 
 end

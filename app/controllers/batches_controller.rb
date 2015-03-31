@@ -2,6 +2,7 @@ class BatchesController < ApplicationController
   before_action :authenticate_user!
 
   def index
+    GetRequests.call() # This should go in a queue or scheduler to run periodically.
     requests = Request.all.where(batch_id: nil)
     @data = BuildRequestData.call(requests)
 

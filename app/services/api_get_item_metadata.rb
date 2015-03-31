@@ -14,7 +14,7 @@ class ApiGetItemMetadata
     validate_input!
 
     params = "barcode=#{@barcode}"
-    raw_results = ApiHandler.call("GET", @path, params)
+    raw_results = ApiHandler.call("GET", @path, nil, params)
 
     results = {"status" => raw_results["status"], "results" => 
       {

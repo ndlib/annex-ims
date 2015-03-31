@@ -15,7 +15,6 @@ class GetItemFromBarcode
 
       data = ApiGetItemMetadata.call(barcode)
       if data["status"] == 200
-Rails.logger.debug data["results"].inspect
         item.attributes = data["results"]
         item.thickness ||= 0
         item.save!
