@@ -33,7 +33,7 @@ class ApiGetRequestList
         req_type = "scan"
       end
 
-      if res["rush"] == "No"
+      if (res["rush"] == "No") || (res["rush"] == "Regular")
         rapid = false
       else
         rapid = true
@@ -52,7 +52,14 @@ class ApiGetRequestList
         "requested" => Date.today.to_s, # Should be date requested, but that doesn't seem available.
         "rapid" => rapid,
         "source" => source,
-        "req_type" => req_type
+        "req_type" => req_type,
+        "title" => res["title"],
+        "article_title" => res["article_title"],
+        "author" => res["author"],
+        "description" => res["description"],
+        "barcode" => res["barcode"],
+        "isbn_issn" => res["isbn_issn"],
+        "bib_number" => res["bib_number"]
       }
     end
 
