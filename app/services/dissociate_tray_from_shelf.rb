@@ -10,6 +10,7 @@ class DissociateTrayFromShelf
   end
 
   def dissociate!
+    shelf = tray.shelf
     tray.shelf = nil
 
     unless UnshelveTray.call(@tray)
@@ -18,10 +19,17 @@ class DissociateTrayFromShelf
 
     if tray.save
       transaction_log
-      tray
+      result = tray
     else
-      false
+      result = false
     end
+
+    if shelf.trays.count == 0
+      shelf.size = nil
+      shelf.save
+    end
+
+    return result
   end
 
 

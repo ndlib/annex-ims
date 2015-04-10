@@ -50,6 +50,27 @@ feature "Trays", :type => :feature do
       expect(current_path).to eq(trays_path)
     end
 
+=begin
+    it "runs through unassigned-unshelved-scan flow and check shelf size" do
+      @shelf = FactoryGirl.create(:shelf)
+      @tray = FactoryGirl.create(:tray, shelf: nil, shelved: false)
+      visit trays_path
+      fill_in "Tray", :with => @tray.barcode
+      click_button "Save"
+      expect(current_path).to eq(show_tray_path(:id => @tray.id))
+      expect(page).to have_content @tray.barcode
+      expect(page).to have_content "STAGING"
+      expect{page.find_by_id("pull")}.to raise_error
+      expect{page.find_by_id("unassign")}.to raise_error
+      fill_in "Shelf", :with => @shelf.barcode
+      click_button "Save"
+      expect(current_path).to eq(trays_path)
+      tray_size = TraySize.call(@tray.barcode)
+p @shelf.size
+      expect(tray_size).to eq @shelf.size
+    end
+=end
+
     it "runs through assigned-unshelved-cancel flow" do
       @shelf = FactoryGirl.create(:shelf)
       @tray = FactoryGirl.create(:tray, shelf: @shelf, shelved: false)
