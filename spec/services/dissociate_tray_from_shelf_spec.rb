@@ -3,7 +3,8 @@ require 'rails_helper'
 RSpec.describe DissociateTrayFromShelf do
   subject { described_class.call(tray)}
 
-  let(:tray) { double(Tray, save: true, "shelf=" => nil, "shelved=" => false)}
+  let(:shelf) { FactoryGirl.create(:shelf) }
+  let(:tray) { FactoryGirl.create(:tray, shelf: shelf) }
 
   before(:each) do
     allow(IsObjectTray).to receive(:call).with(tray).and_return(true)
