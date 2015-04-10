@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe AssociateTrayWithShelfBarcode do
   subject { described_class.call(tray, barcode)}
-  let(:tray) { double(Tray, "shelf=" => true, save: true, "shelved=" => true)} # insert used methods
-  let(:shelf) { double(Shelf)} # insert used methods
+  let(:tray) { FactoryGirl.create(:tray) }
+  let(:shelf) { FactoryGirl.create(:shelf) }
   let(:barcode) { "examplebarcode" }
 
   before(:each) do
