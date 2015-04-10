@@ -14,14 +14,24 @@ class  AssociateTrayWithShelfBarcode
     validate_input!
 
     shelf = GetShelfFromBarcode.call(barcode)
-    tray.shelf = shelf
+    tray_size = TraySize.call(tray.barcode)
 
-    if tray.save
-      ShelveTray.call(tray)
-      tray
+    if (shelf.size.nil?) or (shelf.size == tray_size)
+      tray.shelf = shelf
+      shelf.size = tray_size
+
+      if tray.save
+        ShelveTray.call(tray)
+        shelf.save
+        result = tray
+      else
+        result = false
+      end
     else
-      false
+      raise "tray sizes must match"
     end
+
+    return result
   end
 
   private
