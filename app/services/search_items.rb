@@ -29,6 +29,8 @@ class SearchItems
         paginate :page => 1, :per_page => count
         if filter.has_key?(:criteria_type) && filter.has_key?(:criteria)
             case filter[:criteria_type]
+            when "ERROR"
+              fulltext("ZZZZZ", :fields => :tray_barcode)
             when "any"
               fulltext(filter[:criteria], :fields => [:barcode, :bib_number, :call_number, :isbn_issn, :title, :author, :tray_barcode, :shelf_barcode])
             when "barcode"
