@@ -18,8 +18,6 @@ feature "Trays", :type => :feature do
       expect(page).to have_content "STAGING"
     end
 
-# New workflow from spreadsheet. Take priority over previous code.
-
     it "runs through unassigned-unshelved-cancel flow" do
       @tray = FactoryGirl.create(:tray)
       visit trays_path
@@ -50,10 +48,10 @@ feature "Trays", :type => :feature do
       expect(current_path).to eq(trays_path)
     end
 
-=begin
-    it "runs through unassigned-unshelved-scan flow and check shelf size" do
+    it "runs through unassigned-unshelved-scan flow and check shelf size, allow same size" do
       @shelf = FactoryGirl.create(:shelf)
       @tray = FactoryGirl.create(:tray, shelf: nil, shelved: false)
+      @tray2 = FactoryGirl.create(:tray, shelf: nil, shelved: false)
       visit trays_path
       fill_in "Tray", :with => @tray.barcode
       click_button "Save"
@@ -65,11 +63,78 @@ feature "Trays", :type => :feature do
       fill_in "Shelf", :with => @shelf.barcode
       click_button "Save"
       expect(current_path).to eq(trays_path)
-      tray_size = TraySize.call(@tray.barcode)
-p @shelf.size
-      expect(tray_size).to eq @shelf.size
+      fill_in "Tray", :with => @tray2.barcode
+      click_button "Save"
+      expect(current_path).to eq(show_tray_path(:id => @tray2.id))
+      expect(page).to have_content @tray2.barcode
+      expect(page).to have_content "STAGING"
+      expect{page.find_by_id("pull")}.to raise_error
+      expect{page.find_by_id("unassign")}.to raise_error
+      fill_in "Shelf", :with => @shelf.barcode
+      click_button "Save"
+      expect(current_path).to eq(trays_path)
     end
-=end
+
+    it "runs through unassigned-unshelved-scan flow and check shelf size, reject different size" do
+      @shelf = FactoryGirl.create(:shelf)
+      @tray = FactoryGirl.create(:tray, shelf: nil, shelved: false, barcode: "TRAY-AL1234")
+      @tray2 = FactoryGirl.create(:tray, shelf: nil, shelved: false, barcode: "TRAY-AH1234")
+      visit trays_path
+      fill_in "Tray", :with => @tray.barcode
+      click_button "Save"
+      expect(current_path).to eq(show_tray_path(:id => @tray.id))
+      expect(page).to have_content @tray.barcode
+      expect(page).to have_content "STAGING"
+      expect{page.find_by_id("pull")}.to raise_error
+      expect{page.find_by_id("unassign")}.to raise_error
+      fill_in "Shelf", :with => @shelf.barcode
+      click_button "Save"
+      expect(current_path).to eq(trays_path)
+      fill_in "Tray", :with => @tray2.barcode
+      click_button "Save"
+      expect(current_path).to eq(show_tray_path(:id => @tray2.id))
+      expect(page).to have_content @tray2.barcode
+      expect(page).to have_content "STAGING"
+      expect{page.find_by_id("pull")}.to raise_error
+      expect{page.find_by_id("unassign")}.to raise_error
+      fill_in "Shelf", :with => @shelf.barcode
+      click_button "Save"
+      expect(page).to have_content "tray sizes must match"
+      expect(current_path).to eq(show_tray_path(:id => @tray2.id))
+    end
+
+    it "runs through unassigned-unshelved-scan flow and check shelf size, accept different size after removing one" do
+      @shelf = FactoryGirl.create(:shelf)
+      @tray = FactoryGirl.create(:tray, shelf: nil, shelved: false, barcode: "TRAY-AL1236")
+      @tray2 = FactoryGirl.create(:tray, shelf: nil, shelved: false, barcode: "TRAY-AH1236")
+      visit trays_path
+      fill_in "Tray", :with => @tray.barcode
+      click_button "Save"
+      expect(current_path).to eq(show_tray_path(:id => @tray.id))
+      expect(page).to have_content @tray.barcode
+      expect(page).to have_content "STAGING"
+      expect{page.find_by_id("pull")}.to raise_error
+      expect{page.find_by_id("unassign")}.to raise_error
+      fill_in "Shelf", :with => @shelf.barcode
+      click_button "Save"
+      expect(current_path).to eq(trays_path)
+      fill_in "Tray", :with => @tray.barcode
+      click_button "Save"
+      expect(current_path).to eq(show_tray_path(:id => @tray.id))
+      expect(page).to have_content @tray.barcode
+      click_button "Unassign"
+      expect(current_path).to eq(trays_path)
+      fill_in "Tray", :with => @tray2.barcode
+      click_button "Save"
+      expect(current_path).to eq(show_tray_path(:id => @tray2.id))
+      expect(page).to have_content @tray2.barcode
+      expect(page).to have_content "STAGING"
+      expect{page.find_by_id("pull")}.to raise_error
+      expect{page.find_by_id("unassign")}.to raise_error
+      fill_in "Shelf", :with => @shelf.barcode
+      click_button "Save"
+      expect(current_path).to eq(trays_path)
+    end
 
     it "runs through assigned-unshelved-cancel flow" do
       @shelf = FactoryGirl.create(:shelf)
