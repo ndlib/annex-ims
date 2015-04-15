@@ -24,6 +24,7 @@
       %th= "#{@tray.items.count} Item(s)"
       %th= 'Barcode'
       %th= 'Title'
+      %th= 'Thickness'
       %th= 'Chron'
   %tbody
     - @tray.items.each do |item|
@@ -36,5 +37,6 @@
               = submit_tag 'Unstock', class: 'btn btn-secondary'
         %td= item.barcode
         %td= item.title
+        %td= item.thickness
         %td= item.chron
 

@@ -311,6 +311,7 @@ feature "Trays", :type => :feature do
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
       expect(page).to have_content @item.barcode
       expect(page).to have_content @item.title
+      expect(page).to have_content @item.thickness
       expect(page).to have_content @item.chron
     end
 
@@ -327,6 +328,7 @@ feature "Trays", :type => :feature do
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
       expect(page).to have_content @item.barcode
       expect(page).to have_content @item.title
+      expect(page).to have_content @item.thickness
       expect(page).to have_content @item.chron
       expect(page).to have_content "Item #{@item.barcode} stocked in #{@tray.barcode}."
    end
