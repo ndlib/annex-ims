@@ -280,7 +280,7 @@ feature "Trays", :type => :feature do
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
       fill_in "Item", :with => @item.barcode
-      select(Faker::Number.number(1), :from => "Thickness")
+      fill_in "Thickness", :with => Faker::Number.number(1)
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
     end
@@ -306,7 +306,7 @@ feature "Trays", :type => :feature do
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
       fill_in "Item", :with => @item.barcode
-      select(Faker::Number.number(1), :from => "Thickness")
+      fill_in "Thickness", :with => Faker::Number.number(1)
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
       expect(page).to have_content @item.barcode
@@ -323,7 +323,7 @@ feature "Trays", :type => :feature do
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
       fill_in "Item", :with => @item.barcode
-      select(Faker::Number.number(1), :from => "Thickness")
+      fill_in "Thickness", :with => Faker::Number.number(1)
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
       expect(page).to have_content @item.barcode
@@ -341,7 +341,7 @@ feature "Trays", :type => :feature do
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
       fill_in "Item", :with => @item.barcode
-      select(Faker::Number.number(1), :from => "Thickness")
+      fill_in "Thickness", :with => Faker::Number.number(1)
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
       expect(page).to have_content @tray.barcode
@@ -359,7 +359,7 @@ feature "Trays", :type => :feature do
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
       @items.each do |item|
         fill_in "Item", :with => item.barcode
-        select(Faker::Number.number(1), :from => "Thickness")
+        fill_in "Thickness", :with => Faker::Number.number(1)
         click_button "Save"
         expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
       end
@@ -378,7 +378,7 @@ feature "Trays", :type => :feature do
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
       fill_in "Item", :with => @item.barcode
-      select(Faker::Number.number(1), :from => "Thickness")
+      fill_in "Thickness", :with => Faker::Number.number(1)
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
       expect(page).to have_content @item.barcode
@@ -395,7 +395,7 @@ feature "Trays", :type => :feature do
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
       fill_in "Item", :with => @item.barcode
-      select(Faker::Number.number(1), :from => "Thickness")
+      fill_in "Thickness", :with => Faker::Number.number(1)
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
       expect(page).to have_content @item.barcode
@@ -411,7 +411,7 @@ feature "Trays", :type => :feature do
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
       fill_in "Item", :with => @item.barcode
-      select(Faker::Number.number(1), :from => "Thickness")
+      fill_in "Thickness", :with => Faker::Number.number(1)
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
       expect(page).to have_content @item.barcode
@@ -432,7 +432,7 @@ feature "Trays", :type => :feature do
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
       @items.each do |item|
         fill_in "Item", :with => item.barcode
-        select(10, :from => "Thickness")
+        fill_in "Thickness", :with => 10
         click_button "Save"
       end
       expect(page).to have_content 'warning - tray may be full'
