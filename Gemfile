@@ -26,6 +26,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # New Relic
 gem 'newrelic_rpm'
 
+# For Errbit
+gem 'airbrake'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
@@ -34,7 +37,7 @@ gem 'newrelic_rpm'
 
 # Use Capistrano for deployment
 gem 'capistrano', '~>3.3'
-gem 'capistrano-rails', '~>1.1', group: :development
+gem 'capistrano-rails', '~>1.1'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
