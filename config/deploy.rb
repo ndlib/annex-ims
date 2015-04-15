@@ -1,6 +1,7 @@
 # config valid only for current version of Capistrano
 lock '3.3.5'
 
+require 'capistrano/rails'
 require 'airbrake/capistrano3'
 
 set :application, 'annex-ims'
