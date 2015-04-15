@@ -61,5 +61,5 @@
         %td= item.chron
         %td= item.tray.present? ? item.tray.barcode : ''
         %td= item.shelf.present? ? item.shelf.barcode : ''
-        %td= item.conditions.join(", ")
+        %td= item.conditions.present? ? item.conditions.join(", ") : ''
 
