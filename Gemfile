@@ -26,6 +26,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # New Relic
 gem 'newrelic_rpm'
 
+# For Errbit
+gem 'airbrake'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
