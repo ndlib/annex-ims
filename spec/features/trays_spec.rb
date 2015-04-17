@@ -333,6 +333,34 @@ feature "Trays", :type => :feature do
       expect(page).to have_content "Item #{@item.barcode} stocked in #{@tray.barcode}."
    end
 
+   it "accepts re-associating an item to the same tray" do
+      @tray = FactoryGirl.create(:tray)
+      @item = FactoryGirl.create(:item, barcode: "124456", title: "TEST TITLE", chron: "VOL X")
+      visit trays_items_path
+      fill_in "Tray", :with => @tray.barcode
+      click_button "Save"
+      expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
+      fill_in "Item", :with => @item.barcode
+      fill_in "Thickness", :with => Faker::Number.number(1)
+      click_button "Save"
+      expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
+      expect(page).to have_content @item.barcode
+      expect(page).to have_content @item.title
+      expect(page).to have_content @item.thickness
+      expect(page).to have_content @item.chron
+      expect(page).to have_content "Item #{@item.barcode} stocked in #{@tray.barcode}."
+      fill_in "Item", :with => @item.barcode
+      fill_in "Thickness", :with => Faker::Number.number(1)
+      click_button "Save"
+      expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
+      expect(page).to have_content @item.barcode
+      expect(page).to have_content @item.title
+      expect(page).to have_content @item.thickness
+      expect(page).to have_content @item.chron
+      expect(page).to have_content "Item #{@item.barcode} already assigned to #{@tray.barcode}. Record updated."
+   end
+
+
    it "rejects associating an item to the wrong tray" do
       @tray = FactoryGirl.create(:tray)
       @tray2 = FactoryGirl.create(:tray)

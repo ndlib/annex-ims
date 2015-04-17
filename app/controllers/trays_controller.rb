@@ -145,15 +145,25 @@ class TraysController < ApplicationController
 
     item = GetItemFromBarcode.call(barcode)
 
-    if !item.tray.nil? && item.tray != @tray
-      flash[:error] = "Item #{barcode} is already assigned to #{item.tray.barcode}."
-      redirect_to wrong_tray_path(:id => @tray.id, :barcode => barcode)
-      return
+    already = false
+
+    if !item.tray.nil?
+      if item.tray != @tray
+        flash[:error] = "Item #{barcode} is already assigned to #{item.tray.barcode}."
+        redirect_to wrong_tray_path(:id => @tray.id, :barcode => barcode)
+        return
+      else
+        already = true
+      end
     end
 
     begin
       AssociateTrayWithItemBarcode.call(@tray, barcode, thickness)
-      flash[:notice] = "Item #{barcode} stocked in #{@tray.barcode}."
+      if already
+        flash[:notice] = "Item #{barcode} already assigned to #{@tray.barcode}. Record updated."
+      else
+        flash[:notice] = "Item #{barcode} stocked in #{@tray.barcode}."
+      end
       if TrayFull.call(@tray)
         flash[:error] = 'warning - tray may be full'
       end
@@ -165,8 +175,6 @@ class TraysController < ApplicationController
       return
     end
 
-    redirect_to show_tray_path(:id => @tray.id)
-    return
   end
 
   def dissociate_item
