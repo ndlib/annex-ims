@@ -13,7 +13,9 @@ Rails.application.routes.draw do
   post 'trays/shelves/:id/dissociate', to: 'trays#dissociate', as: 'dissociate_tray'
   post 'trays/shelves/:id/shelve', to: 'trays#shelve', as: 'shelve_tray'
   post 'trays/shelves/:id/unshelve', to: 'trays#unshelve', as: 'unshelve_tray'
-  get 'trays/shelves/:id/wrong', to: 'trays#wrong', as: 'wrong_tray'
+  get 'trays/shelves/:id/wrong_shelf', to: 'trays#wrong_shelf', as: 'wrong_shelf'
+  get 'trays/shelves/:id/wrong_tray/:barcode', to: 'trays#wrong_tray', as: 'wrong_tray'
+
 
   get 'trays/items', to: 'trays#items', as: 'trays_items'
   post 'trays/items', to: 'trays#scan_item', as: 'scan_tray_item'

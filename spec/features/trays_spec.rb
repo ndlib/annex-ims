@@ -188,7 +188,7 @@ feature "Trays", :type => :feature do
       expect{page.find_by_id("pull")}.to raise_error
       fill_in "Shelf", :with => @shelf2.barcode
       click_button "Save"
-      expect(current_path).to eq(wrong_tray_path(:id => @tray.id))
+      expect(current_path).to eq(wrong_shelf_path(:id => @tray.id))
       expect(page).to have_content "#{@tray.barcode} belongs to #{@shelf.barcode}, but #{@shelf2.barcode} was scanned."
       click_button "Shelve Anyway"
       expect(current_path).to eq(trays_path)
@@ -206,7 +206,7 @@ feature "Trays", :type => :feature do
       expect{page.find_by_id("pull")}.to raise_error
       fill_in "Shelf", :with => @shelf2.barcode
       click_button "Save"
-      expect(current_path).to eq(wrong_tray_path(:id => @tray.id))
+      expect(current_path).to eq(wrong_shelf_path(:id => @tray.id))
       expect(page).to have_content "#{@tray.barcode} belongs to #{@shelf.barcode}, but #{@shelf2.barcode} was scanned."
       click_button "Cancel"
       expect(current_path).to eq(trays_path)
@@ -332,6 +332,28 @@ feature "Trays", :type => :feature do
       expect(page).to have_content @item.chron
       expect(page).to have_content "Item #{@item.barcode} stocked in #{@tray.barcode}."
    end
+
+   it "rejects associating an item to the wrong tray" do
+      @tray = FactoryGirl.create(:tray)
+      @tray2 = FactoryGirl.create(:tray)
+      @item = FactoryGirl.create(:item, barcode: "1234567", title: "TEST TITLE", chron: "VOL X", tray: @tray2)
+      visit trays_items_path
+      fill_in "Tray", :with => @tray.barcode
+      click_button "Save"
+      expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
+      fill_in "Item", :with => @item.barcode
+      fill_in "Thickness", :with => Faker::Number.number(1)
+      click_button "Save"
+      expect(current_path).to eq(wrong_tray_path(:id => @tray.id, :barcode => @item.barcode))
+      expect(page).to have_content "Item #{@item.barcode} is already assigned to #{@tray2.barcode}."
+      expect(page).to have_content @item.barcode
+      expect(page).to_not have_content @item.title
+      expect(page).to_not have_content @item.chron
+      expect(page).to_not have_content "Item #{@item.barcode} stocked in #{@tray.barcode}."
+      click_button "OK"
+      expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
+   end
+
 
     it "displays a tray's barcode while processing an item" do
       @tray = FactoryGirl.create(:tray)
