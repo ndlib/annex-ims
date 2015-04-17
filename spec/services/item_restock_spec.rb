@@ -43,9 +43,9 @@ RSpec.describe ItemRestock do
     @tray2 = FactoryGirl.create(:tray)
     @item = FactoryGirl.create(:item, tray: @tray)
     results = ItemRestock.call(@item.id, @tray2.barcode)
-    expect(results[:error]).to eq("incorrect tray for this item")
+    expect(results[:error]).to eq("Item #{@item.barcode} is already assigned to #{@tray.barcode}.")
     expect(results[:notice]).to eq(nil)
-    expect(results[:path]).to eq(h.show_item_path(:id => @item.id))
+    expect(results[:path]).to eq(h.wrong_restock_path(:id => @item.id))
   end
 
 

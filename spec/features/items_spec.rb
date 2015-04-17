@@ -57,8 +57,10 @@ feature "Items", :type => :feature do
       expect(current_path).to eq(show_item_path(:id => @item.id))
       fill_in "Tray", :with => @tray2.barcode
       click_button "Scan"
+      expect(current_path).to eq(wrong_restock_path(:id => @item.id))
+      expect(page).to have_content "Item #{@item.barcode} is already assigned to #{@tray.barcode}."
+      click_button "OK"
       expect(current_path).to eq(show_item_path(:id => @item.id))
-      expect(page).to have_content 'incorrect tray for this item'
     end
 
   end

@@ -39,4 +39,8 @@ class ItemsController < ApplicationController
     return
   end
 
+  def wrong_restock
+    @item = Item.find(params[:id])
+  end
+
 end

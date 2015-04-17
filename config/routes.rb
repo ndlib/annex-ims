@@ -29,6 +29,7 @@ Rails.application.routes.draw do
   get 'items/scan', to: 'items#scan', as: 'scan_item'
   get 'items/:id', to: 'items#show', as: 'show_item'
   post 'items/:id/restock', to: 'items#restock', as: 'item_restock'
+  get 'items/:id/wrong_restock', to: 'items#wrong_restock', as: 'wrong_restock'
 
   get 'search', to: 'search#index', as: 'search'
 

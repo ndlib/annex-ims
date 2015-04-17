@@ -24,8 +24,8 @@ class ItemRestockToTray
         results[:path] = h.show_item_path(:id => @item_id)
     else
       if item.tray != tray # this isn't the place to be putting items in the wrong tray
-        results[:error] = "incorrect tray for this item"
-        results[:path] = h.show_item_path(:id => @item_id)
+        results[:error] = "Item #{item.barcode} is already assigned to #{item.tray.barcode}."
+        results[:path] = h.wrong_restock_path(:id => @item_id)
       else
         StockItem.call(item)
         results[:notice] = "Item #{item.barcode} stocked in #{tray.barcode}."
