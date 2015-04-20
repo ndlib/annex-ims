@@ -5,7 +5,6 @@ feature "Items", :type => :feature do
 
   describe "when signed in" do
     before(:each) do
-      Rails.cache.clear
       login_user
 
       template = Addressable::Template.new "https://apipprd.library.nd.edu/1.0/resources/items/record?auth_token=p7ppNFZU1idKu4qszytB&barcode={barcode}"
