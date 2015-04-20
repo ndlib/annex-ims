@@ -5,7 +5,11 @@ feature "Trays", :type => :feature do
 
   describe "when signed in" do
     before(:each) do
+      Rails.cache.clear
       login_user
+
+      template = Addressable::Template.new "https://apipprd.library.nd.edu/1.0/resources/items/record?auth_token=p7ppNFZU1idKu4qszytB&barcode={barcode}"
+      stub_request(:get, template). with(:headers => {'User-Agent'=>'Faraday v0.9.1'}). to_return{ |response| { :status => 200, :body => {"item_id" => "00110147500410", "barcode" => @item.barcode, "bib_id" => @item.bib_number, "sequence_number" => "00410", "admin_document_number" => "001101475", "call_number" => @item.call_number, "description" => @item.chron ,"title"=> @item.title, "author" => @item.author ,"publication" => "Cambridge, UK : Elsevier Science Publishers, c1991-", "edition" => "", "isbn_issn" =>@item.isbn_issn, "condition" => @item.conditions}.to_json, :headers => {} } }
     end
 
     it "can scan a new tray" do
@@ -401,7 +405,8 @@ feature "Trays", :type => :feature do
       @tray = FactoryGirl.create(:tray)
       @items = []
       5.times do |i|
-        @items << FactoryGirl.create(:item)
+        @item = FactoryGirl.create(:item)
+        @items << @item
       end
       visit trays_items_path
       fill_in "Tray", :with => @tray.barcode
@@ -474,7 +479,8 @@ feature "Trays", :type => :feature do
       @tray = FactoryGirl.create(:tray)
       @items = []
       5.times do
-        @items << FactoryGirl.create(:item)
+        @item = FactoryGirl.create(:item)
+        @items << @item
       end
       visit trays_items_path
       fill_in "Tray", :with => @tray.barcode

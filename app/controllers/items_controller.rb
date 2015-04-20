@@ -9,6 +9,7 @@ class ItemsController < ApplicationController
     begin
       @item = GetItemFromBarcode.call(params[:item][:barcode])
     rescue StandardError => e
+p e.message
       flash[:error] = e.message
       redirect_to items_path
       return

@@ -15,7 +15,6 @@ class ApiGetItemMetadata
 
     params = "barcode=#{@barcode}"
     raw_results = ApiHandler.call("GET", @path, nil, params)
-
     results = {"status" => raw_results["status"], "results" => 
       {
         "title" => raw_results["results"]["title"],
