@@ -18,7 +18,7 @@ class BatchesController < ApplicationController
       redirect_to batches_path
       return
     else
-      @batch = BuildBatch.call(params[:batch])
+      @batch = BuildBatch.call(params[:batch], current_user)
 
       flash[:notice] = "Batch created."
 
