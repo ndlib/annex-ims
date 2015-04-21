@@ -145,6 +145,12 @@ class TraysController < ApplicationController
 
     item = GetItemFromBarcode.call(barcode)
 
+    if item.nil?
+      flash[:error] = "Item #{barcode} not found."
+      redirect_to trays_items_path
+      return
+    end
+
     already = false
 
     if !item.tray.nil?
