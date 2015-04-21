@@ -19,7 +19,7 @@ class ApiPostStockItem
     params = {item_id: @item_id, barcode: @barcode, tray_code: @tray_code}
     params_json = params.to_json
     raw_results = ApiHandler.call("POST", @path, headers, params)
-
+# Rob - I've tried printing out raw_results here, and it's not showing me success. I've varied how params get sent.
     results = {"status" => raw_results["status"], "results" => 
       {
 
