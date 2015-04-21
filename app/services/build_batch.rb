@@ -11,21 +11,26 @@ class BuildBatch
   end
 
   def build!
-    batch = Batch.new
-    batch.user = user
+    if user.batches.where(active: true).count == 0
+      batch = Batch.new
+      batch.user = user
 
-    batch_data.each do |data|
-Rails.logger.info data.inspect
-      lexed_data = data.split('-')
+      batch_data.each do |data|
 
-      request = Request.find(lexed_data[0])
-      batch.requests << request
+        lexed_data = data.split('-')
 
-      item = Item.find(lexed_data[1])
-      batch.items << item
+        request = Request.find(lexed_data[0])
+        batch.requests << request
+
+        item = Item.find(lexed_data[1])
+        batch.items << item
+      end
+
+      batch.save!
+    else
+      batch = nil
     end
 
-    batch.save!
     return batch
 
   end
