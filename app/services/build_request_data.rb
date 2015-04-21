@@ -38,7 +38,7 @@ class BuildRequestData
 
       data << request_data
     end
-Rails.logger.info data.inspect
+
     return data
 
   end

@@ -15,6 +15,7 @@ class BuildBatch
     batch.user = user
 
     batch_data.each do |data|
+Rails.logger.info data.inspect
       lexed_data = data.split('-')
 
       request = Request.find(lexed_data[0])
