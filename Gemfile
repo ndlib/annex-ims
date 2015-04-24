@@ -109,6 +109,9 @@ gem 'multi_xml'
 gem 'sunspot_rails', :git => 'https://github.com/sunspot/sunspot.git'
 gem 'progress_bar' # Because I want to see progress of reindexing
 
+# For paginating results
+gem 'kaminari'
+
 group :development do
   # Simple generators for layouts
   gem 'rails_layout'

@@ -24,9 +24,14 @@ class SearchItems
     if filter[:criteria].blank? && filter[:conditions].blank? && filter[:date_type].blank?
       results = []
     else
-      count = Item.count
+      count = 50 # We could customize this, but let's stick with 50 for now.
+      if filter[:page].blank?
+        page = 1
+      else
+        page = filter[:page]
+      end
       results = Item.search do
-        paginate :page => 1, :per_page => count
+        paginate :page => page, :per_page => count
         if filter.has_key?(:criteria_type) && filter.has_key?(:criteria)
             case filter[:criteria_type]
             when "ERROR"

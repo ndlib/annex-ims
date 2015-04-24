@@ -37,7 +37,7 @@
       = submit_tag 'Search', class: 'btn pull-right btn-primary'
       = submit_tag 'Export', class: 'btn pull-right btn-primary'
 %hr
-= "#{@result.count} results found"
+= "#{@results.count} results found"
 %table.table.table-striped.condensed
   %thead
     %tr
@@ -51,7 +51,7 @@
       %th= 'Shelf'
       %th= 'Condition'
   %tbody
-    - @result.each do |item|
+    - @results.each do |item|
       %tr
         %td= item.barcode
         %td= item.bib_number
@@ -62,4 +62,6 @@
         %td= item.tray.present? ? item.tray.barcode : ''
         %td= item.shelf.present? ? item.shelf.barcode : ''
         %td= item.conditions.present? ? item.conditions.join(", ") : ''
+- if !@results.blank?
+  = paginate @results
 
