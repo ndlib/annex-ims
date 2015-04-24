@@ -66,6 +66,13 @@ group :development, :test do
 
   # For serving up ssl
   gem 'thin'
+
+end
+
+group :test do
+  # For mocking up APIs
+  gem 'webmock'
+
 end
 
 group :development, :test, :staging do

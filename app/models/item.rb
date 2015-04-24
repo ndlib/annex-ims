@@ -14,6 +14,7 @@ class Item < ActiveRecord::Base
 
   validates_presence_of :barcode
   validates_presence_of :thickness, on: :update  # Items are going to be programmatically created, humans will be required to enter thickness.
+  validates_numericality_of :thickness, on: :update, only_integer: true, greater_than_or_equal_to: 0
   validates :barcode, uniqueness: true
   validate :has_correct_prefix
 

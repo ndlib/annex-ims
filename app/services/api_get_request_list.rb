@@ -11,7 +11,7 @@ class ApiGetRequestList
     params = nil
     headers = nil
     raw_results = ApiHandler.call("GET", @path, headers, params)
-
+Rails.logger.info raw_results.inspect
     requests = []
 
     raw_results["results"]["requests"].each do |res|

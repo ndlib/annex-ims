@@ -1,4 +1,4 @@
-class  AssociateTrayWithItemBarcode
+class AssociateTrayWithItemBarcode
   attr_reader :tray, :barcode, :thickness
 
   def self.call(tray, barcode, thickness)

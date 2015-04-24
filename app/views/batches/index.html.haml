@@ -112,7 +112,7 @@
       str += "<th>Chron</th>";
       $.each(json, function( index, item ) {
         str += "<tr>";
-        str += "<td><input class='item' type='checkbox' name='batch[]' id='"+item['id']+"' value='1' /></td>";
+        str += "<td><input class='item' type='checkbox' name='batch[]' id='"+item['id']+"' value='"+item['id']+"' /></td>";
         str += "<td>"+item['shelf']+"</td>";
         str += "<td>"+item['tray']+"</td>";
         str += "<td>"+item['title']+"</td>";

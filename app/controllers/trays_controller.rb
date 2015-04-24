@@ -36,7 +36,7 @@ class TraysController < ApplicationController
     unless (params[:force] == "true")
       if !@tray.shelf.nil? and (@tray.shelf.barcode != barcode)
         flash[:error] = "#{@tray.barcode} belongs to #{@tray.shelf.barcode}, but #{barcode} was scanned."
-        redirect_to wrong_tray_path(:id => @tray.id, :barcode => barcode)
+        redirect_to wrong_shelf_path(:id => @tray.id, :barcode => barcode)
         return
       end
     end
@@ -88,10 +88,18 @@ class TraysController < ApplicationController
   end
 
   # The only way to get here is if you've scanned the wrong shelf after scanning a tray
-  def wrong
+  def wrong_shelf
     @tray = Tray.find(params[:id])
     @barcode = params[:barcode]
   end
+
+  # The only way to get here is if you've scanned the wrong item after scanning a tray
+  def wrong_tray
+    @tray = Tray.find(params[:id])
+    @barcode = params[:barcode]
+    @item = GetItemFromBarcode.call(@barcode)
+  end
+
 
   # Should this area be pulled out into a separate controller? It's all about trays, but with items. 
   def items
@@ -127,7 +135,6 @@ class TraysController < ApplicationController
       return
     end
 
-
     if IsValidThickness.call(params[:thickness])
       thickness = params[:thickness]
     else
@@ -136,9 +143,33 @@ class TraysController < ApplicationController
       return
     end
 
+    item = GetItemFromBarcode.call(barcode)
+
+    if item.nil?
+      flash[:error] = "Item #{barcode} not found."
+      redirect_to trays_items_path
+      return
+    end
+
+    already = false
+
+    if !item.tray.nil?
+      if item.tray != @tray
+        flash[:error] = "Item #{barcode} is already assigned to #{item.tray.barcode}."
+        redirect_to wrong_tray_path(:id => @tray.id, :barcode => barcode)
+        return
+      else
+        already = true
+      end
+    end
+
     begin
       AssociateTrayWithItemBarcode.call(@tray, barcode, thickness)
-      flash[:notice] = "Item #{barcode} stocked in #{@tray.barcode}."
+      if already
+        flash[:notice] = "Item #{barcode} already assigned to #{@tray.barcode}. Record updated."
+      else
+        flash[:notice] = "Item #{barcode} stocked in #{@tray.barcode}."
+      end
       if TrayFull.call(@tray)
         flash[:error] = 'warning - tray may be full'
       end
@@ -150,8 +181,6 @@ class TraysController < ApplicationController
       return
     end
 
-    redirect_to show_tray_path(:id => @tray.id)
-    return
   end
 
   def dissociate_item
