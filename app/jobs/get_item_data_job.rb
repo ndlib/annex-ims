@@ -30,5 +30,6 @@ Rails.logger.info "Got here"
       item.destroy!
       item = nil
     end
+
   end
 end
