@@ -7,9 +7,8 @@ class ItemsController < ApplicationController
 
   def scan
     begin
-      @item = GetItemFromBarcode.call(params[:item][:barcode])
+      @item = GetItemFromBarcode.call(current_user.id, params[:item][:barcode])
     rescue StandardError => e
-p e.message
       flash[:error] = e.message
       redirect_to items_path
       return
@@ -32,7 +31,7 @@ p e.message
     item_id = params[:id]
     barcode = params[:barcode]
 
-    results = ItemRestock.call(item_id, barcode)
+    results = ItemRestock.call(current_user.id, item_id, barcode)
 
     flash[:error] = results[:error]
     flash[:notice] = results[:notice]

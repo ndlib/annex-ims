@@ -1,9 +1,10 @@
 class ApiGetRequestList
-  def self.call()
-    new().get_data!
+  def self.call(user_id)
+    new(user_id).get_data!
   end
 
-  def initialize
+  def initialize(user_id)
+    @user_id = user_id
     @path = "/1.0/resources/items/active_requests"
   end
 
@@ -11,14 +12,14 @@ class ApiGetRequestList
     params = nil
     headers = nil
     raw_results = ApiHandler.call("GET", @path, headers, params)
-Rails.logger.info raw_results.inspect
+
     requests = []
 
     raw_results["results"]["requests"].each do |res|
       if !res["barcode"].blank?
         criteria_type = "barcode"
         criteria = res["barcode"]
-        item = GetItemFromBarcode.call(res["barcode"]) # Hack to make sure data is present for display.
+        item = GetItemFromBarcode.call(@user_id, res["barcode"]) # Hack to make sure data is present for display.
       elsif !res["bib_number"].blank?
         criteria_type = "bib_number"
         criteria = res["bib_number"]

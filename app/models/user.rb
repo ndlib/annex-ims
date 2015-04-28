@@ -4,4 +4,7 @@ class User < ActiveRecord::Base
   # devise :database_authenticatable, :registerable,
   #        :recoverable, :rememberable, :trackable, :validatable
   devise :cas_authenticatable, :trackable
+
+  has_many :issues
+  has_many :resolved_issues, class_name: "Issue"
 end

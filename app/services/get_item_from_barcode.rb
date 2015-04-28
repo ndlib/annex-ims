@@ -1,11 +1,12 @@
 class GetItemFromBarcode
-  attr_reader :barcode
+  attr_reader :user_id, :barcode
 
-  def self.call(barcode)
-    new(barcode).get
+  def self.call(user_id, barcode)
+    new(user_id, barcode).get
   end
 
-  def initialize(barcode)
+  def initialize(user_id, barcode)
+    @user_id = user_id
     @barcode = barcode
   end
 
@@ -18,7 +19,16 @@ class GetItemFromBarcode
         item.attributes = data["results"]
         item.thickness ||= 0
         item.save!
-      elsif data["status"] == 404
+      elsif data["status"] == 404 # Not found
+        AddIssue.call(user_id, barcode, "Item not found.")
+        item.destroy!
+        item = nil
+      elsif data["status"] == 401 # Unauthorized - probably bad key
+        AddIssue.call(user_id, barcode, "Unauthorized - Check API Key.")
+        item.destroy!
+        item = nil
+      elsif data["status"] == 599 # Timeout
+        AddIssue.call(user_id, barcode, "API Timeout.")
         item.destroy!
         item = nil
       end

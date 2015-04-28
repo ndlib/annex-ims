@@ -97,7 +97,7 @@ class TraysController < ApplicationController
   def wrong_tray
     @tray = Tray.find(params[:id])
     @barcode = params[:barcode]
-    @item = GetItemFromBarcode.call(@barcode)
+    @item = GetItemFromBarcode.call(current_user.id, @barcode)
   end
 
 
@@ -143,11 +143,11 @@ class TraysController < ApplicationController
       return
     end
 
-    item = GetItemFromBarcode.call(barcode)
+    item = GetItemFromBarcode.call(current_user.id, barcode)
 
     if item.nil?
       flash[:error] = "Item #{barcode} not found."
-      redirect_to trays_items_path
+      redirect_to show_tray_item_path(:id => @tray.id)
       return
     end
 
@@ -164,7 +164,7 @@ class TraysController < ApplicationController
     end
 
     begin
-      AssociateTrayWithItemBarcode.call(@tray, barcode, thickness)
+      AssociateTrayWithItemBarcode.call(current_user.id, @tray, barcode, thickness)
       if already
         flash[:notice] = "Item #{barcode} already assigned to #{@tray.barcode}. Record updated."
       else

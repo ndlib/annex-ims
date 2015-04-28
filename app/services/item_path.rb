@@ -1,11 +1,12 @@
 class ItemPath
-  attr_reader :item_id, :barcode
+  attr_reader :user_id, :item_id, :barcode
 
-  def self.call(item_id, barcode)
-    new(item_id, barcode).process!
+  def self.call(user_id, item_id, barcode)
+    new(user_id, item_id, barcode).process!
   end
 
-  def initialize(item_id, barcode)
+  def initialize(user_id, item_id, barcode)
+    @user_id = user_id
     @item_id = item_id
     @barcode = barcode
   end
@@ -16,7 +17,7 @@ class ItemPath
     results[:notice] = nil
     results[:path] = nil
 
-    item = GetItemFromBarcode.call(barcode)
+    item = GetItemFromBarcode.call(user_id, barcode)
 
     if item.blank?
       results[:error] = "No item was found with barcode #{barcode}"

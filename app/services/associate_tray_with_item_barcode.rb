@@ -1,11 +1,12 @@
 class AssociateTrayWithItemBarcode
-  attr_reader :tray, :barcode, :thickness
+  attr_reader :user_id, :tray, :barcode, :thickness
 
-  def self.call(tray, barcode, thickness)
-    new(tray, barcode, thickness).associate!
+  def self.call(user_id, tray, barcode, thickness)
+    new(user_id, tray, barcode, thickness).associate!
   end
 
-  def initialize(tray, barcode, thickness)
+  def initialize(user_id, tray, barcode, thickness)
+    @user_id = user_id
     @tray = tray
     @barcode = barcode
     @thickness = thickness
@@ -14,7 +15,7 @@ class AssociateTrayWithItemBarcode
   def associate!
     validate_input!
 
-    item = GetItemFromBarcode.call(barcode)
+    item = GetItemFromBarcode.call(user_id, barcode)
     if !item.nil?
       item.tray = tray
       item.thickness = thickness

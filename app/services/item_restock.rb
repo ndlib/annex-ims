@@ -1,11 +1,12 @@
 class ItemRestock
-  attr_reader :item_id, :barcode
+  attr_reader :user_id, :item_id, :barcode
 
-  def self.call(item_id, barcode)
-    new(item_id, barcode).process!
+  def self.call(user_id, item_id, barcode)
+    new(user_id, item_id, barcode).process!
   end
 
-  def initialize(item_id, barcode)
+  def initialize(user_id, item_id, barcode)
+    @user_id = user_id
     @item_id = item_id
     @barcode = barcode
   end
@@ -17,7 +18,7 @@ class ItemRestock
     results[:path] = nil
 
     if IsItemBarcode.call(barcode)
-      results = ItemPath.call(item_id, barcode)
+      results = ItemPath.call(user_id, item_id, barcode)
 
     elsif IsTrayBarcode.call(barcode)
       results = ItemRestockToTray.call(item_id, barcode)

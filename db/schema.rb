@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150410181000) do
+ActiveRecord::Schema.define(version: 20150428155251) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,6 +27,19 @@ ActiveRecord::Schema.define(version: 20150410181000) do
   end
 
   add_index "batches_items", ["item_id", "batch_id"], name: "index_batches_items_on_item_id_and_batch_id", unique: true, using: :btree
+
+  create_table "issues", force: true do |t|
+    t.integer  "user_id",     null: false
+    t.string   "barcode",     null: false
+    t.text     "message",     null: false
+    t.integer  "resolver_id"
+    t.datetime "resolved_at"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "issues", ["resolver_id"], name: "index_issues_on_resolver_id", using: :btree
+  add_index "issues", ["user_id"], name: "index_issues_on_user_id", using: :btree
 
   create_table "items", force: true do |t|
     t.string   "barcode",                        null: false
@@ -107,6 +120,7 @@ ActiveRecord::Schema.define(version: 20150410181000) do
 
   add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
 
+  add_foreign_key "issues", "users", column: "resolver_id"
   add_foreign_key "items", "trays"
   add_foreign_key "requests", "batches"
   add_foreign_key "requests", "items"

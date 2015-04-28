@@ -1,10 +1,14 @@
 class GetRequests
-  def self.call()
-    new().get_data!
+  def self.call(user_id)
+    new(user_id).get_data!
+  end
+
+  def initialize(user_id)
+    @user_id = user_id
   end
 
   def get_data!
-    list = ApiGetRequestList.call()
+    list = ApiGetRequestList.call(@user_id)
 
     if list["status"] == 200
       list["results"].each do |res|
