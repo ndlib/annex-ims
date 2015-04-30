@@ -113,7 +113,7 @@ gem 'progress_bar' # Because I want to see progress of reindexing
 gem 'kaminari'
 
 # For Activejob queue - make sure you have a RabbitMQ server set up
-gem 'sneakers'
+gem 'sneakers', '~> 1.0.4'
 
 group :development do
   # Simple generators for layouts
