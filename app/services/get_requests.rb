@@ -8,17 +8,9 @@ class GetRequests
   end
 
   def get_data!
-    list = ApiGetRequestList.call(@user_id)
 
-    if list["status"] == 200
-      list["results"].each do |res|
-        r = Request.find_or_initialize_by(trans: res["trans"])
-        r.attributes = res
-        r.save!
-      end
-    else
-      raise "error getting request list"
-    end
+    GetRequestsDataJob.perform_later(@user_id)
+
   end
 
 end

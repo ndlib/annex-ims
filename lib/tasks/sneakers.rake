@@ -31,6 +31,7 @@ namespace :sneakers do
         end)
       end
       workers << ItemDataWorker
+      workers << RequestsDataWorker
       r = Sneakers::Runner.new(workers)
 
       r.run
