@@ -7,4 +7,5 @@ class User < ActiveRecord::Base
 
   has_many :issues
   has_many :resolved_issues, class_name: "Issue"
+  has_many :batches
 end

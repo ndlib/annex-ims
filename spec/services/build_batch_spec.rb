@@ -49,11 +49,10 @@ RSpec.describe BuildBatch, :search => true do
                                         item: item2, 
                                         requested: 1.day.ago.strftime("%Y-%m-%d")) }
 
+    let(:current_user) { FactoryGirl.create(:user) }
     
     before(:all) do
       solr_setup
-      # signin_user @user
-      # pending "add user sign in code"
     end
 
     before(:each) do
@@ -71,7 +70,7 @@ RSpec.describe BuildBatch, :search => true do
     it "builds a batch when an item is selected", :search => true do
       test = ["#{request1.id}-#{item.id}"]
       expected = {}
-      result = BuildBatch.call(test)
+      result = BuildBatch.call(test, current_user)
       expect(request1).to eq result.requests[0]
       expect(item).to eq result.items[0]
     end
