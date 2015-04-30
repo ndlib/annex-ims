@@ -6,9 +6,9 @@ Sneakers.configure({
   vhost: Rails.application.secrets.sneakers["vhost"],
   workers: 1,
   heartbeat: 5,
-  exchange: 'honeycomb',
-  exchange_type: 'topic',
-  routing_key: ['honeypot_images'],
+  exchange: 'default',
+  exchange_type: 'direct',
+  routing_key: ['default'],
   durable: true,
   log: 'log/sneakers.log',
 })
