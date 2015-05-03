@@ -131,7 +131,7 @@ class TraysController < ApplicationController
     barcode = params[:barcode]
 
     if barcode == @tray.barcode
-      redirect_to trays_items_path
+      redirect_to missing_tray_item_path(:id => @tray.id)
       return
     end
 
@@ -209,5 +209,9 @@ class TraysController < ApplicationController
 
     redirect_to show_tray_path(:id => @tray.id)
     return
+  end
+
+  def missing
+    @tray = Tray.find(params[:id])
   end
 end
