@@ -1,6 +1,6 @@
 require 'sneakers/handlers/maxretry'
 
-class ItemDataWorker < ActiveJob::QueueAdapters::SneakersAdapter::JobWrapper
+class DataWorker < ActiveJob::QueueAdapters::SneakersAdapter::JobWrapper
   from_queue 'default',
     handler: Sneakers::Handlers::Maxretry,
     workers: 1,
@@ -15,7 +15,7 @@ class ItemDataWorker < ActiveJob::QueueAdapters::SneakersAdapter::JobWrapper
     routing_key: ['default']
 
   def work(*args)
-    logger.info("ItemDataWorker rejecting args: #{args.inspect}")
+    logger.info("DataWorker rejecting args: #{args.inspect}")
     begin
       super(*args)
     rescue Exception => e

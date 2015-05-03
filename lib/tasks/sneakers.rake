@@ -30,8 +30,7 @@ namespace :sneakers do
           from_queue queue_name
         end)
       end
-      workers << ItemDataWorker
-      workers << RequestsDataWorker
+      workers << DataWorker
       r = Sneakers::Runner.new(workers)
 
       r.run
