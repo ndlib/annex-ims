@@ -76,11 +76,16 @@
         "dom": 'T<"clear">lfrtip',
         "tableTools": {
           "aButtons": [ "print" ]
-        }        
+        },
+        "drawCallback": function( settings ) {
+          addHandler();
+        }
     } );
     $("#selectAll").click(function() {
       $(".item").prop("checked", $("#selectAll").prop("checked"));
     } );
+  } );
+  function addHandler() {
     $("td.details-control").click(function() {
       var tr = $(this).closest('tr');
       var row = table.row( tr );
@@ -96,7 +101,7 @@
         tr.addClass('shown');
       }
     } );
-  } );
+  };
   function format(json) {
     console.log("my object: %o", json)
     if (json.length < 1) {
