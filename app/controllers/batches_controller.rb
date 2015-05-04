@@ -28,6 +28,6 @@ class BatchesController < ApplicationController
   end
 
   def current
-
+    @batch = nil
   end
 end
