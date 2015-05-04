@@ -86,6 +86,7 @@
     } );
   } );
   function addHandler() {
+    $("td.details-control").unbind('click');
     $("td.details-control").click(function() {
       var tr = $(this).closest('tr');
       var row = table.row( tr );
@@ -99,7 +100,7 @@
         // Open this row
         row.child( format(tr.data("params")) ).show();
         tr.addClass('shown');
-      }
+      };
     } );
   };
   function format(json) {
