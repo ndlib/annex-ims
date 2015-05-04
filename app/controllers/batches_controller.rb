@@ -27,4 +27,7 @@ class BatchesController < ApplicationController
     end
   end
 
+  def current
+
+  end
 end
