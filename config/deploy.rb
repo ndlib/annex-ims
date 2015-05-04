@@ -49,6 +49,7 @@ namespace :deploy do
     on roles(:web), in: :sequence, wait: 5 do
       # Your restart mechanism here, for example:
       execute :touch, release_path.join('tmp/restart.txt')
+      execute :rake, 'sneakers:restart'
     end
   end
 
