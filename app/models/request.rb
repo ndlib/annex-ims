@@ -5,6 +5,7 @@ class Request < ActiveRecord::Base
   validates_presence_of :source
   validates_presence_of :req_type
 
-  belongs_to :batch
-  belongs_to :item
+  has_many :matches
+  has_many :items, through: :matches
+  has_many :batches, through: :matches
 end

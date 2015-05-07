@@ -6,15 +6,15 @@ RSpec.describe BuildBatch, :search => true do
   describe "when signed in", ignore: :travis do
 
     let(:shelf) { FactoryGirl.create(:shelf) }
-    let(:tray) { FactoryGirl.create(:tray, barcode: 'TRAY-AH12345', shelf: shelf) }
-    let(:tray2) { FactoryGirl.create(:tray, barcode: 'TRAY-BL6789', shelf: shelf) }
+    let(:tray) { FactoryGirl.create(:tray, barcode: 'TRAY-AH12346', shelf: shelf) }
+    let(:tray2) { FactoryGirl.create(:tray, barcode: 'TRAY-BL6788', shelf: shelf) }
 
     let(:item) { FactoryGirl.create(:item, 
                                     author: 'JOHN DOE', 
                                     title: 'SOME TITLE', 
                                     chron: 'TEST CHRN', 
                                     bib_number: '12345',
-                                    barcode: '9876543',
+                                    barcode: '9876542',
                                     isbn_issn: '987655432',
                                     call_number: 'A 123 .C654 1991',
                                     thickness: 1, 
@@ -28,7 +28,7 @@ RSpec.describe BuildBatch, :search => true do
                                     title: 'SOME OTHER TITLE', 
                                     chron: 'TEST CHRN 2', 
                                     bib_number: '12345',
-                                    barcode: '4576839201',
+                                    barcode: '4576839200',
                                     isbn_issn: '918273645',
                                     call_number: 'A 1234 .C654 1991',
                                     thickness: 1, 
@@ -39,14 +39,12 @@ RSpec.describe BuildBatch, :search => true do
 
     let(:request1) { FactoryGirl.create(:request, 
                                         criteria_type: 'barcode', 
-                                        criteria: item.barcode, 
-                                        item: item, 
+                                        criteria: item.barcode,  
                                         requested: 3.days.ago.strftime("%Y-%m-%d")) }
 
     let(:request2) { FactoryGirl.create(:request, 
                                         criteria_type: 'barcode', 
-                                        criteria: item2.barcode, 
-                                        item: item2, 
+                                        criteria: item2.barcode,
                                         requested: 1.day.ago.strftime("%Y-%m-%d")) }
 
     let(:current_user) { FactoryGirl.create(:user) }
@@ -76,6 +74,9 @@ RSpec.describe BuildBatch, :search => true do
     end
 
     def destroy_all
+      Match.all.each do |m|
+        m.destroy!
+      end
       request2.destroy!
       request1.destroy!
       item2.destroy!

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150428155251) do
+ActiveRecord::Schema.define(version: 20150505212809) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,13 +24,6 @@ ActiveRecord::Schema.define(version: 20150428155251) do
   end
 
   add_index "batches", ["user_id"], name: "index_batches_on_user_id", using: :btree
-
-  create_table "batches_items", id: false, force: true do |t|
-    t.integer "batch_id", null: false
-    t.integer "item_id",  null: false
-  end
-
-  add_index "batches_items", ["item_id", "batch_id"], name: "index_batches_items_on_item_id_and_batch_id", unique: true, using: :btree
 
   create_table "issues", force: true do |t|
     t.integer  "user_id",     null: false
@@ -65,6 +58,14 @@ ActiveRecord::Schema.define(version: 20150428155251) do
 
   add_index "items", ["barcode"], name: "index_items_on_barcode", unique: true, using: :btree
   add_index "items", ["tray_id"], name: "index_items_on_tray_id", using: :btree
+
+  create_table "matches", force: true do |t|
+    t.integer "batch_id",   null: false
+    t.integer "item_id",    null: false
+    t.integer "request_id", null: false
+  end
+
+  add_index "matches", ["item_id", "request_id", "batch_id"], name: "index_matches_on_item_id_and_request_id_and_batch_id", unique: true, using: :btree
 
   create_table "requests", force: true do |t|
     t.string   "criteria_type", null: false
@@ -127,6 +128,7 @@ ActiveRecord::Schema.define(version: 20150428155251) do
   add_foreign_key "batches", "users"
   add_foreign_key "issues", "users", column: "resolver_id"
   add_foreign_key "items", "trays"
+  add_foreign_key "matches", "requests"
   add_foreign_key "requests", "batches"
   add_foreign_key "requests", "items"
   add_foreign_key "trays", "shelves"

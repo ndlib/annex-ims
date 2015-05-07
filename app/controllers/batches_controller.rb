@@ -3,7 +3,7 @@ class BatchesController < ApplicationController
 
   def index
     GetRequests.call(current_user.id) # This should go in a queue or scheduler to run periodically.
-    requests = Request.all.where(batch_id: nil)
+    requests = Request.all.where("id NOT IN (SELECT request_id FROM matches)")
     @data = BuildRequestData.call(requests)
 
     respond_to do |format|
@@ -28,6 +28,17 @@ class BatchesController < ApplicationController
   end
 
   def current
-    @batch = nil
+    @batch = current_user.batches.where(active: true).first
+  end
+
+  def remove
+    if !params[:match_id].blank?
+      match = Match.find(params[:match_id])
+      if !match.blank?
+        match.destroy!
+      end
+    end
+
+    redirect_to current_batch_path
   end
 end

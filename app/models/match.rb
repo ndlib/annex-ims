@@ -1,0 +1,9 @@
+class Match < ActiveRecord::Base
+  belongs_to :batch
+  belongs_to :request
+  belongs_to :item
+
+  validates_presence_of :batch_id
+  validates_presence_of :request_id
+  validates_presence_of :item_id
+end

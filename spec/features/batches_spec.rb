@@ -40,14 +40,12 @@ feature "Build", :type => :feature, :search => true do
 
     let(:request1) { FactoryGirl.create(:request, 
                                         criteria_type: 'barcode', 
-                                        criteria: item.barcode, 
-                                        item: item, 
+                                        criteria: item.barcode,  
                                         requested: 3.days.ago.strftime("%Y-%m-%d")) }
 
     let(:request2) { FactoryGirl.create(:request, 
                                         criteria_type: 'barcode', 
-                                        criteria: item2.barcode, 
-                                        item: item2, 
+                                        criteria: item2.barcode,  
                                         requested: 1.day.ago.strftime("%Y-%m-%d")) }
 
     
@@ -82,6 +80,18 @@ feature "Build", :type => :feature, :search => true do
       expect(current_path).to eq(root_path)
       expect(page).to have_content "Batch created."
     end
+
+    it "can see an item on the batch list once selected", :search => true do
+      visit batches_path
+      find(:css, "#batch_[value='#{request1.id}-#{item.id}']").set(true)
+      click_button "Save"
+      expect(current_path).to eq(root_path)
+      expect(page).to have_content "Batch created."
+      visit current_batch_path
+      expect(page).to have_content item.title
+      expect(page).to have_content item.author
+    end
+
 
     def destroy_all
       request2.destroy!

@@ -40,14 +40,12 @@ feature "Search", :type => :feature, :search => true do
 
     let(:request1) { FactoryGirl.create(:request, 
                                         criteria_type: 'barcode', 
-                                        criteria: item.barcode, 
-                                        item: item, 
+                                        criteria: item.barcode,  
                                         requested: 3.days.ago.strftime("%Y-%m-%d")) }
 
     let(:request2) { FactoryGirl.create(:request, 
                                         criteria_type: 'barcode', 
-                                        criteria: item2.barcode, 
-                                        item: item2, 
+                                        criteria: item2.barcode,  
                                         requested: 1.day.ago.strftime("%Y-%m-%d")) }
 
     

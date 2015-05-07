@@ -15,6 +15,7 @@ class BuildBatch
       batch = Batch.new
       batch.user = user
       batch.active = true
+      batch.save!
     else
       batch = user.batches.where(active: true).first
     end
@@ -24,13 +25,14 @@ class BuildBatch
       lexed_data = data.split('-')
 
       request = Request.find(lexed_data[0])
-      batch.requests << request
-
       item = Item.find(lexed_data[1])
-      batch.items << item
-    end
 
-    batch.save!
+      match = Match.new
+      match.item = item
+      match.batch = batch
+      match.request = request
+      match.save!
+    end
 
     return batch
 
