@@ -1,15 +1,14 @@
 class ApiHandler
-  attr_reader :verb, :path, :headers, :params
+  attr_reader :verb, :path, :params
 
-  def self.call(verb, path, headers, params)
-    new(verb, path, headers, params).transact!
+  def self.call(verb, path, params)
+    new(verb, path, params).transact!
   end
 
-  def initialize(verb, path, headers, params)
+  def initialize(verb, path, params)
     @connection ||= ExternalRestConnection.new(base_url: Rails.application.secrets.api_server, connection_opts: {})
     @verb = verb
     @path = path
-    @headers = headers
     @params = params
   end
 
@@ -20,7 +19,7 @@ class ApiHandler
       @path << "&#{params}"
       @response = @connection.get(@path)
     when "POST"
-      @response = @connection.post(@path, @headers, @params)
+      @response = @connection.post(@path, @params)
     else
       raise "Only GET and POST have been implemented."
     end

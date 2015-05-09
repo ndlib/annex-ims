@@ -32,8 +32,8 @@ class ExternalRestConnection
   end
 
   # POST verb
-  def post(path, headers, payload)
-    @response = connection.post(path, headers: headers, body: payload)
+  def post(path, payload)
+    @response = connection.post(path, payload)
     process_response
   end
 
@@ -83,12 +83,7 @@ class ExternalRestConnection
   def process_response
     result = {"status" => response.status}
     if response.status == 200
-#    type = response_content_type
-#    if expected_type?(response_content_type)
       result["results"] = JSON.parse(response.body)
-#    else
-#      fail Error, "Unexpected type (Expect #{response_format}, Not #{type})"
-#    end
     else
       result["results"] = {}
     end

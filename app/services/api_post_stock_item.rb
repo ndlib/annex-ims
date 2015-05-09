@@ -14,18 +14,10 @@ class ApiPostStockItem
 
   def post_data!
     validate_input!
-
-    headers = {'Content-Type'=> "application/json"}
     params = {item_id: @item_id, barcode: @barcode, tray_code: @tray_code}
-    params_json = params.to_json
-    raw_results = ApiHandler.call("POST", @path, headers, params)
-# Rob - I've tried printing out raw_results here, and it's not showing me success. I've varied how params get sent.
-    results = {"status" => raw_results["status"], "results" => 
-      {
-
-      }}
-
-     raw_results
+    raw_results = ApiHandler.call("POST", @path, params)
+    results = {"status" => raw_results["status"], "results" => {}}
+    raw_results
   end
 
   private
@@ -35,7 +27,6 @@ class ApiPostStockItem
         if IsTrayBarcode.call(tray_code)
           return true
         else
-p tray_code
           raise "tray code is not a tray"
         end
       else
