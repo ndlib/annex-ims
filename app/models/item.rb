@@ -19,6 +19,7 @@ class Item < ActiveRecord::Base
   validate :has_correct_prefix
 
   belongs_to :tray
+  belongs_to :bin
   has_one :shelf, through: :tray
   has_many :matches
   has_many :requests, through: :matches
@@ -47,7 +48,7 @@ class Item < ActiveRecord::Base
 
   def has_correct_prefix
     if !IsItemBarcode.call(barcode)
-      errors.add(:barcode, "must not begin with #{IsShelfBarcode::PREFIX}, #{IsTrayBarcode::PREFIX}, or #{IsToteBarcode::PREFIX}")
+      errors.add(:barcode, "must not begin with #{IsShelfBarcode::PREFIX}, #{IsTrayBarcode::PREFIX}, or #{IsBinBarcode::PREFIX}")
     end
   end
 end

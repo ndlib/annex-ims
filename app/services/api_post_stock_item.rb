@@ -15,7 +15,8 @@ class ApiPostStockItem
   def post_data!
     validate_input!
 
-    headers = {'Content-Type'=> "application/json"}
+    headers = {}
+#    headers = {'Content-Type'=> "application/json"}
     params = {item_id: @item_id, barcode: @barcode, tray_code: @tray_code}
     params_json = params.to_json
     raw_results = ApiHandler.call("POST", @path, headers, params)
