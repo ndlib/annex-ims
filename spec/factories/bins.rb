@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :bin do
-    barcode "MyString"
+    sequence(:barcode) { |n| "BIN-ALEPH-LOAN-#{n}" }
   end
 
 end
