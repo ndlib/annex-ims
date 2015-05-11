@@ -8,6 +8,7 @@
         %th= 'User'
         %th= 'Barcode'
         %th= 'Message'
+        %th= 'Created'
         %th= ''
     %tbody
       - @issues.each do |issue|
@@ -15,6 +16,7 @@
           %td= issue.user.username
           %td= issue.barcode
           %td= issue.message
+          %td= issue.created_at
           %td
             = form_tag resolve_issue_path do |f|
               = hidden_field_tag :issue_id, issue.id

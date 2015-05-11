@@ -77,6 +77,7 @@ feature "Items", :type => :feature do
         expect(page).to have_content issue.user.username
         expect(page).to have_content issue.barcode
         expect(page).to have_content issue.message
+        expect(page).to have_content issue.created_at
       end
     end
 
@@ -91,6 +92,7 @@ feature "Items", :type => :feature do
         expect(page).to have_content issue.user.username
         expect(page).to have_content issue.barcode
         expect(page).to have_content issue.message
+        expect(page).to have_content issue.created_at
         click_button "issue-#{issue.id}"
         expect(current_path).to eq(issues_path)
         expect(page).to_not have_content issue.barcode
