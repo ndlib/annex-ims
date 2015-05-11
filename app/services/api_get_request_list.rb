@@ -11,7 +11,7 @@ class ApiGetRequestList
   def get_data!
     params = nil
     headers = nil
-    raw_results = ApiHandler.call("GET", @path, headers, params)
+    raw_results = ApiHandler.call("GET", @path, params)
 
     requests = []
 
