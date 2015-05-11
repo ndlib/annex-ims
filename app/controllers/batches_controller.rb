@@ -29,6 +29,13 @@ class BatchesController < ApplicationController
 
   def current
     @batch = current_user.batches.where(active: true).first
+
+    if @batch.blank?
+      flash[:error] = "#{current_user.username} does not have an active batch, please create one."
+      redirect_to batches_path
+      return
+    end
+
   end
 
   def remove
@@ -44,6 +51,13 @@ class BatchesController < ApplicationController
 
   def retrieve
     @batch = current_user.batches.where(active: true).first
+
+    if @batch.blank?
+      flash[:error] = "#{current_user.username} does not have an active batch, please create one."
+      redirect_to batches_path
+      return
+    end
+
     @match = @batch.current_match
 
     if @match.nil? # then we're done processing matches
@@ -55,6 +69,13 @@ class BatchesController < ApplicationController
 
   def item
     @batch = current_user.batches.where(active: true).first
+
+    if @batch.blank?
+      flash[:error] = "#{current_user.username} does not have an active batch, please create one."
+      redirect_to batches_path
+      return
+    end
+
     @match = @batch.current_match
 
     if params[:commit] == "Skip"
@@ -80,12 +101,26 @@ class BatchesController < ApplicationController
 
   def bin
     @batch = current_user.batches.where(active: true).first
+
+    if @batch.blank?
+      flash[:error] = "#{current_user.username} does not have an active batch, please create one."
+      redirect_to batches_path
+      return
+    end
+
     @match = @batch.current_match
 
   end
 
   def scan_bin
     @batch = current_user.batches.where(active: true).first
+
+    if @batch.blank?
+      flash[:error] = "#{current_user.username} does not have an active batch, please create one."
+      redirect_to batches_path
+      return
+    end
+
     @match = @batch.current_match
 
     if params[:commit] == "Skip"
@@ -122,11 +157,25 @@ class BatchesController < ApplicationController
 
   def finalize
     @batch = current_user.batches.where(active: true).first
+
+    if @batch.blank?
+      flash[:error] = "#{current_user.username} does not have an active batch, please create one."
+      redirect_to batches_path
+      return
+    end
+
     @matches = @batch.skipped_matches
   end
 
   def finish
     @batch = current_user.batches.where(active: true).first
+
+    if @batch.blank?
+      flash[:error] = "#{current_user.username} does not have an active batch, please create one."
+      redirect_to batches_path
+      return
+    end
+
     FinishBatch.call(@batch)
     flash[:notice] = "Finished processing batch, ready to begin a new batch."
     redirect_to batches_path
