@@ -38,6 +38,12 @@ Rails.application.routes.draw do
   post 'batches', to: 'batches#create', as: 'create_batch'
   get 'batches/current', to: 'batches#current', as: 'current_batch'
   post 'batches/remove', to: 'batches#remove', as: 'remove_batch_match'
+  get 'batches/retrieve', to: 'batches#retrieve', as: 'retrieve_batch'
+  post 'batches/item', to: 'batches#item', as: 'item_batch'
+  get 'batches/bin', to: 'batches#bin', as: 'bin_batch'
+  post 'batches/scan_bin', to: 'batches#scan_bin', as: 'scan_bin_batch'
+  get 'batches/finalize', to: 'batches#finalize', as: 'finalize_batch'
+ post 'batches/finish', to: 'batches#finish', as: 'finish_batch'
 
   # You can have the root of your site routed with "root"
   root 'welcome#index'

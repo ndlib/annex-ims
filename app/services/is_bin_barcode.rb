@@ -1,5 +1,5 @@
-class IsToteBarcode
-  PREFIX = 'TOTE-'
+class IsBinBarcode
+  PREFIX = '(BIN-)(ILL-LOAN|ILL-SCAN|ALEPH-LOAN)(-)'
 
   attr_reader :barcode
 

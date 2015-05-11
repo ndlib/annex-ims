@@ -1,0 +1,22 @@
+%section.req
+  .request= "Request data"
+  .req_title= "Title: #{@match.request.title}"
+  .req_author= "Author: #{@match.request.author}"
+  .req_article= "Article Title: #{@match.request.article_title}"
+%section.container
+  .shelf= "Shelf: #{@match.item.shelf.barcode}"
+  .tray= "Tray: #{@match.item.tray.barcode}"
+  .title= "Title: #{@match.item.title}"
+  .author= "Author: #{@match.item.author}"
+  .chron= "Chron: #{@match.item.chron}"
+  .barcode= "Barcode: #{@match.item.barcode}"
+  %br
+  = form_tag item_batch_path do |f|
+    .field
+      = label_tag :barcode, "Item"
+      = text_field_tag :barcode, nil, autofocus: "autofocus"
+    .actions
+      = submit_tag 'Scan', class: 'btn btn-primary'
+      = submit_tag 'Skip', class: 'btn pull-right btn-warning'
+
+

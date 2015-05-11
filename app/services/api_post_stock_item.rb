@@ -14,6 +14,7 @@ class ApiPostStockItem
 
   def post_data!
     validate_input!
+
     params = {item_id: @item_id, barcode: @barcode, tray_code: @tray_code}
     raw_results = ApiHandler.call("POST", @path, params)
     results = {"status" => raw_results["status"], "results" => {}}

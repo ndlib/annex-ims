@@ -8,4 +8,21 @@ class Request < ActiveRecord::Base
   has_many :matches
   has_many :items, through: :matches
   has_many :batches, through: :matches
+
+  belongs_to :filled_by_item, class_name: "Item", foreign_key: "item_id"
+  belongs_to :filled_in_batch, class_name: "Batch", foreign_key: "batch_id"
+
+  def bin_type
+    if self.source == "aleph"
+      bt = "ALEPH-LOAN"
+    else
+      if self.req_type != "checkout"
+        bt = "ILL-SCAN"
+      else
+        bt = "ILL-LOAN"
+      end
+    end
+
+    return bt
+  end
 end
