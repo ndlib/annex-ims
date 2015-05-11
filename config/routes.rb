@@ -28,6 +28,8 @@ Rails.application.routes.draw do
 
   get 'items', to: 'items#index', as: 'items'
   get 'items/scan', to: 'items#scan', as: 'scan_item'
+  get 'items/issues', to: 'items#issues', as: 'issues'
+  post 'items/resolve', to: 'items#resolve', as: 'resolve_issue'
   get 'items/:id', to: 'items#show', as: 'show_item'
   post 'items/:id/restock', to: 'items#restock', as: 'item_restock'
   get 'items/:id/wrong_restock', to: 'items#wrong_restock', as: 'wrong_restock'
@@ -43,7 +45,7 @@ Rails.application.routes.draw do
   get 'batches/bin', to: 'batches#bin', as: 'bin_batch'
   post 'batches/scan_bin', to: 'batches#scan_bin', as: 'scan_bin_batch'
   get 'batches/finalize', to: 'batches#finalize', as: 'finalize_batch'
- post 'batches/finish', to: 'batches#finish', as: 'finish_batch'
+  post 'batches/finish', to: 'batches#finish', as: 'finish_batch'
 
   # You can have the root of your site routed with "root"
   root 'welcome#index'

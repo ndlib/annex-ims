@@ -43,4 +43,15 @@ class ItemsController < ApplicationController
     @item = Item.find(params[:id])
   end
 
+  def issues
+    @issues = Issue.where("resolved_at IS NULL")
+  end
+
+  def resolve
+    ResolveIssue.call(current_user.id, params[:issue_id])
+
+    redirect_to issues_path
+    return
+  end
+
 end

@@ -66,5 +66,36 @@ feature "Items", :type => :feature do
       expect(current_path).to eq(show_item_path(:id => @item.id))
     end
 
+    it "can view a list of issues associated with retrieving item data" do
+      @issues = []
+      10.times do
+        @issue = FactoryGirl.create(:issue)
+        @issues << @issue
+      end
+      visit issues_path
+      @issues.each do |issue|
+        expect(page).to have_content issue.user.username
+        expect(page).to have_content issue.barcode
+        expect(page).to have_content issue.message
+      end
+    end
+
+    it "can view a list of issues associated with retrieving item data and delete them" do
+      @issues = []
+      10.times do
+        @issue = FactoryGirl.create(:issue)
+        @issues << @issue
+      end
+      visit issues_path
+      @issues.each do |issue|
+        expect(page).to have_content issue.user.username
+        expect(page).to have_content issue.barcode
+        expect(page).to have_content issue.message
+        click_button "issue-#{issue.id}"
+        expect(current_path).to eq(issues_path)
+        expect(page).to_not have_content issue.barcode
+      end
+    end
+
   end
 end
