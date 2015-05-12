@@ -2,9 +2,12 @@
   %span
     = "#{current_user.username} has no active batches."
 - else
-  - if @batch.matches.blank?
+  - if @matches.blank?
     %span
-      = "#{current_user.username} has an active batch, but it has no items."
+      = "#{current_user.username} has an active batch, but it has no skipped items."
+      = form_tag finish_batch_path do |f|
+        .actions
+          = submit_tag 'Done', class: 'btn btn-primary'
   - else
     %table.table.table-striped.condensed.datatable{"id" => "items"}
       %thead
