@@ -1,5 +1,5 @@
 = select_tag :source, options_for_select([["Aleph", "aleph"], ["ILLiad", "illiad"]]), onchange: "table.draw();"
-= select_tag :req_type, options_for_select([["Loan", "checkout"], ["Scan", "scan"]]), onchange: "table.draw();"
+= select_tag :req_type, options_for_select([["Loan", "loan"], ["Scan", "scan"]]), onchange: "table.draw();"
 = label_tag :rapid, "ILLiad Rapid Requests"
 = check_box_tag :rapid, 1, false, onchange: "table.draw();"
 = form_tag create_batch_path do |f|

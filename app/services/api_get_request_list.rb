@@ -28,11 +28,7 @@ class ApiGetRequestList
         criteria = "ERROR"
       end
 
-      if res["request_type"] == "Doc Del"
-        req_type = "checkout"
-      else
-        req_type = "scan"
-      end
+      req_type = res["delivery_type"].downcase
 
       if (res["rush"] == "No") || (res["rush"] == "Regular")
         rapid = false
