@@ -5,26 +5,25 @@
       %th= "Item"
   %tbody
     %tr
-      %td= @match.request.title
-      %td= @match.item.title
-    %tr
-      %td= @match.request.author
-      %td= @match.item.author
-    %tr
-      %td= @match.request.article_title
-      %td= "-"
-    %tr
-      %td= "-"
-      %td= @match.item.chron
-    %tr
-      %td= "-"
-      %td= @match.item.shelf.barcode
-    %tr
-      %td= "-"
-      %td= @match.item.tray.barcode
-    %tr
-      %td= "-"
-      %td= @match.item.barcode
+      %td
+        %ul
+          - if !@match.request.title.blank?
+            %li= @match.request.title
+          - if !@match.request.author.blank?
+            %li= @match.request.author
+          - if !@match.request.article_title.blank?
+            %li= @match.request.article_title
+      %td
+        %ul
+          - if !@match.item.title.blank?
+            %li= @match.item.title
+          - if !@match.item.author.blank?
+            %li= @match.item.author
+          - if !@match.item.chron.blank?
+            %li= @match.item.chron
+          %li= @match.item.shelf.barcode
+          %li= @match.item.tray.barcode
+          %li= @match.item.barcode
 %br
 = form_tag item_batch_path do |f|
   .field
