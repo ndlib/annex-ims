@@ -1,22 +1,37 @@
-%section.req
-  .request= "Request data"
-  .req_title= "Title: #{@match.request.title}"
-  .req_author= "Author: #{@match.request.author}"
-  .req_article= "Article Title: #{@match.request.article_title}"
-%section.container
-  .shelf= "Shelf: #{@match.item.shelf.barcode}"
-  .tray= "Tray: #{@match.item.tray.barcode}"
-  .title= "Title: #{@match.item.title}"
-  .author= "Author: #{@match.item.author}"
-  .chron= "Chron: #{@match.item.chron}"
-  .barcode= "Barcode: #{@match.item.barcode}"
-  %br
-  = form_tag item_batch_path do |f|
-    .field
-      = label_tag :barcode, "Item"
-      = text_field_tag :barcode, nil, autofocus: "autofocus"
-    .actions
-      = submit_tag 'Scan', class: 'btn btn-primary'
-      = submit_tag 'Skip', class: 'btn pull-right btn-warning'
+%table.table.table-striped.condensed.datatable{"id" => "data"}
+  %thead
+    %tr
+      %th= "Request"
+      %th= "Item"
+  %tbody
+    %tr
+      %td= @match.request.title
+      %td= @match.item.title
+    %tr
+      %td= @match.request.author
+      %td= @match.item.author
+    %tr
+      %td= @match.request.article_title
+      %td= "-"
+    %tr
+      %td= "-"
+      %td= @match.item.chron
+    %tr
+      %td= "-"
+      %td= @match.item.shelf.barcode
+    %tr
+      %td= "-"
+      %td= @match.item.tray.barcode
+    %tr
+      %td= "-"
+      %td= @match.item.barcode
+%br
+= form_tag item_batch_path do |f|
+  .field
+    = label_tag :barcode, "Item"
+    = text_field_tag :barcode, nil, autofocus: "autofocus"
+  .actions
+    = submit_tag 'Scan', class: 'btn btn-primary'
+    = submit_tag 'Skip', class: 'btn pull-right btn-warning'
 
 
