@@ -28,5 +28,10 @@
                   = submit_tag 'Remove', class: 'btn btn-primary'
     :javascript
         $(document).ready(function() {
-          window.table = $('#items').DataTable();
+          window.table = $('#items').DataTable( {
+            "dom": 'T<"clear">lfrtip',
+            "tableTools": {
+              "aButtons": [ "print" ]
+            }
+          } );
         } );
