@@ -1,9 +1,9 @@
 class TrayFull
-  TRAY_LIMIT = { "AH" => 40, "AL" => 40,
-                 "BH" => 40, "BL" => 40,
-                 "CH" => 40, "CL" => 40,
-                 "DH" => 40, "DL" => 40,
-                 "EH" => 30, "EL" => 30}
+  TRAY_LIMIT = { "AH" => 136, "AL" => 136,
+                 "BH" => 136, "BL" => 136,
+                 "CH" => 136, "CL" => 136,
+                 "DH" => 136, "DL" => 136,
+                 "EH" => 104, "EL" => 104}
 
   attr_reader :tray
 
