@@ -10,7 +10,7 @@
 
   .field
     = label_tag :thickness
-    = text_field_tag :thickness
+    = text_field_tag :thickness, nil, autofocus: "autofocus"
   .field
     = label_tag :barcode, "Item"
     = text_field_tag :barcode, @barcode
