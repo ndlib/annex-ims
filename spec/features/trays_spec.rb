@@ -11,6 +11,12 @@ feature "Trays", :type => :feature do
       stub_request(:get, template). with(:headers => {'User-Agent'=>'Faraday v0.9.1'}). to_return{ |response| { :status => 200, :body => {"item_id" => "00110147500410", "barcode" => @item.barcode, "bib_id" => @item.bib_number, "sequence_number" => "00410", "admin_document_number" => "001101475", "call_number" => @item.call_number, "description" => @item.chron ,"title"=> @item.title, "author" => @item.author ,"publication" => "Cambridge, UK : Elsevier Science Publishers, c1991-", "edition" => "", "isbn_issn" =>@item.isbn_issn, "condition" => @item.conditions}.to_json, :headers => {} } }
     end
 
+    after(:each) do
+      Item.all.each do |item|
+        item.destroy!
+      end
+    end
+
     it "can scan a new tray" do
       @tray = FactoryGirl.create(:tray)
       visit trays_path
@@ -477,10 +483,11 @@ feature "Trays", :type => :feature do
     it "warns when a try is probably full" do
       @tray = FactoryGirl.create(:tray)
       @items = []
-      5.times do
+      14.times do
         @item = FactoryGirl.create(:item)
         @items << @item
       end
+      @item2 = FactoryGirl.create(:item, tray: @tray, thickness: 6)
       visit trays_items_path
       fill_in "Tray", :with => @tray.barcode
       click_button "Save"
