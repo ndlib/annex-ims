@@ -17,6 +17,15 @@ feature "Retrieve", :type => :feature do
       @match = match
     end
 
+    after(:each) do
+      Match.all.each do |match|
+        match.destroy!
+      end
+      Request.all.each do |request|
+        request.destroy!
+      end
+    end
+
     it "can see a match in the batch list" do
       visit retrieve_batch_path
       expect(page).to have_content match.item.title
