@@ -31,7 +31,18 @@
           window.table = $('#items').DataTable( {
             "dom": 'T<"clear">lfrtip',
             "tableTools": {
-              "aButtons": [ "print" ]
+              "aButtons": [ 
+                  {
+                    "sExtends": "print",
+                    "sTitle": "",
+                    "sInfo": "",
+                    "sMessage": "",
+                    "fnComplete": function ( nButton, oConfig, oFlash, sFlash ) {
+                        alert("Press the [Esc] key to return to the normal view.");
+
+                        $('.ui-dialog,.ui-widget-overlay').addClass('doNotPrint');
+                    }
+                } ]
             }
           } );
         } );

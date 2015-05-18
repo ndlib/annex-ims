@@ -86,3 +86,6 @@ section {
   @extend .btn-primary;
   @extend .btn-xs;
 }
+@media print {
+    .doNotPrint, .doNotPrint * { display: none !important; }
+}
