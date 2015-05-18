@@ -127,7 +127,7 @@ feature "Search", :type => :feature, :search => true do
     it "can search for an item by issn", :search => true do
       visit search_path
       select("ISSN", :from => "criteria_type")
-      fill_in "criteria", :with => item.issn
+      fill_in "criteria", :with => item.isbn_issn
       click_button "Search"
       expect(current_path).to eq(search_path)
       expect(page).to have_content item.title
