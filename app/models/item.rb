@@ -24,6 +24,7 @@ class Item < ActiveRecord::Base
   has_many :matches
   has_many :requests, through: :matches
   has_many :batches, through: :matches
+  has_many :filled_requests, class_name: "Request", foreign_key: "item_id"
 
   searchable do
     text :barcode

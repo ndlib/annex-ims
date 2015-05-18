@@ -6,6 +6,7 @@
   %table.table.table-striped.condensed.datatable{"id" => "items"}
     %thead
       %tr
+        %th= 'User'
         %th= 'Barcode'
         %th= 'Title'
         %th= 'Author'
@@ -13,6 +14,7 @@
     %tbody
       - @bin.items.each do |item|
         %tr
+          %td= !item.filled_requests.order("updated_at desc").first.blank? ? item.filled_requests.order("updated_at desc").first.filled_in_batch.user.username : 'UNKNOWN'
           %td= item.barcode
           %td= item.title
           %td= item.author
