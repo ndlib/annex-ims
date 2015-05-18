@@ -32,6 +32,7 @@ class Item < ActiveRecord::Base
     text :isbn_issn
     text :title
     text :author
+    string :chron
     string :conditions, :multiple => true
     date :initial_ingest
     date :last_ingest

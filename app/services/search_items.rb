@@ -91,7 +91,7 @@ class SearchItems
               with(:last_ingest, Date.parse(filter[:start])..Date.parse(filter[:finish]))
           end
         end
-
+        order_by(:chron, :asc)
       end
 
       if results
