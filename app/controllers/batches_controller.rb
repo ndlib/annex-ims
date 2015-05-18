@@ -188,4 +188,18 @@ class BatchesController < ApplicationController
   def view_single_processed
     @batch = Batch.find(params[:id])
   end
+
+  def view_active
+    @batches = Batch.where(active: true)
+  end
+
+  def view_single_active
+    @batch = Batch.find(params[:id])
+  end
+
+  def cancel_single_active
+    CancelBatch.call(params[:batch_id])
+
+    redirect_to view_active_batches_path
+  end
 end

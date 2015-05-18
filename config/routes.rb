@@ -56,6 +56,10 @@ Rails.application.routes.draw do
   get 'batches/view/processed', to: 'batches#view_processed', as: 'view_processed_batches'
   get 'batches/view/processed/:id', to: 'batches#view_single_processed', as: 'view_single_processed_batch'
 
+  get 'batches/view/active', to: 'batches#view_active', as: 'view_active_batches'
+  get 'batches/view/active/:id', to: 'batches#view_single_active', as: 'view_single_active_batch'
+  post 'batches/view/active', to: 'batches#cancel_single_active', as: 'cancel_single_active_batch'
+
   # You can have the root of your site routed with "root"
   root 'welcome#index'
 

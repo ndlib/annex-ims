@@ -17,6 +17,15 @@ feature "View Processed", :type => :feature do
       @match = match
     end
 
+    after(:each) do
+      Match.all.each do |match|
+        match.destroy!
+      end
+      Batch.all.each do |batch|
+        batch.destroy!
+      end
+    end
+
     it "can see processed batches" do
       visit view_processed_batches_path
       expect(page).to have_content @match.batch.id
