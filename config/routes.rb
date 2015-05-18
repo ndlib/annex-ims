@@ -60,6 +60,10 @@ Rails.application.routes.draw do
   get 'batches/view/active/:id', to: 'batches#view_single_active', as: 'view_single_active_batch'
   post 'batches/view/active', to: 'batches#cancel_single_active', as: 'cancel_single_active_batch'
 
+  get 'bins', to: 'bins#index', as: 'bins'
+  get 'bins/:id', to: 'bins#show', as: 'show_bin'
+  post 'bins', to: 'bins#remove', as: 'bin_remove'
+
   # You can have the root of your site routed with "root"
   root 'welcome#index'
 

@@ -1,0 +1,21 @@
+- if @bins.blank?
+  = "No bins to process."
+- else
+  %table.table.table-striped.condensed.datatable{"id" => "bins"}
+    %thead
+      %tr
+        %th= 'Barcode'
+        %th= '# Items'
+        %th= 'Updated'
+        %th= ''
+    %tbody
+      - @bins.each do |bin|
+        %tr
+          %td= bin.barcode
+          %td= bin.items.count
+          %td= bin.updated_at
+          %td= button_to 'Process', show_bin_path(:id => bin.id), method: :get, class: 'btn btn-primary'
+  :javascript
+      $(document).ready(function() {
+        window.table = $('#bins').DataTable();
+      } );

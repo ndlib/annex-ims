@@ -1,0 +1,27 @@
+- if @bin.items.blank?
+  = "Bin #{@bin.barcode} is empty."
+- else
+  = @bin.barcode
+  %br
+  %table.table.table-striped.condensed.datatable{"id" => "items"}
+    %thead
+      %tr
+        %th= 'Barcode'
+        %th= 'Title'
+        %th= 'Author'
+        %th= ''
+    %tbody
+      - @bin.items.each do |item|
+        %tr
+          %td= item.barcode
+          %td= item.title
+          %td= item.author
+          %td
+            = form_tag bin_remove_path do |f|
+              = hidden_field_tag :item_id, item.id
+              .actions
+                = submit_tag 'Done', class: 'btn btn-primary'
+  :javascript
+    $(document).ready(function() {
+      window.table = $('#items').DataTable();
+    } );
