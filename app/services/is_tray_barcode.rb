@@ -1,5 +1,5 @@
 class IsTrayBarcode
-  PREFIX = '(TRAY-)([A-E][H,L])'
+  PREFIX = "(TRAY-)(([A-E][H,L])|(#{IsShelfBarcode::PREFIX}))"
 
   attr_reader :barcode
 

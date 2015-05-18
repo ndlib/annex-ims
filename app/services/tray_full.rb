@@ -3,7 +3,8 @@ class TrayFull
                  "BH" => 136, "BL" => 136,
                  "CH" => 136, "CL" => 136,
                  "DH" => 136, "DL" => 136,
-                 "EH" => 104, "EL" => 104}
+                 "EH" => 104, "EL" => 104,
+                 "SHELF-" => 100000}
 
   attr_reader :tray
 

@@ -26,6 +26,13 @@ Rails.application.routes.draw do
 
   post 'trays/:id/withdraw', to: 'trays#withdraw', as: 'withdraw_tray'
 
+  get 'shelves/items', to: 'shelves#index', as: 'shelves'
+  post 'shelves/items', to: 'shelves#scan', as: 'scan_shelf'
+  get 'shelves/items/:id', to: 'shelves#show', as: 'show_shelf'
+  post 'shelves/items/:id', to: 'shelves#associate', as: 'associate_shelf_item'
+  post 'shelves/items/:id/dissociate', to: 'shelves#dissociate', as: 'dissociate_shelf_item'
+  get 'shelves/items/:id/wrong/:barcode', to: 'shelves#wrong', as: 'wrong_shelf_item'
+
   get 'items', to: 'items#index', as: 'items'
   get 'items/scan', to: 'items#scan', as: 'scan_item'
   get 'items/issues', to: 'items#issues', as: 'issues'

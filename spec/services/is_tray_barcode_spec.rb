@@ -11,4 +11,9 @@ RSpec.describe IsTrayBarcode do
     barcode = 'SHELF-1234'
     expect(IsTrayBarcode.call(barcode)).to eq(false)
   end
+
+  it "accepts a special shelf/tray as a valid barcode" do
+    barcode = 'TRAY-SHELF-1234'
+    expect(IsTrayBarcode.call(barcode)).to eq(true)
+  end
 end
