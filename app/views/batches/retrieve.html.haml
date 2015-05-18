@@ -1,3 +1,13 @@
+= form_tag(item_batch_path, {"class" => "form-inline"}) do |f|
+  .form-group
+    .field
+      = label_tag :barcode, "Item"
+      = text_field_tag :barcode, nil, autofocus: "autofocus"
+  .form-group
+    .actions
+      = submit_tag 'Save', class: 'btn pull-left btn-primary'
+      = submit_tag 'Skip', class: 'btn pull-right btn-warning'
+%br
 %table.table.table-striped.condensed.datatable{"id" => "data"}
   %thead
     %tr
@@ -15,22 +25,15 @@
             %li= @match.request.article_title
       %td
         %ul
+          %li= @match.item.shelf.barcode
+          %li= @match.item.tray.barcode
+          %li= @match.item.barcode
           - if !@match.item.title.blank?
             %li= @match.item.title
           - if !@match.item.author.blank?
             %li= @match.item.author
           - if !@match.item.chron.blank?
             %li= @match.item.chron
-          %li= @match.item.shelf.barcode
-          %li= @match.item.tray.barcode
-          %li= @match.item.barcode
-%br
-= form_tag item_batch_path do |f|
-  .field
-    = label_tag :barcode, "Item"
-    = text_field_tag :barcode, nil, autofocus: "autofocus"
-  .actions
-    = submit_tag 'Scan', class: 'btn btn-primary'
-    = submit_tag 'Skip', class: 'btn pull-right btn-warning'
+
 
 
