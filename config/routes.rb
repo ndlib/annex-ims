@@ -16,7 +16,6 @@ Rails.application.routes.draw do
   get 'trays/shelves/:id/wrong_shelf', to: 'trays#wrong_shelf', as: 'wrong_shelf'
   get 'trays/shelves/:id/wrong_tray/:barcode', to: 'trays#wrong_tray', as: 'wrong_tray'
 
-
   get 'trays/items', to: 'trays#items', as: 'trays_items'
   post 'trays/items', to: 'trays#scan_item', as: 'scan_tray_item'
   get 'trays/items/:id', to: 'trays#show_item', as: 'show_tray_item'
@@ -53,6 +52,9 @@ Rails.application.routes.draw do
   post 'batches/scan_bin', to: 'batches#scan_bin', as: 'scan_bin_batch'
   get 'batches/finalize', to: 'batches#finalize', as: 'finalize_batch'
   post 'batches/finish', to: 'batches#finish', as: 'finish_batch'
+
+  get 'batches/view/processed', to: 'batches#view_processed', as: 'view_processed_batches'
+  get 'batches/view/processed/:id', to: 'batches#view_single_processed', as: 'view_single_processed_batch'
 
   # You can have the root of your site routed with "root"
   root 'welcome#index'

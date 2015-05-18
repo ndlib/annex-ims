@@ -180,4 +180,12 @@ class BatchesController < ApplicationController
     flash[:notice] = "Finished processing batch, ready to begin a new batch."
     redirect_to batches_path
   end
+
+  def view_processed
+    @batches = Batch.where(active: false)
+  end
+
+  def view_single_processed
+    @batch = Batch.find(params[:id])
+  end
 end

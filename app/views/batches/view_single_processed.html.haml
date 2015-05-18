@@ -1,0 +1,26 @@
+- if @batch.requests.blank?
+  = "Batch has no requests."
+- else
+  %table.table.table-striped.condensed.datatable{"id" => "requests"}
+    %thead
+      %tr
+        %th= 'Title'
+        %th= 'Author'
+        %th= 'Source'
+        %th= 'Type'
+    %tbody
+      - @batch.requests.each do |request|
+        %tr
+          %td= request.title
+          %td= request.author
+          %td= request.source
+          %td= request.req_type
+  :javascript
+    $(document).ready(function() {
+      window.table = $('#requests').DataTable( {
+        "dom": 'T<"clear">lfrtip',
+        "tableTools": {
+          "aButtons": [ "print" ]
+        }
+      } );
+    } );
