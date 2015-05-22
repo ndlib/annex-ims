@@ -38,7 +38,7 @@ feature "View Processed", :type => :feature do
       expect(page).to have_content @match.batch.requests[0].title
       expect(page).to have_content @match.batch.requests[0].author
       expect(page).to have_content @match.batch.requests[0].source
-      expect(page).to have_content @match.batch.requests[0].req_type
+      expect(page).to have_content @match.batch.requests[0].del_type
     end
 
   end

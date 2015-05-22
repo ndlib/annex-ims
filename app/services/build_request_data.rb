@@ -21,6 +21,7 @@ class BuildRequestData
         'id' => request.id,
         'rapid' => (request.rapid ? 'yes' : 'no'),
         'source' => request.source,
+        'del_type' => request.del_type,
         'req_type' => request.req_type,
         'title' => request.title,
         'author' => request.author,

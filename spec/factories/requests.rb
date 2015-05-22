@@ -5,6 +5,7 @@ FactoryGirl.define do
     requested Faker::Date.between(2.days.ago, Date.today)
     rapid false
     source "aleph"
-    req_type "loan"
+    del_type "loan"
+    req_type "doc_del"
   end
 end

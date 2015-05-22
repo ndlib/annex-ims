@@ -16,6 +16,7 @@ class ApiGetRequestList
     requests = []
 
     raw_results["results"]["requests"].each do |res|
+
       if !res["barcode"].blank?
         criteria_type = "barcode"
         criteria = res["barcode"]
@@ -28,7 +29,10 @@ class ApiGetRequestList
         criteria = "ERROR"
       end
 
-      req_type = res["delivery_type"].downcase
+      del_type = res["delivery_type"].downcase
+      source = res["source"].downcase
+
+      req_type = res["request_type"].include?(' ') ? res["request_type"].downcase.gsub!(' ','_') : res["request_type"].downcase
 
       if (res["rush"] == "No") || (res["rush"] == "Regular")
         rapid = false
@@ -36,19 +40,16 @@ class ApiGetRequestList
         rapid = true
       end
 
-      if res["source"] == "Aleph"
-        source = "aleph"
-      else
-        source = "illiad"
-      end
+      trans = (res["transaction"].include?('doc-del')? res["transaction"].gsub!('doc-del', 'aleph') : res["transaction"]).gsub!('-', '_')
 
       requests << { # Will add more info when rebuilding the batch page. Needs a migration.
-        "trans" => res["transaction"],
+        "trans" => trans,
         "criteria_type" => criteria_type,
         "criteria" => criteria,
         "requested" => Date.today.to_s, # Should be date requested, but that doesn't seem available.
         "rapid" => rapid,
         "source" => source,
+        "del_type" => del_type,
         "req_type" => req_type,
         "title" => res["title"],
         "article_title" => res["article_title"],

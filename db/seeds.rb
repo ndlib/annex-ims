@@ -26,5 +26,6 @@ end
     requested: Faker::Date.between(30.days.ago, Date.today),
     rapid: false,
     source: "Aleph",
-    req_type: "checkout")
+    del_type: "loan",
+    req_type: "doc_del")
 end

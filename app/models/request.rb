@@ -16,7 +16,7 @@ class Request < ActiveRecord::Base
     if self.source == "aleph"
       bt = "ALEPH-LOAN"
     else
-      if self.req_type != "loan"
+      if self.del_type != "loan"
         bt = "ILL-SCAN"
       else
         bt = "ILL-LOAN"

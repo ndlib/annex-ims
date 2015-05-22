@@ -38,7 +38,7 @@ feature "View Active", :type => :feature do
       expect(page).to have_content @match.batch.requests[0].title
       expect(page).to have_content @match.batch.requests[0].author
       expect(page).to have_content @match.batch.requests[0].source
-      expect(page).to have_content @match.batch.requests[0].req_type
+      expect(page).to have_content @match.batch.requests[0].del_type
     end
 
     it "can see processed batches and cancel one" do
@@ -56,7 +56,7 @@ feature "View Active", :type => :feature do
       expect(page).to have_content @match.batch.requests[0].title
       expect(page).to have_content @match.batch.requests[0].author
       expect(page).to have_content @match.batch.requests[0].source
-      expect(page).to have_content @match.batch.requests[0].req_type
+      expect(page).to have_content @match.batch.requests[0].del_type
       click_button "Cancel"
       expect(current_path).to eq(view_active_batches_path)
       expect(page).to have_content "No active batches."
