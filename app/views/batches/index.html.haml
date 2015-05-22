@@ -75,7 +75,17 @@
     window.table = $('#requests').DataTable( {
         "dom": 'T<"clear">lfrtip',
         "tableTools": {
-          "aButtons": [ "print" ]
+          "aButtons": [ {
+                    "sExtends": "print",
+                    "sTitle": "",
+                    "sInfo": "",
+                    "sMessage": "",
+                    "fnComplete": function ( nButton, oConfig, oFlash, sFlash ) {
+                        alert('Use Browser Print feature. When done, hit "esc" on your keyboard to return to IMS.');
+
+                        $('.ui-dialog,.ui-widget-overlay').addClass('doNotPrint');
+                    }
+                } ]
         },
         "drawCallback": function( settings ) {
           addHandler();
