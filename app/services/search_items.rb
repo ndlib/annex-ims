@@ -95,7 +95,7 @@ class SearchItems
       end
 
       if results
-        results.results
+        results
       else
         []
       end

@@ -2,7 +2,9 @@ class SearchController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @results = SearchItems.call(params)
+    @res = SearchItems.call(params)
+    @results = @res.results
+    @total = @res.total
     @params = params  # Because we need to fill in the form with previous values.
 
     if params[:commit] == 'Export'
