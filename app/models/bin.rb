@@ -4,6 +4,7 @@ class Bin < ActiveRecord::Base
   validate :has_correct_prefix
 
   has_many :items, -> { order "updated_at DESC" }
+  has_many :matches, -> { order "updated_at DESC" }
 
   def has_correct_prefix
     if !IsBinBarcode.call(barcode)

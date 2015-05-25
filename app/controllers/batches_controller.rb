@@ -146,6 +146,8 @@ class BatchesController < ApplicationController
           @bin = GetBinFromBarcode.call(barcode)
           @match.item.bin = @bin
           @match.item.save!
+          @match.bin = @bin
+          @match.save!
           AcceptMatch.call(@match)
 
           flash[:notice] = "Item #{@match.item.barcode} is now in bin #{barcode}."

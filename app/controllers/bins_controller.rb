@@ -2,7 +2,7 @@ class BinsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @bins = Bin.includes(:items).where.not(items: { id: nil })
+    @bins = Bin.includes(:matches).where.not(matches: { id: nil })
   end
 
   def show
@@ -10,11 +10,13 @@ class BinsController < ApplicationController
   end
 
   def remove
-    @item = Item.find(params[:item_id])
-    bin_id = @item.bin.id
+    @match = Match.find(parama[:match_id])
+    bin_id = @match.bin.id
 
-    @item.bin = nil
-    @item.save!
+    @match.item.bin = nil
+    @match.item.save!
+    @match.bin = nil
+    @match.save!
 
     redirect_to show_bin_path(:id => bin_id)
   end

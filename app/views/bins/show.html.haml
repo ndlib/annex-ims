@@ -3,7 +3,7 @@
 - else
   = @bin.barcode
   %br
-  %table.table.table-striped.condensed.datatable{"id" => "items"}
+  %table.table.table-striped.condensed.datatable{"id" => "matches"}
     %thead
       %tr
         %th= 'User'
@@ -12,18 +12,18 @@
         %th= 'Author'
         %th= ''
     %tbody
-      - @bin.items.each do |item|
+      - @bin.matches.each do |match|
         %tr
-          %td= !item.filled_requests.order("updated_at desc").first.blank? ? item.filled_requests.order("updated_at desc").first.filled_in_batch.user.username : 'UNKNOWN'
-          %td= item.barcode
-          %td= item.title
-          %td= item.author
+          %td= match.batch.user.username
+          %td= match.item.barcode
+          %td= match.item.title
+          %td= match.item.author
           %td
             = form_tag bin_remove_path do |f|
-              = hidden_field_tag :item_id, item.id
+              = hidden_field_tag :match_id, match.id
               .actions
                 = submit_tag 'Done', class: 'btn btn-primary'
   :javascript
     $(document).ready(function() {
-      window.table = $('#items').DataTable();
+      window.table = $('#matches').DataTable();
     } );

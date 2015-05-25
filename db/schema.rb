@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150520165509) do
+ActiveRecord::Schema.define(version: 20150525194824) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -70,12 +70,16 @@ ActiveRecord::Schema.define(version: 20150520165509) do
   add_index "items", ["tray_id"], name: "index_items_on_tray_id", using: :btree
 
   create_table "matches", force: true do |t|
-    t.integer "batch_id",   null: false
-    t.integer "item_id",    null: false
-    t.integer "request_id", null: false
-    t.string  "processed"
+    t.integer  "batch_id",   null: false
+    t.integer  "item_id",    null: false
+    t.integer  "request_id", null: false
+    t.string   "processed"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "bin_id"
   end
 
+  add_index "matches", ["bin_id"], name: "index_matches_on_bin_id", using: :btree
   add_index "matches", ["item_id", "request_id", "batch_id"], name: "index_matches_on_item_id_and_request_id_and_batch_id", unique: true, using: :btree
 
   create_table "requests", force: true do |t|
@@ -141,6 +145,7 @@ ActiveRecord::Schema.define(version: 20150520165509) do
   add_foreign_key "issues", "users", column: "resolver_id"
   add_foreign_key "items", "bins"
   add_foreign_key "items", "trays"
+  add_foreign_key "matches", "bins"
   add_foreign_key "matches", "requests"
   add_foreign_key "requests", "batches"
   add_foreign_key "requests", "items"

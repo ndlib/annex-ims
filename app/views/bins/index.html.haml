@@ -12,7 +12,7 @@
       - @bins.each do |bin|
         %tr
           %td= bin.barcode
-          %td= bin.items.count
+          %td= bin.matches.count
           %td= bin.updated_at
           %td= button_to 'Process', show_bin_path(:id => bin.id), method: :get, class: 'btn btn-primary'
   :javascript
