@@ -7,7 +7,8 @@ feature "Bins", :type => :feature do
     let(:shelf) { FactoryGirl.create(:shelf) }
     let(:tray) { FactoryGirl.create(:tray, shelf: shelf) }
     let(:item) { FactoryGirl.create(:item, tray: tray, thickness: 1) }
-    let(:bin) { FactoryGirl.create(:bin, items: [item]) }
+    let(:match) { FactoryGirl.create(:match, item: item) }
+    let(:bin) { FactoryGirl.create(:bin, matches: [match], items: [item]) }
 
 
     before(:each) do
@@ -19,27 +20,30 @@ feature "Bins", :type => :feature do
       Item.all.each do |item|
         item.destroy!
       end
+      Match.all.each do |match|
+        match.destroy!
+      end
     end
 
-    it "sees bins with items in them" do
+    it "sees bins with matches in them" do
       visit bins_path
       expect(page).to have_content @bin.barcode
-      expect(page).to have_content @bin.items.count
+      expect(page).to have_content @bin.matches.count
       expect(page).to have_content @bin.updated_at
     end
 
     it "sees the contents of a bin" do
       visit show_bin_path(:id => @bin.id)
-      expect(page).to have_content @bin.items[0].barcode
-      expect(page).to have_content @bin.items[0].title
-      expect(page).to have_content @bin.items[0].author
+      expect(page).to have_content @bin.matches[0].item.barcode
+      expect(page).to have_content @bin.matches[0].item.title
+      expect(page).to have_content @bin.matches[0].item.author
     end
 
     it "can remove an item from a bin" do
       visit show_bin_path(:id => @bin.id)
-      expect(page).to have_content @bin.items[0].barcode
-      expect(page).to have_content @bin.items[0].title
-      expect(page).to have_content @bin.items[0].author
+      expect(page).to have_content @bin.matches[0].item.barcode
+      expect(page).to have_content @bin.matches[0].item.title
+      expect(page).to have_content @bin.matches[0].item.author
       click_button "Done"
       expect(current_path).to eq(show_bin_path(:id => @bin.id))
       expect(page).to have_content "Bin #{@bin.barcode} is empty."

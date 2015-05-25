@@ -10,7 +10,7 @@ class BinsController < ApplicationController
   end
 
   def remove
-    @match = Match.find(parama[:match_id])
+    @match = Match.find(params[:match_id])
     bin_id = @match.bin.id
 
     @match.item.bin = nil
