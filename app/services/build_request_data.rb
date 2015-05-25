@@ -31,10 +31,12 @@ class BuildRequestData
         'bib_number' => request.bib_number,
         'item_data' => []}
 
-      items.each do |item|
-        temp = {'id' => "#{request.id}-#{item.id}", 'shelf' => (!item.shelf.nil? ? item.shelf.barcode : ''), 'tray' => (!item.tray.nil? ? item.tray.barcode : ''), 'title' => item.title, 'author' => item.author, 'chron' => item.chron}
+      if !items.blank?
+        items.each do |item|
+          temp = {'id' => "#{request.id}-#{item.id}", 'shelf' => (!item.shelf.nil? ? item.shelf.barcode : ''), 'tray' => (!item.tray.nil? ? item.tray.barcode : ''), 'title' => item.title, 'author' => item.author, 'chron' => item.chron}
 
-        request_data['item_data'] << temp
+          request_data['item_data'] << temp
+        end
       end
 
       data << request_data
