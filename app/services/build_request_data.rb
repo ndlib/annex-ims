@@ -15,7 +15,7 @@ class BuildRequestData
 
     requests.each do |request|
       filter = {:criteria_type => request.criteria_type, :criteria => request.criteria}
-      items = SearchItems.call(filter)
+      items = SearchItems.call(filter).results
 
       request_data = {'requested' => request.requested,
         'id' => request.id,
