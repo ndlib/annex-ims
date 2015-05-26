@@ -20,9 +20,12 @@ class SearchItems
   end
 
   def search!
+    empty = OpenStruct.new
+    empty.results = []
+    empty.total = 0
 
     if filter[:criteria].blank? && filter[:conditions].blank? && filter[:date_type].blank?
-      results = []
+      results = empty
     else
       count = 50 # We could customize this, but let's stick with 50 for now.
       if filter[:page].blank?
@@ -97,7 +100,7 @@ class SearchItems
       if results
         results
       else
-        []
+        empty
       end
 
     end
