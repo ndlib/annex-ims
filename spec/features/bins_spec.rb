@@ -7,13 +7,19 @@ feature "Bins", :type => :feature do
     let(:shelf) { FactoryGirl.create(:shelf) }
     let(:tray) { FactoryGirl.create(:tray, shelf: shelf) }
     let(:item) { FactoryGirl.create(:item, tray: tray, thickness: 1) }
-    let(:match) { FactoryGirl.create(:match, item: item) }
-    let(:bin) { FactoryGirl.create(:bin, matches: [match], items: [item]) }
+    let(:bin) { FactoryGirl.create(:bin, items: [item]) }
+    let(:match) { FactoryGirl.create(:match, item: item, bin: bin) }
 
 
     before(:each) do
       login_user
+
       @bin = bin
+      @match = match
+
+      template = Addressable::Template.new "#{Rails.application.secrets.api_server}/1.0/resources/items/send?auth_token=#{Rails.application.secrets.api_token}"
+      stub_request(:post, template). with(:body => {"barcode"=>"#{@match.item.barcode}", "delivery_type"=>"send", "item_id"=>"#{@match.item.id}", "request_type"=>"doc_del", "source"=>"aleph", "transaction_num"=>"", "tray_code"=>"#{@match.item.tray.barcode}"}, :headers => {'User-Agent'=>'Faraday v0.9.1'}). to_return{ |response| { :status => 200, :body => {:results => {:status => "OK", :message => "Item stocked"}}.to_json, :headers => {} } }
+
     end
 
     after(:each) do
