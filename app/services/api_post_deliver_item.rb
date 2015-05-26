@@ -17,9 +17,12 @@ class ApiPostDeliverItem
 
     params = { item_id: match.item.id, barcode: match.item.barcode, tray_code: match.item.tray.barcode, source: match.request.source, transaction_num: match.request.trans, request_type: match.request.req_type, delivery_type: delivery_type}
 
-    raw_results = ApiHandler.call("POST", path, params)
+    begin
+      raw_results = ApiHandler.call("POST", path, params)
+    rescue Timeout::Error => e
+      raw_results = {"status"=>599, "results"=>{"status"=>"NETWORK CONNECT TIMEOUT ERROR", "message"=>"Timeout Error"}}
+    end
 
-    results = {"status" => raw_results["status"], "results" => {}}
     raw_results
   end
 

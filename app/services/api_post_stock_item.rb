@@ -14,8 +14,13 @@ class ApiPostStockItem
     item = Item.find(@item_id)
 
     params = {item_id: @item_id, barcode: item.barcode, tray_code: item.tray.barcode}
-    raw_results = ApiHandler.call("POST", @path, params)
-    results = {"status" => raw_results["status"], "results" => {}}
+
+    begin
+      raw_results = ApiHandler.call("POST", @path, params)
+    rescue Timeout::Error => e
+      raw_results = {"status"=>599, "results"=>{"status"=>"NETWORK CONNECT TIMEOUT ERROR", "message"=>"Timeout Error"}}
+    end
+
     raw_results
   end
 
