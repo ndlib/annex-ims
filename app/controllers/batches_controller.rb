@@ -148,6 +148,9 @@ class BatchesController < ApplicationController
           @match.item.save!
           @match.bin = @bin
           @match.save!
+
+          UnstockItem.call(@match.item)
+
           AcceptMatch.call(@match)
 
           flash[:notice] = "Item #{@match.item.barcode} is now in bin #{barcode}."
