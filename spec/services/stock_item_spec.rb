@@ -7,8 +7,8 @@ RSpec.describe StockItem do
     @tray = FactoryGirl.create(:tray)
     @shelf = FactoryGirl.create(:shelf)
     @tray2 = FactoryGirl.create(:tray)
-    @item = FactoryGirl.create(:item, tray: @tray)
-    @item2 = FactoryGirl.create(:item)
+    @item = FactoryGirl.create(:item, tray: @tray, thickness: 1)
+    @item2 = FactoryGirl.create(:item, thickness: 1)
 
     template = Addressable::Template.new "#{Rails.application.secrets.api_server}/1.0/resources/items/record?auth_token=#{Rails.application.secrets.api_token}&barcode={barcode}"
 
@@ -23,7 +23,7 @@ RSpec.describe StockItem do
   end
 
   it "sets stocked" do
-    expect(@item).to receive("stocked=").with(true)
+    expect(@item).to receive("stocked!")
     subject
   end
 
@@ -33,7 +33,7 @@ RSpec.describe StockItem do
   end
 
   it "returns false when it is unsuccessful" do
-    allow(@item).to receive(:save).and_return(false)
+    allow(@item).to receive("save!").and_return(false)
     expect(subject).to be(false)
   end
 

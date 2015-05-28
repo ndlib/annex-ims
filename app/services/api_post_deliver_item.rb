@@ -23,6 +23,8 @@ class ApiPostDeliverItem
       raw_results = {"status"=>599, "results"=>{"status"=>"NETWORK CONNECT TIMEOUT ERROR", "message"=>"Timeout Error"}}
     end
 
+    ShipItem.call(match.item)  # This is inside out from StockItem, but works better this way, I think.
+
     raw_results
   end
 

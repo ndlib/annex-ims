@@ -4,7 +4,7 @@ FactoryGirl.define do
     title Faker::Lorem.sentence
     author Faker::Name.name
     chron "Vol 1"
-    thickness nil
+    thickness 1
     tray nil
     bib_number "0037612#{Faker::Number.number(2)}"
     isbn_issn [true, false].sample ? Faker::Code.isbn : "#{Faker::Number.number(4)}-#{Faker::Number.number(4)}"

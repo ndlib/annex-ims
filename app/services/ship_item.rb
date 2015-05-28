@@ -1,24 +1,26 @@
-class UnstockItem
+class ShipItem
   attr_reader :item
 
   def self.call(item)
-    new(item).unstock!
+    new(item).ship!
   end
 
   def initialize(item)
     @item = item
   end
 
-  def unstock!
+  def ship!
     validate_input!
 
-    item.unstocked!
+    item.shipped!
 
-    if item.save
-      item
+    if item.save!
+      result = item
     else
-      false
+      result = false
     end
+
+    return result
   end
 
   private

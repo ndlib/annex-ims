@@ -12,15 +12,17 @@ class StockItem
   def stock!
     validate_input!
 
-    item.stocked = true
+    item.stocked!
     UpdateIngestDate.call(item)
     ApiPostStockItem.call(item.id) # A bit of a hack, because when this gets shifted to a background job we only want it stocked after a successful API call. For now, this will do.
 
-    if item.save
-      item
+    if item.save!
+      result = item
     else
-      false
+      result = false
     end
+
+    return result
   end
 
   private

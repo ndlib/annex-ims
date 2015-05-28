@@ -18,6 +18,8 @@ class AssociateShelfWithItemBarcode
     tray = GetTrayFromBarcode.call("TRAY-#{@shelf.barcode}")
     AssociateTrayWithShelfBarcode.call(tray, @shelf.barcode)
     AssociateTrayWithItemBarcode.call(user_id, tray, barcode, thickness)
+
+    tray
   end
 
   private

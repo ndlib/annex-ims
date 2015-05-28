@@ -2,14 +2,14 @@ require 'rails_helper'
 
 RSpec.describe UnstockItem do
   subject { described_class.call(item)}
-  let(:item) { double(Item, "stocked=" => false, save: true)} # insert used methods
+  let(:item) { double(Item, "unstocked" => false, save: true, "unstocked!" => nil)} # insert used methods
 
   before(:each) do
     allow(IsObjectItem).to receive(:call).with(item).and_return(true)
   end
 
   it "sets stocked" do
-    expect(item).to receive("stocked=").with(false)
+    expect(item).to receive("unstocked!")
     subject
   end
 
