@@ -21,6 +21,7 @@ class AssociateTrayWithItemBarcode
       item.thickness = thickness
       if item.save
         StockItem.call(item)
+        ShelveTray.call(tray)
         return item
       else
         return false
