@@ -15,22 +15,9 @@ class AssociateShelfWithItemBarcode
   def associate!
     validate_input!
 
-    item = GetItemFromBarcode.call(user_id, barcode)
-    if !item.nil?
-      tray = GetTrayFromBarcode.call("TRAY-#{@shelf.barcode}")
-      item.tray = tray
-      tray.shelf = shelf
-      item.thickness = thickness
-      if item.save
-        StockItem.call(item)
-        tray.save!
-        return item
-      else
-        return false
-      end
-    else
-      raise "item #{barcode} not found"
-    end
+    tray = GetTrayFromBarcode.call("TRAY-#{@shelf.barcode}")
+    AssociateTrayWithShelfBarcode.call(tray, @shelf.barcode)
+    AssociateTrayWithItemBarcode.call(user_id, tray, barcode, thickness)
   end
 
   private
