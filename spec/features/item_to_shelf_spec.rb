@@ -5,10 +5,27 @@ feature "Shelves", :type => :feature do
 
   describe "when signed in" do
     before(:each) do
+      @shelf = FactoryGirl.create(:shelf)
+      @tray = FactoryGirl.create(:tray, shelf: @shelf, barcode: "TRAY-#{@shelf.barcode}")
+      @shelf2 = FactoryGirl.create(:shelf)
+      @tray2 = FactoryGirl.create(:tray, shelf: @shelf2, barcode: "TRAY-#{@shelf2.barcode}")
+      @item = FactoryGirl.create(:item, barcode: "123456", thickness:1, tray: @tray)
+      @item2 = FactoryGirl.create(:item)
+      @tray2 = FactoryGirl.create(:tray, barcode: "TRAY-AH11", shelf: @shelf2)
+      @item3 = FactoryGirl.create(:item, barcode: "1234567", tray: @tray2)
+
       login_user
 
       template = Addressable::Template.new "#{Rails.application.secrets.api_server}/1.0/resources/items/record?auth_token=#{Rails.application.secrets.api_token}&barcode={barcode}"
+
+      @template2 = Addressable::Template.new "#{Rails.application.secrets.api_server}/1.0/resources/items/stock?auth_token=#{Rails.application.secrets.api_token}"
+
       stub_request(:get, template). with(:headers => {'User-Agent'=>'Faraday v0.9.1'}). to_return{ |response| { :status => 200, :body => {"item_id" => "00110147500410", "barcode" => @item.barcode, "bib_id" => @item.bib_number, "sequence_number" => "00410", "admin_document_number" => "001101475", "call_number" => @item.call_number, "description" => @item.chron ,"title"=> @item.title, "author" => @item.author ,"publication" => "Cambridge, UK : Elsevier Science Publishers, c1991-", "edition" => "", "isbn_issn" =>@item.isbn_issn, "condition" => @item.conditions}.to_json, :headers => {} } }
+
+      stub_request(:post, @template2).
+        with(:body => {"barcode"=>"#{@item.barcode}", "item_id"=>"#{@item.id}", "tray_code"=>"#{@item.tray.barcode}"},
+          :headers => {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
+        to_return{ |response| { :status => 200, :body => {:results => {:status => "OK", :message => "Item stocked"}}.to_json, :headers => {} } }
     end
 
     after(:each) do
@@ -24,7 +41,6 @@ feature "Shelves", :type => :feature do
     end
 
     it "can scan a new shelf for processing items" do
-      @shelf = FactoryGirl.create(:shelf)
       visit shelves_path
       fill_in "Shelf", :with => @shelf.barcode
       click_button "Save"
@@ -32,8 +48,6 @@ feature "Shelves", :type => :feature do
     end
 
     it "can scan an item for adding to a shelf" do
-      @shelf = FactoryGirl.create(:shelf)
-      @item = FactoryGirl.create(:item)
       visit shelves_path
       fill_in "Shelf", :with => @shelf.barcode
       click_button "Save"
@@ -44,8 +58,6 @@ feature "Shelves", :type => :feature do
     end
 
     it "displays an item after successfully adding it to a shelf" do
-      @shelf = FactoryGirl.create(:shelf)
-      @item = FactoryGirl.create(:item)
       visit shelves_path
       fill_in "Shelf", :with => @shelf.barcode
       click_button "Save"
@@ -59,12 +71,12 @@ feature "Shelves", :type => :feature do
     end
 
    it "displays information about a successful association made" do
-      @shelf = FactoryGirl.create(:shelf)
-      @item = FactoryGirl.create(:item, barcode: "123456", title: "TEST TITLE", chron: "VOL X")
       visit shelves_path
       fill_in "Shelf", :with => @shelf.barcode
       click_button "Save"
       expect(current_path).to eq(show_shelf_path(:id => @shelf.id))
+      @item.tray = nil
+      @item.save!
       fill_in "Item", :with => @item.barcode
       click_button "Save"
       expect(current_path).to eq(show_shelf_path(:id => @shelf.id))
@@ -75,12 +87,12 @@ feature "Shelves", :type => :feature do
    end
 
    it "accepts re-associating an item to the same shelf" do
-      @shelf = FactoryGirl.create(:shelf)
-      @item = FactoryGirl.create(:item, barcode: "124456", title: "TEST TITLE", chron: "VOL X")
       visit shelves_path
       fill_in "Shelf", :with => @shelf.barcode
       click_button "Save"
       expect(current_path).to eq(show_shelf_path(:id => @shelf.id))
+      @item.tray = nil
+      @item.save!
       fill_in "Item", :with => @item.barcode
       click_button "Save"
       expect(current_path).to eq(show_shelf_path(:id => @shelf.id))
@@ -99,30 +111,24 @@ feature "Shelves", :type => :feature do
 
 
    it "rejects associating an item to the wrong shelf" do
-      @shelf = FactoryGirl.create(:shelf, barcode: "SHELF-11")
-      @shelf2 = FactoryGirl.create(:shelf, barcode: "SHELF-22")
-      @tray2 = FactoryGirl.create(:tray, barcode: "TRAY-AH11", shelf: @shelf2)
-      @item = FactoryGirl.create(:item, barcode: "1234567", title: "TEST TITLE", chron: "VOL X", tray: @tray2)
       visit shelves_path
-      fill_in "Shelf", :with => @shelf.barcode
+      fill_in "Shelf", :with => @shelf2.barcode
       click_button "Save"
-      expect(current_path).to eq(show_shelf_path(:id => @shelf.id))
+      expect(current_path).to eq(show_shelf_path(:id => @shelf2.id))
       fill_in "Item", :with => @item.barcode
       click_button "Save"
-      expect(current_path).to eq(wrong_shelf_item_path(:id => @shelf.id, :barcode => @item.barcode))
-      expect(page).to have_content "Item #{@item.barcode} is already assigned to #{@shelf2.barcode}."
+      expect(current_path).to eq(wrong_shelf_item_path(:id => @shelf2.id, :barcode => @item.barcode))
+      expect(page).to have_content "Item #{@item.barcode} is already assigned to #{@shelf.barcode}."
       expect(page).to have_content @item.barcode
       expect(page).to_not have_content @item.title
       expect(page).to_not have_content @item.chron
-      expect(page).to_not have_content "Item #{@item.barcode} stocked in #{@shelf.barcode}."
+      expect(page).to_not have_content "Item #{@item.barcode} stocked in #{@shelf2.barcode}."
       click_button "OK"
-      expect(current_path).to eq(show_shelf_path(:id => @shelf.id))
+      expect(current_path).to eq(show_shelf_path(:id => @shelf2.id))
    end
 
 
     it "displays a shelf's barcode while processing an item" do
-      @shelf = FactoryGirl.create(:shelf)
-      @item = FactoryGirl.create(:item)
       visit shelves_path
       fill_in "Shelf", :with => @shelf.barcode
       click_button "Save"
@@ -134,17 +140,20 @@ feature "Shelves", :type => :feature do
     end
 
     it "displays items associated with a shelf when processing items" do
-      @shelf = FactoryGirl.create(:shelf)
       @items = []
       5.times do |i|
-        @item = FactoryGirl.create(:item)
-        @items << @item
+        item = FactoryGirl.create(:item)
+        @items << item
       end
       visit shelves_path
       fill_in "Shelf", :with => @shelf.barcode
       click_button "Save"
       expect(current_path).to eq(show_shelf_path(:id => @shelf.id))
       @items.each do |item|
+        stub_request(:post, @template2).
+          with(:body => {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"TRAY-#{@shelf.barcode}"},
+            :headers => {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
+          to_return{ |response| { :status => 200, :body => {:results => {:status => "OK", :message => "Item stocked"}}.to_json, :headers => {} } }
         fill_in "Item", :with => item.barcode
         click_button "Save"
         expect(current_path).to eq(show_shelf_path(:id => @shelf.id))
@@ -157,8 +166,6 @@ feature "Shelves", :type => :feature do
     end
 
     it "allows the user to remove an item from a shelf" do
-      @shelf = FactoryGirl.create(:shelf)
-      @item = FactoryGirl.create(:item)
       visit shelves_path
       fill_in "Shelf", :with => @shelf.barcode
       click_button "Save"
@@ -173,8 +180,6 @@ feature "Shelves", :type => :feature do
     end
 
     it "allows the user to finish with the current shelf when processing items" do
-      @shelf = FactoryGirl.create(:shelf)
-      @item = FactoryGirl.create(:item)
       visit shelves_path
       fill_in "Shelf", :with => @shelf.barcode
       click_button "Save"
@@ -188,8 +193,6 @@ feature "Shelves", :type => :feature do
     end
 
     it "allows the user to finish with the current shelf when processing items via scan" do
-      @shelf = FactoryGirl.create(:shelf)
-      @item = FactoryGirl.create(:item)
       visit shelves_path
       fill_in "Shelf", :with => @shelf.barcode
       click_button "Save"

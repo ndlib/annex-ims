@@ -14,6 +14,7 @@ class StockItem
 
     item.stocked = true
     UpdateIngestDate.call(item)
+    ApiPostStockItem.call(item.id) # A bit of a hack, because when this gets shifted to a background job we only want it stocked after a successful API call. For now, this will do.
 
     if item.save
       item

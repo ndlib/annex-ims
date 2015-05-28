@@ -7,6 +7,19 @@ feature "Items", :type => :feature do
     before(:each) do
       login_user
 
+      @tray = FactoryGirl.create(:tray)
+      @shelf = FactoryGirl.create(:shelf)
+      @tray2 = FactoryGirl.create(:tray)
+      @item = FactoryGirl.create(:item, tray: @tray, thickness: 1)
+      @item2 = FactoryGirl.create(:item)
+
+      template2 = Addressable::Template.new "#{Rails.application.secrets.api_server}/1.0/resources/items/stock?auth_token=#{Rails.application.secrets.api_token}"
+
+      stub_request(:post, template2).
+        with(:body => {"barcode"=>"#{@item.barcode}", "item_id"=>"#{@item.id}", "tray_code"=>"#{@item.tray.barcode}"},
+          :headers => {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
+        to_return{ |response| { :status => 200, :body => {:results => {:status => "OK", :message => "Item stocked"}}.to_json, :headers => {} } }
+
       template = Addressable::Template.new "#{Rails.application.secrets.api_server}/1.0/resources/items/record?auth_token=#{Rails.application.secrets.api_token}&barcode={barcode}"
       stub_request(:get, template). with(:headers => {'User-Agent'=>'Faraday v0.9.1'}). to_return{ |response| { :status => 200, :body => {"item_id" => "00110147500410", "barcode" => @item.barcode, "bib_id" => @item.bib_number, "sequence_number" => "00410", "admin_document_number" => "001101475", "call_number" => @item.call_number, "description" => @item.chron ,"title"=> @item.title, "author" => @item.author ,"publication" => "Cambridge, UK : Elsevier Science Publishers, c1991-", "edition" => "", "isbn_issn" =>@item.isbn_issn, "condition" => @item.conditions}.to_json, :headers => {} } }
     end
@@ -50,8 +63,6 @@ feature "Items", :type => :feature do
     end
 
     it "can scan an item and then scan a tray to stock it" do
-      @tray = FactoryGirl.create(:tray)
-      @item = FactoryGirl.create(:item, chron: 'TEST CHRON', tray: @tray)
       visit items_path
       fill_in "Item", :with => @item.barcode
       click_button "Find"

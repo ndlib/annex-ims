@@ -1,40 +1,48 @@
 require 'rails_helper'
 
 RSpec.describe AssociateTrayWithItemBarcode do
-  subject { described_class.call(user_id, tray, barcode, thickness)}
-  let(:tray) { double(Tray, "item=" => true, save: true)} # insert used methods
-  let(:item) { double(Item, "tray=" => true, "thickness=" => true, save: true, "stocked=" => true, initial_ingest: Date.today.to_s, last_ingest: Date.today.to_s)} # insert used methods
-  let(:thickness) { Faker::Number.number(1) }
-  let(:barcode) {  "examplebarcode" }
-  let(:user_id) { 1 }
+  subject { described_class.call(@user_id, @tray, @item.barcode, @item.thickness)}
 
   before(:each) do
-    # setup a shelf to come back from this class.
-    allow(GetItemFromBarcode).to receive(:call).with(user_id, barcode).and_return(item)
-    allow(IsObjectTray).to receive(:call).with(tray).and_return(true)
-    allow(IsObjectItem).to receive(:call).with(item).and_return(true)
-    allow(UpdateIngestDate).to receive(:call).with(item).and_return(true)
+
+    @tray = FactoryGirl.create(:tray)
+    @shelf = FactoryGirl.create(:shelf)
+    @tray2 = FactoryGirl.create(:tray)
+    @item = FactoryGirl.create(:item)
+    @item2 = FactoryGirl.create(:item)
+
+    template = Addressable::Template.new "#{Rails.application.secrets.api_server}/1.0/resources/items/record?auth_token=#{Rails.application.secrets.api_token}&barcode={barcode}"
+
+    template2 = Addressable::Template.new "#{Rails.application.secrets.api_server}/1.0/resources/items/stock?auth_token=#{Rails.application.secrets.api_token}"
+
+    stub_request(:get, template). with(:headers => {'User-Agent'=>'Faraday v0.9.1'}). to_return(:status => 200, :body => '{"item_id":"00110147500410","barcode":"00000016021933","bib_id":"001101475","sequence_number":"00410","admin_document_number":"001101475","call_number":"QH 573 .T746","description":"v.11 :no.1-6  \u003Cp.1-276\u003E   (2001:Jan.-June)","title":"Trends in cell biology.","author":"","publication":"Cambridge, UK : Elsevier Science Publishers, c1991-","edition":"","isbn_issn":"0962-8924","condition":null}', :headers => {})
+
+    stub_request(:post, template2).
+      with(:body => {"barcode"=>"#{@item.barcode}", "item_id"=>"#{@item.id}", "tray_code"=>"#{@tray.barcode}"},
+        :headers => {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
+      to_return{ |response| { :status => 200, :body => {:results => {:status => "OK", :message => "Item stocked"}}.to_json, :headers => {} } }
+
     @user_id = 1 # Just fake having a user here
   end
 
 
   it "gets an item from the barcode" do
-    expect(GetItemFromBarcode).to receive(:call).with(user_id, barcode).and_return(item)
+    expect(GetItemFromBarcode).to receive(:call).with(@user_id, @item.barcode).and_return(@item)
     subject
   end
 
   it "sets the item" do
-    expect(item).to receive("tray=").with(tray)
+    expect(@item).to receive("tray=").with(@tray)
     subject
   end
 
   it "returns the item when it is successful" do
-    allow(item).to receive(:save).and_return(true)
-    expect(subject).to be(item)
+    allow(@item).to receive(:save).and_return(true)
+    expect(subject).to be(@item)
   end
 
   it "returns false when it is unsuccessful" do
-    allow(item).to receive(:save).and_return(false)
+    allow(@item).to receive(:save).and_return(false)
     expect(subject).to be(false)
   end
 
