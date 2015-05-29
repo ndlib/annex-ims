@@ -33,7 +33,7 @@ class BuildRequestData
 
       if !items.blank?
         items.each do |item|
-          temp = {'id' => "#{request.id}-#{item.id}", 'shelf' => (!item.shelf.nil? ? item.shelf.barcode : ''), 'tray' => (!item.tray.nil? ? item.tray.barcode : ''), 'title' => item.title, 'author' => item.author, 'chron' => item.chron}
+          temp = {'id' => "#{request.id}-#{item.id}", 'shelf' => (!item.shelf.nil? ? item.shelf.barcode : ''), 'tray' => (!item.tray.nil? ? item.tray.barcode : ''), 'title' => !item.title.nil? ? CGI.escapeHTML(item.title) : '', 'author' => !item.author.nil? ? CGI.escapeHTML(item.author) : '', 'chron' => !item.chron.nil? ? CGI.escapeHTML(item.chron) : ''}
 
           request_data['item_data'] << temp
         end
