@@ -24,6 +24,12 @@ class ApiGetRequestList
         elsif !res["bib_number"].blank?
           criteria_type = "bib_number"
           criteria = res["bib_number"]
+        elsif !res["isbn_issn"].blank?
+          criteria_type = "isbn_issn"
+          criteria = res["isbn_issn"]
+        elsif !res["title"].blank?
+          criteria_type = "title"
+          criteria = res["title"]
         else
           criteria_type = "ERROR" # Quick hack to cover when not available.
           criteria = "ERROR"
