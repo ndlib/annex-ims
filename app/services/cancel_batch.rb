@@ -11,6 +11,13 @@ class CancelBatch
 
   def cancel!
     batch = Batch.find(@batch_id)
+
+    batch.requests.each do |request|
+      request.filled_by_item = nil
+      request.filled_in_batch = nil
+      request.save!
+    end
+
     batch.matches.each do |match|
       match.destroy!
     end
