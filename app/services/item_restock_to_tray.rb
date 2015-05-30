@@ -1,13 +1,14 @@
 class ItemRestockToTray
-  attr_reader :item_id, :barcode
+  attr_reader :item_id, :barcode, :user
 
-  def self.call(item_id, barcode)
-    new(item_id, barcode).process!
+  def self.call(item_id, barcode, user)
+    new(item_id, barcode, user).process!
   end
 
-  def initialize(item_id, barcode)
+  def initialize(item_id, barcode, user)
     @item_id = item_id
     @barcode = barcode
+    @user = user
   end
 
   def process!
@@ -27,7 +28,7 @@ class ItemRestockToTray
         results[:error] = "Item #{item.barcode} is already assigned to #{item.tray.barcode}."
         results[:path] = h.wrong_restock_path(:id => @item_id)
       else
-        StockItem.call(item)
+        StockItem.call(item, @user)
         results[:notice] = "Item #{item.barcode} stocked in #{tray.barcode}."
         results[:path] = h.items_path
       end

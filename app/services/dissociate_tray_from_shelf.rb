@@ -1,24 +1,25 @@
 class DissociateTrayFromShelf
-  attr_reader :tray
+  attr_reader :tray, :user
 
-  def self.call(tray)
-    new(tray).dissociate!
+  def self.call(tray, user)
+    new(tray, user).dissociate!
   end
 
-  def initialize(tray)
+  def initialize(tray, user)
     @tray = tray
+    @user = user
   end
 
   def dissociate!
-    shelf = tray.shelf
-    tray.shelf = nil
-
-    unless UnshelveTray.call(@tray)
+    unless UnshelveTray.call(@tray, @user)
       raise "unable to unshelve tray"
     end
 
+    shelf = tray.shelf
+    tray.shelf = nil
+
     if tray.save
-      transaction_log
+      LogActivity.call(tray, "Disassociated", shelf, Time.now, user)
       result = tray
     else
       result = false

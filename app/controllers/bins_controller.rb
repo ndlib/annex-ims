@@ -13,6 +13,8 @@ class BinsController < ApplicationController
     @match = Match.find(params[:match_id])
     bin_id = @match.bin.id
 
+    LogActivity.call(@match.item, "Dissociated", @match.item.bin, Time.now, current_user)
+
     @match.item.bin = nil
     @match.item.save!
     @match.bin = nil

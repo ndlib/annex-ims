@@ -1,10 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe UnshelveTray do
-  subject { described_class.call(tray)}
-  let(:tray) { double(Tray, "shelved=" => false, save: true)} # insert used methods
+  subject { described_class.call(tray, user)}
+  let(:shelf) { double(Shelf, barcode: "SHELF-1234")}
+  let(:tray) { double(Tray, "shelved=" => false, save: true, shelf: shelf, barcode: "TRAY-AH1234")} # insert used methods
+  let(:user) { double(User)}
 
   before(:each) do
+    allow(LogActivity).to receive(:call).and_return(true)
     allow(IsObjectTray).to receive(:call).with(tray).and_return(true)
   end
 

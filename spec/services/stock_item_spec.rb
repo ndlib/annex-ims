@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe StockItem do
-  subject { described_class.call(@item)}
+  subject { described_class.call(@item, @user)}
 
   before(:each) do
     @tray = FactoryGirl.create(:tray)
@@ -9,6 +9,7 @@ RSpec.describe StockItem do
     @tray2 = FactoryGirl.create(:tray)
     @item = FactoryGirl.create(:item, tray: @tray, thickness: 1)
     @item2 = FactoryGirl.create(:item, thickness: 1)
+    @user = FactoryGirl.create(:user)
 
     template = Addressable::Template.new "#{Rails.application.secrets.api_server}/1.0/resources/items/record?auth_token=#{Rails.application.secrets.api_token}&barcode={barcode}"
 

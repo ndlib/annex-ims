@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe AssociateTrayWithItemBarcode do
-  subject { described_class.call(@user_id, @tray, @item.barcode, @item.thickness)}
+  subject { described_class.call(@user.id, @tray, @item.barcode, @item.thickness)}
 
   before(:each) do
 
@@ -10,6 +10,7 @@ RSpec.describe AssociateTrayWithItemBarcode do
     @tray2 = FactoryGirl.create(:tray)
     @item = FactoryGirl.create(:item)
     @item2 = FactoryGirl.create(:item)
+    @user = FactoryGirl.create(:user)
 
     @template = Addressable::Template.new "#{Rails.application.secrets.api_server}/1.0/resources/items/record?auth_token=#{Rails.application.secrets.api_token}&barcode={barcode}"
 
@@ -26,6 +27,9 @@ RSpec.describe AssociateTrayWithItemBarcode do
   end
 
   after(:each) do
+    ActivityLog.all.each do |log|
+      log.destroy!
+    end
     Item.all.each do |item|
       item.destroy!
     end
@@ -36,7 +40,7 @@ RSpec.describe AssociateTrayWithItemBarcode do
 
 
   it "gets an item from the barcode" do
-    expect(GetItemFromBarcode).to receive(:call).with(@user_id, @item.barcode).and_return(@item)
+    expect(GetItemFromBarcode).to receive(:call).with(@user.id, @item.barcode).and_return(@item)
     subject
   end
 

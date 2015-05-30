@@ -1,12 +1,13 @@
 class UnstockItem
-  attr_reader :item
+  attr_reader :item, :user
 
-  def self.call(item)
-    new(item).unstock!
+  def self.call(item, user)
+    new(item, user).unstock!
   end
 
-  def initialize(item)
+  def initialize(item, user)
     @item = item
+    @user = user
   end
 
   def unstock!
@@ -14,7 +15,8 @@ class UnstockItem
 
     item.unstocked!
 
-    if item.save
+    if item.save!
+      LogActivity.call(item, "Unstocked", item.tray, Time.now, user)
       item
     else
       false

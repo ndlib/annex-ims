@@ -1,12 +1,13 @@
 class UnshelveTray
-  attr_reader :tray
+  attr_reader :tray, :user
 
-  def self.call(tray)
-    new(tray).unshelve!
+  def self.call(tray, user)
+    new(tray, user).unshelve!
   end
 
-  def initialize(tray)
+  def initialize(tray, user)
     @tray = tray
+    @user = user
   end
 
   def unshelve!
@@ -15,6 +16,7 @@ class UnshelveTray
     tray.shelved = false
 
     if tray.save
+      LogActivity.call(tray, "Unshelved", tray.shelf, Time.now, user)
       tray
     else
       false

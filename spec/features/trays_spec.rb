@@ -9,6 +9,7 @@ feature "Trays", :type => :feature do
 
       @tray = FactoryGirl.create(:tray)
       @item = FactoryGirl.create(:item)
+      @item2 = FactoryGirl.create(:item)
 
       template = Addressable::Template.new "#{Rails.application.secrets.api_server}/1.0/resources/items/record?auth_token=#{Rails.application.secrets.api_token}&barcode={barcode}"
 
@@ -24,6 +25,9 @@ feature "Trays", :type => :feature do
     end
 
     after(:each) do
+      ActivityLog.all.each do |log|
+        log.destroy!
+      end
       Item.all.each do |item|
         item.destroy!
       end
@@ -377,6 +381,10 @@ feature "Trays", :type => :feature do
 
    it "rejects associating an item to the wrong tray" do
       @tray2 = FactoryGirl.create(:tray)
+      stub_request(:post, @template2).
+        with(:body => {"barcode"=>"#{@item.barcode}", "item_id"=>"#{@item.id}", "tray_code"=>"#{@tray2.barcode}"},
+          :headers => {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
+        to_return{ |response| { :status => 200, :body => {:results => {:status => "OK", :message => "Item stocked"}}.to_json, :headers => {} } }
       visit trays_items_path
       fill_in "Tray", :with => @tray2.barcode
       click_button "Save"

@@ -78,16 +78,16 @@ class ShelvesController < ApplicationController
     @item = Item.find(params[:item_id])
 
     if params[:commit] == 'Unstock'
-      if UnstockItem.call(@item)
+      if UnstockItem.call(@item, current_user)
         redirect_to show_shelf_path(:id => @shelf.id)
       else
-        raise "unable to dissociate tray"
+        raise "unable to unstock item"
       end
     else
-      if DissociateShelfFromItem.call(@item)
+      if DissociateShelfFromItem.call(@item, current_user)
         redirect_to show_shelf_path(:id => @shelf.id)
       else
-        raise "unable to dissociate tray"
+        raise "unable to dissociate"
       end
     end
   end

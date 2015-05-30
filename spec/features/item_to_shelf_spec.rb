@@ -29,6 +29,9 @@ feature "Shelves", :type => :feature do
     end
 
     after(:each) do
+      ActivityLog.all.each do |log|
+        log.destroy!
+      end
       Item.all.each do |item|
         item.destroy!
       end

@@ -21,7 +21,8 @@ class ItemRestock
       results = ItemPath.call(user_id, item_id, barcode)
 
     elsif IsTrayBarcode.call(barcode)
-      results = ItemRestockToTray.call(item_id, barcode)
+      user = User.find(user_id)
+      results = ItemRestockToTray.call(item_id, barcode, user)
 
     else
       results[:error] = "scan either a new item or a tray to stock to"

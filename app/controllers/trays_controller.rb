@@ -42,7 +42,7 @@ class TraysController < ApplicationController
     end
 
     begin
-      AssociateTrayWithShelfBarcode.call(@tray, barcode)
+      AssociateTrayWithShelfBarcode.call(@tray, barcode, current_user)
     rescue StandardError => e
       flash[:error] = e.message
       redirect_to show_tray_path(:id => @tray.id)
@@ -58,7 +58,7 @@ class TraysController < ApplicationController
     @tray = Tray.find(params[:id])
     @size = TraySize.call(@tray.barcode)
 
-    if DissociateTrayFromShelf.call(@tray)
+    if DissociateTrayFromShelf.call(@tray, current_user)
       redirect_to trays_path
     else
       raise "unable to dissociate tray"
@@ -69,7 +69,7 @@ class TraysController < ApplicationController
     @tray = Tray.find(params[:id])
     @size = TraySize.call(@tray.barcode)
 
-    if ShelveTray.call(@tray)
+    if ShelveTray.call(@tray, current_user)
       redirect_to trays_path
     else
       raise "unable to shelve tray"
@@ -80,7 +80,7 @@ class TraysController < ApplicationController
     @tray = Tray.find(params[:id])
     @size = TraySize.call(@tray.barcode)
 
-    if UnshelveTray.call(@tray)
+    if UnshelveTray.call(@tray, current_user)
       redirect_to trays_path
     else
       raise "unable to unshelve tray"
@@ -188,13 +188,13 @@ class TraysController < ApplicationController
     @item = Item.find(params[:item_id])
 
     if params[:commit] == 'Unstock'
-      if UnstockItem.call(@item)
+      if UnstockItem.call(@item, current_user)
         redirect_to show_tray_item_path(:id => @tray.id)
       else
         raise "unable to dissociate tray"
       end
     else
-      if DissociateTrayFromItem.call(@item)
+      if DissociateTrayFromItem.call(@item, current_user)
         redirect_to show_tray_item_path(:id => @tray.id)
       else
         raise "unable to dissociate tray"
@@ -205,7 +205,7 @@ class TraysController < ApplicationController
   def withdraw
     @tray = Tray.find(params[:id])
 
-    WithdrawTray.call(@tray)
+    WithdrawTray.call(@tray, current_user)
 
     redirect_to show_tray_path(:id => @tray.id)
     return

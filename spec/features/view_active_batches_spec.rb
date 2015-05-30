@@ -18,6 +18,9 @@ feature "View Active", :type => :feature do
     end
 
     after(:each) do
+      ActivityLog.all.each do |log|
+        log.destroy!
+      end
       Match.all.each do |match|
         match.destroy!
       end

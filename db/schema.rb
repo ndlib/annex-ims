@@ -11,10 +11,35 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150528160030) do
+ActiveRecord::Schema.define(version: 20150529145205) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "activity_logs", force: true do |t|
+    t.string   "object_barcode"
+    t.string   "object_type"
+    t.integer  "object_item_id"
+    t.integer  "object_tray_id"
+    t.string   "action"
+    t.string   "location_barcode"
+    t.string   "location_type"
+    t.integer  "location_tray_id"
+    t.integer  "location_shelf_id"
+    t.integer  "location_bin_id"
+    t.datetime "action_timestamp"
+    t.string   "username"
+    t.integer  "user_id"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
+  add_index "activity_logs", ["location_bin_id"], name: "index_activity_logs_on_location_bin_id", using: :btree
+  add_index "activity_logs", ["location_shelf_id"], name: "index_activity_logs_on_location_shelf_id", using: :btree
+  add_index "activity_logs", ["location_tray_id"], name: "index_activity_logs_on_location_tray_id", using: :btree
+  add_index "activity_logs", ["object_item_id"], name: "index_activity_logs_on_object_item_id", using: :btree
+  add_index "activity_logs", ["object_tray_id"], name: "index_activity_logs_on_object_tray_id", using: :btree
+  add_index "activity_logs", ["user_id"], name: "index_activity_logs_on_user_id", using: :btree
 
   create_table "batches", force: true do |t|
     t.datetime "created_at",                null: false
@@ -141,6 +166,12 @@ ActiveRecord::Schema.define(version: 20150528160030) do
 
   add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
 
+  add_foreign_key "activity_logs", "bins", column: "location_bin_id"
+  add_foreign_key "activity_logs", "items", column: "object_item_id"
+  add_foreign_key "activity_logs", "shelves", column: "location_shelf_id"
+  add_foreign_key "activity_logs", "trays", column: "location_tray_id"
+  add_foreign_key "activity_logs", "trays", column: "object_tray_id"
+  add_foreign_key "activity_logs", "users"
   add_foreign_key "batches", "users"
   add_foreign_key "issues", "users", column: "resolver_id"
   add_foreign_key "items", "bins"

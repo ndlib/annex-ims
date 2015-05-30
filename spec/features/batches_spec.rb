@@ -94,6 +94,9 @@ feature "Build", :type => :feature, :search => true do
 
 
     def destroy_all
+      ActivityLog.all.each do |log|
+        log.destroy!
+      end
       request2.destroy!
       request1.destroy!
       item2.destroy!

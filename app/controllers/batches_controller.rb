@@ -148,8 +148,9 @@ class BatchesController < ApplicationController
           @match.item.save!
           @match.bin = @bin
           @match.save!
+          LogActivity.call(@match.item, "Associated", @bin, Time.now, current_user)
 
-          UnstockItem.call(@match.item)
+          UnstockItem.call(@match.item, current_user)
 
           AcceptMatch.call(@match)
 

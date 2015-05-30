@@ -1,23 +1,24 @@
 class WithdrawTray
-  attr_reader :tray
+  attr_reader :tray, :user
 
-  def self.call(tray)
-    new(tray).withdraw!
+  def self.call(tray, user)
+    new(tray, user).withdraw!
   end
 
-  def initialize(tray)
+  def initialize(tray, user)
     @tray = tray
+    @user = user
   end
 
   def withdraw!
     validate_input!
 
-    unless DissociateTrayFromShelf.call(@tray)
+    unless DissociateTrayFromShelf.call(@tray, @user)
       raise "unable to dissociate tray"
     end
 
     @tray.items.each do |item|
-      DissociateTrayFromItem.call(item)
+      DissociateTrayFromItem.call(item, @user)
     end
 
     if tray.save

@@ -20,7 +20,9 @@ class AssociateTrayWithItemBarcode
       item.tray = tray
       item.thickness = thickness
       if item.save!
-        StockItem.call(item)
+        user = User.find(user_id)
+        LogActivity.call(item, "Associated", item.tray, Time.now, user)
+        StockItem.call(item, user)
         return item
       else
         return false

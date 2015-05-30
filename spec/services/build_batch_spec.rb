@@ -74,6 +74,9 @@ RSpec.describe BuildBatch, :search => true do
     end
 
     def destroy_all
+      ActivityLog.all.each do |log|
+        log.destroy!
+      end
       Match.all.each do |m|
         m.destroy!
       end

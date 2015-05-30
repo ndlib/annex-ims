@@ -1,23 +1,25 @@
 class DissociateTrayFromItem
-  attr_reader :item
+  attr_reader :item, :user
 
-  def self.call(item)
-    new(item).dissociate!
+  def self.call(item, user)
+    new(item, user).dissociate!
   end
 
-  def initialize(item)
+  def initialize(item, user)
     @item = item
+    @user = user
   end
 
   def dissociate!
-    item.tray = nil
+    LogActivity.call(item, "Disassociated", item.tray, Time.now, user)
 
-    unless UnstockItem.call(@item)
+    unless UnstockItem.call(item, user)
       raise "unable to unstock item"
     end
 
-    if item.save
-      transaction_log
+    item.tray = nil
+
+    if item.save!
       item
     else
       false

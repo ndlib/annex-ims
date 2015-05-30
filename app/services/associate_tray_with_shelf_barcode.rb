@@ -1,13 +1,14 @@
 class  AssociateTrayWithShelfBarcode
-  attr_reader :tray, :barcode
+  attr_reader :tray, :barcode, :user
 
-  def self.call(tray, barcode)
-    new(tray, barcode).associate!
+  def self.call(tray, barcode, user)
+    new(tray, barcode, user).associate!
   end
 
-  def initialize(tray, barcode)
+  def initialize(tray, barcode, user)
     @tray = tray
     @barcode = barcode
+    @user = user
   end
 
   def associate!
@@ -21,7 +22,8 @@ class  AssociateTrayWithShelfBarcode
       shelf.size = tray_size
 
       if tray.save
-        ShelveTray.call(tray)
+        LogActivity.call(tray, "Associated", tray.shelf, Time.now, user)
+        ShelveTray.call(tray, user)
         shelf.save
         result = tray
       else
