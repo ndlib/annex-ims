@@ -23,7 +23,11 @@ class ApiPostDeliverItem
       raw_results = {"status"=>599, "results"=>{"status"=>"NETWORK CONNECT TIMEOUT ERROR", "message"=>"Timeout Error"}}
     end
 
-    ShipItem.call(match.item)  # This is inside out from StockItem, but works better this way, I think.
+    if delivery_type == "send"
+      ShipItem.call(match.item)  # This is inside out from StockItem, but works better this way, I think.
+    else
+      UnstockItem.call(match.item)  # Just in case it's not already unstocked, make sure.
+    end
 
     raw_results
   end
