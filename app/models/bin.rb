@@ -5,6 +5,7 @@ class Bin < ActiveRecord::Base
 
   has_many :items, -> { order "updated_at DESC" }
   has_many :matches, -> { order "updated_at DESC" }
+  has_many :location_activity_logs, class_name: "ActivityLog", foreign_key: "location_bin_id"
 
   def has_correct_prefix
     if !IsBinBarcode.call(barcode)

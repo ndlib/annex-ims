@@ -17,19 +17,19 @@ ActiveRecord::Schema.define(version: 20150529145205) do
   enable_extension "plpgsql"
 
   create_table "activity_logs", force: true do |t|
-    t.string   "object_barcode"
-    t.string   "object_type"
+    t.string   "object_barcode",    null: false
+    t.string   "object_type",       null: false
     t.integer  "object_item_id"
     t.integer  "object_tray_id"
-    t.string   "action"
+    t.string   "action",            null: false
     t.string   "location_barcode"
     t.string   "location_type"
     t.integer  "location_tray_id"
     t.integer  "location_shelf_id"
     t.integer  "location_bin_id"
-    t.datetime "action_timestamp"
-    t.string   "username"
-    t.integer  "user_id"
+    t.datetime "action_timestamp",  null: false
+    t.string   "username",          null: false
+    t.integer  "user_id",           null: false
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
   end

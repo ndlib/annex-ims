@@ -27,6 +27,7 @@ class Item < ActiveRecord::Base
   has_many :requests, through: :matches
   has_many :batches, through: :matches
   has_many :filled_requests, class_name: "Request", foreign_key: "item_id"
+  has_many :activity_logs, class_name: "ActivityLog", foreign_key: "object_item_id"
 
   searchable do
     text :barcode
