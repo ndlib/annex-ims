@@ -36,7 +36,7 @@ gem 'airbrake'
 # gem 'unicorn'
 
 # Use Capistrano for deployment
-gem 'capistrano', '~>3.3'
+gem 'capistrano', '~>3.4'
 gem 'capistrano-rails', '~>1.1'
 
 group :development, :test do
