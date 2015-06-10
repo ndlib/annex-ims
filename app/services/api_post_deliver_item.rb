@@ -1,11 +1,12 @@
 class ApiPostDeliverItem
-  attr_reader :match_id
+  attr_reader :match_id, :user
 
-  def self.call(match_id)
-    new(match_id).post_data!
+  def self.call(match_id, user)
+    new(match_id, user).post_data!
   end
 
-  def initialize(match_id)
+  def initialize(match_id, user)
+    @user = user
     @match_id = match_id
     @path = "/1.0/resources/items"
   end
@@ -24,9 +25,9 @@ class ApiPostDeliverItem
     end
 
     if delivery_type == "send"
-      ShipItem.call(match.item)  # This is inside out from StockItem, but works better this way, I think.
+      ShipItem.call(match.item, user)  # This is inside out from StockItem, but works better this way, I think.
     else
-      UnstockItem.call(match.item)  # Just in case it's not already unstocked, make sure.
+      UnstockItem.call(match.item, user)  # Just in case it's not already unstocked, make sure.
     end
 
     raw_results

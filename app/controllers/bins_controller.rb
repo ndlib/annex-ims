@@ -20,7 +20,7 @@ class BinsController < ApplicationController
     @match.bin = nil
     @match.save!
 
-    ApiPostDeliverItem.call(@match.id)
+    ApiPostDeliverItem.call(@match.id, current_user)
 
     redirect_to show_bin_path(:id => bin_id)
   end

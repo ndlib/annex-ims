@@ -12,7 +12,9 @@ class GetRequests
 
     if list["status"] == 200
       list["results"].each do |res|
-        Request.where(trans: res["trans"]).first_or_create!(res) # ApiGetRequestList should return hashes suitable for creating requests. create also saves to db. I'm hoping that transaction is unique per request.
+        r = Request.find_or_initialize_by(trans: res["trans"])
+        r.attributes = res
+        r.save!
       end
     else
       raise "error getting request list"

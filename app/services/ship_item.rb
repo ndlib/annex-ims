@@ -1,12 +1,13 @@
 class ShipItem
-  attr_reader :item
+  attr_reader :item, :user
 
-  def self.call(item)
-    new(item).ship!
+  def self.call(item, user)
+    new(item, user).ship!
   end
 
-  def initialize(item)
+  def initialize(item, user)
     @item = item
+    @user = user
   end
 
   def ship!
@@ -15,6 +16,7 @@ class ShipItem
     item.shipped!
 
     if item.save!
+      LogActivity.call(item, "Shipped", item.tray, Time.now, user)
       result = item
     else
       result = false
