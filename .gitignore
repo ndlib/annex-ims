@@ -20,6 +20,10 @@ config/secrets.yml
 /.bundle
 /vendor/bundle
 
+# Ignore sublime text files
+annex-ims.sublime-project
+annex-ims.sublime-workspace
+
 # these should all be checked in to normalise the environment:
 # Gemfile.lock, .ruby-version, .ruby-gemset
 
