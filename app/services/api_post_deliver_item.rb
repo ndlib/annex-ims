@@ -28,7 +28,7 @@ class ApiPostDeliverItem
       ShipItem.call(match.item, user)  # This is inside out from StockItem, but works better this way, I think.
     else
       UnstockItem.call(match.item, user)  # Just in case it's not already unstocked, make sure.
-      LogActivity.call(item, "Scanned", item.tray, Time.now, user)
+      LogActivity.call(match.item, "Scanned", match.item.tray, Time.now, user)
     end
 
     raw_results
