@@ -32,11 +32,9 @@ class GetItemFromBarcode
         item = nil
       elsif data["status"] == 401 # Unauthorized - probably bad key
         AddIssue.call(user_id, barcode, "Unauthorized - Check API Key.")
-        item.destroy!
         item = nil
       elsif data["status"] == 599 # Timeout
         AddIssue.call(user_id, barcode, "API Timeout.")
-        item.destroy!
         item = nil
       end
       item
