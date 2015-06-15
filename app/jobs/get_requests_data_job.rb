@@ -2,13 +2,11 @@ class GetRequestsDataJob < ActiveJob::Base
   queue_as :default
 
   def perform(user_id)
-Rails.logger.info "Got here"
-
-      list = ApiGetRequestList.call(@user_id)
+      list = ApiGetRequestList.call(user_id)
 
       if list["status"] == 200
         list["results"].each do |res|
-          Request.where(trans: res["trans"]).first_or_create!(res) # ApiGetRequestList should return hashes suitable for creating requests. create also saves to db. I'm hoping that transaction is unique per request.
+          r = Request.where(trans: res["trans"]).first_or_create!(res) # ApiGetRequestList should return hashes suitable for creating requests. create also saves to db. I'm hoping that transaction is unique per request.
         end
       else
         raise "error getting request list"

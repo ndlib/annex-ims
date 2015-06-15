@@ -12,7 +12,7 @@ class GetItemFromBarcode
 
   def get
     if valid?
-      GetItemDataJob.perform_later(barcode)
+      GetItemDataJob.perform_later(user_id, barcode)
 
       item = Item.where(barcode: barcode).first
 

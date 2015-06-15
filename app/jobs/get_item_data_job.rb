@@ -1,12 +1,11 @@
 class GetItemDataJob < ActiveJob::Base
   queue_as :default
 
-  def perform(barcode)
-Rails.logger.info "Got here"
+  def perform(user_id, barcode)
     item = Item.find_or_initialize_by(barcode: barcode)  # This section will need to throw things into a queue for background processing.
 
     if item.new_record?
-      user = User.find(@user_id)
+      user = User.find(user_id)
       item.thickness ||= 0
       item.save!
       LogActivity.call(item, "Created", nil, Time.now, user)
