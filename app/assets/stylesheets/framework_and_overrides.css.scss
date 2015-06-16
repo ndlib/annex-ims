@@ -41,7 +41,6 @@ img {
 // to make views framework-neutral
 main {
   @extend .container;
-  background-color: #eee;
   padding-bottom: 80px;
   width: 100%;
   margin-top: 51px; // accommodate the navbar
@@ -89,3 +88,53 @@ section {
 @media print {
     .doNotPrint, .doNotPrint * { display: none !important; }
 }
+
+a.navbar-brand {
+  background: image_url("vault.png") no-repeat left 8px;
+  background-size: 35px 32px;
+  padding-left: 40px;
+}
+
+a.list-group-item:link {
+  border: none;
+  background: none;
+  color: #666;
+}
+
+a.list-group-item:focus, a.list-group-item-success:focus {
+  background-color: none;
+}
+
+a.list-group-item:hover, a.list-group-item:focus, a.list-group-item-success:hover, a.list-group-item-success:focus {
+  background-color: #ccc;
+}
+
+.collapse.in {
+  .list-group-item {
+    border: solid 1px #bcbcbc;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    padding-left:85px;
+  }
+}
+
+.collapse.input-group {
+  display: none;
+}
+
+.navbar-right {
+  li {
+    padding: 8px 8px 8px 0;
+  }
+
+  li.status {
+    padding: 15px 15px 15px 0;
+    color: #ccc;
+    font-style: italic;
+  }
+
+  a.btn {
+    padding: 7px 15px;
+  }
+}
+
