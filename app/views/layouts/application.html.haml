@@ -1,7 +1,7 @@
 !!!
 %html
   %head
-    %meta{:name => "viewport", :content => "width=device-width, initial-scale=1.5, user-scalable=0"}
+    %meta{:name => "viewport", :content => "width=device-width, initial-scale=1.0, user-scalable=0"}
     %title= content_for?(:title) ? yield(:title) : 'Annex Ims'
     %meta{:name => "description", :content => "#{content_for?(:description) ? yield(:description) : 'Annex Ims'}"}
     = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true
