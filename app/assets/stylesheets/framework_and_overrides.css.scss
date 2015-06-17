@@ -116,7 +116,7 @@ a.navbar-brand {
 a.list-group-item:link {
   border: none;
   background: none;
-  color: #666;
+  color: #333;
 }
 
 .list-group-item:first-child {
@@ -127,13 +127,18 @@ a.list-group-item:hover, a.list-group-item-success:hover {
   background-color: #ccc;
 }
 
-a.list-group-item:focus, a.list-group-item-success:focus {
-  background-color: none;
+a.list-group-item:focus, a.list-group-item-success:focus, a.list-group-item:active, a.list-group-item-success:active {
+  background-color: none !important;
+
+}
+
+a.list-group-item[aria-expanded="true"] {
+  margin-bottom:5px;
 }
 
 .collapse.in {
   .list-group-item {
-    border: solid 1px #bcbcbc;
+    border: solid 2px #bcbcbc;
     border-radius: 5px;
     margin-bottom: 5px;
     padding-left:85px;
@@ -143,7 +148,8 @@ a.list-group-item:focus, a.list-group-item-success:focus {
 
   }
   .barcode {
-      background-image: image_url("barcode.png");
+    background-image: image_url("barcode.png");
+    padding-left: 40px;
 
   }
   .tray {
@@ -161,6 +167,10 @@ a.list-group-item:focus, a.list-group-item-success:focus {
   display: none;
 }
 
+.navbar {
+  margin-bottom: 5px;
+}
+
 .navbar-right {
   margin:0 !important;
 
@@ -170,7 +180,7 @@ a.list-group-item:focus, a.list-group-item-success:focus {
 
   li.status {
     padding: 15px 15px 15px 0;
-    color: #ccc;
+    color: #999;
     font-style: italic;
   }
 
@@ -191,6 +201,7 @@ a.list-group-item:focus, a.list-group-item-success:focus {
   }
   .navbar li {
     width: auto !important;
+    display: inline-block;
 
     .btn {
       display: inline-block;
@@ -199,6 +210,13 @@ a.list-group-item:focus, a.list-group-item-success:focus {
   .navbar-right {
     float: right !important;
     margin-right: 0;
+  }
+
+  nav * {
+    font-size:11px;
+    .navbar-brand {
+      font-size:13px;
+    }
   }
 }
 
