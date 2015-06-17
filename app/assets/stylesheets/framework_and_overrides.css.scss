@@ -196,7 +196,7 @@ a.list-group-item[aria-expanded="true"] {
 
 
 
-@media only screen and (min-width: 320px) {
+@media only screen and (min-width: 760px) {
   .navbar-header::before, .navbar-header::after {
     display: inline;
   }
@@ -267,7 +267,7 @@ a.list-group-item[aria-expanded="true"] {
   td:nth-of-type(8):before { content: "Dream Vacation City"; }
   td:nth-of-type(9):before { content: "GPA"; }
   td:nth-of-type(10):before { content: "Arbitrary Data"; }
-}
+
 
 }
 
