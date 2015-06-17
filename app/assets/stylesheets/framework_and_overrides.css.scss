@@ -3,7 +3,10 @@
 @import "bootstrap";
 
 // navbar issue
-body { padding-top: 40px; }
+body {
+  //padding-top: 40px;
+}
+
 @media screen and (max-width: 768px) {
     body { padding-top: 0px; }
 }
@@ -42,8 +45,8 @@ img {
 main {
   @extend .container;
   padding-bottom: 80px;
-  width: 100%;
-  margin-top: 51px; // accommodate the navbar
+  //width: 100%;
+  // margin-top: 51px; // accommodate the navbar
   }
 section {
   @extend .row;
@@ -89,10 +92,25 @@ section {
     .doNotPrint, .doNotPrint * { display: none !important; }
 }
 
+.container > .navbar-header, main > .navbar-header, .container > .navbar-collapse, main > .navbar-collapse, .container-fluid > .navbar-header, .container-fluid > .navbar-collapse {
+  margin:0;
+}
+
+
+
+.container {
+  padding:0;
+}
+
+main {
+  padding: 0 10px;
+}
+
 a.navbar-brand {
   background: image_url("vault.png") no-repeat left 8px;
   background-size: 35px 32px;
   padding-left: 40px;
+  margin-left: 10px !important;
 }
 
 a.list-group-item:link {
@@ -101,12 +119,16 @@ a.list-group-item:link {
   color: #666;
 }
 
-a.list-group-item:focus, a.list-group-item-success:focus {
-  background-color: none;
+.list-group-item:first-child {
+  border-radius: 0;
 }
 
-a.list-group-item:hover, a.list-group-item:focus, a.list-group-item-success:hover, a.list-group-item-success:focus {
+a.list-group-item:hover, a.list-group-item-success:hover {
   background-color: #ccc;
+}
+
+a.list-group-item:focus, a.list-group-item-success:focus {
+  background-color: none;
 }
 
 .collapse.in {
@@ -115,6 +137,23 @@ a.list-group-item:hover, a.list-group-item:focus, a.list-group-item-success:hove
     border-radius: 5px;
     margin-bottom: 5px;
     padding-left:85px;
+    background-repeat:no-repeat;
+    background-position:10px 10px;
+    background-size:auto 20px ;
+
+  }
+  .barcode {
+      background-image: image_url("barcode.png");
+
+  }
+  .tray {
+    background-image: image_url("traytoshelf.png");
+  }
+  .itemt {
+    background-image: image_url("itemtotray.png");
+  }
+  .items {
+    background-image: image_url("itemtoshelf.png");
   }
 }
 
@@ -123,6 +162,8 @@ a.list-group-item:hover, a.list-group-item:focus, a.list-group-item-success:hove
 }
 
 .navbar-right {
+  margin:0 !important;
+
   li {
     padding: 8px 8px 8px 0;
   }
@@ -135,6 +176,29 @@ a.list-group-item:hover, a.list-group-item:focus, a.list-group-item-success:hove
 
   a.btn {
     padding: 7px 15px;
+  }
+}
+
+.navbar > .container .navbar-brand, .navbar > main .navbar-brand, .navbar > .container-fluid .navbar-brand {
+  margin-left:0;
+}
+
+
+
+@media only screen and (min-width: 320px) {
+  .navbar-header::before, .navbar-header::after {
+    display: inline;
+  }
+  .navbar li {
+    width: auto !important;
+
+    .btn {
+      display: inline-block;
+    }
+  }
+  .navbar-right {
+    float: right !important;
+    margin-right: 0;
   }
 }
 
