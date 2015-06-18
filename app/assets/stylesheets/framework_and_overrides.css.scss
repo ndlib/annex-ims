@@ -202,7 +202,7 @@ hr {
   clear: both;
 }
 
-@media only screen and (max-width: 320px) {
+@media only screen and (max-width: 720px) {
   .navbar-header::before, .navbar-header::after {
     display: inline;
   }
