@@ -38,30 +38,31 @@
     = submit_tag 'Export', class: 'btn pull-right btn-primary'
 %hr
 = "#{@total} results found"
-%table.table.table-striped.condensed
-  %thead
-    %tr
-      %th= 'Barcode'
-      %th= 'Bib Number'
-      %th= 'ISBN/ISSN'
-      %th= 'Title'
-      %th= 'Author'
-      %th= 'Chron'
-      %th= 'Tray'
-      %th= 'Shelf'
-      %th= 'Condition'
-  %tbody
-    - @results.each do |item|
+.itemsearch
+  %table.table.table-striped.condensed
+    %thead
       %tr
-        %td= item.barcode
-        %td= item.bib_number
-        %td= item.isbn_issn
-        %td= item.title
-        %td= item.author
-        %td= item.chron
-        %td= item.tray.present? ? item.tray.barcode : ''
-        %td= item.shelf.present? ? item.shelf.barcode : ''
-        %td= item.conditions.present? ? item.conditions.join(", ") : ''
+        %th= 'Barcode'
+        %th= 'Bib Number'
+        %th= 'ISBN/ISSN'
+        %th= 'Title'
+        %th= 'Author'
+        %th= 'Chron'
+        %th= 'Tray'
+        %th= 'Shelf'
+        %th= 'Condition'
+    %tbody
+      - @results.each do |item|
+        %tr
+          %td= item.barcode
+          %td= item.bib_number
+          %td= item.isbn_issn
+          %td= item.title
+          %td= item.author
+          %td= item.chron
+          %td= item.tray.present? ? item.tray.barcode : ''
+          %td= item.shelf.present? ? item.shelf.barcode : ''
+          %td= item.conditions.present? ? item.conditions.join(", ") : ''
 - if !@results.blank?
   = paginate @results
 

@@ -231,6 +231,8 @@ hr {
     height:2em;
   }
 
+  .itemsearch {
+
   /* Force table to not be like tables anymore */
   table, thead, tbody, th, td, tr {
     display: block;
@@ -280,6 +282,8 @@ td:before {
   td:nth-of-type(7):before { content: "Tray"; }
   td:nth-of-type(8):before { content: "Shelf"; }
   td:nth-of-type(9):before { content: "Condition"; }
+
+}
 
   .scan {
     padding:2em;
