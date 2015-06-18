@@ -281,6 +281,20 @@ td:before {
   td:nth-of-type(8):before { content: "Shelf"; }
   td:nth-of-type(9):before { content: "Condition"; }
 
+  .scan {
+    padding:2em;
+    label {
+      font-size:18px;
+      margin-right:15px;
+    }
+    .actions {
+      text-align: center;
+      padding:3em;
+      .btn {
+        font-size:32px;
+      }
+    }
+  }
 
 }
 
