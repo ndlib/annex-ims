@@ -227,6 +227,9 @@ hr {
     }
   }
 
+  select {
+    height:2em;
+  }
 
   /* Force table to not be like tables anymore */
   table, thead, tbody, th, td, tr {
@@ -240,7 +243,10 @@ thead tr {
   left: -9999px;
 }
 
-tr { border: 1px solid #ccc; }
+tr {
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+}
 
 td {
   /* Behave  like a "row" */
@@ -248,6 +254,7 @@ td {
   border-bottom: 1px solid #eee;
   position: relative;
   padding-left: 50% !important;
+  min-height: 1em;
 }
 
 td:before {
