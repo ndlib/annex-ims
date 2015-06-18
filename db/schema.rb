@@ -108,15 +108,15 @@ ActiveRecord::Schema.define(version: 20150529145205) do
   add_index "matches", ["item_id", "request_id", "batch_id"], name: "index_matches_on_item_id_and_request_id_and_batch_id", unique: true, using: :btree
 
   create_table "requests", force: true do |t|
-    t.string   "criteria_type", null: false
-    t.string   "criteria",      null: false
+    t.string   "criteria_type",              null: false
+    t.string   "criteria",                   null: false
     t.integer  "item_id"
     t.date     "requested"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-    t.boolean  "rapid",         null: false
-    t.string   "source",        null: false
-    t.string   "req_type",      null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.boolean  "rapid",                      null: false
+    t.string   "source",                     null: false
+    t.string   "req_type",                   null: false
     t.integer  "batch_id"
     t.string   "trans"
     t.string   "title"
@@ -126,7 +126,7 @@ ActiveRecord::Schema.define(version: 20150529145205) do
     t.string   "barcode"
     t.string   "isbn_issn"
     t.string   "bib_number"
-    t.string   "del_type",      null: false
+    t.string   "del_type",      default: "", null: false
   end
 
   add_index "requests", ["batch_id"], name: "index_requests_on_batch_id", using: :btree
