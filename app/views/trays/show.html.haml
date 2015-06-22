@@ -1,6 +1,6 @@
 = @tray.barcode
 %br
-- if !(!@tray.shelf.nil? and @tray.shelved)
+- if (@tray.shelf.nil?)
   = form_tag associate_tray_path(@tray) do |f|
     - if @tray.errors.any?
       #error_explanation
@@ -14,6 +14,20 @@
       = text_field_tag :barcode, nil, autofocus: "autofocus"
     .actions
       = submit_tag 'Save', class: 'btn btn-primary'
+- elsif (!@tray.shelf.nil? and !@tray.shelved)
+  = form_tag shelve_tray_path(@tray) do |f|
+    - if @tray.errors.any?
+      #error_explanation
+        %h2= "#{pluralize(@tray.errors.count, "error")} prohibited this tray from being saved:"
+        %ul
+          - @tray.errors.full_messages.each do |msg|
+            %li= msg
+
+    .field
+      = label_tag :barcode, "Shelf"
+      = text_field_tag :barcode, nil, autofocus: "autofocus"
+    .actions
+      = submit_tag 'Shelve', class: 'btn btn-primary'
 %br
 = @tray.shelved ? "Shelved" : "Unshelved"
 %br
