@@ -17,8 +17,8 @@ feature "Bins", :type => :feature do
       @bin = bin
       @match = match
 
-      template = Addressable::Template.new "#{Rails.application.secrets.api_server}/1.0/resources/items/send?auth_token=#{Rails.application.secrets.api_token}"
-      stub_request(:post, template). with(:body => {"barcode"=>"#{@match.item.barcode}", "delivery_type"=>"send", "item_id"=>"#{@match.item.id}", "request_type"=>"doc_del", "source"=>"aleph", "transaction_num"=>"", "tray_code"=>"#{@match.item.tray.barcode}"}, :headers => {'User-Agent'=>'Faraday v0.9.1'}). to_return{ |response| { :status => 200, :body => {:results => {:status => "OK", :message => "Item stocked"}}.to_json, :headers => {} } }
+      uri = Addressable::URI.parse "http://1.0/resources/items/send?auth_token="
+      stub_request(:post, uri). with(:body => {"barcode"=>"#{@match.item.barcode}", "delivery_type"=>"send", "item_id"=>"#{@match.item.id}", "request_type"=>"doc_del", "source"=>"aleph", "transaction_num"=>"", "tray_code"=>"#{@match.item.tray.barcode}"}, :headers => {'User-Agent'=>'Faraday v0.9.1'}). to_return{ |response| { :status => 200, :body => {:results => {:status => "OK", :message => "Item stocked"}}.to_json, :headers => {} } }
 
     end
 

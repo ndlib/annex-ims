@@ -10,58 +10,44 @@ feature "Items", :type => :feature do
       @tray = FactoryGirl.create(:tray)
       @shelf = FactoryGirl.create(:shelf)
       @tray2 = FactoryGirl.create(:tray)
-      @item = FactoryGirl.create(:item, tray: @tray, thickness: 1)
-      @item2 = FactoryGirl.create(:item)
+      @item = FactoryGirl.create(:item, tray: @tray, thickness: 1, title: 'ITEM 1', chron: 'TEST CHRON')
+      @item2 = FactoryGirl.create(:item, tray: @tray2, thickness: 2, title: 'ITEM 2', chron: 'TEST CHRON2')
 
-      template2 = Addressable::Template.new "#{Rails.application.secrets.api_server}/1.0/resources/items/stock?auth_token=#{Rails.application.secrets.api_token}"
+      uri2 = Addressable::URI.parse "http://1.0/resources/items/stock?auth_token="
 
-      stub_request(:post, template2).
+      stub_request(:post, uri2).
         with(:body => {"barcode"=>"#{@item.barcode}", "item_id"=>"#{@item.id}", "tray_code"=>"#{@item.tray.barcode}"},
           :headers => {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
         to_return{ |response| { :status => 200, :body => {:results => {:status => "OK", :message => "Item stocked"}}.to_json, :headers => {} } }
 
-      template = Addressable::Template.new "#{Rails.application.secrets.api_server}/1.0/resources/items/record?auth_token=#{Rails.application.secrets.api_token}&barcode={barcode}"
-      stub_request(:get, template). with(:headers => {'User-Agent'=>'Faraday v0.9.1'}). to_return{ |response| { :status => 200, :body => {"item_id" => "00110147500410", "barcode" => @item.barcode, "bib_id" => @item.bib_number, "sequence_number" => "00410", "admin_document_number" => "001101475", "call_number" => @item.call_number, "description" => @item.chron ,"title"=> @item.title, "author" => @item.author ,"publication" => "Cambridge, UK : Elsevier Science Publishers, c1991-", "edition" => "", "isbn_issn" =>@item.isbn_issn, "condition" => @item.conditions}.to_json, :headers => {} } }
+      uri = Addressable::URI.parse "http://1.0/resources/items/record?auth_token=&barcode=#{@item.barcode}"
+      stub_request(:get, uri). with(:headers => {'User-Agent'=>'Faraday v0.9.1'}). to_return{ |response| { :status => 200, :body => {"item_id" => "00110147500410", "barcode" => @item.barcode, "bib_id" => @item.bib_number, "sequence_number" => "00410", "admin_document_number" => "001101475", "call_number" => @item.call_number, "description" => @item.chron ,"title"=> @item.title, "author" => @item.author ,"publication" => "Cambridge, UK : Elsevier Science Publishers, c1991-", "edition" => "", "isbn_issn" =>@item.isbn_issn, "condition" => @item.conditions}.to_json, :headers => {} } }
     end
 
     after(:each) do
       ActivityLog.all.each do |log|
         log.destroy!
       end
-      Item.all.each do |item|
-        item.destroy!
-      end
-      Tray.all.each do |tray|
-        tray.destroy!
-      end
-      Shelf.all.each do |shelf|
-        shelf.destroy!
-      end
     end
 
     it "can scan a new item" do
-      @item = FactoryGirl.create(:item, chron: 'TEST CHRON')
       visit items_path
       fill_in "Item", :with => @item.barcode
       click_button "Find"
       expect(current_path).to eq(show_item_path(:id => @item.id))
       expect(page).to have_content @item.title
-      expect(page).to have_content @item.author
       expect(page).to have_content @item.chron
     end
 
     it "can scan an item and then scan another item to change tasks" do
-      @item = FactoryGirl.create(:item, chron: 'TEST CHRON')
-      @item2 = FactoryGirl.create(:item, chron: 'TEST CHRON 2')
       visit items_path
-      fill_in "Item", :with => @item2.barcode
+      fill_in "Item", :with => @item.barcode
       click_button "Find"
-      expect(current_path).to eq(show_item_path(:id => @item2.id))
+      expect(current_path).to eq(show_item_path(:id => @item.id))
       fill_in "Item", :with => @item.barcode
       click_button "Scan"
       expect(current_path).to eq(show_item_path(:id => @item.id))
       expect(page).to have_content @item.title
-      expect(page).to have_content @item.author
       expect(page).to have_content @item.chron
     end
 
@@ -77,9 +63,6 @@ feature "Items", :type => :feature do
     end
 
     it "can scan an item and then scan a tray and show an error for the wrong tray" do
-      @tray = FactoryGirl.create(:tray)
-      @item = FactoryGirl.create(:item, chron: 'TEST CHRON', tray: @tray)
-      @tray2 = FactoryGirl.create(:tray)
       visit items_path
       fill_in "Item", :with => @item.barcode
       click_button "Find"
