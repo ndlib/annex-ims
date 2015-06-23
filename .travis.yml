@@ -1,6 +1,7 @@
 language: ruby
 rvm:
 - 2.1.4
+script: "bundle exec rspec spec --tag '~ignore:travis'"
 cache: bundler
 sudo: false
 before_install:

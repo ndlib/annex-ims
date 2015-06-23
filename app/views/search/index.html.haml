@@ -1,0 +1,68 @@
+= form_tag search_path, method: :get do |f|
+  .list-group.panel
+    %a.list-group-item.list-group-item-success Criteria
+    #criteria.input-group
+      = select_tag :criteria_type, options_for_select(SearchItems::CRITERIA_TYPES, @params[:criteria_type])
+      = text_field_tag :criteria, @params[:criteria]
+      = label_tag :criteria, 'Use * for wildcard matches.'
+
+    %a.list-group-item.list-group-item-success{"data-toggle" => "collapse", :href => "#date-range"} Date Range
+    #date-range.collapse
+      = select_tag :date_type, options_for_select([["Request Date", "request"],["Initial Ingest Date", "initial"],["LasIngest Date", "last"]], @params[:date_type]), include_blank: true
+      %span.input-daterange{"data-provide" => "datepicker", "data-date-format" => "yyyy-mm-dd"}
+        = text_field_tag :start, @params[:start] ||= Time.now.strftime("%Y-%m-%d")
+        %span.add-on to
+        = text_field_tag :finish, @params[:finish] ||= Time.now.strftime("%Y-%m-%d")
+
+    %a.list-group-item.list-group-item-success{"data-toggle" => "collapse", :href => "#conditions"}
+      %span.glyphicon.glyphicon-triangle-right
+      Conditions
+    #conditions.collapse
+      .input-group
+        = radio_button_tag :condition_bool, :any, @params[:condition_bool] == 'any'
+        = label_tag :condition_bool_any, "Any"
+        &nbsp;
+        = radio_button_tag :condition_bool, :all, @params[:condition_bool] == 'all'
+        = label_tag :condition_bool_all, "All"
+        &nbsp;
+        = radio_button_tag :condition_bool, :none, @params[:condition_bool] == 'none'
+        = label_tag :condition_bool_none, "None"
+      %ul.list-unstyled
+        - Item::CONDITIONS.each do |condition|
+          %li
+            = check_box_tag "conditions[#{condition}]", 1, !@params[:conditions].blank? ? @params[:conditions][condition] : false
+            = label_tag condition, condition
+
+  .actions
+    = submit_tag 'Search', class: 'btn pull-left btn-primary'
+    = submit_tag 'Export', class: 'btn pull-right btn-primary'
+%hr
+= "#{@total} results found"
+.itemsearch
+  %table.table.table-striped.condensed
+    %thead
+      %tr
+        %th= 'Barcode'
+        %th= 'Bib Number'
+        %th= 'ISBN/ISSN'
+        %th= 'Title'
+        %th= 'Author'
+        %th= 'Chron'
+        %th= 'Tray'
+        %th= 'Shelf'
+        %th= 'Condition'
+    %tbody
+      - @results.each do |item|
+        %tr
+          %td= item.barcode
+          %td= item.bib_number
+          %td= item.isbn_issn
+          %td= item.title
+          %td= item.author
+          %td= item.chron
+          %td= item.tray.present? ? item.tray.barcode : ''
+          %td= item.shelf.present? ? item.shelf.barcode : ''
+          %td= item.conditions.present? ? item.conditions.join(", ") : ''
+- if !@results.blank?
+  = paginate @results
+

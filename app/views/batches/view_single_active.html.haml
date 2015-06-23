@@ -1,0 +1,40 @@
+- if @batch.requests.blank?
+  = "Batch has no requests."
+- else
+  %table.table.table-striped.condensed.datatable{"id" => "requests"}
+    %thead
+      %tr
+        %th= 'Title'
+        %th= 'Author'
+        %th= 'Source'
+        %th= 'Type'
+    %tbody
+      - @batch.requests.each do |request|
+        %tr
+          %td= request.title
+          %td= request.author
+          %td= request.source
+          %td= request.del_type
+  :javascript
+    $(document).ready(function() {
+      window.table = $('#requests').DataTable( {
+        "dom": 'T<"clear">lfrtip',
+        "tableTools": {
+          "aButtons": [ {
+                    "sExtends": "print",
+                    "sTitle": "",
+                    "sInfo": "",
+                    "sMessage": "",
+                    "fnComplete": function ( nButton, oConfig, oFlash, sFlash ) {
+                        alert('Use Browser Print feature. When done, hit "esc" on your keyboard to return to IMS.');
+
+                        $('.ui-dialog,.ui-widget-overlay').addClass('doNotPrint');
+                    }
+                } ]
+        }
+      } );
+    } );
+  = form_tag cancel_single_active_batch_path do |f|
+    = hidden_field_tag :batch_id, @batch.id
+    .actions
+      = submit_tag 'Cancel', class: 'btn btn-primary'

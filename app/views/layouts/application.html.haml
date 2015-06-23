@@ -1,11 +1,15 @@
 !!!
 %html
   %head
-    %title AnnexIms
-    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
+    %meta{:name => "viewport", :content => "width=device-width, initial-scale=1.0, user-scalable=0"}
+    %title= content_for?(:title) ? yield(:title) : 'Annex Ims'
+    %meta{:name => "description", :content => "#{content_for?(:description) ? yield(:description) : 'Annex Ims'}"}
+    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
     = csrf_meta_tags
   %body
-    %p.notice= notice
-    %p.alert= alert
-    = yield
+    %header
+      = render 'layouts/navigation'
+    %main{:role => "main"}
+      = render 'layouts/messages'
+      = yield

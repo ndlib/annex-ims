@@ -1,0 +1,7 @@
+.scan
+  = form_for @item, url: scan_item_path, method: :get do |f|
+    .field
+      = f.label :barcode, "Item"
+      = f.text_field :barcode, autofocus: "autofocus"
+    .actions
+      = f.submit 'Find', class: 'btn btn-primary'

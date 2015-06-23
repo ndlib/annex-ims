@@ -36,7 +36,8 @@ gem 'airbrake'
 # gem 'unicorn'
 
 # Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
+gem 'capistrano', '~>3.4'
+gem 'capistrano-rails', '~>1.1'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -50,6 +51,34 @@ group :development, :test do
 
   # We test with Rspec
   gem 'rspec-rails', '~> 3.0'
+
+  # For mocking up objects
+  gem 'factory_girl_rails', '~> 4.5'
+
+  # For cleaning up the test database
+  gem 'database_cleaner', '~> 1.3'
+
+  # Feature testing
+  gem 'capybara', '~> 2.4'
+
+  # So staging etc can use stand alone Solr
+  gem 'sunspot_solr', :git => 'https://github.com/sunspot/sunspot.git'
+
+  # For serving up ssl
+  gem 'thin'
+
+end
+
+group :test do
+  # For mocking up APIs
+  gem 'webmock'
+
+end
+
+group :development, :test, :staging do
+  # For realistic fake data
+  gem 'faker', '~> 1.4'
+
 end
 
 # Use Haml for markup because I like it.
@@ -59,6 +88,36 @@ gem 'haml-rails'
 gem 'bootstrap-sass', '~> 3.3.1'
 gem 'autoprefixer-rails'
 
-# Devise for authentication
+# Someone already Rails-ified a nice datepicker for Bootstrap
+gem 'bootstrap-datepicker-rails'
+
+# Someone else Rails-ified Datatables
+gem 'jquery-datatables-rails', '~> 3.1.1'
+
+# Devise for authentication, CAS for use in ND
 gem 'devise'
+gem 'devise_cas_authenticatable'
+
+# For consuming the API for items
+gem 'faraday'
+gem 'faraday_middleware'
+gem 'excon'
+gem 'typhoeus'
+gem 'multi_xml'
+
+# For item search
+gem 'sunspot_rails', :git => 'https://github.com/sunspot/sunspot.git'
+gem 'progress_bar' # Because I want to see progress of reindexing
+
+# For paginating results
+gem 'kaminari'
+
+group :development do
+  # Simple generators for layouts
+  gem 'rails_layout'
+
+  # Better error page
+  gem 'better_errors'
+  gem 'binding_of_caller'
+end
 
