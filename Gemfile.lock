@@ -1,4 +1,20 @@
 GIT
+  remote: git://github.com/ndlib/guard-sunspot.git
+  revision: 00fe0004787db2cff1735dbe12a4f8d33b7d2471
+  specs:
+    guard-sunspot (0.0.1)
+      guard (>= 2.0)
+      guard-compat (>= 0.3)
+      sunspot_solr
+
+GIT
+  remote: git://github.com/ndlib/hesburgh_infrastructure.git
+  revision: 58b3c78a6cae9c871883a948e9ebc7d6fa2bb30c
+  specs:
+    hesburgh_infrastructure (0.2.5)
+      rails
+
+GIT
   remote: https://github.com/sunspot/sunspot.git
   revision: 691b42e73beae37e2e05953a1110f4247ec0065c
   specs:
@@ -91,6 +107,8 @@ GEM
     capybara-webkit (1.5.2)
       capybara (>= 2.3.0, < 2.5.0)
       json
+    celluloid (0.16.0)
+      timers (~> 4.0.0)
     coderay (1.1.0)
     coffee-rails (4.1.0)
       coffee-script (>= 2.2.0)
@@ -136,8 +154,30 @@ GEM
     faraday_middleware (0.9.1)
       faraday (>= 0.7.4, < 0.10)
     ffi (1.9.6)
+    formatador (0.2.5)
     globalid (0.3.0)
       activesupport (>= 4.1.0)
+    guard (2.6.1)
+      formatador (>= 0.2.4)
+      listen (~> 2.7)
+      lumberjack (~> 1.0)
+      pry (>= 0.9.12)
+      thor (>= 0.18.1)
+    guard-bundler (2.0.0)
+      bundler (~> 1.0)
+      guard (~> 2.2)
+    guard-coffeescript (1.4.0)
+      coffee-script (>= 2.2.0)
+      guard (>= 1.1.0)
+    guard-compat (1.2.1)
+    guard-rails (0.6.0)
+      guard (~> 2.0)
+    guard-rspec (4.3.1)
+      guard (~> 2.1)
+      rspec (>= 2.14, < 4.0)
+    guard-spring (0.0.4)
+      guard
+      spring
     haml (4.0.6)
       tilt
     haml-rails (0.5.3)
@@ -147,6 +187,7 @@ GEM
       railties (>= 4.0.1)
     highline (1.6.21)
     hike (1.2.3)
+    hitimes (1.2.2)
     i18n (0.7.0)
     jbuilder (2.2.5)
       activesupport (>= 3.0.0, < 5)
@@ -164,10 +205,16 @@ GEM
     kaminari (0.16.3)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
+    listen (2.10.1)
+      celluloid (~> 0.16.0)
+      rb-fsevent (>= 0.9.3)
+      rb-inotify (>= 0.9)
     loofah (2.0.1)
       nokogiri (>= 1.5.9)
+    lumberjack (1.0.9)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
+    method_source (0.8.2)
     mime-types (2.4.3)
     mini_portile (0.6.1)
     minitest (5.4.3)
@@ -187,6 +234,10 @@ GEM
     progress_bar (1.0.3)
       highline (~> 1.6.1)
       options (~> 2.3.0)
+    pry (0.10.1)
+      coderay (~> 1.1.0)
+      method_source (~> 0.8.1)
+      slop (~> 3.4)
     rack (1.6.0.beta2)
     rack-test (0.6.2)
       rack (>= 1.0)
@@ -216,12 +267,19 @@ GEM
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
     rake (10.4.2)
+    rb-fsevent (0.9.5)
+    rb-inotify (0.9.5)
+      ffi (>= 0.5.0)
     rdoc (4.1.2)
       json (~> 1.4)
     responders (2.0.2)
       railties (>= 4.2.0.alpha, < 5)
     rsolr (1.0.10)
       builder (>= 2.1.2)
+    rspec (3.1.0)
+      rspec-core (~> 3.1.0)
+      rspec-expectations (~> 3.1.0)
+      rspec-mocks (~> 3.1.0)
     rspec-core (3.1.7)
       rspec-support (~> 3.1.0)
     rspec-expectations (3.1.2)
@@ -252,6 +310,8 @@ GEM
       rdoc (~> 4.0)
     slop (3.6.0)
     spring (1.2.0)
+    spring-commands-rspec (1.0.4)
+      spring (>= 0.9.1)
     sprockets (2.12.3)
       hike (~> 1.2)
       multi_json (~> 1.0)
@@ -272,6 +332,8 @@ GEM
     thor (0.19.1)
     thread_safe (0.3.4)
     tilt (1.4.1)
+    timers (4.0.1)
+      hitimes
     turbolinks (2.5.2)
       coffee-rails
     typhoeus (0.7.0)
@@ -318,7 +380,15 @@ DEPENDENCIES
   faker (~> 1.4)
   faraday
   faraday_middleware
+  guard (= 2.6.1)
+  guard-bundler (= 2.0.0)
+  guard-coffeescript (= 1.4.0)
+  guard-rails (= 0.6.0)
+  guard-rspec (= 4.3.1)
+  guard-spring (= 0.0.4)
+  guard-sunspot!
   haml-rails
+  hesburgh_infrastructure!
   jbuilder (~> 2.0)
   jquery-datatables-rails (~> 3.1.1)
   jquery-rails
@@ -333,6 +403,7 @@ DEPENDENCIES
   sass-rails (~> 4.0)
   sdoc (~> 0.4.0)
   spring
+  spring-commands-rspec
   sunspot_rails!
   sunspot_solr!
   thin
