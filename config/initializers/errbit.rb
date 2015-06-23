@@ -3,4 +3,5 @@ Airbrake.configure do |config|
   config.host    = 'errbit.library.nd.edu'
   config.port    = 443
   config.secure  = config.port == 443
+  config.user_attributes = [:id, :username, :name]
 end

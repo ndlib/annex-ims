@@ -1,2 +1,22 @@
-%h1 Welcome#index
-%p Find me in app/views/welcome/index.html.haml
+#MainMenu
+  .list-group.panel
+    %a.list-group-item.list-group-item-success{"data-parent" => "#MainMenu", "data-toggle" => "collapse", :href => "#stocking"} Stocking
+    #stocking.collapse
+      %a.list-group-item.barcode{:href => items_path} Item Look-Up / Directed Put Away
+      %a.list-group-item.tray{:href => trays_path} Tray to Shelf
+      %a.list-group-item.itemt{:href => trays_items_path} Items to Tray
+      %a.list-group-item.items{:href => shelves_path} Item Direct to Shelf
+    %a.list-group-item.list-group-item-success{"data-parent" => "#MainMenu", "data-toggle" => "collapse", :href => "#items"} Items
+    #items.collapse
+      %a.list-group-item{:href => search_path} Item Search
+      %a.list-group-item{:href => issues_path} Items with Issues
+    %a.list-group-item.list-group-item-success{"data-parent" => "#MainMenu", "data-toggle" => "collapse", :href => "#bins"} Bins
+    #bins.collapse
+      %a.list-group-item{:href => bins_path} Item Processing
+    %a.list-group-item.list-group-item-success{"data-parent" => "#MainMenu", "data-toggle" => "collapse", :href => "#batches"} Batches
+    #batches.collapse
+      %a.list-group-item{:href => batches_path} Batch Creation
+      %a.list-group-item{:href => current_batch_path} Current Batch
+      %a.list-group-item{:href => retrieve_batch_path} Retrieve Batch
+      %a.list-group-item{:href => view_processed_batches_path} View Processed Batches
+      %a.list-group-item{:href => view_active_batches_path} View Active Batches

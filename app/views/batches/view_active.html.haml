@@ -1,0 +1,40 @@
+- if @batches.blank?
+  = "No active batches."
+- else
+  %table.table.table-striped.condensed.datatable{"id" => "batches"}
+    %thead
+      %tr
+        %th= 'ID'
+        %th= 'User'
+        %th= 'Timestamp'
+        %th= ''
+    %tbody
+      - @batches.each do |batch|
+        %tr
+          %td= batch.id
+          %td= batch.user.username
+          %td= link_to batch.updated_at, view_single_active_batch_path(:id => batch.id)
+          %td
+            = form_tag cancel_single_active_batch_path do |f|
+              = hidden_field_tag :batch_id, batch.id
+              .actions
+                = submit_tag 'Cancel', class: 'btn btn-primary'
+  :javascript
+    $(document).ready(function() {
+      window.table = $('#batches').DataTable( {
+        "dom": 'T<"clear">lfrtip',
+        "tableTools": {
+          "aButtons": [ {
+                    "sExtends": "print",
+                    "sTitle": "",
+                    "sInfo": "",
+                    "sMessage": "",
+                    "fnComplete": function ( nButton, oConfig, oFlash, sFlash ) {
+                        alert('Use Browser Print feature. When done, hit "esc" on your keyboard to return to IMS.');
+
+                        $('.ui-dialog,.ui-widget-overlay').addClass('doNotPrint');
+                    }
+                } ]
+        }
+      } );
+    } );

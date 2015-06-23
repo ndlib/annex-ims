@@ -1,0 +1,48 @@
+- if @batch.blank?
+  %span
+    = "#{current_user.username} has no active batches."
+- else
+  - if @batch.matches.blank?
+    %span
+      = "#{current_user.username} has an active batch, but it has no items."
+  - else
+    %table.table.table-striped.condensed.datatable{"id" => "items"}
+      %thead
+        %tr
+          %th= 'Title'
+          %th= 'Author'
+          %th= 'Shelf'
+          %th= 'Tray'
+          %th= ''
+      %tbody
+        - @batch.matches.each do |match|
+          %tr
+            %td= match.item.title
+            %td= match.item.author
+            %td= !match.item.shelf.blank? ? match.item.shelf.barcode : ''
+            %td= !match.item.tray.blank? ? match.item.tray.barcode : ''
+            %td
+              = form_tag remove_batch_match_path do |f|
+                = hidden_field_tag :match_id, match.id
+                .actions
+                  = submit_tag 'Remove', class: 'btn btn-primary'
+    :javascript
+        $(document).ready(function() {
+          window.table = $('#items').DataTable( {
+            "dom": 'T<"clear">lfrtip',
+            "tableTools": {
+              "aButtons": [ 
+                  {
+                    "sExtends": "print",
+                    "sTitle": "",
+                    "sInfo": "",
+                    "sMessage": "",
+                    "fnComplete": function ( nButton, oConfig, oFlash, sFlash ) {
+                        alert('Use Browser Print feature. When done, hit "esc" on your keyboard to return to IMS.');
+
+                        $('.ui-dialog,.ui-widget-overlay').addClass('doNotPrint');
+                    }
+                } ]
+            }
+          } );
+        } );
