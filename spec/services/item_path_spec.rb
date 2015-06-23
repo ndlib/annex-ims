@@ -11,8 +11,8 @@ RSpec.describe ItemPath do
     @item = FactoryGirl.create(:item, tray: @tray)
     @item2 = FactoryGirl.create(:item)
 
-    uri = Addressable::URI.parse "http://1.0/resources/items/record?auth_token=&barcode=#{@item.barcode}"
-    uri2 = Addressable::URI.parse "http://1.0/resources/items/record?auth_token=&barcode=#{@item2.barcode}"
+    uri = Addressable::URI.parse "http://1.0/resources/items/record?auth_token=987654321&barcode=#{@item.barcode}"
+    uri2 = Addressable::URI.parse "http://1.0/resources/items/record?auth_token=987654321&barcode=#{@item2.barcode}"
 
     stub_request(:get, uri).
          with(:headers => {'User-Agent'=>'Faraday v0.9.1'}).

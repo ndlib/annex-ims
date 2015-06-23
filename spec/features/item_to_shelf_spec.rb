@@ -16,9 +16,9 @@ feature "Shelves", :type => :feature do
 
       login_user
 
-      uri = Addressable::URI.parse "http://1.0/resources/items/record?auth_token=&barcode=#{@item.barcode}"
+      uri = Addressable::URI.parse "http://1.0/resources/items/record?auth_token=987654321&barcode=#{@item.barcode}"
 
-      @uri2 = Addressable::URI.parse "http://1.0/resources/items/stock?auth_token="
+      @uri2 = Addressable::URI.parse "http://1.0/resources/items/stock?auth_token=987654321"
 
       stub_request(:get, uri). with(:headers => {'User-Agent'=>'Faraday v0.9.1'}). to_return{ |response| { :status => 200, :body => {"item_id" => "00110147500410", "barcode" => @item.barcode, "bib_id" => @item.bib_number, "sequence_number" => "00410", "admin_document_number" => "001101475", "call_number" => @item.call_number, "description" => @item.chron ,"title"=> @item.title, "author" => @item.author ,"publication" => "Cambridge, UK : Elsevier Science Publishers, c1991-", "edition" => "", "isbn_issn" =>@item.isbn_issn, "condition" => @item.conditions}.to_json, :headers => {} } }
 
@@ -151,7 +151,7 @@ feature "Shelves", :type => :feature do
       5.times do |i|
         item = FactoryGirl.create(:item, title: "Item #{i + 1}")
         @items << item
-        uri = Addressable::URI.parse "http://1.0/resources/items/record?auth_token=&barcode=#{item.barcode}"
+        uri = Addressable::URI.parse "http://1.0/resources/items/record?auth_token=987654321&barcode=#{item.barcode}"
         stub_request(:get, uri). with(:headers => {'User-Agent'=>'Faraday v0.9.1'}). to_return{ |response| { :status => 200, :body => {"item_id" => "00110147500410", "barcode" => item.barcode, "bib_id" => item.bib_number, "sequence_number" => "00410", "admin_document_number" => "001101475", "call_number" => item.call_number, "description" => item.chron ,"title"=> item.title, "author" => item.author ,"publication" => "Cambridge, UK : Elsevier Science Publishers, c1991-", "edition" => "", "isbn_issn" =>item.isbn_issn, "condition" => item.conditions}.to_json, :headers => {} } }
         stub_request(:post, @uri2).
           with(:body => {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"TRAY-#{@shelf.barcode}"},

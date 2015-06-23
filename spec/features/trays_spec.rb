@@ -11,10 +11,10 @@ feature "Trays", :type => :feature do
       @item = FactoryGirl.create(:item)
       @item2 = FactoryGirl.create(:item)
 
-      uri = Addressable::URI.parse "http://1.0/resources/items/record?auth_token=&barcode=#{@item.barcode}"
-      uri3 = Addressable::URI.parse "http://1.0/resources/items/record?auth_token=&barcode=#{@item.barcode}"
+      uri = Addressable::URI.parse "http://1.0/resources/items/record?auth_token=987654321&barcode=#{@item.barcode}"
+      uri3 = Addressable::URI.parse "http://1.0/resources/items/record?auth_token=987654321&barcode=#{@item.barcode}"
 
-      @uri2 = Addressable::URI.parse "http://1.0/resources/items/stock?auth_token="
+      @uri2 = Addressable::URI.parse "http://1.0/resources/items/stock?auth_token=987654321"
 
       stub_request(:get, uri). with(:headers => {'User-Agent'=>'Faraday v0.9.1'}). to_return{ |response| { :status => 200, :body => {"item_id" => "00110147500410", "barcode" => @item.barcode, "bib_id" => @item.bib_number, "sequence_number" => "00410", "admin_document_number" => "001101475", "call_number" => @item.call_number, "description" => @item.chron ,"title"=> @item.title, "author" => @item.author ,"publication" => "Cambridge, UK : Elsevier Science Publishers, c1991-", "edition" => "", "isbn_issn" =>@item.isbn_issn, "condition" => @item.conditions}.to_json, :headers => {} } }
       stub_request(:get, uri3). with(:headers => {'User-Agent'=>'Faraday v0.9.1'}). to_return{ |response| { :status => 200, :body => {"item_id" => "00110147500410", "barcode" => @item.barcode, "bib_id" => @item.bib_number, "sequence_number" => "00410", "admin_document_number" => "001101475", "call_number" => @item.call_number, "description" => @item.chron ,"title"=> @item.title, "author" => @item.author ,"publication" => "Cambridge, UK : Elsevier Science Publishers, c1991-", "edition" => "", "isbn_issn" =>@item.isbn_issn, "condition" => @item.conditions}.to_json, :headers => {} } }
@@ -329,7 +329,7 @@ feature "Trays", :type => :feature do
     it "displays an item after successfully adding it to a tray" do
       @item = FactoryGirl.create(:item)
       expect(GetItemFromBarcode).to receive(:call).with(@user.id, @item.barcode).and_return(@item).at_least :once
-      uri = Addressable::URI.parse "http://1.0/resources/items/stock?auth_token="
+      uri = Addressable::URI.parse "http://1.0/resources/items/stock?auth_token=987654321"
       stub_request(:post, uri).
       with(:body => {"barcode"=>"#{@item.barcode}", "item_id"=>"#{@item.id}", "tray_code"=>"#{@tray.barcode}"},
         :headers => {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
@@ -351,7 +351,7 @@ feature "Trays", :type => :feature do
    it "displays information about a successful association made" do
       @item = FactoryGirl.create(:item)
       expect(GetItemFromBarcode).to receive(:call).with(@user.id, @item.barcode).and_return(@item).at_least :once
-      uri = Addressable::URI.parse "http://1.0/resources/items/stock?auth_token="
+      uri = Addressable::URI.parse "http://1.0/resources/items/stock?auth_token=987654321"
       stub_request(:post, uri).
       with(:body => {"barcode"=>"#{@item.barcode}", "item_id"=>"#{@item.id}", "tray_code"=>"#{@tray.barcode}"},
         :headers => {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
@@ -375,8 +375,8 @@ feature "Trays", :type => :feature do
       @item = FactoryGirl.create(:item)
       @tray = FactoryGirl.create(:tray)
       expect(GetItemFromBarcode).to receive(:call).with(@user.id, @item.barcode).and_return(@item).at_least :once
-      uri = Addressable::URI.parse "http://1.0/resources/items/record?auth_token=&barcode=#{@item.barcode}"
-      uri2 = Addressable::URI.parse "http://1.0/resources/items/stock?auth_token="
+      uri = Addressable::URI.parse "http://1.0/resources/items/record?auth_token=987654321&barcode=#{@item.barcode}"
+      uri2 = Addressable::URI.parse "http://1.0/resources/items/stock?auth_token=987654321"
       stub_request(:get, uri). with(:headers => {'User-Agent'=>'Faraday v0.9.1'}). to_return{ |response| { :status => 200, :body => {"item_id" => "00110147500410", "barcode" => @item.barcode, "bib_id" => @item.bib_number, "sequence_number" => "00410", "admin_document_number" => "001101475", "call_number" => @item.call_number, "description" => @item.chron ,"title"=> @item.title, "author" => @item.author ,"publication" => "Cambridge, UK : Elsevier Science Publishers, c1991-", "edition" => "", "isbn_issn" =>@item.isbn_issn, "condition" => @item.conditions}.to_json, :headers => {} } }
       stub_request(:post, uri2).
         with(:body => {"barcode"=>"#{@item.barcode}", "item_id"=>"#{@item.id}", "tray_code"=>"#{@tray.barcode}"},
@@ -459,8 +459,8 @@ feature "Trays", :type => :feature do
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
       @items.each do |item|
         expect(GetItemFromBarcode).to receive(:call).with(@user.id, item.barcode).and_return(item).at_least :once
-        uri = Addressable::URI.parse "http://1.0/resources/items/stock?auth_token=&barcode=#{item.barcode}"
-        uri2 = Addressable::URI.parse "http://1.0/resources/items/stock?auth_token="
+        uri = Addressable::URI.parse "http://1.0/resources/items/stock?auth_token=987654321&barcode=#{item.barcode}"
+        uri2 = Addressable::URI.parse "http://1.0/resources/items/stock?auth_token=987654321"
         stub_request(:post, uri).
           with(:body => {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{@tray.barcode}"},
             :headers => {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
@@ -484,8 +484,8 @@ feature "Trays", :type => :feature do
     it "allows the user to remove an item from a tray" do
       @item = FactoryGirl.create(:item)
       @tray = FactoryGirl.create(:tray)
-      uri = Addressable::URI.parse "http://1.0/resources/items/record?auth_token=&barcode=#{@item.barcode}"
-      uri2 = Addressable::URI.parse "http://1.0/resources/items/stock?auth_token="
+      uri = Addressable::URI.parse "http://1.0/resources/items/record?auth_token=987654321&barcode=#{@item.barcode}"
+      uri2 = Addressable::URI.parse "http://1.0/resources/items/stock?auth_token=987654321"
       stub_request(:get, uri). with(:headers => {'User-Agent'=>'Faraday v0.9.1'}). to_return{ |response| { :status => 200, :body => {"item_id" => "00110147500410", "barcode" => @item.barcode, "bib_id" => @item.bib_number, "sequence_number" => "00410", "admin_document_number" => "001101475", "call_number" => @item.call_number, "description" => @item.chron ,"title"=> @item.title, "author" => @item.author ,"publication" => "Cambridge, UK : Elsevier Science Publishers, c1991-", "edition" => "", "isbn_issn" =>@item.isbn_issn, "condition" => @item.conditions}.to_json, :headers => {} } }
       stub_request(:post, uri2).
         with(:body => {"barcode"=>"#{@item.barcode}", "item_id"=>"#{@item.id}", "tray_code"=>"#{@tray.barcode}"},
@@ -508,8 +508,8 @@ feature "Trays", :type => :feature do
     it "allows the user to finish with the current tray when processing items" do
       @item = FactoryGirl.create(:item)
       @tray = FactoryGirl.create(:tray)
-      uri = Addressable::URI.parse "http://1.0/resources/items/record?auth_token=&barcode=#{@item.barcode}"
-      uri2 = Addressable::URI.parse "http://1.0/resources/items/stock?auth_token="
+      uri = Addressable::URI.parse "http://1.0/resources/items/record?auth_token=987654321&barcode=#{@item.barcode}"
+      uri2 = Addressable::URI.parse "http://1.0/resources/items/stock?auth_token=987654321"
       stub_request(:get, uri). with(:headers => {'User-Agent'=>'Faraday v0.9.1'}). to_return{ |response| { :status => 200, :body => {"item_id" => "00110147500410", "barcode" => @item.barcode, "bib_id" => @item.bib_number, "sequence_number" => "00410", "admin_document_number" => "001101475", "call_number" => @item.call_number, "description" => @item.chron ,"title"=> @item.title, "author" => @item.author ,"publication" => "Cambridge, UK : Elsevier Science Publishers, c1991-", "edition" => "", "isbn_issn" =>@item.isbn_issn, "condition" => @item.conditions}.to_json, :headers => {} } }
       stub_request(:post, uri2).
         with(:body => {"barcode"=>"#{@item.barcode}", "item_id"=>"#{@item.id}", "tray_code"=>"#{@tray.barcode}"},
@@ -531,8 +531,8 @@ feature "Trays", :type => :feature do
     it "allows the user to finish with the current tray when processing items via scan" do
       @item = FactoryGirl.create(:item)
       @tray = FactoryGirl.create(:tray)
-      uri = Addressable::URI.parse "http://1.0/resources/items/record?auth_token=&barcode=#{@item.barcode}"
-      uri2 = Addressable::URI.parse "http://1.0/resources/items/stock?auth_token="
+      uri = Addressable::URI.parse "http://1.0/resources/items/record?auth_token=987654321&barcode=#{@item.barcode}"
+      uri2 = Addressable::URI.parse "http://1.0/resources/items/stock?auth_token=987654321"
       stub_request(:get, uri). with(:headers => {'User-Agent'=>'Faraday v0.9.1'}). to_return{ |response| { :status => 200, :body => {"item_id" => "00110147500410", "barcode" => @item.barcode, "bib_id" => @item.bib_number, "sequence_number" => "00410", "admin_document_number" => "001101475", "call_number" => @item.call_number, "description" => @item.chron ,"title"=> @item.title, "author" => @item.author ,"publication" => "Cambridge, UK : Elsevier Science Publishers, c1991-", "edition" => "", "isbn_issn" =>@item.isbn_issn, "condition" => @item.conditions}.to_json, :headers => {} } }
       stub_request(:post, uri2).
         with(:body => {"barcode"=>"#{@item.barcode}", "item_id"=>"#{@item.id}", "tray_code"=>"#{@tray.barcode}"},
@@ -565,8 +565,8 @@ feature "Trays", :type => :feature do
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
       @items.each do |item|
         expect(GetItemFromBarcode).to receive(:call).with(@user.id, item.barcode).and_return(item).at_least :once
-        uri = Addressable::URI.parse "http://1.0/resources/items/stock?auth_token=&barcode=#{item.barcode}"
-        uri2 = Addressable::URI.parse "http://1.0/resources/items/stock?auth_token="
+        uri = Addressable::URI.parse "http://1.0/resources/items/stock?auth_token=987654321&barcode=#{item.barcode}"
+        uri2 = Addressable::URI.parse "http://1.0/resources/items/stock?auth_token=987654321"
         stub_request(:post, uri).
           with(:body => {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{@tray.barcode}"},
             :headers => {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
