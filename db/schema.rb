@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150529145205) do
+ActiveRecord::Schema.define(version: 20150623185029) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -166,12 +166,6 @@ ActiveRecord::Schema.define(version: 20150529145205) do
 
   add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
 
-  add_foreign_key "activity_logs", "bins", column: "location_bin_id"
-  add_foreign_key "activity_logs", "items", column: "object_item_id"
-  add_foreign_key "activity_logs", "shelves", column: "location_shelf_id"
-  add_foreign_key "activity_logs", "trays", column: "location_tray_id"
-  add_foreign_key "activity_logs", "trays", column: "object_tray_id"
-  add_foreign_key "activity_logs", "users"
   add_foreign_key "batches", "users"
   add_foreign_key "issues", "users", column: "resolver_id"
   add_foreign_key "items", "bins"
