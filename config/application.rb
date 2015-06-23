@@ -27,5 +27,8 @@ module AnnexIms
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
+
+    # ActiveJob needs a back end. In our case, it's RabbitMQ, via sneakers.
+    config.active_job.queue_adapter = :sneakers
   end
 end
