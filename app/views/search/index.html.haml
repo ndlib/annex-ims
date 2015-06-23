@@ -8,7 +8,7 @@
 
     %a.list-group-item.list-group-item-success{"data-toggle" => "collapse", :href => "#date-range"} Date Range
     #date-range.collapse
-      = select_tag :date_type, options_for_select([["Request Date", "request"],["Initial Ingest Date", "initial"],["LasIngest Date", "last"]], @params[:date_type]), include_blank: true
+      = select_tag :date_type, options_for_select([["Request Date", "request"],["Initial Ingest Date", "initial"],["Last Ingest Date", "last"]], @params[:date_type]), include_blank: true
       %span.input-daterange{"data-provide" => "datepicker", "data-date-format" => "yyyy-mm-dd"}
         = text_field_tag :start, @params[:start] ||= Time.now.strftime("%Y-%m-%d")
         %span.add-on to

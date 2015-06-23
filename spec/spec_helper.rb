@@ -16,11 +16,13 @@
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
 require 'webmock/rspec'
+require 'capybara/rspec'
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.
+  ENV["RAILS_ENV"] = 'test'
   config.expect_with :rspec do |expectations|
     # This option will default to `true` in RSpec 4. It makes the `description`
     # and `failure_message` of custom matchers include text for helper methods
@@ -44,23 +46,33 @@ RSpec.configure do |config|
     mocks.verify_partial_doubles = true
   end
 
+  # Allow localhost connections for testing
+  WebMock.disable_net_connect!(:allow_localhost => true)
+
+  # Use webkit for javascript testing
+  # Capybara.javascript_driver = :selenium
+  Capybara.javascript_driver = :webkit
+  
   config.before(:suite) do
-    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.strategy = :transaction # , { pre_count: true, cache_tables: true }
     DatabaseCleaner.clean_with(:truncation)
     DatabaseCleaner.start
     DatabaseCleaner.clean
   end
-
+ 
   config.before(:each) do
+    DatabaseCleaner.clean_with(:truncation)
     DatabaseCleaner.clean
   end
-
+ 
   config.after(:each) do
+    DatabaseCleaner.clean_with(:truncation)
     DatabaseCleaner.clean
   end
-
+ 
   config.after(:suite) do
     DatabaseCleaner.clean_with(:truncation)
+    DatabaseCleaner.clean
   end
 
 # The settings below are suggested to provide a good initial experience
