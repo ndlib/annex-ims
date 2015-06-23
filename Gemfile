@@ -40,6 +40,16 @@ gem 'capistrano', '~>3.4'
 gem 'capistrano-rails', '~>1.1'
 
 group :development, :test do
+  gem "spring-commands-rspec"
+  gem "hesburgh_infrastructure", github: "ndlib/hesburgh_infrastructure"
+  gem "guard", "2.6.1"
+  gem "guard-bundler", "2.0.0"
+  gem "guard-coffeescript", "1.4.0"
+  gem "guard-rails", "0.6.0"
+  gem "guard-rspec", "4.3.1"
+  gem "guard-spring", "0.0.4"
+  gem "guard-sunspot", github: "ndlib/guard-sunspot"
+
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
 
