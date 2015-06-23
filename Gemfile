@@ -60,6 +60,7 @@ group :development, :test do
 
   # Feature testing
   gem 'capybara', '~> 2.4'
+  gem 'capybara-webkit'
 
   # So staging etc can use stand alone Solr
   gem 'sunspot_solr', :git => 'https://github.com/sunspot/sunspot.git'

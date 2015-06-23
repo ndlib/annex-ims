@@ -11,13 +11,15 @@ feature "Trays", :type => :feature do
       @item = FactoryGirl.create(:item)
       @item2 = FactoryGirl.create(:item)
 
-      template = Addressable::Template.new "#{Rails.application.secrets.api_server}/1.0/resources/items/record?auth_token=#{Rails.application.secrets.api_token}&barcode={barcode}"
+      uri = Addressable::URI.parse "http://1.0/resources/items/record?auth_token=987654321&barcode=#{@item.barcode}"
+      uri3 = Addressable::URI.parse "http://1.0/resources/items/record?auth_token=987654321&barcode=#{@item.barcode}"
 
-      @template2 = Addressable::Template.new "#{Rails.application.secrets.api_server}/1.0/resources/items/stock?auth_token=#{Rails.application.secrets.api_token}"
+      @uri2 = Addressable::URI.parse "http://1.0/resources/items/stock?auth_token=987654321"
 
-      stub_request(:get, template). with(:headers => {'User-Agent'=>'Faraday v0.9.1'}). to_return{ |response| { :status => 200, :body => {"item_id" => "00110147500410", "barcode" => @item.barcode, "bib_id" => @item.bib_number, "sequence_number" => "00410", "admin_document_number" => "001101475", "call_number" => @item.call_number, "description" => @item.chron ,"title"=> @item.title, "author" => @item.author ,"publication" => "Cambridge, UK : Elsevier Science Publishers, c1991-", "edition" => "", "isbn_issn" =>@item.isbn_issn, "condition" => @item.conditions}.to_json, :headers => {} } }
+      stub_request(:get, uri). with(:headers => {'User-Agent'=>'Faraday v0.9.1'}). to_return{ |response| { :status => 200, :body => {"item_id" => "00110147500410", "barcode" => @item.barcode, "bib_id" => @item.bib_number, "sequence_number" => "00410", "admin_document_number" => "001101475", "call_number" => @item.call_number, "description" => @item.chron ,"title"=> @item.title, "author" => @item.author ,"publication" => "Cambridge, UK : Elsevier Science Publishers, c1991-", "edition" => "", "isbn_issn" =>@item.isbn_issn, "condition" => @item.conditions}.to_json, :headers => {} } }
+      stub_request(:get, uri3). with(:headers => {'User-Agent'=>'Faraday v0.9.1'}). to_return{ |response| { :status => 200, :body => {"item_id" => "00110147500410", "barcode" => @item.barcode, "bib_id" => @item.bib_number, "sequence_number" => "00410", "admin_document_number" => "001101475", "call_number" => @item.call_number, "description" => @item.chron ,"title"=> @item.title, "author" => @item.author ,"publication" => "Cambridge, UK : Elsevier Science Publishers, c1991-", "edition" => "", "isbn_issn" =>@item.isbn_issn, "condition" => @item.conditions}.to_json, :headers => {} } }
 
-      stub_request(:post, @template2).
+      stub_request(:post, @uri2).
         with(:body => {"barcode"=>"#{@item.barcode}", "item_id"=>"#{@item.id}", "tray_code"=>"#{@tray.barcode}"},
           :headers => {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
         to_return{ |response| { :status => 200, :body => {:results => {:status => "OK", :message => "Item stocked"}}.to_json, :headers => {} } }
@@ -38,6 +40,7 @@ feature "Trays", :type => :feature do
     end
 
     it "can scan a new tray" do
+      @tray = FactoryGirl.create(:tray)
       visit trays_path
       fill_in "Tray", :with => @tray.barcode
       click_button "Save"
@@ -47,6 +50,7 @@ feature "Trays", :type => :feature do
     end
 
     it "runs through unassigned-unshelved-cancel flow" do
+      @tray = FactoryGirl.create(:tray)
       visit trays_path
       fill_in "Tray", :with => @tray.barcode
       click_button "Save"
@@ -199,7 +203,7 @@ feature "Trays", :type => :feature do
       expect(page).to have_content @tray.barcode
       expect{page.find_by_id("pull")}.to raise_error
       fill_in "Shelf", :with => @shelf.barcode
-      click_button "Save"
+      click_button "Shelve"
       expect(current_path).to eq(trays_path)
     end
 
@@ -214,7 +218,7 @@ feature "Trays", :type => :feature do
       expect(page).to have_content @tray.barcode
       expect{page.find_by_id("pull")}.to raise_error
       fill_in "Shelf", :with => @shelf2.barcode
-      click_button "Save"
+      click_button "Shelve"
       expect(current_path).to eq(wrong_shelf_path(:id => @tray.id))
       expect(page).to have_content "#{@tray.barcode} belongs to #{@shelf.barcode}, but #{@shelf2.barcode} was scanned."
       click_button "Shelve Anyway"
@@ -232,7 +236,7 @@ feature "Trays", :type => :feature do
       expect(page).to have_content @tray.barcode
       expect{page.find_by_id("pull")}.to raise_error
       fill_in "Shelf", :with => @shelf2.barcode
-      click_button "Save"
+      click_button "Shelve"
       expect(current_path).to eq(wrong_shelf_path(:id => @tray.id))
       expect(page).to have_content "#{@tray.barcode} belongs to #{@shelf.barcode}, but #{@shelf2.barcode} was scanned."
       click_button "Cancel"
@@ -323,6 +327,13 @@ feature "Trays", :type => :feature do
     end
 
     it "displays an item after successfully adding it to a tray" do
+      @item = FactoryGirl.create(:item)
+      expect(GetItemFromBarcode).to receive(:call).with(@user.id, @item.barcode).and_return(@item).at_least :once
+      uri = Addressable::URI.parse "http://1.0/resources/items/stock?auth_token=987654321"
+      stub_request(:post, uri).
+      with(:body => {"barcode"=>"#{@item.barcode}", "item_id"=>"#{@item.id}", "tray_code"=>"#{@tray.barcode}"},
+        :headers => {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
+      to_return{ |response| { :status => 200, :body => {:results => {:status => "OK", :message => "Item stocked"}}.to_json, :headers => {} } }
       visit trays_items_path
       fill_in "Tray", :with => @tray.barcode
       click_button "Save"
@@ -338,6 +349,13 @@ feature "Trays", :type => :feature do
     end
 
    it "displays information about a successful association made" do
+      @item = FactoryGirl.create(:item)
+      expect(GetItemFromBarcode).to receive(:call).with(@user.id, @item.barcode).and_return(@item).at_least :once
+      uri = Addressable::URI.parse "http://1.0/resources/items/stock?auth_token=987654321"
+      stub_request(:post, uri).
+      with(:body => {"barcode"=>"#{@item.barcode}", "item_id"=>"#{@item.id}", "tray_code"=>"#{@tray.barcode}"},
+        :headers => {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
+      to_return{ |response| { :status => 200, :body => {:results => {:status => "OK", :message => "Item stocked"}}.to_json, :headers => {} } }
       visit trays_items_path
       fill_in "Tray", :with => @tray.barcode
       click_button "Save"
@@ -354,6 +372,16 @@ feature "Trays", :type => :feature do
    end
 
    it "accepts re-associating an item to the same tray" do
+      @item = FactoryGirl.create(:item)
+      @tray = FactoryGirl.create(:tray)
+      expect(GetItemFromBarcode).to receive(:call).with(@user.id, @item.barcode).and_return(@item).at_least :once
+      uri = Addressable::URI.parse "http://1.0/resources/items/record?auth_token=987654321&barcode=#{@item.barcode}"
+      uri2 = Addressable::URI.parse "http://1.0/resources/items/stock?auth_token=987654321"
+      stub_request(:get, uri). with(:headers => {'User-Agent'=>'Faraday v0.9.1'}). to_return{ |response| { :status => 200, :body => {"item_id" => "00110147500410", "barcode" => @item.barcode, "bib_id" => @item.bib_number, "sequence_number" => "00410", "admin_document_number" => "001101475", "call_number" => @item.call_number, "description" => @item.chron ,"title"=> @item.title, "author" => @item.author ,"publication" => "Cambridge, UK : Elsevier Science Publishers, c1991-", "edition" => "", "isbn_issn" =>@item.isbn_issn, "condition" => @item.conditions}.to_json, :headers => {} } }
+      stub_request(:post, uri2).
+        with(:body => {"barcode"=>"#{@item.barcode}", "item_id"=>"#{@item.id}", "tray_code"=>"#{@tray.barcode}"},
+          :headers => {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
+        to_return{ |response| { :status => 200, :body => {:results => {:status => "OK", :message => "Item stocked"}}.to_json, :headers => {} } }
       visit trays_items_path
       fill_in "Tray", :with => @tray.barcode
       click_button "Save"
@@ -381,29 +409,32 @@ feature "Trays", :type => :feature do
 
    it "rejects associating an item to the wrong tray" do
       @tray2 = FactoryGirl.create(:tray)
-      stub_request(:post, @template2).
-        with(:body => {"barcode"=>"#{@item.barcode}", "item_id"=>"#{@item.id}", "tray_code"=>"#{@tray2.barcode}"},
+      item = FactoryGirl.create(:item, tray: @tray2)
+      expect(GetItemFromBarcode).to receive(:call).with(@user.id, item.barcode).and_return(item).at_least :once
+      stub_request(:post, @uri2).
+        with(:body => {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{@tray2.barcode}"},
           :headers => {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
         to_return{ |response| { :status => 200, :body => {:results => {:status => "OK", :message => "Item stocked"}}.to_json, :headers => {} } }
       visit trays_items_path
-      fill_in "Tray", :with => @tray2.barcode
+      fill_in "Tray", :with => @tray.barcode
       click_button "Save"
-      expect(current_path).to eq(show_tray_item_path(:id => @tray2.id))
-      fill_in "Item", :with => @item.barcode
+      expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
+      fill_in "Item", :with => item.barcode
       fill_in "Thickness", :with => Faker::Number.number(1)
       click_button "Save"
-      expect(current_path).to eq(wrong_tray_path(:id => @tray2.id, :barcode => @item.barcode))
-      expect(page).to have_content "Item #{@item.barcode} is already assigned to #{@tray.barcode}."
-      expect(page).to have_content @item.barcode
-      expect(page).to_not have_content @item.title
-      expect(page).to_not have_content @item.chron
-      expect(page).to_not have_content "Item #{@item.barcode} stocked in #{@tray.barcode}."
+      expect(current_path).to eq(wrong_tray_path(:id => @tray.id, :barcode => item.barcode))
+      expect(page).to have_content "Item #{item.barcode} is already assigned to #{@tray2.barcode}."
+      expect(page).to have_content item.barcode
+      expect(page).to_not have_content item.title
+      expect(page).to_not have_content item.chron
+      expect(page).to_not have_content "Item #{item.barcode} stocked in #{@tray.barcode}."
       click_button "OK"
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
    end
 
 
     it "displays a tray's barcode while processing an item" do
+      @tray = FactoryGirl.create(:tray)
       visit trays_items_path
       fill_in "Tray", :with => @tray.barcode
       click_button "Save"
@@ -416,6 +447,7 @@ feature "Trays", :type => :feature do
     end
 
     it "displays items associated with a tray when processing items" do
+      @tray = FactoryGirl.create(:tray)
       @items = []
       5.times do |i|
         @item = FactoryGirl.create(:item)
@@ -426,7 +458,14 @@ feature "Trays", :type => :feature do
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
       @items.each do |item|
-        stub_request(:post, @template2).
+        expect(GetItemFromBarcode).to receive(:call).with(@user.id, item.barcode).and_return(item).at_least :once
+        uri = Addressable::URI.parse "http://1.0/resources/items/stock?auth_token=987654321&barcode=#{item.barcode}"
+        uri2 = Addressable::URI.parse "http://1.0/resources/items/stock?auth_token=987654321"
+        stub_request(:post, uri).
+          with(:body => {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{@tray.barcode}"},
+            :headers => {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
+          to_return{ |response| { :status => 200, :body => {:results => {:status => "OK", :message => "Item stocked"}}.to_json, :headers => {} } }
+        stub_request(:post, uri2).
           with(:body => {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{@tray.barcode}"},
             :headers => {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
           to_return{ |response| { :status => 200, :body => {:results => {:status => "OK", :message => "Item stocked"}}.to_json, :headers => {} } }
@@ -443,6 +482,15 @@ feature "Trays", :type => :feature do
     end
 
     it "allows the user to remove an item from a tray" do
+      @item = FactoryGirl.create(:item)
+      @tray = FactoryGirl.create(:tray)
+      uri = Addressable::URI.parse "http://1.0/resources/items/record?auth_token=987654321&barcode=#{@item.barcode}"
+      uri2 = Addressable::URI.parse "http://1.0/resources/items/stock?auth_token=987654321"
+      stub_request(:get, uri). with(:headers => {'User-Agent'=>'Faraday v0.9.1'}). to_return{ |response| { :status => 200, :body => {"item_id" => "00110147500410", "barcode" => @item.barcode, "bib_id" => @item.bib_number, "sequence_number" => "00410", "admin_document_number" => "001101475", "call_number" => @item.call_number, "description" => @item.chron ,"title"=> @item.title, "author" => @item.author ,"publication" => "Cambridge, UK : Elsevier Science Publishers, c1991-", "edition" => "", "isbn_issn" =>@item.isbn_issn, "condition" => @item.conditions}.to_json, :headers => {} } }
+      stub_request(:post, uri2).
+        with(:body => {"barcode"=>"#{@item.barcode}", "item_id"=>"#{@item.id}", "tray_code"=>"#{@tray.barcode}"},
+          :headers => {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
+        to_return{ |response| { :status => 200, :body => {:results => {:status => "OK", :message => "Item stocked"}}.to_json, :headers => {} } }
       visit trays_items_path
       fill_in "Tray", :with => @tray.barcode
       click_button "Save"
@@ -458,6 +506,15 @@ feature "Trays", :type => :feature do
     end
 
     it "allows the user to finish with the current tray when processing items" do
+      @item = FactoryGirl.create(:item)
+      @tray = FactoryGirl.create(:tray)
+      uri = Addressable::URI.parse "http://1.0/resources/items/record?auth_token=987654321&barcode=#{@item.barcode}"
+      uri2 = Addressable::URI.parse "http://1.0/resources/items/stock?auth_token=987654321"
+      stub_request(:get, uri). with(:headers => {'User-Agent'=>'Faraday v0.9.1'}). to_return{ |response| { :status => 200, :body => {"item_id" => "00110147500410", "barcode" => @item.barcode, "bib_id" => @item.bib_number, "sequence_number" => "00410", "admin_document_number" => "001101475", "call_number" => @item.call_number, "description" => @item.chron ,"title"=> @item.title, "author" => @item.author ,"publication" => "Cambridge, UK : Elsevier Science Publishers, c1991-", "edition" => "", "isbn_issn" =>@item.isbn_issn, "condition" => @item.conditions}.to_json, :headers => {} } }
+      stub_request(:post, uri2).
+        with(:body => {"barcode"=>"#{@item.barcode}", "item_id"=>"#{@item.id}", "tray_code"=>"#{@tray.barcode}"},
+          :headers => {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
+        to_return{ |response| { :status => 200, :body => {:results => {:status => "OK", :message => "Item stocked"}}.to_json, :headers => {} } }
       visit trays_items_path
       fill_in "Tray", :with => @tray.barcode
       click_button "Save"
@@ -472,6 +529,15 @@ feature "Trays", :type => :feature do
     end
 
     it "allows the user to finish with the current tray when processing items via scan" do
+      @item = FactoryGirl.create(:item)
+      @tray = FactoryGirl.create(:tray)
+      uri = Addressable::URI.parse "http://1.0/resources/items/record?auth_token=987654321&barcode=#{@item.barcode}"
+      uri2 = Addressable::URI.parse "http://1.0/resources/items/stock?auth_token=987654321"
+      stub_request(:get, uri). with(:headers => {'User-Agent'=>'Faraday v0.9.1'}). to_return{ |response| { :status => 200, :body => {"item_id" => "00110147500410", "barcode" => @item.barcode, "bib_id" => @item.bib_number, "sequence_number" => "00410", "admin_document_number" => "001101475", "call_number" => @item.call_number, "description" => @item.chron ,"title"=> @item.title, "author" => @item.author ,"publication" => "Cambridge, UK : Elsevier Science Publishers, c1991-", "edition" => "", "isbn_issn" =>@item.isbn_issn, "condition" => @item.conditions}.to_json, :headers => {} } }
+      stub_request(:post, uri2).
+        with(:body => {"barcode"=>"#{@item.barcode}", "item_id"=>"#{@item.id}", "tray_code"=>"#{@tray.barcode}"},
+          :headers => {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
+        to_return{ |response| { :status => 200, :body => {:results => {:status => "OK", :message => "Item stocked"}}.to_json, :headers => {} } }
       visit trays_items_path
       fill_in "Tray", :with => @tray.barcode
       click_button "Save"
@@ -498,7 +564,14 @@ feature "Trays", :type => :feature do
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(:id => @tray.id))
       @items.each do |item|
-        stub_request(:post, @template2).
+        expect(GetItemFromBarcode).to receive(:call).with(@user.id, item.barcode).and_return(item).at_least :once
+        uri = Addressable::URI.parse "http://1.0/resources/items/stock?auth_token=987654321&barcode=#{item.barcode}"
+        uri2 = Addressable::URI.parse "http://1.0/resources/items/stock?auth_token=987654321"
+        stub_request(:post, uri).
+          with(:body => {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{@tray.barcode}"},
+            :headers => {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
+          to_return{ |response| { :status => 200, :body => {:results => {:status => "OK", :message => "Item stocked"}}.to_json, :headers => {} } }
+        stub_request(:post, uri2).
           with(:body => {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{@tray.barcode}"},
             :headers => {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
           to_return{ |response| { :status => 200, :body => {:results => {:status => "OK", :message => "Item stocked"}}.to_json, :headers => {} } }
@@ -508,14 +581,5 @@ feature "Trays", :type => :feature do
       end
       expect(page).to have_content 'warning - tray may be full'
     end
-
-    it "displays information about the tray the user just finished working with" do
-      # pending "Not sure how to test this one yet, because when we're done it should leave that page and get ready for the next, I think."
-    end
-
-  end
-
-  describe "when not signed in" do
-    pending "add some scenarios (or delete) #{__FILE__}"
   end
 end
