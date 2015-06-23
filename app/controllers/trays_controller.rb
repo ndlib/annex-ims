@@ -69,6 +69,16 @@ class TraysController < ApplicationController
     @tray = Tray.find(params[:id])
     @size = TraySize.call(@tray.barcode)
 
+    barcode = params[:barcode]
+    
+    unless (params[:force] == "true")
+      if !@tray.shelf.nil? and (@tray.shelf.barcode != barcode)
+        flash[:error] = "#{@tray.barcode} belongs to #{@tray.shelf.barcode}, but #{barcode} was scanned."
+        redirect_to wrong_shelf_path(:id => @tray.id, :barcode => barcode)
+        return
+      end
+    end
+
     if ShelveTray.call(@tray, current_user)
       redirect_to trays_path
     else
