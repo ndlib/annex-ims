@@ -26,21 +26,6 @@ feature "Shelves", :type => :feature do
         to_return{ |response| { :status => 200, :body => {:results => {:status => "OK", :message => "Item stocked"}}.to_json, :headers => {} } }
     end
 
-    after(:each) do
-      ActivityLog.all.each do |log|
-        log.destroy!
-      end
-      Item.all.each do |item|
-        item.destroy!
-      end
-      Tray.all.each do |tray|
-        tray.destroy!
-      end
-      Shelf.all.each do |shelf|
-        shelf.destroy!
-      end
-    end
-
     it "can scan a new shelf for processing items" do
       visit shelves_path
       fill_in "Shelf", :with => @shelf.barcode
@@ -71,7 +56,7 @@ feature "Shelves", :type => :feature do
       expect(page).to have_content @item.chron
     end
 
-   it "displays information about a successful association made" do
+    it "displays information about a successful association made" do
       visit shelves_path
       fill_in "Shelf", :with => @shelf.barcode
       click_button "Save"
@@ -85,9 +70,9 @@ feature "Shelves", :type => :feature do
       expect(page).to have_content @item.title
       expect(page).to have_content @item.chron
       expect(page).to have_content "Item #{@item.barcode} stocked in #{@shelf.barcode}."
-   end
+    end
 
-   it "accepts re-associating an item to the same shelf" do
+    it "accepts re-associating an item to the same shelf" do
       visit shelves_path
       fill_in "Shelf", :with => @shelf.barcode
       click_button "Save"
@@ -108,10 +93,10 @@ feature "Shelves", :type => :feature do
       expect(page).to have_content @item.title
       expect(page).to have_content @item.chron
       expect(page).to have_content "Item #{@item.barcode} already assigned to #{@shelf.barcode}. Record updated."
-   end
+    end
 
 
-   it "rejects associating an item to the wrong shelf" do
+    it "rejects associating an item to the wrong shelf" do
       visit shelves_path
       fill_in "Shelf", :with => @shelf2.barcode
       click_button "Save"
@@ -126,7 +111,7 @@ feature "Shelves", :type => :feature do
       expect(page).to_not have_content "Item #{@item.barcode} stocked in #{@shelf2.barcode}."
       click_button "OK"
       expect(current_path).to eq(show_shelf_path(:id => @shelf2.id))
-   end
+    end
 
 
     it "displays a shelf's barcode while processing an item" do

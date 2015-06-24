@@ -95,20 +95,6 @@ feature "Build", :type => :feature, :search => true do
       expect(page).to have_content item.author
     end
 
-
-    def destroy_all
-      ActivityLog.all.each do |log|
-        log.destroy!
-      end
-      request2.destroy!
-      request1.destroy!
-      item2.destroy!
-      item.destroy!
-      tray2.destroy!
-      tray.destroy!
-      shelf.destroy!
-    end
-
     def save_all
       shelf.save!
       tray.save!
