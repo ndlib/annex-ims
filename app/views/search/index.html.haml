@@ -15,7 +15,7 @@
         = text_field_tag :finish, @params[:finish] ||= Time.now.strftime("%Y-%m-%d")
 
     %a.list-group-item.list-group-item-success{"data-toggle" => "collapse", :href => "#conditions"}
-      %span.glyphicon.glyphicon-triangle-right
+      %span.glyphicon.glyphicon-plus
       Conditions
     #conditions.collapse
       .input-group
