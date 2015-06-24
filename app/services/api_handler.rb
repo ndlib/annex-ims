@@ -22,17 +22,25 @@ class ApiHandler
   end
 
   def transact!
+    raw_response = raw_transact!
+    ApiResponse.new(status_code: raw_response["status"], body: raw_response["results"])
+  rescue Timeout::Error => e
+    NotifyError.call(exception: e)
+    ApiResponse.new(status_code: 599, body: {})
+  end
+
+  private
+
+  def raw_transact!
     case verb
     when "GET"
-      @response = connection.get(path_with_params)
+      connection.get(path_with_params)
     when "POST"
-      @response = connection.post(path, params)
+      connection.post(path, params)
     else
       raise HTTPMethodNotImplemented, "Only GET and POST have been implemented."
     end
   end
-
-  private
 
   def connection
     @connection ||= ExternalRestConnection.new(base_url: base_url, connection_opts: {})

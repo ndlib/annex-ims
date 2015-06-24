@@ -1,8 +1,12 @@
 require "rails_helper"
 
 RSpec.describe ApiHandler do
+  let(:response_status) { 200 }
   let(:raw_response) do
-    ""
+    {
+      "status" => response_status,
+      "results" => { "test" => "test" }
+    }
   end
 
   let(:auth_token) { Rails.application.secrets.api_token }
@@ -43,9 +47,32 @@ RSpec.describe ApiHandler do
     end
   end
 
+  describe "#transact!" do
+    it "creates an ApiHandler with the response" do
+      expect(subject).to receive(:raw_transact!).and_return(raw_response)
+      response = subject.transact!
+      expect(response).to be_a_kind_of(ApiResponse)
+      expect(response.status_code).to eq(200)
+    end
+
+    context "error" do
+      let(:response_status) { 500 }
+
+      it "returns the correct status code" do
+        expect(subject).to receive(:raw_transact!).and_return(raw_response)
+        expect(subject.transact!.status_code).to eq(500)
+      end
+    end
+
+    it "handles a timeout exception" do
+      expect(subject).to receive(:raw_transact!).and_raise(Timeout::Error)
+      expect(subject.transact!.timeout?).to eq(true)
+    end
+  end
+
   context "GET" do
     it "calls #get on the connection and includes the params" do
-      expect(connection).to receive(:get).with("#{path}?auth_token=#{auth_token}&#{params.to_param}")
+      expect(connection).to receive(:get).with("#{path}?auth_token=#{auth_token}&#{params.to_param}").and_return(raw_response)
       subject.transact!
     end
   end
@@ -54,7 +81,7 @@ RSpec.describe ApiHandler do
     let(:method) { "POST" }
 
     it "calls #post on the connection" do
-      expect(connection).to receive(:post).with("#{path}?auth_token=#{auth_token}", params)
+      expect(connection).to receive(:post).with("#{path}?auth_token=#{auth_token}", params).and_return(raw_response)
       subject.transact!
     end
   end

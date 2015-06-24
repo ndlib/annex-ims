@@ -7,7 +7,6 @@ class ApiGetItemMetadata
 
   def initialize(barcode)
     @barcode = barcode
-    @path = "/1.0/resources/items/record"
   end
 
   def get_data!
@@ -18,14 +17,11 @@ class ApiGetItemMetadata
   private
 
     def response
-      raw_results = ApiHandler.call("GET", @path, { barcode: barcode })
-      ApiResponse.new(status_code: raw_results["status"], body: response_data(raw_results["results"]))
-    rescue Timeout::Error => e
-      ApiResponse.new(status_code: 599, body: response_data())
+      response = ApiHandler.call("GET", "/1.0/resources/items/record", { barcode: barcode })
+      ApiResponse.new(status_code: response.status_code, body: response_data(response.body))
     end
 
     def response_data(data = {})
-      data = data.with_indifferent_access
       {
         title: data[:title],
         author: data[:author],
