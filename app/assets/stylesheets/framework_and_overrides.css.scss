@@ -142,7 +142,6 @@ a.list-group-item[aria-expanded="true"] {
     border: solid 2px #bcbcbc;
     border-radius: 5px;
     margin-bottom: 5px;
-    padding-left:95px;
     background-repeat:no-repeat;
     background-position:10px 10px;
     background-size:auto 25px ;
@@ -155,12 +154,15 @@ a.list-group-item[aria-expanded="true"] {
   }
   .tray {
     background-image: image_url("traytoshelf.png");
+    padding-left:95px;
   }
   .itemt {
     background-image: image_url("itemtotray.png");
+    padding-left:95px;
   }
   .items {
     background-image: image_url("itemtoshelf.png");
+    padding-left:95px;
   }
 }
 
@@ -200,6 +202,19 @@ a.list-group-item[aria-expanded="true"] {
 
 hr {
   clear: both;
+}
+
+.scan {
+  form {
+    padding: 1em 0;
+
+    .field {
+      margin-bottom: 1.5em;
+      label {
+        margin-right: 12px;
+      }
+    }
+  }
 }
 
 @media only screen and (max-width: 720px) {
