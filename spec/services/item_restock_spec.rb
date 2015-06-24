@@ -13,14 +13,10 @@ RSpec.describe ItemRestock do
     @item2 = FactoryGirl.create(:item)
     @user = FactoryGirl.create(:user)
 
-    uri = api_url("1.0/resources/items/record")
-    uri2 = api_url("1.0/resources/items/stock")
-    item_uri = api_url("1.0/resources/items/record", barcode: @item.barcode)
-    item2_uri = api_url("1.0/resources/items/record", barcode: @item2.barcode)
+    item_uri = api_item_url(@item)
+    item2_uri = api_item_url(@item2)
 
-    stub_request(:get, uri). with(:headers => {'User-Agent'=>'Faraday v0.9.1'}). to_return(:status => 200, :body => '{"item_id":"00110147500410","barcode":"00000016021933","bib_id":"001101475","sequence_number":"00410","admin_document_number":"001101475","call_number":"QH 573 .T746","description":"v.11 :no.1-6  \u003Cp.1-276\u003E   (2001:Jan.-June)","title":"Trends in cell biology.","author":"","publication":"Cambridge, UK : Elsevier Science Publishers, c1991-","edition":"","isbn_issn":"0962-8924","condition":null}', :headers => {})
-
-    stub_request(:post, uri2).
+    stub_request(:post, api_stock_url).
       with(:body => {"barcode"=>"#{@item.barcode}", "item_id"=>"#{@item.id}", "tray_code"=>"#{@item.tray.barcode}"},
         :headers => {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
       to_return{ |response| { :status => 200, :body => {:results => {:status => "OK", :message => "Item stocked"}}.to_json, :headers => {} } }

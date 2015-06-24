@@ -11,8 +11,8 @@ RSpec.describe ItemPath do
     @item = FactoryGirl.create(:item, tray: @tray)
     @item2 = FactoryGirl.create(:item)
 
-    item_uri = api_url("1.0/resources/items/record", barcode: @item.barcode)
-    item2_uri = api_url("1.0/resources/items/record", barcode: @item2.barcode)
+    item_uri = api_item_url(@item)
+    item2_uri = api_item_url(@item2)
 
     stub_request(:get, item_uri).
          with(:headers => {'User-Agent'=>'Faraday v0.9.1'}).

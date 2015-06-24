@@ -13,9 +13,7 @@ RSpec.describe ItemRestockToTray do
     @item2 = FactoryGirl.create(:item)
     @user = FactoryGirl.create(:user)
 
-    uri2 = api_url("1.0/resources/items/stock")
-
-    stub_request(:post, uri2).
+    stub_request(:post, api_stock_url).
       with(:body => {"barcode"=>"#{@item.barcode}", "item_id"=>"#{@item.id}", "tray_code"=>"#{@item.tray.barcode}"},
         :headers => {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
       to_return{ |response| { :status => 200, :body => {:results => {:status => "OK", :message => "Item stocked"}}.to_json, :headers => {} } }

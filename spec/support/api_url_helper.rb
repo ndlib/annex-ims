@@ -11,4 +11,16 @@ module ApiUrlHelper
     end
     Addressable::URI.parse "#{base_url}#{path}?#{params}"
   end
+
+  def api_stock_url
+    api_url("1.0/resources/items/stock")
+  end
+
+  def api_send_url
+    api_url("1.0/resources/items/send")
+  end
+
+  def api_item_url(item)
+    api_url("1.0/resources/items/record", barcode: item.barcode)
+  end
 end
