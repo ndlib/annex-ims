@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe GetItemFromBarcode do
   subject { described_class.call(user.id, barcode) }
@@ -8,17 +8,17 @@ RSpec.describe GetItemFromBarcode do
   let(:user) { instance_double(User, username: "bob", id: 1) }
   let(:barcode) { 123456789 }
   let!(:data) { { "status" => api_response_status, "results" => item_attr } }
-  let(:item_attr) {
+  let(:item_attr) do
     {
-      "title"=>"Symphony no. 2, op. 16 : The four temperaments / Carl Nielsen.",
-      "author"=>"Nielsen, Carl, 1865-1931.",
-      "chron"=>"",
-      "bib_number"=>"001883956",
-      "isbn_issn"=>"0486418979",
-      "conditions"=>nil,
-      "call_number"=>"M 1001 .N5 S2 2002"
+      "title" => "Symphony no. 2, op. 16 : The four temperaments / Carl Nielsen.",
+      "author" => "Nielsen, Carl, 1865-1931.",
+      "chron" => "",
+      "bib_number" => "001883956",
+      "isbn_issn" => "0486418979",
+      "conditions" => nil,
+      "call_number" =>" M 1001 .N5 S2 2002"
     }
-  }
+  end
 
   before(:each) do
     allow(User).to receive(:find).and_return(user)
@@ -28,7 +28,7 @@ RSpec.describe GetItemFromBarcode do
   context "invalid barcode" do
     it "raises an error" do
       allow(IsItemBarcode).to receive(:call).and_return(false)
-      expect{ subject }.to raise_error
+      expect { subject }.to raise_error
     end
   end
 
