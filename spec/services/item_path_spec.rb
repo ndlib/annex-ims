@@ -11,14 +11,14 @@ RSpec.describe ItemPath do
     @item = FactoryGirl.create(:item, tray: @tray)
     @item2 = FactoryGirl.create(:item)
 
-    uri = Addressable::URI.parse "http://1.0/resources/items/record?auth_token=987654321&barcode=#{@item.barcode}"
-    uri2 = Addressable::URI.parse "http://1.0/resources/items/record?auth_token=987654321&barcode=#{@item2.barcode}"
+    item_uri = api_item_url(@item)
+    item2_uri = api_item_url(@item2)
 
-    stub_request(:get, uri).
+    stub_request(:get, item_uri).
          with(:headers => {'User-Agent'=>'Faraday v0.9.1'}).
          to_return(:status => 200, :body => '{"path":"http://bogus"}', :headers => {})
 
-    stub_request(:get, uri2).
+    stub_request(:get, item2_uri).
          with(:headers => {'User-Agent'=>'Faraday v0.9.1'}).
          to_return(:status => 200, :body => '{"path":"http://bogus"}', :headers => {})
 
