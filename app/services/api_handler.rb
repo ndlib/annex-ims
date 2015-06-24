@@ -1,29 +1,61 @@
 class ApiHandler
-  attr_reader :verb, :path, :params
+  attr_reader :verb, :base_path, :params, :response
 
-  def self.call(verb, path, params)
-    new(verb, path, params).transact!
+  class HTTPMethodNotImplemented < StandardError; end
+
+  def self.call(verb, base_path, params)
+    new(verb, base_path, params).transact!
   end
 
-  def initialize(verb, path, params)
-    @connection ||= ExternalRestConnection.new(base_url: Rails.application.secrets.api_server, connection_opts: {})
+  def self.get(base_path, params)
+    call("GET", base_path, params)
+  end
+
+  def self.post(base_path, params)
+    call("POST", base_path, params)
+  end
+
+  def initialize(verb, base_path, params)
     @verb = verb
-    @path = path
+    @base_path = base_path
     @params = params
   end
 
   def transact!
-    @path << "?auth_token=#{Rails.application.secrets.api_token}"
-    case @verb
+    case verb
     when "GET"
-      @path << "&#{params}"
-      @response = @connection.get(@path)
+      @response = connection.get(path_with_params)
     when "POST"
-      @response = @connection.post(@path, @params)
+      @response = connection.post(path, params)
     else
-      raise "Only GET and POST have been implemented."
+      raise HTTPMethodNotImplemented, "Only GET and POST have been implemented."
     end
+  end
 
+  private
+
+  def connection
+    @connection ||= ExternalRestConnection.new(base_url: base_url, connection_opts: {})
+  end
+
+  def auth_token_param
+    { auth_token: auth_token }.to_param
+  end
+
+  def path
+    "#{base_path}?#{auth_token_param}"
+  end
+
+  def path_with_params
+    "#{path}&#{params.to_param}"
+  end
+
+  def auth_token
+    Rails.application.secrets.api_token
+  end
+
+  def base_url
+    Rails.application.secrets.api_server
   end
 
 end
