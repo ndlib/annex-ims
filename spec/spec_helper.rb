@@ -52,26 +52,24 @@ RSpec.configure do |config|
   # Use webkit for javascript testing
   # Capybara.javascript_driver = :selenium
   Capybara.javascript_driver = :webkit
-  
+
   config.before(:suite) do
-    DatabaseCleaner.strategy = :transaction # , { pre_count: true, cache_tables: true }
     DatabaseCleaner.clean_with(:truncation)
+  end
+
+  config.before(:each) do |example|
+    # Feature specs can't easily be isolated within a transaction, so we use the truncation strategy here.
+    #  See: https://github.com/DatabaseCleaner/database_cleaner/issues/273
+    if [:feature, :request].include? example.metadata[:type]
+      DatabaseCleaner.strategy = :truncation
+    else
+      DatabaseCleaner.strategy = :transaction
+    end
+
     DatabaseCleaner.start
-    DatabaseCleaner.clean
   end
- 
-  config.before(:each) do
-    DatabaseCleaner.clean_with(:truncation)
-    DatabaseCleaner.clean
-  end
- 
+
   config.after(:each) do
-    DatabaseCleaner.clean_with(:truncation)
-    DatabaseCleaner.clean
-  end
- 
-  config.after(:suite) do
-    DatabaseCleaner.clean_with(:truncation)
     DatabaseCleaner.clean
   end
 
