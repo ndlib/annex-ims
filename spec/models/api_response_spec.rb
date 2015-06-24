@@ -73,4 +73,24 @@ RSpec.describe ApiResponse do
       expect(subject.not_found?).to eq(true)
     end
   end
+
+  context "body" do
+    it "can be accessed with string or symbol keys" do
+      expect(subject.body[:title]).to eq("title")
+      expect(subject.body["title"]).to eq("title")
+    end
+  end
+
+  context "data with string keys" do
+    let(:data) do
+      {
+        "title" => "string title",
+        "author" => "string authors",
+      }
+    end
+
+    it "can be accessed with symbols" do
+      expect(subject.body[:title]).to eq("string title")
+    end
+  end
 end
