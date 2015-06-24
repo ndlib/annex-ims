@@ -39,6 +39,9 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
+  # ActiveJob needs a back end. In our case, it's RabbitMQ, via sneakers. Except for testing. Here it's "test".
+  config.active_job.queue_adapter = :test
 end
 
 Devise.setup do |config|

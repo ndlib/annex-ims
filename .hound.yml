@@ -1,0 +1,5 @@
+ruby:
+  config_file: config/style_guides/.ruby-style.yml
+
+javascript:
+  config_file: config/style_guides/.javascript-style.json
