@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe SyncItemMetadata do
   let(:barcode) { "00000007819006" }
   let(:item) { FactoryGirl.create(:item, barcode: barcode) }
-  let(:user_id) { 1 }
+  let(:user_id) { FactoryGirl.create(:user).id }
 
   context "self" do
     subject { described_class }
