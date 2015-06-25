@@ -5,6 +5,8 @@ def h
 end
 
 RSpec.describe ItemPath do
+  let(:user) { instance_double(User, username: "bob", id: 1) }
+
   before(:each) do
     @tray = FactoryGirl.create(:tray)
     @tray2 = FactoryGirl.create(:tray)
@@ -24,6 +26,7 @@ RSpec.describe ItemPath do
 
 
     @user_id = 1 # Just fake having a user here
+    allow(User).to receive(:find).and_return(user)
   end
 
   it "returns a path for a valid item" do

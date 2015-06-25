@@ -27,7 +27,7 @@ class LogActivity
 
     activity.action = @action
 
-    if @action != "Created"
+    if @location
       activity.location_barcode = @location.barcode
       activity.location_type = @location.class.to_s
 
