@@ -45,8 +45,20 @@ class SyncItemMetadata
       end
     end
 
+    def map_item_attributes(data)
+      {
+        title: data[:title],
+        author: data[:author],
+        chron: data[:description],
+        bib_number: data[:bib_id],
+        isbn_issn: data[:isbn_issn],
+        conditions: data[:condition],
+        call_number: data[:call_number],
+      }
+    end
+
     def save_metadata(data)
-      item.update!(data)
+      item.update!(map_item_attributes(data))
       LogActivity.call(item, "UpdatedByAPI", nil, Time.now, user)
     end
 

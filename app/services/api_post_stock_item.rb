@@ -1,5 +1,5 @@
 class ApiPostStockItem
-  REQUEST_PATH = "/1.0/resources/items/stock"
+  API_PATH = "/1.0/resources/items/stock"
 
   attr_reader :item_id
 
@@ -12,7 +12,7 @@ class ApiPostStockItem
   end
 
   def post_data!
-    ApiHandler.call("POST", REQUEST_PATH, post_params)
+    ApiHandler.post(API_PATH, post_params)
   end
 
   private

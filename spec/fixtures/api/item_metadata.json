@@ -5,11 +5,11 @@
   "sequence_number":"00010",
   "admin_document_number":"000841979",
   "call_number":"Q 172.5 .C45 U25 1990",
-  "description":"",
+  "description":"Description",
   "title":"The ubiquity of chaos / edited by Saul Krasner.",
-  "author":"",
+  "author":"Author",
   "publication":"Washington, DC : American Association for the Advancement of Science, 1990.",
-  "edition":"",
-  "isbn_issn":"0871683504 : $24.95",
-  "condition":null
+  "edition":"Edition",
+  "isbn_issn":"0871683504",
+  "condition":["Condition"]
 }

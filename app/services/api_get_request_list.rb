@@ -1,11 +1,14 @@
 class ApiGetRequestList
+  API_PATH = "/1.0/resources/items/active_requests"
+
+  attr_reader :user_id
+
   def self.call(user_id)
     new(user_id).get_data!
   end
 
   def initialize(user_id)
     @user_id = user_id
-    @path = "/1.0/resources/items/active_requests"
   end
 
   def get_data!
@@ -14,7 +17,7 @@ class ApiGetRequestList
 
     requests = []
 
-    response = ApiHandler.call("GET", @path, params)
+    response = ApiHandler.get(API_PATH, params)
     if response.success?
       requests = parse_requests(response.body[:requests])
     end
@@ -28,7 +31,7 @@ class ApiGetRequestList
       if !res["barcode"].blank?
         criteria_type = "barcode"
         criteria = res["barcode"]
-        item = GetItemFromBarcode.call(@user_id, res["barcode"]) # Hack to make sure data is present for display.
+        item = GetItemFromBarcode.call(user_id, res["barcode"]) # Hack to make sure data is present for display.
       elsif !res["bib_number"].blank?
         criteria_type = "bib_number"
         criteria = res["bib_number"]
