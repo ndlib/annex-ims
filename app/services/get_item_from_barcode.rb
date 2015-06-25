@@ -30,11 +30,11 @@ class GetItemFromBarcode
 
   private
 
-    def user
-      @user ||= User.find(user_id)
-    end
+  def user
+    @user ||= User.find(user_id)
+  end
 
-    def valid?
-      IsItemBarcode.call(barcode)
-    end
+  def valid?
+    IsItemBarcode.call(barcode)
+  end
 end
