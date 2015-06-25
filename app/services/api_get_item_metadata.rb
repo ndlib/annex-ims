@@ -12,6 +12,6 @@ class ApiGetItemMetadata
   end
 
   def get_data!
-    ApiHandler.get(API_PATH, { barcode: barcode })
+    ApiHandler.get(API_PATH, barcode: barcode)
   end
 end

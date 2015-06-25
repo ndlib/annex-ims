@@ -31,7 +31,7 @@ class ApiGetRequestList
       if !res["barcode"].blank?
         criteria_type = "barcode"
         criteria = res["barcode"]
-        item = GetItemFromBarcode.call(user_id, res["barcode"]) # Hack to make sure data is present for display.
+        GetItemFromBarcode.call(user_id, res["barcode"]) # Hack to make sure data is present for display.
       elsif !res["bib_number"].blank?
         criteria_type = "bib_number"
         criteria = res["bib_number"]
