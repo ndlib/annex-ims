@@ -15,6 +15,13 @@ namespace :sneakers do
     File.exists?(pid_file)
   end
 
+  # Start and stop a worker to make sure it is functional
+  def test_worker(worker_class)
+    worker = worker_class.new
+    worker.run
+    worker.stop
+  end
+
   desc "Force start sneakers as a background process"
   task :force_start do
     if sneakers_running?
@@ -46,6 +53,7 @@ namespace :sneakers do
           ItemMetadataWorker,
         ]
         worker_classes.each do |worker_class|
+          test_worker(worker_class)
           worker_class.number_of_workers.times do
             workers << worker_class
           end
