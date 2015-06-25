@@ -1,6 +1,4 @@
 class ApiPostStockItem
-  API_PATH = "/1.0/resources/items/stock"
-
   attr_reader :item_id
 
   def self.call(item_id)
@@ -12,7 +10,7 @@ class ApiPostStockItem
   end
 
   def post_data!
-    ApiHandler.post(API_PATH, post_params)
+    ApiHandler.post(:stock, post_params)
   end
 
   private

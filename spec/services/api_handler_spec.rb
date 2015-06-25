@@ -11,11 +11,12 @@ RSpec.describe ApiHandler do
 
   let(:auth_token) { Rails.application.secrets.api_token }
   let(:method) { "GET" }
-  let(:path) { "1.0/test" }
+  let(:expected_path) { "/1.0/resources/items/#{action}" }
+  let(:action) { :test }
   let(:params) { { test: "test" } }
   let(:connection) { instance_double(ExternalRestConnection) }
 
-  subject { described_class.new(method, path, params) }
+  subject { described_class.new(method, action, params) }
 
   before do
     allow(ExternalRestConnection).to receive(:new).and_return(connection)
@@ -26,23 +27,35 @@ RSpec.describe ApiHandler do
 
     describe "#call" do
       it "instantiates a new record and calls transact!" do
-        expect(described_class).to receive(:new).with("GET", path, params).and_call_original
+        expect(described_class).to receive(:new).with("GET", action, params).and_call_original
         expect_any_instance_of(described_class).to receive(:transact!).and_return("response")
-        expect(subject.call("GET", path, params)).to eq("response")
+        expect(subject.call("GET", action, params)).to eq("response")
       end
     end
 
     describe "#get" do
       it "calls #call with GET" do
-        expect(described_class).to receive(:call).with("GET", path, params).and_return("response")
-        expect(subject.get(path, params)).to eq("response")
+        expect(described_class).to receive(:call).with("GET", action, params).and_return("response")
+        expect(subject.get(action, params)).to eq("response")
       end
     end
 
     describe "#post" do
       it "calls #call with POST" do
-        expect(described_class).to receive(:call).with("POST", path, params).and_return("response")
-        expect(subject.post(path, params)).to eq("response")
+        expect(described_class).to receive(:call).with("POST", action, params).and_return("response")
+        expect(subject.post(action, params)).to eq("response")
+      end
+    end
+
+    describe "#base_url" do
+      it "returns the api url" do
+        expect(subject.base_url).to eq(Rails.application.secrets.api_server)
+      end
+    end
+
+    describe "#path" do
+      it "returns the path with the auth token" do
+        expect(subject.path(action)).to eq("#{expected_path}?auth_token=#{auth_token}")
       end
     end
   end
@@ -72,7 +85,7 @@ RSpec.describe ApiHandler do
 
   context "GET" do
     it "calls #get on the connection and includes the params" do
-      expect(connection).to receive(:get).with("#{path}?auth_token=#{auth_token}&#{params.to_param}").and_return(raw_response)
+      expect(connection).to receive(:get).with("#{expected_path}?auth_token=#{auth_token}&#{params.to_param}").and_return(raw_response)
       subject.transact!
     end
   end
@@ -81,7 +94,7 @@ RSpec.describe ApiHandler do
     let(:method) { "POST" }
 
     it "calls #post on the connection" do
-      expect(connection).to receive(:post).with("#{path}?auth_token=#{auth_token}", params).and_return(raw_response)
+      expect(connection).to receive(:post).with("#{expected_path}?auth_token=#{auth_token}", params).and_return(raw_response)
       subject.transact!
     end
   end

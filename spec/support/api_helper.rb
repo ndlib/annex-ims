@@ -1,19 +1,15 @@
 module ApiHelper
-  def api_url(path, params_hash = {})
-    base_url = Rails.application.secrets.api_server || "http:/"
-    auth_token = Rails.application.secrets.api_token
-    unless path =~ /^\//
-      path = "/#{path}"
-    end
-    params = { auth_token: auth_token }.to_param
+  def api_url(action, params_hash = {})
+    base_url = ApiHandler.base_url || "http:/"
+    path = ApiHandler.path(action)
     if params_hash.present?
-      params += "&#{params_hash.to_param}"
+      path += "&#{params_hash.to_param}"
     end
-    Addressable::URI.parse "#{base_url}#{path}?#{params}"
+    Addressable::URI.parse "#{base_url}#{path}"
   end
 
   def api_stock_url
-    api_url("1.0/resources/items/stock")
+    api_url(:stock)
   end
 
   def api_scan_send_url(match)
@@ -25,15 +21,15 @@ module ApiHelper
   end
 
   def api_send_url
-    api_url("1.0/resources/items/send")
+    api_url(:send)
   end
 
   def api_scan_url
-    api_url("1.0/resources/items/scan")
+    api_url(:scan)
   end
 
   def api_item_metadata_url(barcode)
-    api_url("1.0/resources/items/record", barcode: barcode)
+    api_url(:record, barcode: barcode)
   end
 
   def api_item_url(item)
@@ -41,7 +37,7 @@ module ApiHelper
   end
 
   def api_requests_url
-    api_url("1.0/resources/items/active_requests")
+    api_url(:active_requests)
   end
 
   def stub_api_stock_item(item:, status_code: 200, body: nil)

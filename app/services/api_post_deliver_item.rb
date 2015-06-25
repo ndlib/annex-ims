@@ -13,11 +13,7 @@ class ApiPostDeliverItem
   end
 
   def post_data!
-    delivery_type = (match.request.del_type == "scan") ? "scan" : "send"
-
-    params = { item_id: match.item.id, barcode: match.item.barcode, tray_code: match.item.tray.barcode, source: match.request.source, transaction_num: match.request.trans, request_type: match.request.req_type, delivery_type: delivery_type}
-
-    response = ApiHandler.post(path(delivery_type), params)
+    response = ApiHandler.post(delivery_type, params)
 
     if delivery_type == "send"
       ShipItem.call(match.item, user)  # This is inside out from StockItem, but works better this way, I think.
@@ -27,6 +23,26 @@ class ApiPostDeliverItem
     end
 
     response
+  end
+
+  def params
+    {
+      item_id: match.item.id,
+      barcode: match.item.barcode,
+      tray_code: match.item.tray.barcode,
+      source: match.request.source,
+      transaction_num: match.request.trans,
+      request_type: match.request.req_type,
+      delivery_type: delivery_type
+    }
+  end
+
+  def delivery_type
+    if match.request.del_type == "scan"
+      "scan"
+    else
+      "send"
+    end
   end
 
   def path(delivery_type)

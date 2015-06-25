@@ -1,6 +1,4 @@
 class ApiGetRequestList
-  API_PATH = "/1.0/resources/items/active_requests"
-
   attr_reader :user_id
 
   def self.call(user_id)
@@ -17,7 +15,7 @@ class ApiGetRequestList
 
     requests = []
 
-    response = ApiHandler.get(API_PATH, params)
+    response = ApiHandler.get(:active_requests, params)
     if response.success?
       requests = parse_requests(response.body[:requests])
     end

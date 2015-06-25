@@ -1,6 +1,4 @@
 class ApiGetItemMetadata
-  API_PATH = "/1.0/resources/items/record"
-
   attr_reader :barcode
 
   def self.call(barcode)
@@ -12,6 +10,6 @@ class ApiGetItemMetadata
   end
 
   def get_data!
-    ApiHandler.get(API_PATH, barcode: barcode)
+    ApiHandler.get(:record, barcode: barcode)
   end
 end

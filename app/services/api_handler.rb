@@ -1,23 +1,41 @@
 class ApiHandler
-  attr_reader :verb, :base_path, :params, :response
+  BASE_PATH = "/1.0/resources/items"
+
+  attr_reader :verb, :action, :params, :response
 
   class HTTPMethodNotImplemented < StandardError; end
 
-  def self.call(verb, base_path, params)
-    new(verb, base_path, params).transact!
+  def self.call(verb, action, params)
+    new(verb, action, params).transact!
   end
 
-  def self.get(base_path, params)
-    call("GET", base_path, params)
+  def self.get(action, params)
+    call("GET", action, params)
   end
 
-  def self.post(base_path, params)
-    call("POST", base_path, params)
+  def self.post(action, params)
+    call("POST", action, params)
   end
 
-  def initialize(verb, base_path, params)
+  def self.path(action)
+    "#{File.join(BASE_PATH, action.to_s)}?#{auth_token_param}"
+  end
+
+  def self.auth_token
+    Rails.application.secrets.api_token
+  end
+
+  def self.auth_token_param
+    { auth_token: auth_token }.to_param
+  end
+
+  def self.base_url
+    Rails.application.secrets.api_server
+  end
+
+  def initialize(verb, action, params)
     @verb = verb
-    @base_path = base_path
+    @action = action
     @params = params
   end
 
@@ -46,24 +64,16 @@ class ApiHandler
     @connection ||= ExternalRestConnection.new(base_url: base_url, connection_opts: {})
   end
 
-  def auth_token_param
-    { auth_token: auth_token }.to_param
+  def path
+    self.class.path(action)
   end
 
-  def path
-    "#{base_path}?#{auth_token_param}"
+  def base_url
+    self.class.base_url
   end
 
   def path_with_params
     "#{path}&#{params.to_param}"
-  end
-
-  def auth_token
-    Rails.application.secrets.api_token
-  end
-
-  def base_url
-    Rails.application.secrets.api_server
   end
 
 end
