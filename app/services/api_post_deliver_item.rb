@@ -8,21 +8,15 @@ class ApiPostDeliverItem
   def initialize(match_id, user)
     @user = user
     @match_id = match_id
-    @path = "/1.0/resources/items"
   end
 
   def post_data!
-    match = Match.find(@match_id)
     delivery_type = (match.request.del_type == "scan") ? "scan" : "send"
-    path = "#{@path}/#{delivery_type}"
+    path = "/1.0/resources/items/#{delivery_type}"
 
     params = { item_id: match.item.id, barcode: match.item.barcode, tray_code: match.item.tray.barcode, source: match.request.source, transaction_num: match.request.trans, request_type: match.request.req_type, delivery_type: delivery_type}
 
-    begin
-      raw_results = ApiHandler.call("POST", path, params)
-    rescue Timeout::Error => e
-      raw_results = {"status"=>599, "results"=>{"status"=>"NETWORK CONNECT TIMEOUT ERROR", "message"=>"Timeout Error"}}
-    end
+    response = ApiHandler.call("POST", path, params)
 
     if delivery_type == "send"
       ShipItem.call(match.item, user)  # This is inside out from StockItem, but works better this way, I think.
@@ -31,7 +25,13 @@ class ApiPostDeliverItem
       LogActivity.call(match.item, "Scanned", match.item.tray, Time.now, user)
     end
 
-    raw_results
+    response
+  end
+
+  private
+
+  def match
+    @match ||= Match.find(match_id)
   end
 
 end

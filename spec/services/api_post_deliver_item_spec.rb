@@ -1,24 +1,26 @@
 require "rails_helper"
 
-RSpec.describe ApiGetItemMetadata do
-  let(:barcode) { "00000007819006" }
+RSpec.describe ApiPostDeliverItem do
+  let(:match) { FactoryGirl.create(:match, item: item) }
+  let(:tray) { FactoryGirl.create(:tray) }
+  let(:user) { FactoryGirl.create(:user) }
+  let(:item) { FactoryGirl.create(:item, tray: tray) }
 
   context "self" do
     subject { described_class }
 
     describe "#call" do
-      subject { described_class.call(barcode) }
+      subject { described_class.call(match.id, user) }
 
       it "retrieves data" do
-        stub_api_item_metadata(barcode: barcode)
+        stub_api_scan_send(match: match)
         expect(subject).to be_a_kind_of(ApiResponse)
         expect(subject.success?).to eq(true)
-        expect(subject.body).to be_a_kind_of(Hash)
-        expect(subject.body[:title]).to eq("The ubiquity of chaos / edited by Saul Krasner.")
+        expect(subject.body).to eq("status"=>"OK", "message"=>"Item stocked")
       end
 
       it "does not raise an exception on API failure" do
-        stub_api_item_metadata(barcode: barcode, status_code: 500, body: {}.to_json)
+        stub_api_scan_send(match: match, status_code: 500, body: {}.to_json)
         expect(subject).to be_a_kind_of(ApiResponse)
         expect(subject.error?).to eq(true)
         expect(subject.body).to be_a_kind_of(Hash)

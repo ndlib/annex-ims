@@ -20,6 +20,10 @@ module ApiHelper
     api_url("1.0/resources/items/send")
   end
 
+  def api_scan_url
+    api_url("1.0/resources/items/send")
+  end
+
   def api_item_metadata_url(barcode)
     api_url("1.0/resources/items/record", barcode: barcode)
   end
@@ -30,6 +34,32 @@ module ApiHelper
 
   def api_requests_url
     api_url("1.0/resources/items/active_requests")
+  end
+
+  def stub_api_scan_send(match:, status_code: 200, body: nil)
+    body ||= api_fixture_data("scan_send.json")
+    if match.request.del_type == "scan"
+      url = api_scan_url
+    else
+      url = api_send_url
+    end
+    stub_request(:post, url).
+      with(body: api_scan_send_params(match),
+           headers: { "User-Agent" => "Faraday v0.9.1" }).
+      to_return(status: status_code, body: body, headers: {})
+  end
+
+  def api_scan_send_params(match)
+    delivery_type = (match.request.del_type == "scan") ? "scan" : "send"
+    {
+      item_id: match.item.id.to_s,
+      barcode: match.item.barcode,
+      tray_code: match.item.tray.barcode,
+      source: match.request.source,
+      transaction_num: match.request.trans.to_s,
+      request_type: match.request.req_type,
+      delivery_type: delivery_type
+    }
   end
 
   def stub_api_active_requests(status_code: 200, body: nil)
