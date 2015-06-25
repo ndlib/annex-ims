@@ -1,0 +1,50 @@
+{
+  "requests":[
+    {
+      "transaction":"illiad-85132100",
+      "request_date_time":"2015-05-05T08:46:00Z",
+      "request_type":"Doc Del",
+      "delivery_type":"Scan",
+      "source":"Illiad",
+      "title":"Popular music",
+      "author":"",
+      "description":"7 03 1988",
+      "pages":"-285",
+      "journal_title":"",
+      "article_title":"Country Music Video",
+      "article_author":"Mark Fenster",
+      "barcode":"",
+      "isbn_issn":"",
+      "bib_number":"",
+      "adm_number":"",
+      "ill_system_id":"",
+      "item_sequence":"",
+      "call_number":"",
+      "send_to":"",
+      "rush":"Regular"
+    },
+    {
+      "transaction":"illiad-851321",
+      "request_date_time":"2015-05-05T08:46:00Z",
+      "request_type":"Doc Del",
+      "delivery_type":"Scan",
+      "source":"Illiad",
+      "title":"Popular music",
+      "author":"",
+      "description":"7 03 1988",
+      "pages":"-285",
+      "journal_title":"",
+      "article_title":"Country Music Video",
+      "article_author":"Mark Fenster",
+      "barcode":"",
+      "isbn_issn":"",
+      "bib_number":"",
+      "adm_number":"",
+      "ill_system_id":"",
+      "item_sequence":"",
+      "call_number":"",
+      "send_to":"",
+      "rush":"Regular"
+    }
+  ]
+}

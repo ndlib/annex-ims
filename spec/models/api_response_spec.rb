@@ -81,7 +81,15 @@ RSpec.describe ApiResponse do
     end
   end
 
-  context "data with string keys" do
+  context "array body" do
+    let(:data) { [1, 2, 3] }
+
+    it "has the array as the body" do
+      expect(subject.body).to eq([1, 2, 3])
+    end
+  end
+
+  context "body with string keys" do
     let(:data) do
       {
         "title" => "string title",

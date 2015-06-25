@@ -3,7 +3,10 @@ class ApiResponse
 
   def initialize(status_code: status_code, body: body)
     @status_code = status_code
-    @body = body.with_indifferent_access
+    @body = body
+    if @body.is_a?(Hash)
+      @body = @body.with_indifferent_access
+    end
   end
 
   def success?

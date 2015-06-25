@@ -1,4 +1,4 @@
-module ApiUrlHelper
+module ApiHelper
   def api_url(path, params_hash = {})
     base_url = Rails.application.secrets.api_server || "http:/"
     auth_token = Rails.application.secrets.api_token
@@ -22,5 +22,20 @@ module ApiUrlHelper
 
   def api_item_url(item)
     api_url("1.0/resources/items/record", barcode: item.barcode)
+  end
+
+  def api_requests_url
+    api_url("1.0/resources/items/active_requests")
+  end
+
+  def stub_api_active_requests(status_code: 200, body: nil)
+    body ||= api_fixture_data("active_requests.json")
+    stub_request(:get, api_requests_url).
+      with(headers: { "User-Agent" => "Faraday v0.9.1" }).
+      to_return(status: 200, body: body, headers: {})
+  end
+
+  def api_fixture_data(filename)
+    File.read(Rails.root.join("spec/fixtures/api", filename))
   end
 end
