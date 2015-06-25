@@ -137,7 +137,34 @@ a.list-group-item[aria-expanded="true"] {
   margin-bottom:5px;
 }
 
-.collapse.in {
+// .collapse.in {
+//   .list-group-item {
+//     border: solid 2px #bcbcbc;
+//     border-radius: 5px;
+//     margin-bottom: 5px;
+//     padding-left:95px;
+//     background-repeat:no-repeat;
+//     background-position:10px 10px;
+//     background-size:auto 25px ;
+
+//   }
+//   .barcode {
+//     background-image: image_url("barcode.png") !important;
+//     padding-left: 45px;
+
+//   }
+//   .tray {
+//     background-image: image_url("traytoshelf.png");
+//   }
+//   .itemt {
+//     background-image: image_url("itemtotray.png");
+//   }
+//   .items {
+//     background-image: image_url("itemtoshelf.png");
+//   }
+// }
+
+#stocking, #items, #batches {
   .list-group-item {
     border: solid 2px #bcbcbc;
     border-radius: 5px;
@@ -164,10 +191,6 @@ a.list-group-item[aria-expanded="true"] {
   }
 }
 
-//.collapse.input-group {
-//  display: none;
-//}
-
 .navbar {
   margin-bottom: 5px;
 }
@@ -193,6 +216,7 @@ a.list-group-item[aria-expanded="true"] {
 .navbar > .container .navbar-brand, .navbar > main .navbar-brand, .navbar > .container-fluid .navbar-brand {
   margin-left:0;
 }
+
 
 .list-group.panel {
   box-shadow: none;
