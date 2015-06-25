@@ -22,8 +22,6 @@ class GetItemFromBarcode
 
       if SyncItemMetadata.call(item: item, user_id: user_id)
         item
-      else
-        nil
       end
     else
       raise "barcode is not an item"

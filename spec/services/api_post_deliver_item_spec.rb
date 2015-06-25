@@ -16,7 +16,7 @@ RSpec.describe ApiPostDeliverItem do
         stub_api_scan_send(match: match)
         expect(subject).to be_a_kind_of(ApiResponse)
         expect(subject.success?).to eq(true)
-        expect(subject.body).to eq("status"=>"OK", "message"=>"Item status updated")
+        expect(subject.body).to eq("status" => "OK", "message" => "Item status updated")
       end
 
       it "does not raise an exception on API failure" do

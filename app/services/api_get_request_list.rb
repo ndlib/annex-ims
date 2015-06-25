@@ -49,7 +49,7 @@ class ApiGetRequestList
       del_type = res["delivery_type"].downcase
       source = res["source"].downcase
 
-      req_type = res["request_type"].include?(' ') ? res["request_type"].downcase.gsub!(' ','_') : res["request_type"].downcase
+      req_type = res["request_type"].include?(" ") ? res["request_type"].downcase.gsub!(" ","_") : res["request_type"].downcase
 
       if (res["rush"] == "No") || (res["rush"] == "Regular")
         rapid = false
@@ -57,13 +57,13 @@ class ApiGetRequestList
         rapid = true
       end
 
-      trans = (res["transaction"].include?('doc-del')? res["transaction"].gsub!('doc-del', 'aleph') : res["transaction"]).gsub!('-', '_')
+      trans = (res["transaction"].include?("doc-del")? res["transaction"].gsub!("doc-del", "aleph") : res["transaction"]).gsub!("-", "_")
 
       requests << { # Will add more info when rebuilding the batch page. Needs a migration.
         "trans" => trans,
         "criteria_type" => criteria_type,
         "criteria" => criteria,
-        "requested" => Date.today.to_s, # Should be date requested, but that doesn't seem available.
+        "requested" => Date.today.to_s, # Should be date requested, but that doesn"t seem available.
         "rapid" => rapid,
         "source" => source,
         "del_type" => del_type,
