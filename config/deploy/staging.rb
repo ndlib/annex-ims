@@ -19,7 +19,6 @@
 server 'annex-staging.library.nd.edu', user: 'app', roles: %w{web app db}
 
 set :rack_env, :staging
-set :branch, "staging"
 
 # Custom SSH Options
 # ==================
