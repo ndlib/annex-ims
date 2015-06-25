@@ -8,6 +8,13 @@ set :repo_url, "git@github.com:ndlib/annex-ims.git"
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
+if ENV["SCM_BRANCH"] && ENV["SCM_BRANCH"] != ""
+  set :branch, ENV["SCM_BRANCH"]
+elsif fetch(:stage).to_s == "production"
+  ask :branch, "master"
+else
+  ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
+end
 
 # Default deploy_to directory is /var/www/my_app_name
 # set :deploy_to, "/var/www/my_app_name"
