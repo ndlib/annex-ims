@@ -20,8 +20,12 @@ module ApiHelper
     api_url("1.0/resources/items/send")
   end
 
+  def api_item_metadata_url(barcode)
+    api_url("1.0/resources/items/record", barcode: barcode)
+  end
+
   def api_item_url(item)
-    api_url("1.0/resources/items/record", barcode: item.barcode)
+    api_item_metadata_url(item.barcode)
   end
 
   def api_requests_url
@@ -33,6 +37,20 @@ module ApiHelper
     stub_request(:get, api_requests_url).
       with(headers: { "User-Agent" => "Faraday v0.9.1" }).
       to_return(status: status_code, body: body, headers: {})
+  end
+
+  def stub_api_item_metadata(barcode:, status_code: 200, body: nil)
+    body ||= api_item_metadata_json(barcode)
+    stub_request(:get, api_item_metadata_url(barcode)).
+      with(headers: { "User-Agent" => "Faraday v0.9.1" }).
+      to_return(status: status_code, body: body, headers: {})
+  end
+
+  def api_item_metadata_json(barcode)
+    data = api_fixture_data("item_metadata.json")
+    hash = JSON.parse(data)
+    hash["barcode"] = barcode
+    hash.to_json
   end
 
   def api_fixture_data(filename)
