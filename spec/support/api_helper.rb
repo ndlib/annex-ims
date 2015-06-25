@@ -32,7 +32,7 @@ module ApiHelper
     body ||= api_fixture_data("active_requests.json")
     stub_request(:get, api_requests_url).
       with(headers: { "User-Agent" => "Faraday v0.9.1" }).
-      to_return(status: 200, body: body, headers: {})
+      to_return(status: status_code, body: body, headers: {})
   end
 
   def api_fixture_data(filename)
