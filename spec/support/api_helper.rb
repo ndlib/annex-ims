@@ -36,6 +36,22 @@ module ApiHelper
     api_url("1.0/resources/items/active_requests")
   end
 
+  def stub_api_stock_item(item:, status_code: 200, body: nil)
+    body ||= api_fixture_data("stock_item.json")
+    stub_request(:post, api_stock_url).
+      with(body: api_stock_item_params(item),
+           headers: { "User-Agent" => "Faraday v0.9.1" }).
+      to_return(status: status_code, body: body, headers: {})
+  end
+
+  def api_stock_item_params(item)
+    {
+      item_id: item.id.to_s,
+      barcode: item.barcode,
+      tray_code: item.tray.barcode
+    }
+  end
+
   def stub_api_scan_send(match:, status_code: 200, body: nil)
     body ||= api_fixture_data("scan_send.json")
     if match.request.del_type == "scan"
