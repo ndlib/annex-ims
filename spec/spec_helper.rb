@@ -79,6 +79,22 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
   end
 
+  config.before(:suite) do
+    # Preload the fields for ActiveRecord objects to allow use of instance_double
+    [
+      User
+    ].each do |database_model|
+      instance = database_model.new
+      # The first attribute is id, which does not cause the methods to be built on the class
+      field = instance.attributes.keys[1]
+      # Trigger method missing on the instance which dynamically adds the methods to the class
+      instance.send(field)
+
+      # Reload all factories
+      FactoryGirl.reload
+    end
+  end
+
 # The settings below are suggested to provide a good initial experience
 # with RSpec, but feel free to customize to your heart's content.
 =begin

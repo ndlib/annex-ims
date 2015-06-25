@@ -16,12 +16,20 @@ module ApiHelper
     api_url("1.0/resources/items/stock")
   end
 
+  def api_scan_send_url(match)
+    if match.request.del_type == "scan"
+      api_scan_url
+    else
+      api_send_url
+    end
+  end
+
   def api_send_url
     api_url("1.0/resources/items/send")
   end
 
   def api_scan_url
-    api_url("1.0/resources/items/send")
+    api_url("1.0/resources/items/scan")
   end
 
   def api_item_metadata_url(barcode)
@@ -54,19 +62,21 @@ module ApiHelper
 
   def stub_api_scan_send(match:, status_code: 200, body: nil)
     body ||= api_fixture_data("scan_send.json")
-    if match.request.del_type == "scan"
-      url = api_scan_url
-    else
-      url = api_send_url
-    end
-    stub_request(:post, url).
+    stub_request(:post, api_scan_send_url(match)).
       with(body: api_scan_send_params(match),
            headers: { "User-Agent" => "Faraday v0.9.1" }).
       to_return(status: status_code, body: body, headers: {})
   end
 
+  def api_scan_send_delivery_type(match)
+    if match.request.del_type == "scan"
+      "scan"
+    else
+      "send"
+    end
+  end
+
   def api_scan_send_params(match)
-    delivery_type = (match.request.del_type == "scan") ? "scan" : "send"
     {
       item_id: match.item.id.to_s,
       barcode: match.item.barcode,
@@ -74,7 +84,7 @@ module ApiHelper
       source: match.request.source,
       transaction_num: match.request.trans.to_s,
       request_type: match.request.req_type,
-      delivery_type: delivery_type
+      delivery_type: api_scan_send_delivery_type(match)
     }
   end
 

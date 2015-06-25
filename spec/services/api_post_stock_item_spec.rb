@@ -14,7 +14,7 @@ RSpec.describe ApiPostStockItem do
         stub_api_stock_item(item: item)
         expect(subject).to be_a_kind_of(ApiResponse)
         expect(subject.success?).to eq(true)
-        expect(subject.body).to eq("status"=>"OK", "message"=>"Item stocked")
+        expect(subject.body).to eq("status" => "OK", "message" => "Item stocked")
       end
 
       it "does not raise an exception on API failure" do
