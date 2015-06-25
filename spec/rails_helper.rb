@@ -51,5 +51,5 @@ RSpec.configure do |config|
   # For Devise testing
   config.include Devise::TestHelpers, type: :controller
 
-  config.include ApiUrlHelper
+  config.include ApiHelper
 end

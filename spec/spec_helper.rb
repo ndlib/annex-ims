@@ -19,6 +19,12 @@ require 'webmock/rspec'
 require 'capybara/rspec'
 
 RSpec.configure do |config|
+  # Run specs in random order to surface order dependencies. If you find an
+  # order dependency and want to debug it, you can fix the order by providing
+  # the seed, which is printed after each run.
+  #     --seed 1234
+  config.order = :random
+
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.
@@ -71,6 +77,22 @@ RSpec.configure do |config|
 
   config.after(:each) do
     DatabaseCleaner.clean
+  end
+
+  config.before(:suite) do
+    # Preload the fields for ActiveRecord objects to allow use of instance_double
+    [
+      User
+    ].each do |database_model|
+      instance = database_model.new
+      # The first attribute is id, which does not cause the methods to be built on the class
+      field = instance.attributes.keys[1]
+      # Trigger method missing on the instance which dynamically adds the methods to the class
+      instance.send(field)
+
+      # Reload all factories
+      FactoryGirl.reload
+    end
   end
 
 # The settings below are suggested to provide a good initial experience

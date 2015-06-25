@@ -75,7 +75,7 @@ feature "Items", :type => :feature do
 
     it "can view a list of issues associated with retrieving item data" do
       @issues = []
-      10.times do
+      5.times do
         @issue = FactoryGirl.create(:issue)
         @issues << @issue
       end
@@ -90,7 +90,7 @@ feature "Items", :type => :feature do
 
     it "can view a list of issues associated with retrieving item data and delete them" do
       @issues = []
-      10.times do
+      5.times do
         @issue = FactoryGirl.create(:issue)
         @issues << @issue
       end

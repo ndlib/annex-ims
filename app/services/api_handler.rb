@@ -1,29 +1,79 @@
 class ApiHandler
-  attr_reader :verb, :path, :params
+  BASE_PATH = "/1.0/resources/items"
 
-  def self.call(verb, path, params)
-    new(verb, path, params).transact!
+  attr_reader :verb, :action, :params, :response
+
+  class HTTPMethodNotImplemented < StandardError; end
+
+  def self.call(verb, action, params)
+    new(verb, action, params).transact!
   end
 
-  def initialize(verb, path, params)
-    @connection ||= ExternalRestConnection.new(base_url: Rails.application.secrets.api_server, connection_opts: {})
+  def self.get(action, params)
+    call("GET", action, params)
+  end
+
+  def self.post(action, params)
+    call("POST", action, params)
+  end
+
+  def self.path(action)
+    "#{File.join(BASE_PATH, action.to_s)}?#{auth_token_param}"
+  end
+
+  def self.auth_token
+    Rails.application.secrets.api_token
+  end
+
+  def self.auth_token_param
+    { auth_token: auth_token }.to_param
+  end
+
+  def self.base_url
+    Rails.application.secrets.api_server
+  end
+
+  def initialize(verb, action, params)
     @verb = verb
-    @path = path
+    @action = action
     @params = params
   end
 
   def transact!
-    @path << "?auth_token=#{Rails.application.secrets.api_token}"
-    case @verb
-    when "GET"
-      @path << "&#{params}"
-      @response = @connection.get(@path)
-    when "POST"
-      @response = @connection.post(@path, @params)
-    else
-      raise "Only GET and POST have been implemented."
-    end
+    raw_response = raw_transact!
+    ApiResponse.new(status_code: raw_response["status"], body: raw_response["results"])
+  rescue Timeout::Error => e
+    NotifyError.call(exception: e)
+    ApiResponse.new(status_code: 599, body: {})
+  end
 
+  private
+
+  def raw_transact!
+    case verb
+    when "GET"
+      connection.get(path_with_params)
+    when "POST"
+      connection.post(path, params)
+    else
+      raise HTTPMethodNotImplemented, "Only GET and POST have been implemented."
+    end
+  end
+
+  def connection
+    @connection ||= ExternalRestConnection.new(base_url: base_url, connection_opts: {})
+  end
+
+  def path
+    self.class.path(action)
+  end
+
+  def base_url
+    self.class.base_url
+  end
+
+  def path_with_params
+    "#{path}&#{params.to_param}"
   end
 
 end
