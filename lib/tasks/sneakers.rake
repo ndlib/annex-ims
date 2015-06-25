@@ -15,6 +15,7 @@ namespace :sneakers do
     File.exists?(pid_file)
   end
 
+  desc "Force start sneakers as a background process"
   task :force_start do
     if sneakers_running?
       puts "Stopping existing sneakers process."
@@ -23,6 +24,7 @@ namespace :sneakers do
     Rake::Task["sneakers:start"].invoke
   end
 
+  desc "Start sneakers workers as a background process"
   task :start do |t, args|
     puts "Starting sneakers in background"
     Process.fork do
@@ -31,7 +33,7 @@ namespace :sneakers do
     puts "Started sneakers"
   end
 
-  desc "Start work (set JOB_QUEUES=default,active_job_two,active_job_one)"
+  desc "Start the sneakers workers"
   task :run  => :environment do
     begin
       if sneakers_running?
@@ -63,6 +65,7 @@ namespace :sneakers do
     end
   end
 
+  desc "Stop the sneakers background process"
   task :stop do
     if sneakers_running?
       pid = File.read(pid_file).strip.to_i
@@ -88,6 +91,7 @@ namespace :sneakers do
     end
   end
 
+  desc "Stop the sneakers background process and remove the PID file if it fails"
   task :force_stop do
     Rake::Task["sneakers:stop"].invoke
     if sneakers_running?
@@ -98,6 +102,7 @@ namespace :sneakers do
     end
   end
 
+  desc "Restart the sneakers background process"
   task :restart do
     Rake::Task["sneakers:stop"].invoke
     Rake::Task["sneakers:start"].invoke
