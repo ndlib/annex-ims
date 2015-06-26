@@ -11,6 +11,16 @@ class SyncItemMetadata
   end
 
   def sync
+    if sync_required?
+      perform_sync
+    else
+      true
+    end
+  end
+
+  private
+
+  def perform_sync
     response = ApiGetItemMetadata.call(barcode)
     if response.success?
       save_metadata(response.body)
@@ -21,7 +31,9 @@ class SyncItemMetadata
     end
   end
 
-  private
+  def sync_required?
+    item.metadata_status != "complete"
+  end
 
   def user
     @user ||= User.find(user_id)
