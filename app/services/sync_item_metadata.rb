@@ -14,7 +14,6 @@ class SyncItemMetadata
     response = ApiGetItemMetadata.call(barcode)
     if response.success?
       save_metadata(response.body)
-      item
       true
     else
       handle_error(response)
@@ -30,7 +29,21 @@ class SyncItemMetadata
 
   def handle_error(response)
     AddIssue.call(user_id, barcode, error_message(response))
-    DestroyItem.call(item, user)
+    if response.not_found?
+      handle_not_found
+    else
+      handle_other_error
+    end
+  end
+
+  def handle_not_found
+    save_metadata_status("not_found")
+    LogActivity.call(item, "MetadataNotFound", nil, Time.now, user)
+  end
+
+  def handle_other_error
+    save_metadata_status("error")
+    LogActivity.call(item, "MetadataError", nil, Time.now, user)
   end
 
   def error_message(response)
@@ -41,7 +54,7 @@ class SyncItemMetadata
     elsif response.timeout?
       "API Timeout."
     else
-      "Error #{response.status_code}"
+      "#{response.status_code}"
     end
   end
 
@@ -57,8 +70,21 @@ class SyncItemMetadata
     }
   end
 
+  def save_metadata_status(status)
+    item.update!(metadata_status_attributes(status))
+  end
+
+  def metadata_status_attributes(status)
+    {
+      metadata_status: status,
+      metadata_updated_at: Time.now,
+    }
+  end
+
   def save_metadata(data)
-    item.update!(map_item_attributes(data))
+    update_attributes = map_item_attributes(data).
+      merge(metadata_status_attributes("complete"))
+    item.update!(update_attributes)
     LogActivity.call(item, "UpdatedByAPI", nil, Time.now, user)
   end
 

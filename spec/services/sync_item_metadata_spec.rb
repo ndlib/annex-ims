@@ -12,6 +12,20 @@ RSpec.describe SyncItemMetadata do
     describe "#call" do
       subject { described_class.call(item: item, user_id: user_id) }
 
+      shared_examples "a metadata status update" do |expected_status|
+        it "sets the item metadata_status to #{expected_status}" do
+          subject
+          expect(item.metadata_status).to eq(expected_status)
+        end
+
+        it "updates the metadata_updated_at" do
+          expect(item.metadata_updated_at).to be_nil
+          subject
+          expect(item.metadata_updated_at).to be_present
+          expect(Time.now - item.metadata_updated_at).to be < 1
+        end
+      end
+
       context "success" do
         before do
           stub_api_item_metadata(barcode: barcode)
@@ -35,30 +49,13 @@ RSpec.describe SyncItemMetadata do
       end
 
       context "error response" do
-        let(:status_code) { 500 }
-
         before do
-          stub_api_item_metadata(barcode: barcode, status_code: 500, body: {}.to_json)
+          stub_api_item_metadata(barcode: barcode, status_code: status_code, body: {}.to_json)
         end
 
         shared_examples "an error response" do
           it "returns false" do
             expect(subject).to eq(false)
-          end
-
-          it "adds an issue" do
-            expect(AddIssue).to receive(:call).with(user.id, barcode, anything).and_call_original
-            subject
-          end
-
-          it "destroys the item" do
-            expect(item).to receive(:destroy!)
-            subject
-          end
-
-          it "logs the activity" do
-            expect(LogActivity).to receive(:call).with(anything, "Destroyed", anything, anything, anything).ordered
-            subject
           end
         end
 
@@ -66,24 +63,32 @@ RSpec.describe SyncItemMetadata do
           let(:status_code) { 500 }
 
           it_behaves_like "an error response"
+
+          it_behaves_like "a metadata status update", "error"
         end
 
         context "not found error" do
           let(:status_code) { 404 }
 
           it_behaves_like "an error response"
+
+          it_behaves_like "a metadata status update", "not_found"
         end
 
         context "timeout error" do
           let(:status_code) { 599 }
 
           it_behaves_like "an error response"
+
+          it_behaves_like "a metadata status update", "error"
         end
 
         context "unauthorized error" do
           let(:status_code) { 401 }
 
           it_behaves_like "an error response"
+
+          it_behaves_like "a metadata status update", "error"
         end
       end
     end
