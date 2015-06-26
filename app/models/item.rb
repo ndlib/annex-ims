@@ -12,12 +12,20 @@ class Item < ActiveRecord::Base
     "UNBOUND",
     "OTHER"]
 
+  METADATA_STATUSES = [
+    "pending",
+    "complete",
+    "not_found",
+    "error",
+  ]
+
   enum status: { stocked: 0, unstocked: 1, shipped: 2}
 
   validates_presence_of :barcode
   validates_presence_of :thickness, on: :update  # Items are going to be programmatically created, humans will be required to enter thickness.
   validates_numericality_of :thickness, on: :update, only_integer: true, greater_than_or_equal_to: 0
   validates :barcode, uniqueness: true
+  validates :metadata_status, inclusion: METADATA_STATUSES
   validate :has_correct_prefix
 
   belongs_to :tray
