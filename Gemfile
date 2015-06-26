@@ -96,7 +96,7 @@ end
 gem 'haml-rails'
 
 # Use Bootstrap because I'm not a designer
-gem 'bootstrap-sass', '~> 3.3.1'
+gem 'bootstrap-sass', '3.3.5'
 gem 'autoprefixer-rails'
 
 # Someone already Rails-ified a nice datepicker for Bootstrap
