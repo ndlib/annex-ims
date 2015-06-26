@@ -92,7 +92,12 @@ section {
     .doNotPrint, .doNotPrint * { display: none !important; }
 }
 
-.container > .navbar-header, main > .navbar-header, .container > .navbar-collapse, main > .navbar-collapse, .container-fluid > .navbar-header, .container-fluid > .navbar-collapse {
+.container > .navbar-header, 
+  main > .navbar-header,
+  .container > .navbar-collapse,
+  main > .navbar-collapse,
+  .container-fluid > .navbar-header,
+  .container-fluid > .navbar-collapse {
   margin: 0;
 }
 
@@ -144,7 +149,7 @@ a.list-group-item[aria-expanded="true"] {
     margin-bottom: 5px;
     background-repeat: no-repeat;
     background-position: 10px 10px;
-    background-size: auto 25px ;
+    background-size: auto 25px;
 
   }
   .barcode {
@@ -209,7 +214,9 @@ a.list-group-item[aria-expanded="true"] {
   }
 }
 
-.navbar > .container .navbar-brand, .navbar > main .navbar-brand, .navbar > .container-fluid .navbar-brand {
+.navbar > .container .navbar-brand, 
+  .navbar > main .navbar-brand, 
+  .navbar > .container-fluid .navbar-brand {
   margin-left: 0;
 }
 
