@@ -82,6 +82,7 @@ RSpec.configure do |config|
   config.before(:suite) do
     # Preload the fields for ActiveRecord objects to allow use of instance_double
     [
+      Item,
       User
     ].each do |database_model|
       instance = database_model.new

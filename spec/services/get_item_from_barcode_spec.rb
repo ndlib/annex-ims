@@ -18,7 +18,7 @@ RSpec.describe GetItemFromBarcode do
     end
   end
 
-  context "given a valid item" do
+  context "new item" do
     it "creates an item" do
       expect { subject }.to change { Item.count }.by(1)
     end
@@ -33,14 +33,49 @@ RSpec.describe GetItemFromBarcode do
       subject
     end
 
-    it "returns the item on successful sync" do
-      expect(SyncItemMetadata).to receive(:call).and_return(true)
+    it "returns the item" do
       expect(subject).to be_kind_of(Item)
     end
+  end
 
-    it "returns nil on failed sync" do
-      expect(SyncItemMetadata).to receive(:call).and_return(false)
-      expect(subject).to be_nil
+  context "existing item" do
+    let(:metadata_status) { "pending" }
+    let(:item) { instance_double(Item, metadata_status: metadata_status) }
+
+    before do
+      allow_any_instance_of(described_class).to receive(:item).and_return(item)
+    end
+
+    context "not_found status" do
+      let(:metadata_status) { "not_found" }
+
+      it "returns nil" do
+        expect(subject).to be_nil
+      end
+    end
+
+    context "error status" do
+      let(:metadata_status) { "error" }
+
+      it "returns the item" do
+        expect(subject).to eq(item)
+      end
+    end
+
+    context "complete status" do
+      let(:metadata_status) { "complete" }
+
+      it "returns the item" do
+        expect(subject).to eq(item)
+      end
+    end
+
+    context "pending status" do
+      let(:metadata_status) { "pending" }
+
+      it "returns the item" do
+        expect(subject).to eq(item)
+      end
     end
   end
 end
