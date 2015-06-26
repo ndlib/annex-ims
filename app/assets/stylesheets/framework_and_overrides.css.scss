@@ -193,6 +193,34 @@ a.list-group-item[aria-expanded="true"] {
   }
 }
 
+.list-group-item-success {
+  .glyphicon {
+    vertical-align: top;
+    font-size: 18px;
+  }
+}
+
+.list-group-item-success[aria-expanded="true"] {
+  .glyphicon-plus:before {
+    content:"-";
+  }
+
+}
+
+.list-group-item-success[aria-expanded="false"] {
+  .glyphicon-plus:before {
+    content:"+";
+  }
+
+}
+
+
+
+//.collapse.input-group {
+//  display: none;
+//}
+
+>>>>>>> Layout updates to add menu icons.
 .navbar {
   margin-bottom: 5px;
 }
