@@ -67,6 +67,8 @@ namespace :sneakers do
       end
     rescue SystemExit
       # Ignore SystemExit errors
+    rescue Interrupt
+      # Ignore Interrupt errors
     rescue Exception => e
       NotifyError.call(exception: e)
       raise e
