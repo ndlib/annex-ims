@@ -1,11 +1,11 @@
 class SyncItemMetadata
   attr_reader :item, :user_id
 
-  def self.call(item: item, user_id: user_id)
+  def self.call(item:, user_id:)
     new(item: item, user_id: user_id).sync
   end
 
-  def initialize(item: item, user_id: user_id)
+  def initialize(item:, user_id:)
     @item = item
     @user_id = user_id
   end
