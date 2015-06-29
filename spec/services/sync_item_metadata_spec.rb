@@ -130,12 +130,21 @@ RSpec.describe SyncItemMetadata do
           end
         end
 
+        shared_examples "a response that queues a background job" do
+          it "queues a background job" do
+            expect(SyncItemMetadataJob).to receive(:perform_later).with(item: item, user_id: user_id)
+            subject
+          end
+        end
+
         context "500 error" do
           let(:status_code) { 500 }
 
           it_behaves_like "an error response"
 
           it_behaves_like "a metadata status update", "error"
+
+          it_behaves_like "a response that queues a background job"
         end
 
         context "not found error" do
@@ -144,6 +153,11 @@ RSpec.describe SyncItemMetadata do
           it_behaves_like "an error response"
 
           it_behaves_like "a metadata status update", "not_found"
+
+          it "does not queue a background job" do
+            expect(SyncItemMetadataJob).to_not receive(:perform_later)
+            subject
+          end
         end
 
         context "timeout error" do
@@ -152,6 +166,8 @@ RSpec.describe SyncItemMetadata do
           it_behaves_like "an error response"
 
           it_behaves_like "a metadata status update", "error"
+
+          it_behaves_like "a response that queues a background job"
         end
 
         context "unauthorized error" do
@@ -160,6 +176,8 @@ RSpec.describe SyncItemMetadata do
           it_behaves_like "an error response"
 
           it_behaves_like "a metadata status update", "error"
+
+          it_behaves_like "a response that queues a background job"
         end
       end
     end

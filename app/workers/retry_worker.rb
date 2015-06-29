@@ -23,7 +23,7 @@ class RetryWorker < ActiveJob::QueueAdapters::SneakersAdapter::JobWrapper
   def work(*args)
     super(*args)
   rescue StandardError => e
-    NotifyError.call(e, args: args)
+    NotifyError.call(exception: e, args: args)
     logger.error e.message
     logger.error args
     logger.error e.backtrace.join("\n")

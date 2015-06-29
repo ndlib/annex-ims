@@ -72,7 +72,14 @@ class SyncItemMetadata
 
   def handle_other_error
     save_metadata_status("error")
+    process_in_background
     LogActivity.call(item, "MetadataError", nil, Time.now, user)
+  end
+
+  def process_in_background
+    if !background?
+      SyncItemMetadataJob.perform_later(item: item, user_id: user_id)
+    end
   end
 
   def error_message(response)
