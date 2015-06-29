@@ -3,7 +3,7 @@ require "typhoeus/adapters/faraday"
 # class for establishing a rest connection to an external source
 class ExternalRestConnection
   DEFAULT_CONNECTION_OPTIONS = {
-    max_retries: 2,
+    max_retries: Rails.configuration.api_max_retries,
     response_format: "json",
   }
 

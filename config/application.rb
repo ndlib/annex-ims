@@ -30,5 +30,9 @@ module AnnexIms
 
     # ActiveJob needs a back end. In our case, it's RabbitMQ, via sneakers.
     config.active_job.queue_adapter = :sneakers
+
+    config.api_foreground_timeout = 3
+    config.api_foreground_max_retries = 0
+    config.api_max_retries = 2
   end
 end

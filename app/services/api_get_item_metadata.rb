@@ -25,8 +25,8 @@ class ApiGetItemMetadata
       {}
     else
       {
-        timeout: 3,
-        max_retries: 0
+        timeout: Rails.configuration.api_foreground_timeout,
+        max_retries: Rails.configuration.api_foreground_max_retries,
       }
     end
   end
