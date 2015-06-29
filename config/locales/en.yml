@@ -20,4 +20,10 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  item:
+    metadata_status:
+      complete: "Metadata synchronized"
+      not_found: "Barcode not found"
+      pending: "Metadata sync pending"
+      error: "Error loading metadata, will retry automatically"
+
