@@ -24,21 +24,42 @@ class ExternalRestConnection
     opts[:response_format]
   end
 
+  def timeout
+    opts[:timeout]
+  end
+
   # GET verb
   def get(path)
-    @response = connection.get(path)
+    @response = connection.get do |req|
+      req.url path
+      if timeout
+        req.options.timeout = timeout
+      end
+    end
     process_response
   end
 
   # PUT verb
   def put(path, payload)
-    @response = connection.put(path, payload)
+    @response = connection.put do |req|
+      req.url path
+      req.body = payload
+      if timeout
+        req.options.timeout = timeout
+      end
+    end
     process_response
   end
 
   # POST verb
   def post(path, payload)
-    @response = connection.post(path, payload)
+    @response = connection.post do |req|
+      req.url path
+      req.body = payload
+      if timeout
+        req.options.timeout = timeout
+      end
+    end
     process_response
   end
 
