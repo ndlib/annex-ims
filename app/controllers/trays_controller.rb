@@ -1,5 +1,4 @@
 class TraysController < ApplicationController
-  before_action :authenticate_user!
 
   def index
     @tray = Tray.new
