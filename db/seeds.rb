@@ -3,13 +3,13 @@
 #
 # Examples:
 #
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
+#   cities = City.create([{ name: "Chicago" }, { name: "Copenhagen" }])
+#   Mayor.create(name: "Emanuel", city: cities.first)
 
 # This is just for development purposes. Do not seed the production system with this. We need Items in the system.
 
 def rand_letter
-  ('A'..'Z').to_a.sample
+  ("A".."Z").to_a.sample
 end
 
 def call_number
@@ -18,17 +18,17 @@ end
 
 100.times do |i|
   Item.create(
-                barcode: Faker::Number.number(14),
-                title: Faker::Lorem.sentence,
-                author: Faker::Name.name,
-                bib_number: "0037612#{Faker::Number.number(2)}",
-                isbn_issn: [true, false].sample ? Faker::Code.isbn : "#{Faker::Number.number(4)}-#{Faker::Number.number(4)}",
-                conditions: [Item::CONDITIONS.sample, Item::CONDITIONS.sample, Item::CONDITIONS.sample, Item::CONDITIONS.sample].uniq,
-                call_number: call_number,
-                initial_ingest: Faker::Date.between(30.days.ago, Date.today),
-                last_ingest: Time.now.strftime("%Y-%m-%d"),
-                thickness: 1,
-             )
+    barcode: Faker::Number.number(14),
+    title: Faker::Lorem.sentence,
+    author: Faker::Name.name,
+    bib_number: "0037612#{Faker::Number.number(2)}",
+    isbn_issn: [true, false].sample ? Faker::Code.isbn : "#{Faker::Number.number(4)}-#{Faker::Number.number(4)}",
+    conditions: [Item::CONDITIONS.sample, Item::CONDITIONS.sample, Item::CONDITIONS.sample, Item::CONDITIONS.sample].uniq,
+    call_number: call_number,
+    initial_ingest: Faker::Date.between(30.days.ago, Date.today),
+    last_ingest: Time.now.strftime("%Y-%m-%d"),
+    thickness: 1,
+  )
 end
 
 50.times do |i|
