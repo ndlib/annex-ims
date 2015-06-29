@@ -1,4 +1,4 @@
-Annex IMS
+IRIS - Integrated Retrieval and Inventory System 
 =========
 [![Build Status](https://travis-ci.org/ndlib/annex-ims.svg?branch=master)](https://travis-ci.org/ndlib/annex-ims)
 [![Coverage Status](https://coveralls.io/repos/ndlib/annex-ims/badge.svg)](https://coveralls.io/r/ndlib/annex-ims)
@@ -6,7 +6,7 @@ Annex IMS
 
 Software to manage inventory in the annex. 
 
-Annex IMS - Inventory Management System for offsite storage facilities
+IRIS - Integrated Retrieval and Inventory System for offsite storage facilities
 Copyright (C) 2015 Hesburgh Libraries - University of Notre Dame
 
 This program is free software: you can redistribute it and/or modify
