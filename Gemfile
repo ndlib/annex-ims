@@ -50,6 +50,8 @@ group :development, :test do
   gem "guard-spring", "0.0.4"
   gem "guard-sunspot", github: "ndlib/guard-sunspot"
 
+  gem "coveralls", require: false
+
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
 

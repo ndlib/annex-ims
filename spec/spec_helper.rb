@@ -14,9 +14,16 @@
 # users commonly want.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
-
 require 'webmock/rspec'
 require 'capybara/rspec'
+require "simplecov"
+require "coveralls"
+
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
+  SimpleCov::Formatter::HTMLFormatter,
+  Coveralls::SimpleCov::Formatter
+]
+SimpleCov.start("rails")
 
 RSpec.configure do |config|
   # Run specs in random order to surface order dependencies. If you find an
