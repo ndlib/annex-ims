@@ -2,21 +2,26 @@ require 'typhoeus/adapters/faraday'
 
 # class for establishing a rest connection to an external source
 class ExternalRestConnection
+  DEFAULT_CONNECTION_OPTIONS = {
+    max_retries: 2,
+    response_format: 'json',
+  }
+
   attr_reader :base_url, :faraday_instance, :connection, :opts, :response
   attr_accessor :request_body
 
   def initialize(base_url: nil, connection_opts: {})
-    @opts = connection_opts
+    @opts = DEFAULT_CONNECTION_OPTIONS.merge(connection_opts)
     @base_url = base_url
     @connection = establish_connection
   end
 
   def max_retries
-    @opts[:max_retries] ||= 2
+    opts[:max_retries]
   end
 
   def response_format
-    @opts[:response_format] ||= 'json'
+    opts[:response_format]
   end
 
   # GET verb
