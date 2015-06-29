@@ -1,10 +1,10 @@
-require 'typhoeus/adapters/faraday'
+require "typhoeus/adapters/faraday"
 
 # class for establishing a rest connection to an external source
 class ExternalRestConnection
   DEFAULT_CONNECTION_OPTIONS = {
     max_retries: 2,
-    response_format: 'json',
+    response_format: "json",
   }
 
   attr_reader :base_url, :faraday_instance, :connection, :opts, :response
@@ -93,8 +93,8 @@ class ExternalRestConnection
 
   def file_cache
     ActiveSupport::Cache::FileStore.new(
-      File.join(rails_root, '/tmp', 'cache'),
-      namespace: 'api_rest_data',
+      File.join(rails_root, "/tmp", "cache"),
+      namespace: "api_rest_data",
       expires_in: 240  # four minutes
     )
   end
@@ -123,7 +123,7 @@ class ExternalRestConnection
   end
 
   def expected_type?(type)
-    if response_format == 'json'
+    if response_format == "json"
       type =~ /text\/plain/
     else
       type =~ /#{response_format}/
@@ -131,6 +131,6 @@ class ExternalRestConnection
   end
 
   def response_content_type
-    response.headers['Content-Type']
+    response.headers["Content-Type"]
   end
 end
