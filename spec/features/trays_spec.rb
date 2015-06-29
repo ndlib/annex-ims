@@ -12,7 +12,7 @@ feature "Trays", type: :feature do
     before(:each) do
       login_user
 
-      stub_request(:get, api_item_url(item)). with(headers: {'User-Agent'=>'Faraday v0.9.1'}). to_return{ |response| { status: 200, body: {"item_id" => "00110147500410", "barcode" => item.barcode, "bib_id" => item.bib_number, "sequence_number" => "00410", "admin_document_number" => "001101475", "call_number" => item.call_number, "description" => item.chron ,"title"=> item.title, "author" => item.author ,"publication" => "Cambridge, UK : Elsevier Science Publishers, c1991-", "edition" => "", "isbn_issn" =>item.isbn_issn, "condition" => item.conditions}.to_json, headers: {} } }
+      stub_request(:get, api_item_url(item)). with(headers: {'User-Agent'=>'Faraday v0.9.1'}). to_return{ |response| { status: 200, body: {"item_id" => "00110147500410", "barcode" => item.barcode, "bib_id" => item.bib_number, "sequence_number" => "00410", "admin_document_number" => "001101475", "call_number" => item.call_number, "description" => item.chron ,"title"=> item.title, "author" => item.author ,"publication" => "Cambridge, UK : Elsevier Science Publishers, c1991-", "edition" => "", "isbn_issn" =>item.isbn_issn, "condition" => item.conditions}.to_json, "sublibrary"=>"ANNEX", headers: {} } }
 
       stub_request(:post, api_stock_url).
         with(body: {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{tray.barcode}"},
@@ -370,7 +370,7 @@ feature "Trays", type: :feature do
       item = FactoryGirl.create(:item, tray: tray2)
       expect(GetItemFromBarcode).to receive(:call).with(@user.id, item.barcode).and_return(item).at_least :once
       stub_request(:post, api_stock_url).
-        with(body: {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{tray2.barcode}"},
+        with(body: {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{tray2.barcode}", "sublibrary"=>"ANNEX"},
           headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
         to_return{ |response| { status: 200, body: {results: {status: "OK", message: "Item stocked"}}.to_json, headers: {} } }
       visit trays_items_path
@@ -392,6 +392,8 @@ feature "Trays", type: :feature do
 
 
     it "displays a tray's barcode while processing an item" do
+      item_uri = api_item_url(item)
+      stub_request(:get, item_uri). with(headers: {'User-Agent'=>'Faraday v0.9.1'}). to_return{ |response| { status: 200, body: {"item_id" => "00110147500410", "barcode" => item.barcode, "bib_id" => item.bib_number, "sequence_number" => "00410", "admin_document_number" => "001101475", "call_number" => item.call_number, "description" => item.chron ,"title"=> item.title, "author" => item.author ,"publication" => "Cambridge, UK : Elsevier Science Publishers, c1991-", "edition" => "", "isbn_issn" =>item.isbn_issn, "condition" => item.conditions, "sublibrary" => "ANNEX" }.to_json, headers: {} } }
       visit trays_items_path
       fill_in "Tray", with: tray.barcode
       click_button "Save"
@@ -438,7 +440,7 @@ feature "Trays", type: :feature do
 
     it "allows the user to remove an item from a tray" do
       item_uri = api_item_url(item)
-      stub_request(:get, item_uri). with(headers: {'User-Agent'=>'Faraday v0.9.1'}). to_return{ |response| { status: 200, body: {"item_id" => "00110147500410", "barcode" => item.barcode, "bib_id" => item.bib_number, "sequence_number" => "00410", "admin_document_number" => "001101475", "call_number" => item.call_number, "description" => item.chron ,"title"=> item.title, "author" => item.author ,"publication" => "Cambridge, UK : Elsevier Science Publishers, c1991-", "edition" => "", "isbn_issn" =>item.isbn_issn, "condition" => item.conditions}.to_json, headers: {} } }
+      stub_request(:get, item_uri). with(headers: {'User-Agent'=>'Faraday v0.9.1'}). to_return{ |response| { status: 200, body: {"item_id" => "00110147500410", "barcode" => item.barcode, "bib_id" => item.bib_number, "sequence_number" => "00410", "admin_document_number" => "001101475", "call_number" => item.call_number, "description" => item.chron ,"title"=> item.title, "author" => item.author ,"publication" => "Cambridge, UK : Elsevier Science Publishers, c1991-", "edition" => "", "isbn_issn" =>item.isbn_issn, "condition" => item.conditions, "sublibrary" => "ANNEX" }.to_json, headers: {} } }
       stub_request(:post, api_stock_url).
         with(body: {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{tray.barcode}"},
           headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
@@ -459,7 +461,7 @@ feature "Trays", type: :feature do
 
     it "allows the user to finish with the current tray when processing items" do
       item_uri = api_item_url(item)
-      stub_request(:get, item_uri). with(headers: {'User-Agent'=>'Faraday v0.9.1'}). to_return{ |response| { status: 200, body: {"item_id" => "00110147500410", "barcode" => item.barcode, "bib_id" => item.bib_number, "sequence_number" => "00410", "admin_document_number" => "001101475", "call_number" => item.call_number, "description" => item.chron ,"title"=> item.title, "author" => item.author ,"publication" => "Cambridge, UK : Elsevier Science Publishers, c1991-", "edition" => "", "isbn_issn" =>item.isbn_issn, "condition" => item.conditions}.to_json, headers: {} } }
+      stub_request(:get, item_uri). with(headers: {'User-Agent'=>'Faraday v0.9.1'}). to_return{ |response| { status: 200, body: {"item_id" => "00110147500410", "barcode" => item.barcode, "bib_id" => item.bib_number, "sequence_number" => "00410", "admin_document_number" => "001101475", "call_number" => item.call_number, "description" => item.chron ,"title"=> item.title, "author" => item.author ,"publication" => "Cambridge, UK : Elsevier Science Publishers, c1991-", "edition" => "", "isbn_issn" =>item.isbn_issn, "condition" => item.conditions, "sublibrary" => "ANNEX" }.to_json, headers: {} } }
       stub_request(:post, api_stock_url).
         with(body: {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{tray.barcode}"},
           headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
@@ -479,7 +481,7 @@ feature "Trays", type: :feature do
 
     it "allows the user to finish with the current tray when processing items via scan" do
       item_uri = api_item_url(item)
-      stub_request(:get, item_uri). with(headers: {'User-Agent'=>'Faraday v0.9.1'}). to_return{ |response| { status: 200, body: {"item_id" => "00110147500410", "barcode" => item.barcode, "bib_id" => item.bib_number, "sequence_number" => "00410", "admin_document_number" => "001101475", "call_number" => item.call_number, "description" => item.chron ,"title"=> item.title, "author" => item.author ,"publication" => "Cambridge, UK : Elsevier Science Publishers, c1991-", "edition" => "", "isbn_issn" =>item.isbn_issn, "condition" => item.conditions}.to_json, headers: {} } }
+      stub_request(:get, item_uri). with(headers: {'User-Agent'=>'Faraday v0.9.1'}). to_return{ |response| { status: 200, body: {"item_id" => "00110147500410", "barcode" => item.barcode, "bib_id" => item.bib_number, "sequence_number" => "00410", "admin_document_number" => "001101475", "call_number" => item.call_number, "description" => item.chron ,"title"=> item.title, "author" => item.author ,"publication" => "Cambridge, UK : Elsevier Science Publishers, c1991-", "edition" => "", "isbn_issn" =>item.isbn_issn, "condition" => item.conditions, "sublibrary" => "ANNEX" }.to_json, headers: {} } }
       stub_request(:post, api_stock_url).
         with(body: {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{tray.barcode}"},
           headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
