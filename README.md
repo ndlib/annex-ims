@@ -1,6 +1,6 @@
 Annex IMS
 =========
-
+[![Build Status](https://travis-ci.org/ndlib/annex-ims.svg?branch=master)](https://travis-ci.org/ndlib/annex-ims)
 [![Coverage Status](https://coveralls.io/repos/ndlib/annex-ims/badge.svg)](https://coveralls.io/r/ndlib/annex-ims)
 
 Software to manage inventory in the annex. 
