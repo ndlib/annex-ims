@@ -1,20 +1,20 @@
 class ApiHandler
   BASE_PATH = "/1.0/resources/items"
 
-  attr_reader :verb, :action, :params, :response
+  attr_reader :verb, :action, :params, :response, :connection_opts
 
   class HTTPMethodNotImplemented < StandardError; end
 
-  def self.call(verb:, action:, params: {})
-    new(verb: verb, action: action, params: params).transact!
+  def self.call(verb:, action:, params: {}, connection_opts: {})
+    new(verb: verb, action: action, params: params, connection_opts: connection_opts).transact!
   end
 
-  def self.get(action:, params: {})
-    call(verb: "GET", action: action, params: params)
+  def self.get(action:, params: {}, connection_opts: {})
+    call(verb: "GET", action: action, params: params, connection_opts: connection_opts)
   end
 
-  def self.post(action:, params: {})
-    call(verb: "POST", action: action, params: params)
+  def self.post(action:, params: {}, connection_opts: {})
+    call(verb: "POST", action: action, params: params, connection_opts: connection_opts)
   end
 
   def self.path(action)
@@ -33,21 +33,28 @@ class ApiHandler
     Rails.application.secrets.api_server
   end
 
-  def initialize(verb:, action:, params: {})
+  def initialize(verb:, action:, params: {}, connection_opts: {})
     @verb = verb
     @action = action
     @params = params
+    @connection_opts = connection_opts
   end
 
   def transact!
     raw_response = raw_transact!
     ApiResponse.new(status_code: raw_response["status"], body: raw_response["results"])
   rescue Timeout::Error => e
-    NotifyError.call(exception: e)
-    ApiResponse.new(status_code: 599, body: {})
+    handle_timeout_exception(e)
+  rescue Faraday::TimeoutError => e
+    handle_timeout_exception(e)
   end
 
   private
+
+  def handle_timeout_exception(exception)
+    NotifyError.call(exception: exception)
+    ApiResponse.new(status_code: 599, body: {})
+  end
 
   def raw_transact!
     case verb
@@ -61,7 +68,7 @@ class ApiHandler
   end
 
   def connection
-    @connection ||= ExternalRestConnection.new(base_url: base_url, connection_opts: {})
+    @connection ||= ExternalRestConnection.new(base_url: base_url, connection_opts: connection_opts)
   end
 
   def path

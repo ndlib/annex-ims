@@ -7,7 +7,7 @@ RSpec.describe ApiGetItemMetadata do
     subject { described_class }
 
     describe "#call" do
-      subject { described_class.call(barcode) }
+      subject { described_class.call(barcode: barcode) }
 
       it "retrieves data" do
         stub_api_item_metadata(barcode: barcode)

@@ -85,6 +85,17 @@ RSpec.describe SyncItemMetadata do
         end
       end
 
+      context "timeout" do
+        before do
+          stub_request(:get, api_item_metadata_url(barcode)).to_timeout
+        end
+
+        it "returns false and is a timeout response" do
+          expect(subject).to eq(false)
+          expect(item.metadata_status).to eq("error")
+        end
+      end
+
       context "error response" do
         before do
           stub_api_item_metadata(barcode: barcode, status_code: status_code, body: {}.to_json)

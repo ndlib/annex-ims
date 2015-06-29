@@ -26,7 +26,7 @@ class SyncItemMetadata
   private
 
   def perform_sync
-    response = ApiGetItemMetadata.call(barcode)
+    response = ApiGetItemMetadata.call(barcode: barcode, background: background)
     if response.success?
       save_metadata(response.body)
       true
