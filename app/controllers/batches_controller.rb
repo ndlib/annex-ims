@@ -1,5 +1,4 @@
 class BatchesController < ApplicationController
-  before_action :authenticate_user!
 
   def index
     GetRequests.call(current_user.id) # This should go in a queue or scheduler to run periodically.

@@ -1,5 +1,4 @@
 class BinsController < ApplicationController
-  before_action :authenticate_user!
 
   def index
     @bins = Bin.includes(:matches).where.not(matches: { id: nil })
