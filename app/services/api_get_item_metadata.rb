@@ -24,7 +24,10 @@ class ApiGetItemMetadata
     if background?
       {}
     else
-      { timeout: 3 }
+      {
+        timeout: 3,
+        max_retries: 0
+      }
     end
   end
 end

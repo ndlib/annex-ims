@@ -37,7 +37,19 @@ class SyncItemMetadata
   end
 
   def sync_required?
+    sync_required_based_on_status? && sync_allowed_based_on_time?
+  end
+
+  def sync_required_based_on_status?
     item.metadata_status != "complete"
+  end
+
+  def sync_allowed_based_on_time?
+    if background?
+      true
+    else
+      item.metadata_updated_at.blank? || 10.minutes.ago > item.metadata_updated_at
+    end
   end
 
   def user

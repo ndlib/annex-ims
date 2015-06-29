@@ -6,12 +6,13 @@ RSpec.describe SyncItemMetadata do
   let(:user) { FactoryGirl.create(:user) }
   let(:user_id) { user.id }
   let(:response) { ApiResponse.new(status_code: 200, body: {}) }
+  let(:background) { false }
 
   context "self" do
     subject { described_class }
 
     describe "#call" do
-      subject { described_class.call(item: item, user_id: user_id) }
+      subject { described_class.call(item: item, user_id: user_id, background: background) }
 
       shared_examples "a metadata status update" do |expected_status|
         it "sets the item metadata_status to #{expected_status}" do
@@ -28,7 +29,7 @@ RSpec.describe SyncItemMetadata do
       end
 
       context "previously synced item" do
-        let(:item) { instance_double(Item, metadata_status: "complete") }
+        let(:item) { instance_double(Item, metadata_status: "complete", metadata_updated_at: 1.day.ago) }
 
         it "does not perform a sync" do
           expect(ApiGetItemMetadata).to_not receive(:call)
@@ -36,8 +37,30 @@ RSpec.describe SyncItemMetadata do
         end
       end
 
+      context "recently updated item in error" do
+        let(:item) { instance_double(Item, barcode: barcode, metadata_status: "error", metadata_updated_at: 1.minute.ago, update!: true) }
+
+        context "foreground sync" do
+          let(:background) { false }
+
+          it "does not perform a sync" do
+            expect(ApiGetItemMetadata).to_not receive(:call)
+            expect(subject).to eq(true)
+          end
+        end
+
+        context "background sync" do
+          let(:background) { true }
+
+          it "performs a sync" do
+            expect(ApiGetItemMetadata).to receive(:call).and_return(response)
+            expect(subject).to eq(true)
+          end
+        end
+      end
+
       context "pending item" do
-        let(:item) { instance_double(Item, barcode: barcode, metadata_status: "pending", update!: true) }
+        let(:item) { instance_double(Item, barcode: barcode, metadata_status: "pending", update!: true, metadata_updated_at: 1.day.ago) }
 
         it "performs a sync" do
           expect(ApiGetItemMetadata).to receive(:call).and_return(response)
@@ -46,7 +69,7 @@ RSpec.describe SyncItemMetadata do
       end
 
       context "error item" do
-        let(:item) { instance_double(Item, barcode: barcode, metadata_status: "error", update!: true) }
+        let(:item) { instance_double(Item, barcode: barcode, metadata_status: "error", update!: true, metadata_updated_at: 1.day.ago) }
 
         it "performs a sync" do
           expect(ApiGetItemMetadata).to receive(:call).and_return(response)
@@ -55,7 +78,7 @@ RSpec.describe SyncItemMetadata do
       end
 
       context "not_found item" do
-        let(:item) { instance_double(Item, barcode: barcode, metadata_status: "not_found", update!: true) }
+        let(:item) { instance_double(Item, barcode: barcode, metadata_status: "not_found", update!: true, metadata_updated_at: 1.day.ago) }
 
         it "performs a sync" do
           expect(ApiGetItemMetadata).to receive(:call).and_return(response)
