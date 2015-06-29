@@ -17,7 +17,8 @@
     conditions: [Item::CONDITIONS.sample, Item::CONDITIONS.sample, Item::CONDITIONS.sample, Item::CONDITIONS.sample].uniq,
     call_number: "#{('A'..'Z').to_a.sample}#{('A'..'Z').to_a.sample}#{Faker::Number.number(4)}.#{('A'..'Z').to_a.sample}#{Faker::Number.number(2)} #{(1900..2014).to_a.sample}",
     initial_ingest: Faker::Date.between(30.days.ago, Date.today),
-    last_ingest: Time.now.strftime("%Y-%m-%d"))
+    last_ingest: Time.now.strftime("%Y-%m-%d"),
+    thickness: 1)
 end
 
 50.times do |i|
