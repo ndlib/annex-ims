@@ -11,8 +11,8 @@ RSpec.describe ItemMetadataWorker, type: :worker do
     subject { described_class }
 
     describe "#number_of_workers" do
-      it "is 4" do
-        expect(subject.number_of_workers).to eq(4)
+      it "is 1" do
+        expect(subject.number_of_workers).to eq(1)
       end
     end
   end
