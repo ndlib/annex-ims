@@ -1,6 +1,8 @@
 Annex IMS
 =========
 
+[![Coverage Status](https://coveralls.io/repos/ndlib/annex-ims/badge.svg)](https://coveralls.io/r/ndlib/annex-ims)
+
 Software to manage inventory in the annex. 
 
 Annex IMS - Inventory Management System for offsite storage facilities
