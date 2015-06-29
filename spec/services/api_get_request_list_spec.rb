@@ -14,6 +14,7 @@ RSpec.describe ApiGetRequestList do
         expect(subject.success?).to eq(true)
         expect(subject.body).to be_a_kind_of(Array)
         expect(subject.body.count).to eq(2)
+        expect(subject.body.first["trans"]).to eq("illiad_85132100")
       end
 
       it "does not raise an exception on API failure" do

@@ -75,6 +75,8 @@ class ApiGetRequestList
         "bib_number" => res["bib_number"]
       }
     end
+
+    requests
   end
 
 end
