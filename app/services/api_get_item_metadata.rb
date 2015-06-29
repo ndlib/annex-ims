@@ -10,6 +10,6 @@ class ApiGetItemMetadata
   end
 
   def get_data!
-    ApiHandler.get(:record, barcode: barcode)
+    ApiHandler.get(action: :record, params: { barcode: barcode })
   end
 end

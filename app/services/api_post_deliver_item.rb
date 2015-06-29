@@ -13,7 +13,7 @@ class ApiPostDeliverItem
   end
 
   def post_data!
-    response = ApiHandler.post(delivery_type, params)
+    response = ApiHandler.post(action: delivery_type, params: params)
 
     if delivery_type == "send"
       ShipItem.call(match.item, user)  # This is inside out from StockItem, but works better this way, I think.

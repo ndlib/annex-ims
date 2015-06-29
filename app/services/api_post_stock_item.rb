@@ -10,12 +10,12 @@ class ApiPostStockItem
   end
 
   def post_data!
-    ApiHandler.post(:stock, post_params)
+    ApiHandler.post(action: :stock, params: params)
   end
 
   private
 
-  def post_params
+  def params
     {
       item_id: item.id,
       barcode: item.barcode,

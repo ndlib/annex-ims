@@ -5,16 +5,16 @@ class ApiHandler
 
   class HTTPMethodNotImplemented < StandardError; end
 
-  def self.call(verb, action, params)
-    new(verb, action, params).transact!
+  def self.call(verb:, action:, params: {})
+    new(verb: verb, action: action, params: params).transact!
   end
 
-  def self.get(action, params)
-    call("GET", action, params)
+  def self.get(action:, params: {})
+    call(verb: "GET", action: action, params: params)
   end
 
-  def self.post(action, params)
-    call("POST", action, params)
+  def self.post(action:, params: {})
+    call(verb: "POST", action: action, params: params)
   end
 
   def self.path(action)
@@ -33,7 +33,7 @@ class ApiHandler
     Rails.application.secrets.api_server
   end
 
-  def initialize(verb, action, params)
+  def initialize(verb:, action:, params: {})
     @verb = verb
     @action = action
     @params = params

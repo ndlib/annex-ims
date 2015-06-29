@@ -16,7 +16,7 @@ RSpec.describe ApiHandler do
   let(:params) { { test: "test" } }
   let(:connection) { instance_double(ExternalRestConnection) }
 
-  subject { described_class.new(method, action, params) }
+  subject { described_class.new(verb: method, action: action, params: params) }
 
   before do
     allow(ExternalRestConnection).to receive(:new).and_return(connection)
@@ -27,23 +27,23 @@ RSpec.describe ApiHandler do
 
     describe "#call" do
       it "instantiates a new record and calls transact!" do
-        expect(described_class).to receive(:new).with("GET", action, params).and_call_original
+        expect(described_class).to receive(:new).with(verb: "GET", action: action, params: params).and_call_original
         expect_any_instance_of(described_class).to receive(:transact!).and_return("response")
-        expect(subject.call("GET", action, params)).to eq("response")
+        expect(subject.call(verb: "GET", action: action, params: params)).to eq("response")
       end
     end
 
     describe "#get" do
       it "calls #call with GET" do
-        expect(described_class).to receive(:call).with("GET", action, params).and_return("response")
-        expect(subject.get(action, params)).to eq("response")
+        expect(described_class).to receive(:call).with(verb: "GET", action: action, params: params).and_return("response")
+        expect(subject.get(action: action, params: params)).to eq("response")
       end
     end
 
     describe "#post" do
       it "calls #call with POST" do
-        expect(described_class).to receive(:call).with("POST", action, params).and_return("response")
-        expect(subject.post(action, params)).to eq("response")
+        expect(described_class).to receive(:call).with(verb: "POST", action: action, params: params).and_return("response")
+        expect(subject.post(action: action, params: params)).to eq("response")
       end
     end
 

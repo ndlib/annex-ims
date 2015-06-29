@@ -1,13 +1,14 @@
 class SyncItemMetadata
-  attr_reader :item, :user_id
+  attr_reader :item, :user_id, :background
 
   def self.call(item:, user_id:, background: false)
-    new(item: item, user_id: user_id).sync
+    new(item: item, user_id: user_id, background: background).sync
   end
 
   def initialize(item:, user_id:, background: false)
     @item = item
     @user_id = user_id
+    @background = background
   end
 
   def sync
@@ -16,6 +17,10 @@ class SyncItemMetadata
     else
       true
     end
+  end
+
+  def background?
+    background
   end
 
   private
