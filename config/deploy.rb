@@ -49,7 +49,7 @@ set :default_env, { path: "/opt/ruby/current/bin:$PATH" }
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
-set :whenever_identifier, ->{ "#{fetch(:application)}_#{fetch(:stage)}" }
+set :whenever_identifier, -> { "#{fetch(:application)}_#{fetch(:stage)}" }
 
 namespace :deploy do
 
