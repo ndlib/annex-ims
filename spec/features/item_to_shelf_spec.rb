@@ -17,8 +17,26 @@ feature "Shelves", :type => :feature do
       login_user
 
       item_uri = api_item_url(@item)
+      response_body = {
+        "item_id" => "00110147500410",
+        "barcode" => @item.barcode,
+        "bib_id" => @item.bib_number,
+        "sequence_number" => "00410",
+        "admin_document_number" => "001101475",
+        "call_number" => @item.call_number,
+        "description" => @item.chron,
+        "title"=> @item.title,
+        "author" => @item.author,
+        "publication" => "Cambridge, UK : Elsevier Science Publishers, c1991-",
+        "edition" => "",
+        "isbn_issn" => @item.isbn_issn,
+        "condition" => @item.conditions,
+        "sublibrary" => "ANNEX"
+      }.to_json
 
-      stub_request(:get, item_uri). with(:headers => {'User-Agent'=>'Faraday v0.9.1'}). to_return{ |response| { :status => 200, :body => {"item_id" => "00110147500410", "barcode" => @item.barcode, "bib_id" => @item.bib_number, "sequence_number" => "00410", "admin_document_number" => "001101475", "call_number" => @item.call_number, "description" => @item.chron ,"title"=> @item.title, "author" => @item.author ,"publication" => "Cambridge, UK : Elsevier Science Publishers, c1991-", "edition" => "", "isbn_issn" =>@item.isbn_issn, "condition" => @item.conditions, "sublibrary" => "ANNEX" }.to_json, :headers => {} } }
+      stub_request(:get, item_uri).
+        with(headers: { "User-Agent" => "Faraday v0.9.1" }).
+        to_return { { status: 200, body: response_body, headers: {} } }
 
       stub_request(:post, api_stock_url).
         with(:body => {"barcode"=>"#{@item.barcode}", "item_id"=>"#{@item.id}", "tray_code"=>"#{@item.tray.barcode}"},
@@ -135,7 +153,25 @@ feature "Shelves", :type => :feature do
         item = FactoryGirl.create(:item, title: "Item #{i + 1}")
         @items << item
         item_uri = api_item_url(item)
-        stub_request(:get, item_uri). with(:headers => {'User-Agent'=>'Faraday v0.9.1'}). to_return{ |response| { :status => 200, :body => {"item_id" => "00110147500410", "barcode" => item.barcode, "bib_id" => item.bib_number, "sequence_number" => "00410", "admin_document_number" => "001101475", "call_number" => item.call_number, "description" => item.chron ,"title"=> item.title, "author" => item.author ,"publication" => "Cambridge, UK : Elsevier Science Publishers, c1991-", "edition" => "", "isbn_issn" =>item.isbn_issn, "condition" => item.conditions, "sublibrary" => "ANNEX" }.to_json, :headers => {} } }
+        response_body = {
+          "item_id" => "00110147500410",
+          "barcode" => item.barcode,
+          "bib_id" => item.bib_number,
+          "sequence_number" => "00410",
+          "admin_document_number" => "001101475",
+          "call_number" => item.call_number,
+          "description" => item.chron,
+          "title" => item.title,
+          "author" => item.author,
+          "publication" => "Cambridge, UK : Elsevier Science Publishers, c1991-",
+          "edition" => "",
+          "isbn_issn" => item.isbn_issn,
+          "condition" => item.conditions,
+          "sublibrary" => "ANNEX"
+        }.to_json
+        stub_request(:get, item_uri).
+          with(headers: { "User-Agent" => "Faraday v0.9.1" }).
+          to_return { { status: 200, body: response_body, headers: {} } }
         stub_request(:post, api_stock_url).
           with(:body => {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"TRAY-#{@shelf.barcode}"},
             :headers => {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).

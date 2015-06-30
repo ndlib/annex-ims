@@ -17,12 +17,12 @@ RSpec.describe ItemPath do
     item2_uri = api_item_url(@item2)
 
     stub_request(:get, item_uri).
-         with(:headers => {'User-Agent'=>'Faraday v0.9.1'}).
-         to_return(:status => 200, :body => '{"path":"http://bogus", "sublibrary":"ANNEX"}', :headers => {})
+      with(headers: { "User-Agent"=>"Faraday v0.9.1" }).
+      to_return(status: 200, body: '{"path":"http://bogus", "sublibrary":"ANNEX"}', headers: {})
 
     stub_request(:get, item2_uri).
-         with(:headers => {'User-Agent'=>'Faraday v0.9.1'}).
-         to_return(:status => 200, :body => '{"path":"http://bogus", "sublibrary":"ANNEX"}', :headers => {})
+      with(headers: { "User-Agent"=>"Faraday v0.9.1" }).
+      to_return(status: 200, body: '{"path":"http://bogus", "sublibrary":"ANNEX"}', headers: {})
 
 
     @user_id = 1 # Just fake having a user here

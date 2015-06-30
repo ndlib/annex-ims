@@ -213,7 +213,7 @@ RSpec.describe SyncItemMetadata do
         end
 
         context "no sublibrary code" do
-          let(:body_json) { { }.to_json }
+          let(:body_json) { {}.to_json }
           let(:status_code) { 200 }
 
           it_behaves_like "a metadata status update", "not_for_annex"

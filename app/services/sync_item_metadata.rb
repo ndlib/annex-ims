@@ -65,13 +65,13 @@ class SyncItemMetadata
 
   def handle_error(error)
     save_metadata_status(error[:status])
-    if(error[:issue])
+    if error[:issue]
       AddIssue.call(user_id, barcode, error[:issue])
     end
-    if(error[:activity])
+    if error[:activity]
       LogActivity.call(item, error[:activity], nil, Time.now, user)
     end
-    if(error[:enqueue])
+    if error[:enqueue]
       process_in_background
     end
   end

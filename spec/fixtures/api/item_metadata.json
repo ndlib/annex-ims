@@ -12,5 +12,6 @@
   "edition":"Edition",
   "isbn_issn":"0871683504",
   "condition":["Condition"],
+  "chron":"Chron",
   "sublibrary":"ANNEX"
 }
