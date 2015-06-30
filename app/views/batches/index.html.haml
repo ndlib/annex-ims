@@ -19,6 +19,7 @@
         %th= 'Request Barcode'
         %th= 'Request ISSN/ISBN'
         %th= 'Request Bib Number'
+        %th= 'Remove Request'
     %tbody
       - @data.each do |row|
         %tr{"data-params" => row['item_data'].to_json}
@@ -33,6 +34,11 @@
           %td= row['barcode']
           %td= row['isbn_issn']
           %td= row['bib_number']
+          %td
+            = form_tag remove_request_path do |f|
+              = hidden_field_tag :request_id, row['id']
+              .actions
+                = submit_tag 'Remove', data: { confirm: 'Remove request?' }, class: 'btn btn-primary'
   .actions
     = submit_tag 'Save', class: 'btn btn-primary'
 :javascript

@@ -48,6 +48,7 @@ feature "Bins", :type => :feature do
     end
 
     it "can remove an item from a bin" do
+      stub_api_scan_send(match: @bin.matches[0])
       visit show_bin_path(:id => @bin.id)
       expect(page).to have_content @bin.matches[0].item.barcode
       expect(page).to have_content @bin.matches[0].item.title

@@ -5,7 +5,7 @@ class Request < ActiveRecord::Base
   validates_presence_of :source
   validates_presence_of :req_type
 
-  has_many :matches
+  has_many :matches, dependent: :destroy
   has_many :items, through: :matches
   has_many :batches, through: :matches
 
