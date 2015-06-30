@@ -11,7 +11,8 @@ class DestroyRequest
   end
 
   def destroy
-    request.destroy!
-    LogActivity.call(request, "Destroyed", nil, Time.now, user)
+    status = request.destroy!
+    LogActivity.call(request, "Removed", nil, Time.now, user)
+    status
   end
 end

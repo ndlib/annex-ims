@@ -28,6 +28,10 @@ module ApiHelper
     api_url(:scan)
   end
 
+  def api_remove_request_url
+    api_url(:archive_request)
+  end
+
   def api_item_metadata_url(barcode)
     api_url(:record, barcode: barcode)
   end
@@ -64,6 +68,13 @@ module ApiHelper
       to_return(status: status_code, body: body, headers: {})
   end
 
+  def stub_api_remove_request(request: request, status_code: 200, body: nil)
+    stub_request(:post, api_remove_request_url).
+      with(body: api_remove_request_params(request),
+           headers: { "User-Agent" => "Faraday v0.9.1" }).
+      to_return(status: status_code, body: body, headers: {})
+  end
+
   def api_scan_send_delivery_type(match)
     if match.request.del_type == "scan"
       "scan"
@@ -81,6 +92,13 @@ module ApiHelper
       transaction_num: match.request.trans.to_s,
       request_type: match.request.req_type,
       delivery_type: api_scan_send_delivery_type(match)
+    }
+  end
+
+  def api_remove_request_params(request)
+    {
+      source: request.source,
+      transaction_num: request.trans
     }
   end
 

@@ -20,6 +20,9 @@ describe "DestroyRequest" do
       expect(Request.all.count).to eq 1
     end
     
+    it "returns true on success" do
+      expect(subject).to be_truthy  
+    end    
   end
 
 end
