@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe SyncItemMetadata do
   let(:barcode) { "00000007819006" }
-  let(:item) { FactoryGirl.create(:item, barcode: barcode) }
+  let(:item) { FactoryGirl.create(:item, barcode: barcode, metadata_status: "pending") }
   let(:user) { FactoryGirl.create(:user) }
   let(:user_id) { user.id }
   let(:response) { ApiResponse.new(status_code: 200, body: { sublibrary: "ANNEX" }) }
