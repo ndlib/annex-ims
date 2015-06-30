@@ -1,4 +1,6 @@
 class ApiPostStockItem
+  class ApiStockItemError < StandardError; end
+
   attr_reader :item
 
   def self.call(item: item)
@@ -10,7 +12,12 @@ class ApiPostStockItem
   end
 
   def post_data!
-    ApiHandler.post(action: :stock, params: params)
+    response = ApiHandler.post(action: :stock, params: params)
+    if response.success?
+      response
+    else
+      raise ApiStockItemError, "Error sending stock request to API. params: #{params.inspect}, response: #{response.inspect}"
+    end
   end
 
   private
