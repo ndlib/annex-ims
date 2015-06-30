@@ -9,37 +9,32 @@ RSpec.describe "Request" do
     context "when source is aleph" do
 
       it "returns the correct bin type" do
-        expect(request.bin_type).to eq "ALEPH-LOAN" 
+        expect(request.bin_type).to eq "ALEPH-LOAN"
       end
     end
 
     context "when source is not aleph" do
 
       before(:each) do
-        request.source = 'ill'
+        request.source = "ill"
       end
 
       context "when del_type is not loan" do
-
         before(:each) do
           request.del_type = "not loan"
         end
 
         it "returns the correct bin type" do
-          expect(request.bin_type).to eq "ILL-SCAN" 
+          expect(request.bin_type).to eq "ILL-SCAN"
         end
-        
       end
 
       context "when del_type is loan" do
 
         it "returns the correct bin type" do
-          expect(request.bin_type).to eq "ILL-LOAN" 
+          expect(request.bin_type).to eq "ILL-LOAN"
         end
       end
-      
     end
-    
   end
-  
 end

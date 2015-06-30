@@ -8,7 +8,7 @@ RSpec.describe ApiRemoveRequest do
     subject { described_class.call(request) }
 
     it "responds with success" do
-      stub_api_remove_request(request: request, body: { 
+      stub_api_remove_request(request: request, body: {
         "status" => "OK",
         "message" => "Request removed" }.to_json)
       expect(subject).to be_a_kind_of(ApiResponse)

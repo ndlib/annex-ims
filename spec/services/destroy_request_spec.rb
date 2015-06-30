@@ -1,11 +1,10 @@
 require "rails_helper"
 
 describe "DestroyRequest" do
-
   let(:request) { FactoryGirl.create(:request) }
   let(:request1) { FactoryGirl.create(:request) }
   let(:user) { FactoryGirl.create(:user) }
-  subject { DestroyRequest.call(request, user)}
+  subject { DestroyRequest.call(request, user) }
 
   describe "#destroy" do
 
@@ -19,10 +18,9 @@ describe "DestroyRequest" do
       subject
       expect(Request.all.count).to eq 1
     end
-    
-    it "returns true on success" do
-      expect(subject).to be_truthy  
-    end    
-  end
 
+    it "returns true on success" do
+      expect(subject).to be_truthy
+    end
+  end
 end
