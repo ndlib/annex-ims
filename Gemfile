@@ -127,6 +127,8 @@ gem 'kaminari'
 
 gem "sneakers"
 
+gem "whenever", require: false
+
 group :development do
   # Simple generators for layouts
   gem 'rails_layout'
