@@ -10,7 +10,7 @@ class ApiRemoveRequest
   end
 
   def post_data!
-    ApiHandler.post(:archive_request, post_params)
+    ApiHandler.post(action: :archive_request, params: post_params)
   end
 
   private
