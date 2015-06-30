@@ -39,7 +39,7 @@ class GetItemFromBarcode
   end
 
   def item_can_be_stocked?
-    item.metadata_status != "not_found"
+    !(["not_found", "not_for_annex"].include? item.metadata_status)
   end
 
   def user

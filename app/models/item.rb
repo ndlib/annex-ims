@@ -16,6 +16,7 @@ class Item < ActiveRecord::Base
     "pending",
     "complete",
     "not_found",
+    "not_for_annex",
     "error",
   ]
 

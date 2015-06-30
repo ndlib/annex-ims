@@ -5,7 +5,7 @@ RSpec.describe SyncItemMetadata do
   let(:item) { FactoryGirl.create(:item, barcode: barcode) }
   let(:user) { FactoryGirl.create(:user) }
   let(:user_id) { user.id }
-  let(:response) { ApiResponse.new(status_code: 200, body: {}) }
+  let(:response) { ApiResponse.new(status_code: 200, body: { sublibrary: "ANNEX" }) }
   let(:background) { false }
 
   context "self" do
@@ -25,6 +25,20 @@ RSpec.describe SyncItemMetadata do
           subject
           expect(item.metadata_updated_at).to be_present
           expect(Time.now - item.metadata_updated_at).to be < 1
+        end
+      end
+
+      shared_examples "an issue logger" do |expected_issue|
+        it "calls AddIssue with #{expected_issue}" do
+          expect(AddIssue).to receive(:call).with(user.id, barcode, expected_issue)
+          subject
+        end
+      end
+
+      shared_examples "an activity logger" do |expected_activity, expected_location|
+        it "calls LogActivity with #{expected_activity}" do
+          expect(LogActivity).to receive(:call).with(item, expected_activity, expected_location, anything, user)
+          subject
         end
       end
 
@@ -103,7 +117,7 @@ RSpec.describe SyncItemMetadata do
         end
 
         it "logs the activity" do
-          expect(LogActivity).to receive(:call).with(anything, "UpdatedByAPI", anything, anything, anything).ordered
+          expect(LogActivity).to receive(:call).with(anything, "MetadataUpdated", anything, anything, anything).ordered
           expect(subject).to eq(true)
         end
       end
@@ -120,8 +134,10 @@ RSpec.describe SyncItemMetadata do
       end
 
       context "error response" do
+        let(:body_json) { { sublibrary: "ANNEX" }.to_json }
+
         before do
-          stub_api_item_metadata(barcode: barcode, status_code: status_code, body: {}.to_json)
+          stub_api_item_metadata(barcode: barcode, status_code: status_code, body: body_json)
         end
 
         shared_examples "an error response" do
@@ -145,6 +161,10 @@ RSpec.describe SyncItemMetadata do
           it_behaves_like "a metadata status update", "error"
 
           it_behaves_like "a response that queues a background job"
+
+          it_behaves_like "an issue logger", "500"
+
+          it_behaves_like "an activity logger", "MetadataError500"
         end
 
         context "not found error" do
@@ -158,6 +178,10 @@ RSpec.describe SyncItemMetadata do
             expect(SyncItemMetadataJob).to_not receive(:perform_later)
             subject
           end
+
+          it_behaves_like "an issue logger", "Item not found."
+
+          it_behaves_like "an activity logger", "MetadataNotFound"
         end
 
         context "timeout error" do
@@ -168,6 +192,10 @@ RSpec.describe SyncItemMetadata do
           it_behaves_like "a metadata status update", "error"
 
           it_behaves_like "a response that queues a background job"
+
+          it_behaves_like "an issue logger", "API Timeout."
+
+          it_behaves_like "an activity logger", "MetadataTimeout"
         end
 
         context "unauthorized error" do
@@ -178,6 +206,32 @@ RSpec.describe SyncItemMetadata do
           it_behaves_like "a metadata status update", "error"
 
           it_behaves_like "a response that queues a background job"
+
+          it_behaves_like "an issue logger", "Unauthorized - Check API Key."
+
+          it_behaves_like "an activity logger", "MetadataUnauthorized"
+        end
+
+        context "no sublibrary code" do
+          let(:body_json) { {}.to_json }
+          let(:status_code) { 200 }
+
+          it_behaves_like "a metadata status update", "not_for_annex"
+
+          it_behaves_like "an issue logger", "Not marked for Annex"
+
+          it_behaves_like "an activity logger", "MetadataFoundNotMarkedForAnnex"
+        end
+
+        context "sublibrary code is not ANNEX" do
+          let(:body_json) { { sublibrary: "SOMETHINGELSE" }.to_json }
+          let(:status_code) { 200 }
+
+          it_behaves_like "a metadata status update", "not_for_annex"
+
+          it_behaves_like "an issue logger", "Not marked for Annex"
+
+          it_behaves_like "an activity logger", "MetadataFoundNotMarkedForAnnex"
         end
       end
     end
