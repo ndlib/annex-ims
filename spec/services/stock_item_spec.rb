@@ -36,5 +36,4 @@ RSpec.describe StockItem do
     expect(ApiStockItemJob).to receive(:perform_later).with(item: @item)
     subject
   end
-
 end
