@@ -18,18 +18,21 @@
   %thead
     %tr
       %th= "#{@shelf.items.count} Item(s)"
+      %th= 'Status'
       %th= 'Barcode'
       %th= 'Title'
       %th= 'Chron'
   %tbody
     - @shelf.items.each do |item|
       %tr
-        %td
+        %td{ style: "white-space:nowrap;" }
           = form_tag dissociate_shelf_item_path(@shelf) do |f|
             = hidden_field_tag :item_id, item.id
-            .actions
+            .actions{ style: "display: inline-block;" }
               = submit_tag 'Remove', class: 'btn btn-primary'
-              = submit_tag 'Unstock', class: 'btn btn-secondary'
+              - if(item.status == 'stocked')
+                = submit_tag 'Unstock', class: 'btn btn-secondary'
+        %td= item.status.titleize
         %td= item.barcode
         %td= item.title
         %td= item.chron
