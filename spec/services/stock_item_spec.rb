@@ -32,4 +32,8 @@ RSpec.describe StockItem do
     expect(subject).to be(false)
   end
 
+  it "queues a background job" do
+    expect(ApiStockItemJob).to receive(:perform_later).with(item: @item)
+    subject
+  end
 end

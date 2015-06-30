@@ -106,6 +106,7 @@ namespace :sneakers do
       begin
         workers = []
         worker_classes = [
+          ApiWorker,
           ItemMetadataWorker,
         ]
         worker_classes.each do |worker_class|
