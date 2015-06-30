@@ -8,7 +8,7 @@ RSpec.describe ApiPostStockItem do
     subject { described_class }
 
     describe "#call" do
-      subject { described_class.call(item.id) }
+      subject { described_class.call(item: item) }
 
       it "retrieves data" do
         stub_api_stock_item(item: item)

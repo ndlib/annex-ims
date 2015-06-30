@@ -1,12 +1,12 @@
 class ApiPostStockItem
-  attr_reader :item_id
+  attr_reader :item
 
-  def self.call(item_id)
-    new(item_id).post_data!
+  def self.call(item: item)
+    new(item: item).post_data!
   end
 
-  def initialize(item_id)
-    @item_id = item_id
+  def initialize(item: item)
+    @item = item
   end
 
   def post_data!
@@ -21,10 +21,6 @@ class ApiPostStockItem
       barcode: item.barcode,
       tray_code: item.tray.barcode
     }
-  end
-
-  def item
-    @item ||= Item.find(item_id)
   end
 
 end
