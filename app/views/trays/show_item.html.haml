@@ -29,7 +29,7 @@
       %th= 'Chron'
   %tbody
     - @tray.items.each do |item|
-      %tr{ class: "item-metadata-#{item.metadata_status}" }
+      %tr{ class: "item-metadata-#{item.metadata_status.to_s.gsub(/_/,'-')}" }
         %td{ style: "white-space:nowrap;" }
           = form_tag dissociate_tray_item_path(@tray) do |f|
             = hidden_field_tag :item_id, item.id
@@ -45,5 +45,8 @@
             = item.title
           - else
             = t "item.metadata_status.#{item.metadata_status}"
+            - if item.title.present?
+              %br
+              = item.title
         %td= item.chron
 

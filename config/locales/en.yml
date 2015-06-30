@@ -23,7 +23,8 @@ en:
   item:
     metadata_status:
       complete: "Metadata synchronized"
+      error: "Error loading metadata, will retry automatically"
+      not_for_annex: "Item not flagged for annex"
       not_found: "Barcode not found"
       pending: "Metadata sync pending"
-      error: "Error loading metadata, will retry automatically"
 

@@ -248,7 +248,8 @@ hr {
   > tbody {
     tr:nth-of-type(odd),
     tr:nth-of-type(even) {
-      &.item-metadata-not_found {
+      &.item-metadata-not-found,
+      &.item-metadata-not-for-annex {
         background-color: $alert-danger-bg;
       }
     }
