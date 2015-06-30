@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :item do
-    sequence(:barcode) { |n| "#{n}" }
+    sequence(:barcode) { |n| "000012345#{n}" }
     title Faker::Lorem.sentence
     author Faker::Name.name
     chron "Vol 1"

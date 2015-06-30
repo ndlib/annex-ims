@@ -10,12 +10,9 @@ class ApiGetRequestList
   end
 
   def get_data!
-    params = nil
-    headers = nil
-
     requests = []
 
-    response = ApiHandler.get(:active_requests, params)
+    response = ApiHandler.get(action: :active_requests)
     if response.success?
       requests = parse_requests(response.body[:requests])
     end

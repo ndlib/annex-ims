@@ -1,13 +1,14 @@
 class SyncItemMetadata
-  attr_reader :item, :user_id
+  attr_reader :item, :user_id, :background
 
-  def self.call(item:, user_id:)
-    new(item: item, user_id: user_id).sync
+  def self.call(item:, user_id:, background: false)
+    new(item: item, user_id: user_id, background: background).sync
   end
 
-  def initialize(item:, user_id:)
+  def initialize(item:, user_id:, background: false)
     @item = item
     @user_id = user_id
+    @background = background
   end
 
   def sync
@@ -18,10 +19,14 @@ class SyncItemMetadata
     end
   end
 
+  def background?
+    background
+  end
+
   private
 
   def perform_sync
-    response = ApiGetItemMetadata.call(barcode)
+    response = ApiGetItemMetadata.call(barcode: barcode, background: background)
     if response.success?
       save_metadata(response.body)
       true
@@ -32,7 +37,19 @@ class SyncItemMetadata
   end
 
   def sync_required?
+    sync_required_based_on_status? && sync_allowed_based_on_time?
+  end
+
+  def sync_required_based_on_status?
     item.metadata_status != "complete"
+  end
+
+  def sync_allowed_based_on_time?
+    if background?
+      true
+    else
+      item.metadata_updated_at.blank? || 10.minutes.ago > item.metadata_updated_at
+    end
   end
 
   def user
@@ -55,7 +72,14 @@ class SyncItemMetadata
 
   def handle_other_error
     save_metadata_status("error")
+    process_in_background
     LogActivity.call(item, "MetadataError", nil, Time.now, user)
+  end
+
+  def process_in_background
+    if !background?
+      SyncItemMetadataJob.perform_later(item: item, user_id: user_id)
+    end
   end
 
   def error_message(response)

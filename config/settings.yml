@@ -1,0 +1,20 @@
+# Store non-sensitive configuration settings here.  Acessible from Rails.configuration.settings
+defaults: &defaults
+  api_foreground_timeout: 3
+  api_foreground_max_retries: 0
+  api_max_retries: 2
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+staging:
+  <<: *defaults
+
+pre_production:
+  <<: *defaults
+
+production:
+  <<: *defaults

@@ -8,7 +8,7 @@ RSpec.describe SyncItemMetadataJob, type: :job do
 
   describe "#perform" do
     it "calls SyncItemMetadata with set values" do
-      expect(SyncItemMetadata).to receive(:call).with(item: item, user_id: user_id)
+      expect(SyncItemMetadata).to receive(:call).with(item: item, user_id: user_id, background: true)
       subject.perform_now(item: item, user_id: user_id)
     end
   end
