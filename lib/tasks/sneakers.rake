@@ -4,15 +4,31 @@ require 'sneakers/runner'
 task :environment
 
 namespace :sneakers do
-  class SneakersAlreadyRunning < StandardError
+  class SneakersPidFileExists < StandardError
   end
 
   def pid_file
     Rails.root.join('tmp/pids/sneakers.pid')
   end
 
-  def sneakers_running?
+  def pid_file_exists?
     File.exists?(pid_file)
+  end
+
+  def sneakers_pid
+    if pid_file_exists?
+      File.read(pid_file).strip.to_i
+    end
+  end
+
+  def process_running?(pid)
+    begin
+      # Send a null signal to get the process status
+      Process.kill(0, pid)
+      true
+    rescue Errno::ESRCH
+      false
+    end
   end
 
   # Start and stop a worker to make sure it is functional
@@ -22,13 +38,22 @@ namespace :sneakers do
     worker.stop
   end
 
-  desc "Force start sneakers as a background process"
-  task :force_start do
-    if sneakers_running?
-      puts "Stopping existing sneakers process."
-      Rake::Task["sneakers:force_stop"].invoke
+  desc "Ensures that sneakers is running"
+  task :ensure_running do
+    running = false
+    if pid = sneakers_pid
+      if process_running?(pid)
+        running = true
+      else
+        timestamp = Time.now.strftime("%Y%m%d%H%M%S")
+        broken_name = "#{pid_file}.#{timestamp}"
+        File.rename(pid_file, broken_name)
+        puts "PID file exists, but sneakers is not running. Moving broken PID file: #{broken_name}"
+      end
     end
-    Rake::Task["sneakers:start"].invoke
+    if !running
+      Rake::Task["sneakers:start"].invoke
+    end
   end
 
   desc "Start sneakers workers as a background process"
@@ -43,8 +68,8 @@ namespace :sneakers do
   desc "Start the sneakers workers"
   task :run  => :environment do
     begin
-      if sneakers_running?
-        raise SneakersAlreadyRunning, "Sneakers already running: #{pid_file}"
+      if pid_file_exists?
+        raise SneakersPidFileExists, "Sneakers pid file already exists: #{pid_file}"
       end
       File.open(pid_file, 'w'){|f| f.puts Process.pid}
       begin
@@ -77,19 +102,21 @@ namespace :sneakers do
 
   desc "Stop the sneakers background process"
   task :stop do
-    if sneakers_running?
-      pid = File.read(pid_file).strip.to_i
-      puts "Stopping sneakers..."
-      Process.kill("INT", pid)
+    if pid = sneakers_pid
       stopped = false
-      60.times do
-        begin
-          Process.kill(0, pid)
-        rescue Errno::ESRCH
-          stopped = true
-          break
+      puts "Stopping sneakers..."
+      if process_running?(pid)
+        Process.kill("INT", pid)
+        60.times do
+          if process_running?(pid)
+            sleep(1)
+          else
+            stopped = true
+            break
+          end
         end
-        sleep(1)
+      else
+        stopped = true
       end
       if stopped
         puts "Stopped sneakers"
@@ -98,17 +125,6 @@ namespace :sneakers do
       end
     else
       puts "Sneakers not running"
-    end
-  end
-
-  desc "Stop the sneakers background process and remove the PID file if it fails"
-  task :force_stop do
-    Rake::Task["sneakers:stop"].invoke
-    if sneakers_running?
-      timestamp = Time.now.strftime("%Y%m%d%H%M%S")
-      broken_name = "#{pid_file}.#{timestamp}"
-      puts "Moving broken PID file: #{broken_name}"
-      File.rename(pid_file, broken_name)
     end
   end
 
