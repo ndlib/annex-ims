@@ -1,6 +1,12 @@
-include Warden::Test::Helpers
-
 module AuthenticationHelper
+  include Warden::Test::Helpers
+
+  def self.included(spec)
+    spec.after do
+      Warden.test_reset!
+    end
+  end
+
   def login_user
     @user = FactoryGirl.create(:user)
     login_as @user, scope: :user
