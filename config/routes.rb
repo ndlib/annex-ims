@@ -64,6 +64,8 @@ Rails.application.routes.draw do
   get 'bins/:id', to: 'bins#show', as: 'show_bin'
   post 'bins', to: 'bins#remove', as: 'bin_remove'
 
+  post 'requests/remove', to: 'requests#remove', as: 'remove_request'
+
   # You can have the root of your site routed with "root"
   root 'welcome#index'
 
