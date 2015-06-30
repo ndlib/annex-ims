@@ -7,6 +7,9 @@ namespace :sneakers do
   class SneakersPidFileExists < StandardError
   end
 
+  class SneakersWorkerError < StandardError
+  end
+
   def pid_file
     Rails.root.join('tmp/pids/sneakers.pid')
   end
@@ -34,8 +37,17 @@ namespace :sneakers do
   # Start and stop a worker to make sure it is functional
   def test_worker(worker_class)
     worker = worker_class.new
-    worker.run
-    worker.stop
+    begin
+      Timeout::timeout(60) do
+        worker.run
+      end
+      true
+    rescue Timeout::Error
+      raise SneakersWorkerError, "Timed out while testing #{worker_class}"
+      false
+    ensure
+      worker.stop
+    end
   end
 
   desc "Ensures that sneakers is running"
