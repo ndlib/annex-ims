@@ -19,7 +19,7 @@
 
 # Learn more: http://github.com/javan/whenever
 
-set :output, Rails.root.join("log", "cron.log")
+set :output, File.join("log", "cron.log")
 
 every 1.hour do
   rake "sneakers:ensure_running"
