@@ -7,7 +7,6 @@ describe "DestroyRequest" do
   subject { DestroyRequest.call(request, user) }
 
   describe "#destroy" do
-
     before(:each) do
       request.save!
       request1.save!
