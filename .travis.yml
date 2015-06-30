@@ -1,15 +1,12 @@
 language: ruby
 rvm:
-- 2.1.4
+  - 2.1.4
 script: "bundle exec rspec spec --tag '~ignore:travis'"
 cache: bundler
-sudo: false
-before_install:
-- travis_retry gem install bundler
 before_script:
-- cp config/secrets.yml.travis config/secrets.yml
-- cp config/database.yml.travis config/database.yml
-- psql -c 'create database travis_ci_test;' -U postgres
+  - cp config/secrets.yml.travis config/secrets.yml
+  - cp config/database.yml.travis config/database.yml
+  - psql -c 'create database travis_ci_test;' -U postgres
 notifications:
   hipchat:
     rooms:

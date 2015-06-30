@@ -25,8 +25,8 @@
             %li= @match.request.article_title
       %td
         %ul
-          %li= @match.item.shelf.barcode
-          %li= @match.item.tray.barcode
+          %li= @match.item.shelf ? @match.item.shelf.barcode : "No Shelf"
+          %li= @match.item.tray ? @match.item.tray.barcode : "No Tray"
           %li= @match.item.barcode
           - if !@match.item.title.blank?
             %li= @match.item.title
