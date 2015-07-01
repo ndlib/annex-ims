@@ -55,11 +55,6 @@ group :application do
   gem "sneakers"
 end
 
-group :doc do
-  # bundle exec rake doc:rails generates the API under doc/api.
-  gem "sdoc", "~> 0.4.0"
-end
-
 # New Relic
 gem "newrelic_rpm"
 
@@ -122,6 +117,9 @@ group :development, :test do
   gem "thin"
 
   gem "rails-erd"
+
+  # bundle exec rake doc:rails generates the API under doc/api.
+  gem "sdoc", "~> 0.4.0"
 end
 
 group :test do
