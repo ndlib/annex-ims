@@ -80,6 +80,7 @@ group :development, :test do
   # For serving up ssl
   gem 'thin'
 
+  gem 'rails-erd'
 end
 
 group :test do

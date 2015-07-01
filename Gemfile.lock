@@ -114,6 +114,7 @@ GEM
       json
     celluloid (0.16.0)
       timers (~> 4.0.0)
+    choice (0.2.0)
     chronic (0.10.2)
     coderay (1.1.0)
     coffee-rails (4.1.0)
@@ -276,6 +277,11 @@ GEM
       activesupport (>= 4.2.0.beta, < 5.0)
       nokogiri (~> 1.6.0)
       rails-deprecated_sanitizer (>= 1.0.1)
+    rails-erd (1.4.0)
+      activerecord (>= 3.2)
+      activesupport (>= 3.2)
+      choice (~> 0.2.0)
+      ruby-graphviz (~> 1.2)
     rails-html-sanitizer (1.0.2)
       loofah (~> 2.0)
     rails_layout (1.0.24)
@@ -318,6 +324,7 @@ GEM
       rspec-mocks (~> 3.1.0)
       rspec-support (~> 3.1.0)
     rspec-support (3.1.2)
+    ruby-graphviz (1.2.2)
     rubycas-client (2.3.9)
       activesupport
     safe_yaml (1.0.4)
@@ -443,6 +450,7 @@ DEPENDENCIES
   pg
   progress_bar
   rails (~> 4.2.0)
+  rails-erd
   rails_layout
   rspec-rails (~> 3.0)
   sass-rails (~> 4.0)
