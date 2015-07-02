@@ -1,58 +1,56 @@
 class ApiPostDeliverItem
-  API_PATH = "/1.0/resources/items/"
+  class ApiDeliverItemError < StandardError; end
+  attr_reader :match
 
-  attr_reader :match_id, :user
-
-  def self.call(match_id, user)
-    new(match_id, user).post_data!
+  def self.call(match:)
+    new(match: match).post_data!
   end
 
-  def initialize(match_id, user)
-    @user = user
-    @match_id = match_id
+  def initialize(match:)
+    @match = match
   end
 
   def post_data!
     response = ApiHandler.post(action: delivery_type, params: params)
-
-    if delivery_type == "send"
-      ShipItem.call(match.item, user)  # This is inside out from StockItem, but works better this way, I think.
+    if response.success?
+      response
     else
-      UnstockItem.call(match.item, user)  # Just in case it's not already unstocked, make sure.
-      LogActivity.call(match.item, "Scanned", match.item.tray, Time.now, user)
+      raise ApiDeliverItemError, "Error sending #{delivery_type} request to API. params: #{params.inspect}, response: #{response.inspect}"
     end
-
-    response
-  end
-
-  def params
-    {
-      item_id: match.item.id,
-      barcode: match.item.barcode,
-      tray_code: match.item.tray.barcode,
-      source: match.request.source,
-      transaction_num: match.request.trans,
-      request_type: match.request.req_type,
-      delivery_type: delivery_type
-    }
-  end
-
-  def delivery_type
-    if match.request.del_type == "scan"
-      "scan"
-    else
-      "send"
-    end
-  end
-
-  def path(delivery_type)
-    "#{API_PATH}#{delivery_type}"
   end
 
   private
 
-  def match
-    @match ||= Match.find(match_id)
+  def params
+    {
+      item_id: item.id,
+      barcode: item.barcode,
+      tray_code: tray_code,
+      source: request.source,
+      transaction_num: request.trans,
+      request_type: request.req_type,
+      delivery_type: delivery_type
+    }
+  end
+
+  def item
+    match.item
+  end
+
+  def request
+    match.request
+  end
+
+  def tray_code
+    item.tray ? item.tray.barcode : nil
+  end
+
+  def delivery_type
+    if request.del_type == "scan"
+      "scan"
+    else
+      "send"
+    end
   end
 
 end
