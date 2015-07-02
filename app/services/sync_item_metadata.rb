@@ -28,7 +28,7 @@ class SyncItemMetadata
   private
 
   def perform_sync
-    response = ApiGetItemMetadata.call(barcode: barcode, background: background)
+    response = ApiGetItemMetadata.call(item: item, background: background)
     error = get_error(response)
     if error.nil?
       save_metadata(response.body)
@@ -72,37 +72,34 @@ class SyncItemMetadata
     if error[:issue]
       AddIssue.call(user_id, barcode, error[:issue])
     end
-    if error[:activity]
-      LogActivity.call(item, error[:activity], nil, Time.now, user)
-    end
     if error[:enqueue]
       process_in_background(error)
     end
   end
 
   # If there is any error in the response status, or with the data in the response,
-  # get_error will return a json { type:, status:, issue:, activity:, enqueue: }
+  # get_error will return a json { type:, status:, issue:, enqueue: }
   # otherwise if there are no errors in the response, will return nil
   def get_error(response)
     if response.success?
       get_data_error(response)
     elsif response.not_found?
-      { type: :not_found, status: :not_found, issue: "Item not found.", activity: "MetadataNotFound" }
+      { type: :not_found, status: :not_found, issue: "Item not found." }
     elsif response.unauthorized?
-      { type: :unauthorized, status: :error, issue: "Unauthorized - Check API Key.", activity: "MetadataUnauthorized", enqueue: true }
+      { type: :unauthorized, status: :error, issue: "Unauthorized - Check API Key.", enqueue: true }
     elsif response.timeout?
-      { type: :timeout, status: :error, issue: "API Timeout.", activity: "MetadataTimeout", enqueue: true }
+      { type: :timeout, status: :error, issue: "API Timeout.", enqueue: true }
     else
-      { type: :unknown, status: :error, issue: "#{response.status_code}", activity: "MetadataError#{response.status_code}", enqueue: true }
+      { type: :unknown, status: :error, issue: "#{response.status_code}", enqueue: true }
     end
   end
 
   # Check to see if there is any error in the data received from from the api
-  # If there is an error, get_data_error will return a json { type:, status:, issue:, activity:, enqueue: }
+  # If there is an error, get_data_error will return a json { type:, status:, issue:, enqueue: }
   # otherwise if there are no errors with the data, will return nil
   def get_data_error(response)
     if !(response.body.has_key?(:sublibrary)) || response.body[:sublibrary] != "ANNEX"
-      { type: :not_for_annex, status: :not_for_annex, issue: "Not marked for Annex", activity: "MetadataFoundNotMarkedForAnnex" }
+      { type: :not_for_annex, status: :not_for_annex, issue: "Not marked for Annex" }
     else
       nil
     end
@@ -135,7 +132,7 @@ class SyncItemMetadata
     update_attributes = map_item_attributes(data).
       merge(metadata_status_attributes("complete"))
     item.update!(update_attributes)
-    LogActivity.call(item, "MetadataUpdated", nil, Time.now, user)
+    ActivityLogger.update_item_metadata(item: item)
   end
 
   def barcode

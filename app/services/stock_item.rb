@@ -18,7 +18,7 @@ class StockItem
     ApiStockItemJob.perform_later(item: item)
 
     if item.save!
-      LogActivity.call(item, "Stocked", item.tray, Time.now, user)
+      ActivityLogger.stock_item(item: item, tray: item.tray, user: user)
       result = item
     else
       result = false

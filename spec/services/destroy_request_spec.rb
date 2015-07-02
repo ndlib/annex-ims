@@ -21,5 +21,10 @@ describe "DestroyRequest" do
     it "returns true on success" do
       expect(subject).to be_truthy
     end
+
+    it "logs the activity" do
+      expect(ActivityLogger).to receive(:remove_request).with(request: request, user: user).and_call_original
+      subject
+    end
   end
 end

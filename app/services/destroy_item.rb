@@ -11,7 +11,8 @@ class DestroyItem
   end
 
   def destroy
-    item.destroy!
-    LogActivity.call(item, "Destroyed", nil, Time.now, user)
+    status = item.destroy!
+    ActivityLogger.destroy_item(item: item, user: user)
+    status
   end
 end

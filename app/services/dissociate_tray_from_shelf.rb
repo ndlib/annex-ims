@@ -11,7 +11,7 @@ class DissociateTrayFromShelf
   end
 
   def dissociate!
-    unless UnshelveTray.call(@tray, @user)
+    unless UnshelveTray.call(tray, user)
       raise "unable to unshelve tray"
     end
 
@@ -19,7 +19,7 @@ class DissociateTrayFromShelf
     tray.shelf = nil
 
     if tray.save
-      LogActivity.call(tray, "Disassociated", shelf, Time.now, user)
+      ActivityLogger.dissociate_tray_and_shelf(tray: tray, shelf: shelf, user: user)
       result = tray
     else
       result = false

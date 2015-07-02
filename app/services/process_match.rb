@@ -21,8 +21,16 @@ class ProcessMatch
 
   private
 
+  def request
+    match.request
+  end
+
+  def item
+    match.item
+  end
+
   def delivery_type
-    if match.request.del_type == "scan"
+    if request.del_type == "scan"
       "scan"
     else
       "send"
@@ -30,17 +38,17 @@ class ProcessMatch
   end
 
   def dissociate_bin
-    LogActivity.call(match.item, "Dissociated", match.item.bin, Time.now, user)
+    ActivityLogger.dissociate_item_and_bin(item: item, bin: item.bin, user: user)
 
-    match.item.update!(bin: nil)
+    item.update!(bin: nil)
     match.update!(bin: nil)
   end
 
   def scan_send
     if delivery_type == "send"
-      ShipItem.call(match.item, user)
+      ShipItem.call(item: item, request: request, user: user)
     else
-      ScanItem.call(match.item, user)
+      ScanItem.call(item: item, request: request, user: user)
     end
   end
 

@@ -32,8 +32,8 @@ RSpec.describe DissociateTrayFromShelf do
     expect(subject).to be(false)
   end
 
-  it "registers the call with the transaction log" do
-    #expect(TransactionLog).to recieve(:call).with("dissociate", "itemid")
-    #subject
+  it "logs the activity" do
+    expect(ActivityLogger).to receive(:dissociate_tray_and_shelf).with(tray: tray, shelf: shelf, user: user)
+    subject
   end
 end

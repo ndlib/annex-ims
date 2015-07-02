@@ -28,4 +28,11 @@ class ApiResponse
   def unauthorized?
     status_code == 401
   end
+
+  def attributes
+    {
+      status_code: status_code,
+      body: body,
+    }
+  end
 end

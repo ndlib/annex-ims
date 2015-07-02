@@ -35,13 +35,6 @@ RSpec.describe SyncItemMetadata do
         end
       end
 
-      shared_examples "an activity logger" do |expected_activity, expected_location|
-        it "calls LogActivity with #{expected_activity}" do
-          expect(LogActivity).to receive(:call).with(item, expected_activity, expected_location, anything, user)
-          subject
-        end
-      end
-
       context "previously synced item" do
         let(:item) { instance_double(Item, metadata_status: "complete", metadata_updated_at: 1.day.ago) }
 
@@ -52,7 +45,7 @@ RSpec.describe SyncItemMetadata do
       end
 
       context "recently updated item in error" do
-        let(:item) { instance_double(Item, barcode: barcode, metadata_status: "error", metadata_updated_at: 1.minute.ago, update!: true) }
+        let(:item) { instance_double(Item, barcode: barcode, metadata_status: "error", metadata_updated_at: 1.minute.ago, update!: true, attributes: {}) }
 
         context "foreground sync" do
           let(:background) { false }
@@ -74,7 +67,7 @@ RSpec.describe SyncItemMetadata do
       end
 
       context "pending item" do
-        let(:item) { instance_double(Item, barcode: barcode, metadata_status: "pending", update!: true, metadata_updated_at: 1.day.ago) }
+        let(:item) { instance_double(Item, barcode: barcode, metadata_status: "pending", update!: true, metadata_updated_at: 1.day.ago, attributes: {}) }
 
         it "performs a sync" do
           expect(ApiGetItemMetadata).to receive(:call).and_return(response)
@@ -83,7 +76,7 @@ RSpec.describe SyncItemMetadata do
       end
 
       context "error item" do
-        let(:item) { instance_double(Item, barcode: barcode, metadata_status: "error", update!: true, metadata_updated_at: 1.day.ago) }
+        let(:item) { instance_double(Item, barcode: barcode, metadata_status: "error", update!: true, metadata_updated_at: 1.day.ago, attributes: {}) }
 
         it "performs a sync" do
           expect(ApiGetItemMetadata).to receive(:call).and_return(response)
@@ -92,7 +85,7 @@ RSpec.describe SyncItemMetadata do
       end
 
       context "not_found item" do
-        let(:item) { instance_double(Item, barcode: barcode, metadata_status: "not_found", update!: true, metadata_updated_at: 1.day.ago) }
+        let(:item) { instance_double(Item, barcode: barcode, metadata_status: "not_found", update!: true, metadata_updated_at: 1.day.ago, attributes: {}) }
 
         it "performs a sync" do
           expect(ApiGetItemMetadata).to receive(:call).and_return(response)
@@ -117,7 +110,7 @@ RSpec.describe SyncItemMetadata do
         end
 
         it "logs the activity" do
-          expect(LogActivity).to receive(:call).with(anything, "MetadataUpdated", anything, anything, anything).ordered
+          expect(ActivityLogger).to receive(:update_item_metadata).with(item: item)
           expect(subject).to eq(true)
         end
       end
@@ -171,8 +164,6 @@ RSpec.describe SyncItemMetadata do
           it_behaves_like "a response that queues a background job"
 
           it_behaves_like "an issue logger", "500"
-
-          it_behaves_like "an activity logger", "MetadataError500"
         end
 
         context "not found error" do
@@ -188,8 +179,6 @@ RSpec.describe SyncItemMetadata do
           end
 
           it_behaves_like "an issue logger", "Item not found."
-
-          it_behaves_like "an activity logger", "MetadataNotFound"
         end
 
         context "timeout error" do
@@ -202,8 +191,6 @@ RSpec.describe SyncItemMetadata do
           it_behaves_like "a response that queues a background job"
 
           it_behaves_like "an issue logger", "API Timeout."
-
-          it_behaves_like "an activity logger", "MetadataTimeout"
         end
 
         context "unauthorized error" do
@@ -216,8 +203,6 @@ RSpec.describe SyncItemMetadata do
           it_behaves_like "a response that queues a background job"
 
           it_behaves_like "an issue logger", "Unauthorized - Check API Key."
-
-          it_behaves_like "an activity logger", "MetadataUnauthorized"
         end
 
         context "no sublibrary code" do
@@ -227,8 +212,6 @@ RSpec.describe SyncItemMetadata do
           it_behaves_like "a metadata status update", "not_for_annex"
 
           it_behaves_like "an issue logger", "Not marked for Annex"
-
-          it_behaves_like "an activity logger", "MetadataFoundNotMarkedForAnnex"
         end
 
         context "sublibrary code is not ANNEX" do
@@ -238,8 +221,6 @@ RSpec.describe SyncItemMetadata do
           it_behaves_like "a metadata status update", "not_for_annex"
 
           it_behaves_like "an issue logger", "Not marked for Annex"
-
-          it_behaves_like "an activity logger", "MetadataFoundNotMarkedForAnnex"
         end
       end
     end

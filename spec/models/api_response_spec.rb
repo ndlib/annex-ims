@@ -101,4 +101,10 @@ RSpec.describe ApiResponse do
       expect(subject.body[:title]).to eq("string title")
     end
   end
+
+  context "attributes" do
+    it "is a hash of status_code and body" do
+      expect(subject.attributes).to eq({ status_code: status_code, body: data.with_indifferent_access })
+    end
+  end
 end

@@ -22,7 +22,7 @@ class  AssociateTrayWithShelfBarcode
       shelf.size = tray_size
 
       if tray.save
-        LogActivity.call(tray, "Associated", tray.shelf, Time.now, user)
+        ActivityLogger.associate_tray_and_shelf(tray: tray, shelf: tray.shelf, user: user)
         ShelveTray.call(tray, user)
         shelf.save
         result = tray

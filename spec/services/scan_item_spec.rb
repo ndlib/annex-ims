@@ -2,10 +2,11 @@ require "rails_helper"
 
 RSpec.describe ScanItem do
   let(:item) { FactoryGirl.create(:item, tray: tray) }
-  let(:user) { FactoryGirl.create(:user) }
   let(:tray) { FactoryGirl.create(:tray) }
+  let(:user) { FactoryGirl.create(:user) }
+  let(:request) { FactoryGirl.create(:request) }
 
-  subject { described_class.call(item, user) }
+  subject { described_class.call(item: item, request: request, user: user) }
 
   it "works" do
     subject
@@ -13,7 +14,7 @@ RSpec.describe ScanItem do
 
   it "unstocks the item and logs the scan activity" do
     expect(UnstockItem).to receive(:call).with(item, user)
-    expect(LogActivity).to receive(:call).with(item, "Scanned", item.tray, anything, user)
+    expect(ActivityLogger).to receive(:scan_item).with(item: item, request: request, user: user)
     subject
   end
 end

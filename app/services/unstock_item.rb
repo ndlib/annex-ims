@@ -16,7 +16,7 @@ class UnstockItem
     item.unstocked!
 
     if item.save!
-      LogActivity.call(item, "Unstocked", item.tray, Time.now, user)
+      ActivityLogger.unstock_item(item: item, tray: item.tray, user: user)
       item
     else
       false
