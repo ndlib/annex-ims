@@ -151,6 +151,14 @@ RSpec.describe SyncItemMetadata do
             expect(SyncItemMetadataJob).to receive(:perform_later).with(item: item, user_id: user_id)
             subject
           end
+
+          context "in background" do
+            let(:background) { true }
+
+            it "raises an exception" do
+              expect { subject }.to raise_error(described_class::SyncItemMetadataError)
+            end
+          end
         end
 
         context "500 error" do

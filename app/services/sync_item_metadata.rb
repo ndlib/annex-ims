@@ -1,4 +1,6 @@
 class SyncItemMetadata
+  class SyncItemMetadataError < StandardError; end
+
   attr_reader :item, :user_id, :background
 
   def self.call(item:, user_id:, background: false)
@@ -57,8 +59,10 @@ class SyncItemMetadata
     @user ||= User.find(user_id)
   end
 
-  def process_in_background
-    if !background?
+  def process_in_background(error)
+    if background?
+      raise SyncItemMetadataError, "Error syncing item metadata. item: #{item.inspect}, error: #{error.inspect}"
+    else
       SyncItemMetadataJob.perform_later(item: item, user_id: user_id)
     end
   end
@@ -72,7 +76,7 @@ class SyncItemMetadata
       LogActivity.call(item, error[:activity], nil, Time.now, user)
     end
     if error[:enqueue]
-      process_in_background
+      process_in_background(error)
     end
   end
 
