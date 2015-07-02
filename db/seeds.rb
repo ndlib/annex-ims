@@ -38,7 +38,7 @@ end
     criteria_type: "barcode",
     criteria: barcode,
     barcode: barcode,
-    title: "Seed Request #{barcode}"
+    title: "Seed Request #{barcode}",
     requested: Faker::Date.between(30.days.ago, Date.today),
     rapid: false,
     source: "Aleph",
