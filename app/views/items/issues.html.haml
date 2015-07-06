@@ -15,7 +15,7 @@
         %tr
           %td= issue.user.username
           %td= issue.barcode
-          %td= issue.message
+          %td= t "issues.issue_type.#{issue.issue_type}"
           %td= issue.created_at
           %td
             = form_tag resolve_issue_path do |f|
