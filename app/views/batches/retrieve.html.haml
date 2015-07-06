@@ -21,7 +21,7 @@
             %li
               %b= "Title: "
               %span= @match.request.title
-          - if !@match.request.title.blank?
+          - if !@match.request.author.blank?
             %li
               %b= "Author: "
               %span= @match.request.author
