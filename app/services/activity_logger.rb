@@ -1,5 +1,5 @@
 class ActivityLogger
-  DATA_OBJECTS = [:item, :tray, :shelf, :bin, :request, :api_response, :params]
+  DATA_OBJECTS = [:item, :tray, :shelf, :bin, :request, :issue, :api_response, :params]
   attr_reader :action, :user, :data_objects
 
   def self.api_get_item_metadata(item:, params:, api_response:)
@@ -16,6 +16,10 @@ class ActivityLogger
 
   def self.associate_tray_and_shelf(tray:, shelf:, user:)
     call(action: "AssociatedTrayAndShelf", user: user, tray: tray, shelf: shelf)
+  end
+
+  def self.create_issue(issue:, item:)
+    call(action: "CreatedIssue", issue: issue, item: item)
   end
 
   def self.create_item(item:, user:)

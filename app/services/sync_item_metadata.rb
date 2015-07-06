@@ -69,8 +69,8 @@ class SyncItemMetadata
 
   def handle_error(error)
     save_metadata_status(error[:status])
-    if error[:issue]
-      AddIssue.call(user_id, barcode, error[:issue])
+    if error[:issue_type]
+      AddIssue.call(item: item, user_id: user_id, type: error[:issue_type])
     end
     if error[:enqueue]
       process_in_background(error)
@@ -84,13 +84,13 @@ class SyncItemMetadata
     if response.success?
       get_data_error(response)
     elsif response.not_found?
-      { type: :not_found, status: :not_found, issue: "Item not found." }
+      { type: :not_found, status: :not_found, issue_type: "not_found" }
     elsif response.unauthorized?
-      { type: :unauthorized, status: :error, issue: "Unauthorized - Check API Key.", enqueue: true }
+      { type: :unauthorized, status: :error, enqueue: true }
     elsif response.timeout?
-      { type: :timeout, status: :error, issue: "API Timeout.", enqueue: true }
+      { type: :timeout, status: :error, enqueue: true }
     else
-      { type: :unknown, status: :error, issue: "#{response.status_code}", enqueue: true }
+      { type: :unknown, status: :error, enqueue: true }
     end
   end
 
@@ -99,7 +99,7 @@ class SyncItemMetadata
   # otherwise if there are no errors with the data, will return nil
   def get_data_error(response)
     if !(response.body.has_key?(:sublibrary)) || response.body[:sublibrary] != "ANNEX"
-      { type: :not_for_annex, status: :not_for_annex, issue: "Not marked for Annex" }
+      { type: :not_for_annex, status: :not_for_annex, issue_type: "not_for_annex" }
     else
       nil
     end

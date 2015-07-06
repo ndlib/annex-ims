@@ -28,9 +28,9 @@ RSpec.describe SyncItemMetadata do
         end
       end
 
-      shared_examples "an issue logger" do |expected_issue|
-        it "calls AddIssue with #{expected_issue}" do
-          expect(AddIssue).to receive(:call).with(user.id, barcode, expected_issue)
+      shared_examples "an issue logger" do |expected_issue_type|
+        it "calls AddIssue with #{expected_issue_type}" do
+          expect(AddIssue).to receive(:call).with(item: item, user_id: user.id, type: expected_issue_type)
           subject
         end
       end
@@ -162,8 +162,6 @@ RSpec.describe SyncItemMetadata do
           it_behaves_like "a metadata status update", "error"
 
           it_behaves_like "a response that queues a background job"
-
-          it_behaves_like "an issue logger", "500"
         end
 
         context "not found error" do
@@ -178,7 +176,7 @@ RSpec.describe SyncItemMetadata do
             subject
           end
 
-          it_behaves_like "an issue logger", "Item not found."
+          it_behaves_like "an issue logger", "not_found"
         end
 
         context "timeout error" do
@@ -189,8 +187,6 @@ RSpec.describe SyncItemMetadata do
           it_behaves_like "a metadata status update", "error"
 
           it_behaves_like "a response that queues a background job"
-
-          it_behaves_like "an issue logger", "API Timeout."
         end
 
         context "unauthorized error" do
@@ -201,8 +197,6 @@ RSpec.describe SyncItemMetadata do
           it_behaves_like "a metadata status update", "error"
 
           it_behaves_like "a response that queues a background job"
-
-          it_behaves_like "an issue logger", "Unauthorized - Check API Key."
         end
 
         context "no sublibrary code" do
@@ -211,7 +205,7 @@ RSpec.describe SyncItemMetadata do
 
           it_behaves_like "a metadata status update", "not_for_annex"
 
-          it_behaves_like "an issue logger", "Not marked for Annex"
+          it_behaves_like "an issue logger", "not_for_annex"
         end
 
         context "sublibrary code is not ANNEX" do
@@ -220,7 +214,7 @@ RSpec.describe SyncItemMetadata do
 
           it_behaves_like "a metadata status update", "not_for_annex"
 
-          it_behaves_like "an issue logger", "Not marked for Annex"
+          it_behaves_like "an issue logger", "not_for_annex"
         end
       end
     end
