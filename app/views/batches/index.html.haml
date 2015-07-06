@@ -134,7 +134,15 @@
       str += "<th>Chron</th>";
       $.each(json, function( index, item ) {
         str += "<tr>";
-        str += "<td><input class='item' type='checkbox' name='batch[]' id='"+item['id']+"' value='"+item['id']+"' /></td>";
+        if (item['status'] == 'stocked') {
+          str += "<td><input class='item' type='checkbox' name='batch[]' id='"+item['id']+"' value='"+item['id']+"' /></td>";
+        }
+        if (item['status'] == 'unstocked') {
+          str += "<td><span style='color: red'>Unstocked</span></td>";
+        }
+        if (item['status'] == 'shipped') {
+          str += "<td><span style='color: red'>Shipped</span></td>";
+        }
         str += "<td>"+item['shelf']+"</td>";
         str += "<td>"+item['tray']+"</td>";
         str += "<td>"+item['title']+"</td>";
