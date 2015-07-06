@@ -248,7 +248,7 @@ GEM
       mini_portile (~> 0.6.0)
     options (2.3.2)
     orm_adapter (0.5.0)
-    pg (0.17.1)
+    pg (0.18.2)
     pr_geohash (1.0.0)
     progress_bar (1.0.3)
       highline (~> 1.6.1)
@@ -447,7 +447,7 @@ DEPENDENCIES
   kaminari
   multi_xml
   newrelic_rpm
-  pg
+  pg (~> 0.18.2)
   progress_bar
   rails (~> 4.2.0)
   rails-erd
