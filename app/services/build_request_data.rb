@@ -17,7 +17,8 @@ class BuildRequestData
       filter = {:criteria_type => request.criteria_type, :criteria => request.criteria}
       items = SearchItems.call(filter).results
 
-      request_data = {"requested" => request.requested,
+      request_data = {
+        "requested" => request.requested,
         "id" => request.id,
         "rapid" => (request.rapid ? "yes" : "no"),
         "source" => request.source,
@@ -29,7 +30,8 @@ class BuildRequestData
         "barcode" => request.barcode,
         "isbn_issn" => request.isbn_issn,
         "bib_number" => request.bib_number,
-        "item_data" => []}
+        "item_data" => []
+      }
 
       if !items.blank?
         items.each do |item|
