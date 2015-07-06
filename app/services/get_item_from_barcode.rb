@@ -33,7 +33,7 @@ class GetItemFromBarcode
       if item.new_record?
         item.thickness ||= 0
         item.save!
-        LogActivity.call(item, "Created", nil, Time.now, user)
+        ActivityLogger.create_item(item: item, user: user)
       end
     end
   end

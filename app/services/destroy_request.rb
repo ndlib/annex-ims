@@ -11,10 +11,8 @@ class DestroyRequest
   end
 
   def destroy
-    request_copy = request.clone
-    request_copy.barcode = request_copy.trans
     status = request.destroy!
-    LogActivity.call(request_copy, "Removed", nil, Time.now, user)
+    ActivityLogger.remove_request(request: request, user: user)
     status
   end
 end

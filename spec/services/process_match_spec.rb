@@ -15,14 +15,15 @@ RSpec.describe ProcessMatch do
     expect(subject).to eq(true)
   end
 
-  it "dissociates the bin" do
+  it "dissociates the bin and logs the activity" do
+    expect(ActivityLogger).to receive(:dissociate_item_and_bin).with(item: item, bin: bin, user: user)
     subject
     expect(match.bin).to be_nil
     expect(item.bin).to be_nil
   end
 
   it "ships the item" do
-    expect(ShipItem).to receive(:call).with(item, user)
+    expect(ShipItem).to receive(:call).with(item: item, request: request, user: user).and_call_original
     subject
   end
 
@@ -30,7 +31,7 @@ RSpec.describe ProcessMatch do
     let(:request) { FactoryGirl.create(:request, del_type: "scan") }
 
     it "scans the item" do
-      expect(ScanItem).to receive(:call).with(item, user).and_call_original
+      expect(ScanItem).to receive(:call).with(item: item, request: request, user: user).and_call_original
       subject
     end
   end

@@ -11,26 +11,7 @@ class DissociateShelfFromItem
   end
 
   def dissociate!
-    LogActivity.call(item, "Dissociated", item.tray, Time.now, user)
-
-    unless UnstockItem.call(@item, @user)
-      raise "unable to unstock item"
-    end
-
-    item.tray = nil
-
-    if item.save
-      item
-    else
-      false
-    end
+    DissociateTrayFromItem.call(item, user)
   end
-
-
-  private
-
-    def transaction_log
-      # log transaction here
-    end
 
 end

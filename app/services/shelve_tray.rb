@@ -16,7 +16,7 @@ class ShelveTray
     tray.shelved = true
 
     if tray.save
-      LogActivity.call(tray, "Shelved", tray.shelf, Time.now, user)
+      ActivityLogger.shelve_tray(tray: tray, shelf: tray.shelf, user: user)
       tray
     else
       false

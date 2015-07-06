@@ -7,12 +7,17 @@ RSpec.describe ShelveTray do
   let(:user) { double(User, username: "bob", id: 1)}
 
   before(:each) do
-    allow(LogActivity).to receive(:call).and_return(true)
+    allow(ActivityLogger).to receive(:shelve_tray).with(tray: tray, shelf: shelf, user: user)
     allow(IsObjectTray).to receive(:call).with(tray).and_return(true)
   end
 
   it "sets shelved" do
     expect(tray).to receive("shelved=").with(true)
+    subject
+  end
+
+  it "logs the activity" do
+    expect(ActivityLogger).to receive(:shelve_tray).with(tray: tray, shelf: shelf, user: user)
     subject
   end
 
@@ -26,10 +31,12 @@ RSpec.describe ShelveTray do
     expect(subject).to be(false)
   end
 
+  context "not a tray" do
+    let(:tray) { instance_double(Item) }
 
-# this is not implemented in the class..
-  it "raises an error if the item is not a tray." do
-    #expect(IsTray).to recieve(:call).with(tray).and_return(false)
-    #expect { subject }.to raise_error
+    it "raises an error if the tray is not a tray." do
+      expect(IsObjectTray).to receive(:call).with(tray).and_return(false)
+      expect { subject }.to raise_error("object is not a tray")
+    end
   end
 end

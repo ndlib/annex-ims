@@ -11,15 +11,15 @@ class DissociateTrayFromItem
   end
 
   def dissociate!
-    LogActivity.call(item, "Disassociated", item.tray, Time.now, user)
-
+    tray = item.tray
     unless UnstockItem.call(item, user)
       raise "unable to unstock item"
     end
 
     item.tray = nil
 
-    if item.save!
+    if item.save
+      ActivityLogger.dissociate_item_and_tray(item: item, tray: tray, user: user)
       item
     else
       false

@@ -3,6 +3,8 @@ rvm:
   - 2.1.4
 script: "bundle exec rspec spec --tag '~ignore:travis'"
 cache: bundler
+addons:
+  postgresql: "9.4"
 before_script:
   - cp config/secrets.yml.travis config/secrets.yml
   - cp config/database.yml.travis config/database.yml

@@ -8,7 +8,7 @@ class BatchesController < ApplicationController
     @data = BuildRequestData.call(requests)
 
     respond_to do |format|
-      format.html  # index.html.erb 
+      format.html # index.html.erb
     end
   end
 
@@ -147,7 +147,7 @@ class BatchesController < ApplicationController
           @match.item.save!
           @match.bin = @bin
           @match.save!
-          LogActivity.call(@match.item, "Associated", @bin, Time.now, current_user)
+          ActivityLogger.associate_item_and_bin(item: @match.item, bin: @bin, user: current_user)
 
           UnstockItem.call(@match.item, current_user)
 

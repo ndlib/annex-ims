@@ -1,20 +1,21 @@
 class ScanItem
-  attr_reader :item, :user
+  attr_reader :item, :request, :user
 
-  def self.call(item, user)
-    new(item, user).scan!
+  def self.call(item:, request:, user:)
+    new(item: item, request: request, user: user).scan!
   end
 
-  def initialize(item, user)
+  def initialize(item:, request:, user:)
     @item = item
     @user = user
+    @request = request
   end
 
   def scan!
     validate_input!
 
     UnstockItem.call(item, user) # Just in case it's not already unstocked, make sure.
-    LogActivity.call(item, "Scanned", item.tray, Time.now, user)
+    ActivityLogger.scan_item(item: item, request: request, user: user)
 
     item
   end

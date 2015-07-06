@@ -1,12 +1,12 @@
 class ApiGetItemMetadata
-  attr_reader :barcode, :background
+  attr_reader :item, :background
 
-  def self.call(barcode:, background: false)
-    new(barcode: barcode, background: background).get_data!
+  def self.call(item:, background: false)
+    new(item: item, background: background).get_data!
   end
 
-  def initialize(barcode:, background: false)
-    @barcode = barcode
+  def initialize(item:, background: false)
+    @item = item
     @background = background
   end
 
@@ -15,10 +15,22 @@ class ApiGetItemMetadata
   end
 
   def get_data!
-    ApiHandler.get(action: :record, params: { barcode: barcode }, connection_opts: connection_opts)
+    response = ApiHandler.get(action: :record, params: params, connection_opts: connection_opts)
+    ActivityLogger.api_get_item_metadata(item: item, params: params, api_response: response)
+    response
   end
 
   private
+
+  def barcode
+    item.barcode
+  end
+
+  def params
+    {
+      barcode: barcode,
+    }
+  end
 
   def connection_opts
     if background?

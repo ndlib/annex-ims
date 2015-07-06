@@ -7,12 +7,17 @@ RSpec.describe UnshelveTray do
   let(:user) { double(User)}
 
   before(:each) do
-    allow(LogActivity).to receive(:call).and_return(true)
+    allow(ActivityLogger).to receive(:unshelve_tray).with(tray: tray, shelf: shelf, user: user)
     allow(IsObjectTray).to receive(:call).with(tray).and_return(true)
   end
 
   it "sets shelved" do
     expect(tray).to receive("shelved=").with(false)
+    subject
+  end
+
+  it "logs the activity" do
+    expect(ActivityLogger).to receive(:unshelve_tray).with(tray: tray, shelf: shelf, user: user)
     subject
   end
 

@@ -24,7 +24,7 @@ RSpec.describe GetItemFromBarcode do
     end
 
     it "logs the activity" do
-      expect(LogActivity).to receive(:call).with(anything, "Created", anything, anything, anything).ordered
+      expect(ActivityLogger).to receive(:create_item).with(item: kind_of(Item), user: user)
       subject
     end
 
