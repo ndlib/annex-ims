@@ -18,11 +18,21 @@
       %td
         %ul
           - if !@match.request.title.blank?
-            %li= @match.request.title
-          - if !@match.request.author.blank?
-            %li= @match.request.author
+            %li
+              %b= "Title: "
+              %span= @match.request.title
+          - if !@match.request.title.blank?
+            %li
+              %b= "Author: "
+              %span= @match.request.author
           - if !@match.request.article_title.blank?
-            %li= @match.request.article_title
+            %li
+              %b= "Article: "
+              %span= @match.request.article_title
+          - if !@match.request.description.blank?
+            %li
+              %b= "Description: "
+              %span= @match.request.description
       %td
         %ul
           %li= @match.item.shelf ? @match.item.shelf.barcode : "No Shelf"
