@@ -1,24 +1,26 @@
 class ApiRemoveRequest
-  attr_reader :item_id
+  attr_reader :request
 
-  def self.call(request)
-    new(request).post_data!
+  def self.call(request:)
+    new(request: request).post_data!
   end
 
-  def initialize(request)
+  def initialize(request:)
     @request = request
   end
 
   def post_data!
-    ApiHandler.post(action: :archive_request, params: post_params)
+    response = ApiHandler.post(action: :archive_request, params: params)
+    ActivityLogger.api_remove_request(request: request, params: params, api_response: response)
+    response
   end
 
   private
 
-  def post_params
+  def params
     {
-      source: @request.source,
-      transaction_num: @request.trans
+      source: request.source,
+      transaction_num: request.trans
     }
   end
 end

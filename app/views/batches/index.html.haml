@@ -35,10 +35,8 @@
           %td= row['isbn_issn']
           %td= row['bib_number']
           %td
-            = form_tag remove_request_path do |f|
-              = hidden_field_tag :request_id, row['id']
-              .actions
-                = submit_tag 'Remove', data: { confirm: 'Remove request?' }, class: 'btn btn-primary'
+            .actions
+              = link_to "Remove", remove_request_path(row["id"]), method: :delete, data: { confirm: 'Remove request?' }, class: 'btn btn-primary'
   .actions
     = submit_tag 'Save', class: 'btn btn-primary'
 :javascript
@@ -147,7 +145,7 @@
         str += "<td>"+item['tray']+"</td>";
         str += "<td>"+item['title']+"</td>";
         str += "<td>"+item['author']+"</td>";
-        str += "<td>"+item['chron']+"</td>"; 
+        str += "<td>"+item['chron']+"</td>";
         str += "</tr>";
       } );
       str += "</table>";
