@@ -6,7 +6,6 @@ describe "DestroyItem" do
   subject { DestroyItem.call(item, user) }
 
   describe "#destroy" do
-
     it "deletes one request" do
       item
       expect { subject }.to change { Item.count }.from(1).to(0)

@@ -5,7 +5,7 @@ RSpec.describe StockItem do
   let(:tray) { FactoryGirl.create(:tray) }
   let(:shelf) { FactoryGirl.create(:shelf) }
   let(:user) { FactoryGirl.create(:user) }
-  subject { described_class.call(item, user)}
+  subject { described_class.call(item, user) }
 
   it "sets stocked" do
     expect(item).to receive("stocked!")

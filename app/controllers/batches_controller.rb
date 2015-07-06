@@ -8,7 +8,7 @@ class BatchesController < ApplicationController
     @data = BuildRequestData.call(requests)
 
     respond_to do |format|
-      format.html  # index.html.erb
+      format.html # index.html.erb
     end
   end
 

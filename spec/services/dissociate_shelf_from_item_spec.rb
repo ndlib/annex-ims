@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe DissociateShelfFromItem do
-  subject { described_class.call(item, user)}
+  subject { described_class.call(item, user) }
 
   let(:item) { instance_double(Item) }
   let(:user) { instance_double(User) }

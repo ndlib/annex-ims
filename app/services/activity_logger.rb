@@ -112,7 +112,7 @@ class ActivityLogger
   end
 
   def validate_data_objects!
-    keys = data_objects.keys.map { |key| key.to_sym }
+    keys = data_objects.keys.map(&:to_sym)
     invalid_keys = keys - DATA_OBJECTS
     if invalid_keys.present?
       raise ArgumentError, "unknown keywords: #{invalid_keys.join(', ')}"

@@ -3,9 +3,9 @@ require 'rails_helper'
 RSpec.describe DissociateTrayFromItem do
   subject { described_class.call(item, user)}
 
-  let(:tray) { instance_double(Tray)}
-  let(:item) { instance_double(Item, save: true, "tray=" => nil, tray: tray, "save!" => true)}
-  let(:user) { instance_double(User, username: "bob", id: 1)}
+  let(:tray) { instance_double(Tray) }
+  let(:item) { instance_double(Item, save: true, "tray=" => nil, tray: tray, "save!" => true) }
+  let(:user) { instance_double(User, username: "bob", id: 1) }
 
   before(:each) do
     allow(ActivityLogger).to receive(:dissociate_item_and_tray).and_return(true)

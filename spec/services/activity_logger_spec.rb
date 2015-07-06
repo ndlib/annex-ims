@@ -10,14 +10,13 @@ RSpec.describe ActivityLogger do
   let(:api_response) { ApiResponse.new(status_code: 200, body: { status: "OK" }) }
 
   shared_examples "an activity log" do |message|
-
     def compare_user(activity_log, user)
       if user
-        expect(subject.username).to eq(user.username)
-        expect(subject.user_id).to eq(user.id)
+        expect(activity_log.username).to eq(user.username)
+        expect(activity_log.user_id).to eq(user.id)
       else
-        expect(subject.username).to be_nil
-        expect(subject.user_id).to be_nil
+        expect(activity_log.username).to be_nil
+        expect(activity_log.user_id).to be_nil
       end
     end
 
