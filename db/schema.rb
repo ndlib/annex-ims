@@ -169,6 +169,7 @@ ActiveRecord::Schema.define(version: 20150625190556) do
   add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
 
   add_foreign_key "batches", "users"
+  add_foreign_key "issues", "users"
   add_foreign_key "issues", "users", column: "resolver_id"
   add_foreign_key "items", "bins"
   add_foreign_key "items", "trays"
