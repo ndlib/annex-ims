@@ -6,6 +6,10 @@ class ActivityLogger
     call(action: "ApiGetItemMetadata", item: item, params: params, api_response: api_response)
   end
 
+  def self.api_remove_request(request:, params:, api_response:)
+    call(action: "ApiRemoveRequest", request: request, params: params, api_response: api_response)
+  end
+
   def self.associate_item_and_bin(item:, bin:, user:)
     call(action: "AssociatedItemAndBin", user: user, item: item, bin: bin)
   end
