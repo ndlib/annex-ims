@@ -31,6 +31,7 @@ Rails.application.routes.draw do
   post "shelves/items/:id", to: "shelves#associate", as: "associate_shelf_item"
   post "shelves/items/:id/dissociate", to: "shelves#dissociate", as: "dissociate_shelf_item"
   get "shelves/items/:id/wrong/:barcode", to: "shelves#wrong", as: "wrong_shelf_item"
+  get "shelves/items/:id/missing", to: "shelves#missing", as: "missing_shelf_item"
 
   get "items", to: "items#index", as: "items"
   get "items/scan", to: "items#scan", as: "scan_item"
