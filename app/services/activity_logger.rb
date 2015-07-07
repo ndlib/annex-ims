@@ -2,6 +2,10 @@ class ActivityLogger
   DATA_OBJECTS = [:item, :tray, :shelf, :bin, :request, :issue, :api_response, :params]
   attr_reader :action, :user, :data_objects
 
+  def self.accept_item(item:, request:, user:)
+    call(action: "AcceptedItem", user: user, item: item, request: request)
+  end
+
   def self.api_get_item_metadata(item:, params:, api_response:)
     call(action: "ApiGetItemMetadata", item: item, params: params, api_response: api_response)
   end

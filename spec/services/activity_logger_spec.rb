@@ -42,6 +42,13 @@ RSpec.describe ActivityLogger do
     end
   end
 
+  context "AcceptedItem" do
+    let(:arguments) { { item: item, user: user, request: request } }
+    subject { described_class.accept_item(**arguments) }
+
+    it_behaves_like "an activity log", "AcceptedItem"
+  end
+
   context "ApiGetItemMetadata" do
     let(:arguments) do
       {
