@@ -30,4 +30,17 @@ RSpec.describe UnstockItem do
     expect(subject).to be(false)
   end
 
+  context "no associated tray" do
+    let(:tray) { nil }
+
+    it "doesn't log the activity" do
+      expect(ActivityLogger).not_to receive(:unstock_item).with(item: item, tray: tray, user: user)
+      subject
+    end
+
+    it "still flags it as unstocked" do
+      expect(item).to receive(:unstocked!)
+      subject
+    end
+  end
 end
