@@ -4,7 +4,7 @@ feature "Build", :type => :feature, :search => true do
   include SolrSpecHelper
   include AuthenticationHelper
 
-  describe "when signed in", ignore: :travis, js: true do
+  describe "when signed in", js: true do
 
     let(:shelf) { FactoryGirl.build(:shelf) }
     let(:tray) { FactoryGirl.build(:tray, barcode: 'TRAY-AH12345', shelf: shelf) }

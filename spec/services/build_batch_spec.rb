@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe BuildBatch, search: true do
   include SolrSpecHelper
 
-  describe "when signed in", ignore: :travis do
+  describe "when signed in" do
 
     let(:shelf) { FactoryGirl.create(:shelf) }
     let(:tray) { FactoryGirl.create(:tray, barcode: "TRAY-AH12346", shelf: shelf) }
