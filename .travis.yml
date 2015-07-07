@@ -1,13 +1,13 @@
 language: ruby
+cache: false
 rvm:
-  - 2.1.4
-cache: bundler
+- 2.1.4
 addons:
   postgresql: "9.4"
 before_script:
-  - cp config/secrets.yml.travis config/secrets.yml
-  - cp config/database.yml.travis config/database.yml
-  - psql -c 'create database travis_ci_test;' -U postgres
+- cp config/secrets.yml.travis config/secrets.yml
+- cp config/database.yml.travis config/database.yml
+- psql -c 'create database travis_ci_test;' -U postgres
 script: "bundle exec rspec spec --tag '~ignore:travis'"
 notifications:
   hipchat:
