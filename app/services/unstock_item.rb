@@ -16,7 +16,9 @@ class UnstockItem
     item.unstocked!
 
     if item.save!
-      ActivityLogger.unstock_item(item: item, tray: item.tray, user: user)
+      unless item.tray.nil?
+        ActivityLogger.unstock_item(item: item, tray: item.tray, user: user)
+      end
       item
     else
       false
