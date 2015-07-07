@@ -33,4 +33,6 @@ en:
     issue_type:
       not_found: "Barcode not found."
       not_for_annex: "Item not marked for annex."
+  requests:
+    synchronized: "Synchronized %{count} requests."
 

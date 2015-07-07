@@ -4,7 +4,8 @@ namespace :annex do
     begin
       logger = Logger.new(STDOUT)
       requests = GetRequests.call
-      logger.info("[annex:get_active_requests] Retrieved #{requests.count} requests.")
+      message = I18n.t("requests.synchronized", count: requests.count)
+      logger.info("[annex:get_active_requests] #{message}")
     rescue StandardError => e
       NotifyError.call(exception: e)
       raise e

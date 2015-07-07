@@ -1,8 +1,6 @@
 class BatchesController < ApplicationController
 
   def index
-    GetRequests.call # This should go in a queue or scheduler to run periodically.
-
     # Should this be in a service object? It's a relatively simple one-liner.
     requests = Request.all.where("id NOT IN (SELECT request_id FROM matches WHERE processed IS NULL OR processed != 'skipped')")
     @data = BuildRequestData.call(requests)

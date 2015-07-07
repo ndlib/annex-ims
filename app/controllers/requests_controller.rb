@@ -10,4 +10,11 @@ class RequestsController < ApplicationController
 
     redirect_to :back
   end
+
+  def sync
+    requests = GetRequests.call
+    flash[:notice] = I18n.t("requests.synchronized", count: requests.count)
+
+    redirect_to :back
+  end
 end

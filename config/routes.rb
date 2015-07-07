@@ -65,7 +65,14 @@ Rails.application.routes.draw do
   get "bins/:id", to: "bins#show", as: "show_bin"
   post "bins", to: "bins#remove", as: "bin_remove"
 
-  delete "requests/remove/:id", to: "requests#remove", as: "remove_request"
+  resources :requests, only: [] do
+    collection do
+      post :sync
+    end
+    member do
+      delete :remove
+    end
+  end
 
   # You can have the root of your site routed with "root"
   root "welcome#index"
