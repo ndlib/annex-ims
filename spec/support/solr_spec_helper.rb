@@ -15,9 +15,26 @@ module SolrSpecHelper
       # shut down the Solr server
       at_exit { Process.kill('TERM', pid) }
       # wait for solr to start
-      sleep 5
+      20.times do |i|
+        if solr_running?
+          break
+        end
+        sleep 0.5
+      end
     end
 
     ::Sunspot.session = $original_sunspot_session
+  end
+
+  def solr_running?
+    if $sunspot
+      response = nil
+      Net::HTTP.start('localhost', $sunspot.port) do |http|
+        response = http.head('/solr/')
+      end
+      response.class == Net::HTTPOK
+    end
+  rescue Errno::ECONNREFUSED
+    false
   end
 end
