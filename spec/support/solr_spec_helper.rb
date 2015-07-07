@@ -8,14 +8,14 @@ module SolrSpecHelper
       $sunspot = ::Sunspot::Rails::Server.new
 
       pid = fork do
-        STDERR.reopen('/dev/null')
-        STDOUT.reopen('/dev/null')
+        STDERR.reopen("/dev/null")
+        STDOUT.reopen("/dev/null")
         $sunspot.run
       end
       # shut down the Solr server
-      at_exit { Process.kill('TERM', pid) }
+      at_exit { Process.kill("TERM", pid) }
       # wait for solr to start
-      20.times do |i|
+      20.times do
         if solr_running?
           break
         end
@@ -29,8 +29,8 @@ module SolrSpecHelper
   def solr_running?
     if $sunspot
       response = nil
-      Net::HTTP.start('localhost', $sunspot.port) do |http|
-        response = http.head('/solr/')
+      Net::HTTP.start("localhost", $sunspot.port) do |http|
+        response = http.head("/solr/")
       end
       response.class == Net::HTTPOK
     end
