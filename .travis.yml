@@ -7,10 +7,12 @@ rvm:
 addons:
   postgresql: "9.4"
 before_script:
+- export DISPLAY=:99.0
+- sh -e /etc/init.d/xvfb start
 - cp config/secrets.yml.travis config/secrets.yml
 - cp config/database.yml.travis config/database.yml
 - psql -c 'create database travis_ci_test;' -U postgres
-script: "bundle exec rspec spec --tag '~ignore:travis'"
+script: "bundle exec rspec spec"
 notifications:
   hipchat:
     rooms:

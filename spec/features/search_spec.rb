@@ -4,7 +4,7 @@ feature "Search", :type => :feature, :search => true do
   include SolrSpecHelper
   include AuthenticationHelper
 
-  describe "when signed in", ignore: :travis do
+  describe "when signed in" do
 
     let(:shelf) { FactoryGirl.create(:shelf) }
     let(:tray) { FactoryGirl.create(:tray, barcode: 'TRAY-AH12345', shelf: shelf) }

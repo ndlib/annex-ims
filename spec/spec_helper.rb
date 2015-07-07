@@ -71,9 +71,11 @@ RSpec.configure do |config|
   end
 
   config.before(:each) do |example|
-    # Feature specs can't easily be isolated within a transaction, so we use the truncation strategy here.
+    # Feature specs that make use of Capybara's javascript driver can't easily be isolated
+    #  within a transaction, so we use the truncation strategy here.
     #  See: https://github.com/DatabaseCleaner/database_cleaner/issues/273
-    if [:feature, :request].include? example.metadata[:type]
+    #       https://mattbrictson.com/faster-capybara-specs
+    if example.metadata[:js]
       DatabaseCleaner.strategy = :truncation
     else
       DatabaseCleaner.strategy = :transaction
