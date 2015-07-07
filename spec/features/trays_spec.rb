@@ -314,7 +314,7 @@ feature "Trays", type: :feature do
       expect(page).to have_content item.chron
     end
 
-   it "displays information about a successful association made" do
+    it "displays information about a successful association made" do
       expect(GetItemFromBarcode).to receive(:call).with(barcode: item.barcode, user_id: @user.id).and_return(item).at_least :once
       stub_request(:post, api_stock_url).
       with(body: {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{tray.barcode}"},
@@ -333,9 +333,9 @@ feature "Trays", type: :feature do
       expect(page).to have_content item.thickness
       expect(page).to have_content item.chron
       expect(page).to have_content "Item #{item.barcode} stocked in #{tray.barcode}."
-   end
+    end
 
-   it "accepts re-associating an item to the same tray" do
+    it "accepts re-associating an item to the same tray" do
       expect(GetItemFromBarcode).to receive(:call).with(barcode: item.barcode, user_id: @user.id).and_return(item).at_least :once
       item_uri = api_item_url(item)
       stub_request(:get, item_uri).
@@ -367,10 +367,10 @@ feature "Trays", type: :feature do
       expect(page).to have_content item.thickness
       expect(page).to have_content item.chron
       expect(page).to have_content "Item #{item.barcode} already assigned to #{tray.barcode}. Record updated."
-   end
+    end
 
 
-   it "rejects associating an item to the wrong tray" do
+    it "rejects associating an item to the wrong tray" do
       tray2 = FactoryGirl.create(:tray)
       item = FactoryGirl.create(:item, tray: tray2)
       expect(GetItemFromBarcode).to receive(:call).with(barcode: item.barcode, user_id: @user.id).and_return(item).at_least :once
@@ -393,7 +393,7 @@ feature "Trays", type: :feature do
       expect(page).to_not have_content "Item #{item.barcode} stocked in #{tray.barcode}."
       click_button "OK"
       expect(current_path).to eq(show_tray_item_path(id: tray.id))
-   end
+    end
 
 
     it "displays a tray's barcode while processing an item" do
