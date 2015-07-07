@@ -17,7 +17,7 @@ class ItemPath
     results[:notice] = nil
     results[:path] = nil
 
-    item = GetItemFromBarcode.call(user_id, barcode)
+    item = GetItemFromBarcode.call(barcode: barcode, user_id: user_id)
 
     if item.blank?
       results[:error] = "No item was found with barcode #{barcode}"
