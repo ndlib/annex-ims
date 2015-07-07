@@ -106,7 +106,7 @@ class TraysController < ApplicationController
   def wrong_tray
     @tray = Tray.find(params[:id])
     @barcode = params[:barcode]
-    @item = GetItemFromBarcode.call(current_user.id, @barcode)
+    @item = GetItemFromBarcode.call(barcode: @barcode, user_id: current_user.id)
   end
 
 
@@ -152,7 +152,7 @@ class TraysController < ApplicationController
       return
     end
 
-    item = GetItemFromBarcode.call(current_user.id, barcode)
+    item = GetItemFromBarcode.call(barcode: barcode, user_id: current_user.id)
 
     if item.nil?
       flash[:error] = I18n.t("errors.barcode_not_found", barcode: barcode)

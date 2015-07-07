@@ -15,7 +15,7 @@ class AssociateTrayWithItemBarcode
   def associate!
     validate_input!
 
-    item = GetItemFromBarcode.call(user_id, barcode)
+    item = GetItemFromBarcode.call(barcode: barcode, user_id: user_id)
     if !item.nil?
       item.tray = tray
       item.thickness = thickness

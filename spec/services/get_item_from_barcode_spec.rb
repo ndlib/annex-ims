@@ -1,8 +1,9 @@
 require "rails_helper"
 
 RSpec.describe GetItemFromBarcode do
-  subject { described_class.call(user.id, barcode) }
+  subject { described_class.call(barcode: barcode, user_id: user_id) }
 
+  let(:user_id) { user.id }
   let(:user) { instance_double(User, username: "bob", id: 1) }
   let(:barcode) { "123456789" }
 

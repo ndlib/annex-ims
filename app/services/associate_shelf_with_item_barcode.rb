@@ -16,7 +16,7 @@ class AssociateShelfWithItemBarcode
     validate_input!
     user = User.find(user_id)
     tray = GetTrayFromBarcode.call("TRAY-#{@shelf.barcode}")
-    item = GetItemFromBarcode.call(user_id, barcode)
+    item = GetItemFromBarcode.call(barcode: barcode, user_id: user_id)
 
     if tray.items.include?(item)
       StockItem.call(item, user)

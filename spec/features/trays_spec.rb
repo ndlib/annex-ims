@@ -295,7 +295,7 @@ feature "Trays", type: :feature do
     end
 
     it "displays an item after successfully adding it to a tray" do
-      expect(GetItemFromBarcode).to receive(:call).with(@user.id, item.barcode).and_return(item).at_least :once
+      expect(GetItemFromBarcode).to receive(:call).with(barcode: item.barcode, user_id: @user.id).and_return(item).at_least :once
       stub_request(:post, api_stock_url).
       with(body: {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{tray.barcode}"},
         headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
@@ -315,7 +315,7 @@ feature "Trays", type: :feature do
     end
 
    it "displays information about a successful association made" do
-      expect(GetItemFromBarcode).to receive(:call).with(@user.id, item.barcode).and_return(item).at_least :once
+      expect(GetItemFromBarcode).to receive(:call).with(barcode: item.barcode, user_id: @user.id).and_return(item).at_least :once
       stub_request(:post, api_stock_url).
       with(body: {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{tray.barcode}"},
         headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
@@ -336,7 +336,7 @@ feature "Trays", type: :feature do
    end
 
    it "accepts re-associating an item to the same tray" do
-      expect(GetItemFromBarcode).to receive(:call).with(@user.id, item.barcode).and_return(item).at_least :once
+      expect(GetItemFromBarcode).to receive(:call).with(barcode: item.barcode, user_id: @user.id).and_return(item).at_least :once
       item_uri = api_item_url(item)
       stub_request(:get, item_uri).
         with(headers: { "User-Agent"=>"Faraday v0.9.1" }).
@@ -373,7 +373,7 @@ feature "Trays", type: :feature do
    it "rejects associating an item to the wrong tray" do
       tray2 = FactoryGirl.create(:tray)
       item = FactoryGirl.create(:item, tray: tray2)
-      expect(GetItemFromBarcode).to receive(:call).with(@user.id, item.barcode).and_return(item).at_least :once
+      expect(GetItemFromBarcode).to receive(:call).with(barcode: item.barcode, user_id: @user.id).and_return(item).at_least :once
       stub_request(:post, api_stock_url).
         with(body: {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{tray2.barcode}"},
           headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
@@ -423,7 +423,7 @@ feature "Trays", type: :feature do
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(id: tray.id))
       items.each do |item|
-        expect(GetItemFromBarcode).to receive(:call).with(@user.id, item.barcode).and_return(item).at_least :once
+        expect(GetItemFromBarcode).to receive(:call).with(barcode: item.barcode, user_id: @user.id).and_return(item).at_least :once
         item_uri = api_item_url(item)
         stub_request(:post, item_uri).
           with(body: {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{tray.barcode}"},
@@ -525,7 +525,7 @@ feature "Trays", type: :feature do
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(id: tray.id))
       items.each do |item|
-        expect(GetItemFromBarcode).to receive(:call).with(@user.id, item.barcode).and_return(item).at_least :once
+        expect(GetItemFromBarcode).to receive(:call).with(barcode: item.barcode, user_id: @user.id).and_return(item).at_least :once
         item_uri = api_item_url(item)
         stub_request(:post, item_uri).
           with(body: {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{tray.barcode}"},

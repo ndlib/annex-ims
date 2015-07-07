@@ -1,11 +1,11 @@
 class GetItemFromBarcode
   attr_reader :user_id, :barcode
 
-  def self.call(user_id, barcode)
-    new(user_id, barcode).get
+  def self.call(barcode:, user_id:)
+    new(barcode: barcode, user_id: user_id).get
   end
 
-  def initialize(user_id, barcode)
+  def initialize(barcode:, user_id:)
     @user_id = user_id
     @barcode = barcode
   end
@@ -43,7 +43,9 @@ class GetItemFromBarcode
   end
 
   def user
-    @user ||= User.find(user_id)
+    if user_id
+      @user ||= User.find(user_id)
+    end
   end
 
   def valid?

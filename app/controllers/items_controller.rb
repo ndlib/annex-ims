@@ -6,7 +6,7 @@ class ItemsController < ApplicationController
 
   def scan
     begin
-      @item = GetItemFromBarcode.call(current_user.id, params[:item][:barcode])
+      @item = GetItemFromBarcode.call(barcode: params[:item][:barcode], user_id: current_user.id)
     rescue StandardError => e
       flash[:error] = e.message
       redirect_to items_path
