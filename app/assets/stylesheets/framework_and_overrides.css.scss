@@ -171,25 +171,10 @@ a.list-group-item[aria-expanded="true"] {
   }
 }
 
-.list-group-item-success {
-  .glyphicon {
-    font-size: 18px;
-    vertical-align: top;
-  }
-}
-
 .list-group-item-success[aria-expanded="true"] {
   .glyphicon-plus:before {
-    content: "-";
+    content: "\2212";
   }
-
-}
-
-.list-group-item-success[aria-expanded="false"] {
-  .glyphicon-plus:before {
-    content: "+";
-  }
-
 }
 
 .navbar {
