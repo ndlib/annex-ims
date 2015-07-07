@@ -19,7 +19,7 @@ RSpec.describe BatchesController, type: :controller do
     it "logs an AcceptedItem activity on Save" do
       allow_any_instance_of(Batch).to receive(:current_match).and_return(match)
       expect(ActivityLogger).to receive(:accept_item)
-      get :item, { commit: "Save", barcode: match.item.barcode }
+      get :item, commit: "Save", barcode: match.item.barcode
     end
   end
 end
