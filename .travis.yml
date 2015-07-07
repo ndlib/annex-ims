@@ -1,5 +1,6 @@
 language: ruby
-cache: false
+cache:
+  bundler: true
 rvm:
 - 2.1.4
 addons:
