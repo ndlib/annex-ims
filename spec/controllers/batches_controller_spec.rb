@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-RSpec.describe BatchesController, :type => :controller do
+RSpec.describe BatchesController, type: :controller do
   let(:user) { FactoryGirl.create(:user) }
   let(:batch) { FactoryGirl.create(:batch, user: user) }
   let(:match) { FactoryGirl.create(:match, batch: batch) }
@@ -13,7 +13,7 @@ RSpec.describe BatchesController, :type => :controller do
     it "logs a SkippedItem activity" do
       allow_any_instance_of(Batch).to receive(:current_match).and_return(match)
       expect(ActivityLogger).to receive(:skip_item)
-      get :item, { commit: 'Skip' }
+      get :item, commit: "Skip"
     end
   end
 end
