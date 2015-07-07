@@ -83,6 +83,8 @@ class BatchesController < ApplicationController
       @match.processed = "skipped"
       @match.save!
 
+      ActivityLogger.skip_item(item: @match.item, request: @match.request, user: current_user)
+
       redirect_to retrieve_batch_path
       return
     else

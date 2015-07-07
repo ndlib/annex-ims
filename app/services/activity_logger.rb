@@ -62,6 +62,10 @@ class ActivityLogger
     call(action: "ShippedItem", item: item, request: request, user: user)
   end
 
+  def self.skip_item(item:, request:, user:)
+    call(action: "SkippedItem", user: user, item: item, request: request)
+  end
+
   def self.stock_item(item:, tray:, user:)
     call(action: "StockedItem", user: user, item: item, tray: tray)
   end
