@@ -153,6 +153,13 @@ RSpec.describe ActivityLogger do
     it_behaves_like "an activity log", "ShippedItem"
   end
 
+  context "SkippedItem" do
+    let(:arguments) { { item: item, request: request, user: user } }
+    subject { described_class.skip_item(**arguments) }
+
+    it_behaves_like "an activity log", "SkippedItem"
+  end
+
   context "StockedItem" do
     let(:arguments) { { item: item, tray: tray, user: user } }
     subject { described_class.stock_item(**arguments) }
