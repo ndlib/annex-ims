@@ -2,7 +2,7 @@ FactoryGirl.define do
   factory :request do
     criteria_type "barcode"
     sequence(:criteria) { |n| "#{n}" }
-    sequence(:barcode) { |n| "12345#{n}" }
+    sequence(:barcode) { |n| AnnexFaker::Item.barcode_sequence(n) }
     sequence(:trans) { |n| "aleph_12345#{n}" }
     requested { Date.today - rand(3).days }
     rapid false

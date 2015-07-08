@@ -1,7 +1,6 @@
 module AnnexFaker
   class Shelf
     class << self
-      HEIGHTS =
       def barcode
         "SHELF-#{AnnexFaker::Letter.uletter}-#{AnnexFaker::Number.number(3)}-#{AnnexFaker::Letter.uletter}"
       end
