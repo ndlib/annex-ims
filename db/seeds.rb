@@ -16,20 +16,10 @@ def call_number
   "#{rand_letter}#{rand_letter}#{Faker::Number.number(4)}.#{rand_letter}#{Faker::Number.number(2)} #{(1900..2014).to_a.sample}"
 end
 
-100.times do |i|
-  Item.create!(
-    barcode: Faker::Number.number(14).to_s,
-    title: Faker::Lorem.sentence,
-    author: Faker::Name.name,
-    bib_number: "00#{Faker::Number.number(7)}",
-    isbn_issn: [true, false].sample ? Faker::Code.isbn : "#{Faker::Number.number(4)}-#{Faker::Number.number(4)}",
-    conditions: [Item::CONDITIONS.sample, Item::CONDITIONS.sample, Item::CONDITIONS.sample, Item::CONDITIONS.sample].uniq,
-    call_number: call_number,
-    initial_ingest: Faker::Date.between(30.days.ago, Date.today),
-    last_ingest: Time.now.strftime("%Y-%m-%d"),
-    metadata_status: "complete",
-    thickness: 1,
-  )
+simulator = Simulator.new
+
+100.times do
+  simulator.create_item
 end
 
 50.times do |i|
