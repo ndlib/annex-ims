@@ -16,8 +16,7 @@
         %span= "Item"
         - if IsPartOfSet.call(@match)
           - match_set = GetMatchSet.call(@match)
-          %span= "(" + match_set[@match.item.id] + " of " + match_set.count.to_s
-          %span= " for this request" + ")"
+          = "(" + t("item.set", ordinal_number: match_set[@match.item.id], total_number: match_set.count.to_s) + ")"
   %tbody
     %tr
       %td
