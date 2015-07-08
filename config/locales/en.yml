@@ -29,6 +29,7 @@ en:
       not_for_annex: "Item not flagged for annex"
       not_found: "Barcode not found"
       pending: "Metadata sync pending"
+    set: "%{ordinal_number} out of %{total_number} for this request"
   issues:
     issue_type:
       not_found: "Barcode not found."
