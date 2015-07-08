@@ -1,7 +1,7 @@
 class MatchQuery
   attr_reader :relation
 
-  def initialize(relation = Match.all, match)
+  def initialize(relation = Match.all)
     @relation = relation
   end
 
@@ -14,7 +14,7 @@ class MatchQuery
       order("items.title").
       order("items.chron").
       map.
-      with_index { |m,i| set[m.item.id] = "#{i + 1}".to_i.ordinalize }
+      with_index { |m, i| set[m.item.id] = "#{i + 1}".to_i.ordinalize }
     set
   end
 

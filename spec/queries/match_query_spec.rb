@@ -35,8 +35,8 @@ RSpec.describe MatchQuery do
       it "has the appropriate ordinal text" do
         expect(subject.retrieve_set(match_4)[item_1.id]).to eq "1st"
       end
-    end 
-  end  
+    end
+  end
 
   describe "#part_of_set?" do
     context "is part of set" do
