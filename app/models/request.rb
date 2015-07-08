@@ -14,10 +14,6 @@ class Request < ActiveRecord::Base
 
   enum status: { received: 0, completed: 1 }
 
-  def remaining_matches
-    matches.where("processed IS NULL OR processed NOT IN('skipped', 'completed')")
-  end
-
   def bin_type
     if self.source == "aleph"
       bt = "ALEPH-LOAN"

@@ -31,32 +31,5 @@ RSpec.describe "Request" do
         end
       end
     end
-
-    context "#remaining_matches" do
-      it "does not exclude accepted matches" do
-        match = FactoryGirl.create(:match, request: request, processed: "accepted")
-        expect(request.remaining_matches.count).to eq(1)
-      end
-
-      it "does not exclude new matches (where processed is nil)" do
-        match = FactoryGirl.create(:match, request: request)
-        expect(request.remaining_matches.count).to eq(1)
-      end
-
-      it "excludes skipped matches" do
-        match = FactoryGirl.create(:match, request: request, processed: "skipped")
-        expect(request.remaining_matches.count).to eq(0)
-      end
-
-      it "excludes completed matches" do
-        match = FactoryGirl.create(:match, request: request, processed: "completed")
-        expect(request.remaining_matches.count).to eq(0)
-      end
-
-      it "does not exclude any matches in some other processed status" do
-        match = FactoryGirl.create(:match, request: request, processed: "some_new_thing")
-        expect(request.remaining_matches.count).to eq(1)
-      end
-    end
   end
 end

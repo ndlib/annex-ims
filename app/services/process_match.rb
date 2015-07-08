@@ -60,7 +60,8 @@ class ProcessMatch
   def complete_match
     @match.processed = "completed"
     @match.save!
-    if @match.request.remaining_matches.count == 0
+    request = RequestQuery.new(@match.request)
+    if request.remaining_matches.count == 0
       CompleteRequest.call(request: @match.request, user: user)
     end
   end
