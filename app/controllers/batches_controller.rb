@@ -93,6 +93,7 @@ class BatchesController < ApplicationController
         return
       else
         flash[:notice] = "Item #{@match.item.barcode} scanned."
+        ActivityLogger.accept_item(item: @match.item, request: @match.request, user: current_user)
         redirect_to bin_batch_path
         return
       end
