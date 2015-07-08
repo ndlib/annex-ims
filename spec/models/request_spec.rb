@@ -1,7 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "Request" do
-  let(:request) { FactoryGirl.create(:request) }
+  let(:del_type) { "loan" }
+  let(:request) { FactoryGirl.create(:request, del_type: del_type) }
 
   describe "#bin_type" do
     context "when source is aleph" do
@@ -15,10 +16,8 @@ RSpec.describe "Request" do
         request.source = "ill"
       end
 
-      context "when del_type is not loan" do
-        before(:each) do
-          request.del_type = "not loan"
-        end
+      context "when del_type is scan" do
+        let(:del_type) { "scan" }
 
         it "returns the correct bin type" do
           expect(request.bin_type).to eq "ILL-SCAN"
@@ -26,6 +25,8 @@ RSpec.describe "Request" do
       end
 
       context "when del_type is loan" do
+        let(:del_type) { "loan" }
+
         it "returns the correct bin type" do
           expect(request.bin_type).to eq "ILL-LOAN"
         end
