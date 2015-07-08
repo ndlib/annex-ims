@@ -15,7 +15,6 @@ RSpec.describe GetMatchSet do
 
   context "when set includes three items" do
     describe "::call" do
-
       it "returns three entries" do
         expect(subject.call(match_1).count).to eq 3
       end
@@ -30,7 +29,6 @@ RSpec.describe GetMatchSet do
 
   context "when set includes one item" do
     describe "::call" do
-
       it "returns one entry" do
         expect(subject.call(match_4).count).to eq 1
       end
