@@ -28,6 +28,24 @@ module AnnexFaker
     YEARS = (1900..Date.today.year).to_a
 
     class << self
+      def attributes
+        {
+          barcode: barcode,
+          title: Faker::Lorem.sentence,
+          author: Faker::Name.name,
+          chron: "Vol 1",
+          thickness: 1,
+          tray: nil,
+          bib_number: bib_number,
+          isbn_issn: [true, false].sample ? isbn : issn,
+          conditions: conditions,
+          call_number: call_number,
+          initial_ingest: Date.today - rand(3).days,
+          last_ingest: Date.today,
+          metadata_status: "complete",
+        }
+      end
+
       def attributes_sequence(i)
         {
           barcode: barcode_sequence(i),

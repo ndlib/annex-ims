@@ -4,8 +4,18 @@ RSpec.describe "Benchmark" do
   let(:iterations) { 200 }
 
   context "items" do
-    let(:iterations) { 200 }
-    it "benchmarks items", disabled: false do
+    let(:iterations) { 1000 }
+    it "benchmarks items", disabled: true do
+
+      # RubyProf.start
+      # iterations.times do |i|
+      #   Item.create!(AnnexFaker::Item.attributes_sequence(i))
+      # end
+      # result = RubyProf.stop
+      # printer = RubyProf::GraphHtmlPrinter.new(result)
+      # File.open(Rails.root.join("tmp/profile_data.html"), "w") { |file| printer.print(file) }
+      # Item.delete_all
+
       Benchmark.bmbm(10) do |benchmark|
         # benchmark.report "FactoryGirl" do
         #   iterations.times do
@@ -38,6 +48,22 @@ RSpec.describe "Benchmark" do
         benchmark.report "AnnexFaker Item.create" do
           iterations.times do |i|
             Item.create!(AnnexFaker::Item.attributes_sequence(i))
+          end
+          Item.delete_all
+        end
+
+        benchmark.report "AnnexFaker Item.save!" do
+          iterations.times do |i|
+            item = Item.new(AnnexFaker::Item.attributes_sequence(i))
+            item.save!
+          end
+          Item.delete_all
+        end
+
+        benchmark.report "AnnexFaker Item.save! without validations" do
+          iterations.times do |i|
+            item = Item.new(AnnexFaker::Item.attributes_sequence(i))
+            item.save!(validate: false)
           end
           Item.delete_all
         end
