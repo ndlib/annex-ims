@@ -12,7 +12,11 @@
   %thead
     %tr
       %th= "Request"
-      %th= "Item"
+      %th
+        %span= "Item"
+        - if IsPartOfSet.call(@match)
+          %span= "(" + GetMatchSet.call(@match)[@match.item.id] + " of " + GetMatchSet.call(@match).count.to_s
+          %span= " for this request" + ")"
   %tbody
     %tr
       %td
