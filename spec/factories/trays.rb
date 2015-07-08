@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :tray do
-    sequence(:barcode) { |n| "TRAY-AL#{n}" }
+    sequence(:barcode) { |n| AnnexFaker::Tray.barcode_sequence(n) }
     shelf nil
   end
 

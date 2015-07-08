@@ -4,7 +4,7 @@ FactoryGirl.define do
     sequence(:criteria) { |n| "#{n}" }
     sequence(:barcode) { |n| "12345#{n}" }
     sequence(:trans) { |n| "aleph_12345#{n}" }
-    requested Faker::Date.between(2.days.ago, Date.today)
+    requested { Date.today - rand(3).days }
     rapid false
     source "aleph"
     del_type "loan"

@@ -12,7 +12,7 @@ module AnnexFaker
           thickness: 1,
           tray: nil,
           bib_number: bib_number,
-          isbn_issn: [true, false].sample ? isbn : issn,
+          isbn_issn: send([:isbn, :issn].sample),
           conditions: conditions,
           call_number: call_number,
           initial_ingest: Date.today - rand(3).days,

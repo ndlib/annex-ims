@@ -341,7 +341,7 @@ RSpec.describe "Benchmark" do
           # Fastest (1.5% of original, tie with init)
           benchmark.report "constant" do
             iterations.times do
-              AnnexFaker::Letter::ULetters.sample
+              AnnexFaker::Letter::ULETTERS.sample
             end
           end
 
@@ -385,7 +385,7 @@ RSpec.describe "Benchmark" do
           # Fastest
           benchmark.report "constant" do
             iterations.times do
-              ([nil]*number_of_letters).map { AnnexFaker::Letter::ULetters.sample }.join
+              ([nil]*number_of_letters).map { AnnexFaker::Letter::ULETTERS.sample }.join
             end
           end
 

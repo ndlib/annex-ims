@@ -66,7 +66,7 @@ feature "Trays", type: :feature do
       end
 
       it "runs through unassigned-unshelved-scan flow and check shelf size, allow same size" do
-        tray2 = FactoryGirl.create(:tray, shelf: nil, shelved: false)
+        tray2 = FactoryGirl.create(:tray, barcode: "#{tray.barcode}1", shelf: nil, shelved: false)
         visit trays_path
         fill_in "Tray", with: tray.barcode
         click_button "Save"
