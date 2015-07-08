@@ -1,36 +1,233 @@
 require "rails_helper"
 
 RSpec.describe "Benchmark" do
-  let(:iterations) { 100 }
+  let(:iterations) { 200 }
 
-  it "benchmarks items", disabled: true do
-    Benchmark.bmbm(10) do |benchmark|
-      benchmark.report "FactoryGirl" do
-        iterations.times do
-          FactoryGirl.create(:item)
+  context "items" do
+    let(:iterations) { 200 }
+    it "benchmarks items", disabled: true do
+      Benchmark.bmbm(10) do |benchmark|
+        benchmark.report "FactoryGirl" do
+          iterations.times do
+            FactoryGirl.create(:item)
+          end
+          Item.delete_all
         end
-        Item.delete_all
+
+        benchmark.report "Item.create" do
+          iterations.times do |i|
+            Item.create!(
+              barcode: "000012345#{i}",
+              title: Faker::Lorem.sentence,
+              author: Faker::Name.name,
+              chron: "Vol 1",
+              thickness: 1,
+              tray: nil,
+              bib_number: "0037612#{Faker::Number.number(2)}",
+              isbn_issn: [true, false].sample ? Faker::Code.isbn : "#{Faker::Number.number(4)}-#{Faker::Number.number(4)}",
+              conditions: [Item::CONDITIONS.sample, Item::CONDITIONS.sample, Item::CONDITIONS.sample, Item::CONDITIONS.sample].uniq,
+              call_number: "#{("A".."Z").to_a.sample}#{("A".."Z").to_a.sample}#{Faker::Number.number(4)}.#{("A".."Z").to_a.sample}#{Faker::Number.number(2)} #{(1900..2014).to_a.sample}",
+              initial_ingest: Faker::Date.between(2.days.ago, Date.today),
+              last_ingest: Date::today.to_s,
+              metadata_status: "complete",
+            )
+          end
+          Item.delete_all
+        end
+
+        benchmark.report "AnnexFaker Item.create" do
+          iterations.times do |i|
+            Item.create!(
+              barcode: AnnexFaker::Item.barcode_sequence(i),
+              title: Faker::Lorem.sentence,
+              author: Faker::Name.name,
+              chron: "Vol 1",
+              thickness: 1,
+              tray: nil,
+              bib_number: AnnexFaker::Item.bib_number_sequence(i),
+              isbn_issn: [true, false].sample ? AnnexFaker::Item.isbn : AnnexFaker::Item.issn,
+              conditions: AnnexFaker::Item.conditions,
+              call_number: AnnexFaker::Item.call_number,
+              initial_ingest: Faker::Date.between(2.days.ago, Date.today),
+              last_ingest: Date::today.to_s,
+              metadata_status: "complete",
+            )
+          end
+          Item.delete_all
+        end
+
+        benchmark.report "AnnexFaker build" do
+          iterations.times do |i|
+            Item.new(
+              barcode: AnnexFaker::Item.barcode_sequence(i),
+              title: Faker::Lorem.sentence,
+              author: Faker::Name.name,
+              chron: "Vol 1",
+              thickness: 1,
+              tray: nil,
+              bib_number: AnnexFaker::Item.bib_number_sequence(i),
+              isbn_issn: [true, false].sample ? AnnexFaker::Item.isbn : AnnexFaker::Item.issn,
+              conditions: AnnexFaker::Item.conditions,
+              call_number: AnnexFaker::Item.call_number,
+              initial_ingest: Faker::Date.between(2.days.ago, Date.today),
+              last_ingest: Date::today.to_s,
+              metadata_status: "complete",
+            )
+          end
+        end
+
+        benchmark.report "AnnexFaker attributes" do
+          iterations.times do |i|
+            {
+              barcode: AnnexFaker::Item.barcode_sequence(i),
+              title: Faker::Lorem.sentence,
+              author: Faker::Name.name,
+              chron: "Vol 1",
+              thickness: 1,
+              tray: nil,
+              bib_number: AnnexFaker::Item.bib_number_sequence(i),
+              isbn_issn: [true, false].sample ? AnnexFaker::Item.isbn : AnnexFaker::Item.issn,
+              conditions: AnnexFaker::Item.conditions,
+              call_number: AnnexFaker::Item.call_number,
+              initial_ingest: Faker::Date.between(2.days.ago, Date.today),
+              last_ingest: Date::today.to_s,
+              metadata_status: "complete",
+            }
+          end
+        end
       end
+    end
+  end
 
-      benchmark.report "Item.create" do
-        iterations.times do |i|
-          Item.create!(
-            barcode: "000012345#{i}",
-            title: Faker::Lorem.sentence,
-            author: Faker::Name.name,
-            chron: "Vol 1",
-            thickness: 1,
-            tray: nil,
-            bib_number: "0037612#{Faker::Number.number(2)}",
-            isbn_issn: [true, false].sample ? Faker::Code.isbn : "#{Faker::Number.number(4)}-#{Faker::Number.number(4)}",
-            conditions: [Item::CONDITIONS.sample, Item::CONDITIONS.sample, Item::CONDITIONS.sample, Item::CONDITIONS.sample].uniq,
-            call_number: "#{("A".."Z").to_a.sample}#{("A".."Z").to_a.sample}#{Faker::Number.number(4)}.#{("A".."Z").to_a.sample}#{Faker::Number.number(2)} #{(1900..2014).to_a.sample}",
-            initial_ingest: Faker::Date.between(2.days.ago, Date.today),
-            last_ingest: Date::today.to_s,
-            metadata_status: "complete",
-          )
+  context "attributes" do
+    let(:iterations) { 1000 }
+    it "benchmarks items attributes", disabled: false do
+      Benchmark.bmbm(10) do |benchmark|
+        # benchmark.report "FactoryGirl.build" do
+        #   iterations.times do
+        #     FactoryGirl.build(:item)
+        #   end
+        # end
+
+        # benchmark.report "Item.build" do
+        #   iterations.times do |i|
+        #     Item.new(
+        #       barcode: "000012345#{i}",
+        #       title: Faker::Lorem.sentence,
+        #       author: Faker::Name.name,
+        #       chron: "Vol 1",
+        #       thickness: 1,
+        #       tray: nil,
+        #       bib_number: "0037612#{Faker::Number.number(2)}",
+        #       isbn_issn: [true, false].sample ? Faker::Code.isbn : "#{Faker::Number.number(4)}-#{Faker::Number.number(4)}",
+        #       conditions: [Item::CONDITIONS.sample, Item::CONDITIONS.sample, Item::CONDITIONS.sample, Item::CONDITIONS.sample].uniq,
+        #       call_number: "#{("A".."Z").to_a.sample}#{("A".."Z").to_a.sample}#{Faker::Number.number(4)}.#{("A".."Z").to_a.sample}#{Faker::Number.number(2)} #{(1900..2014).to_a.sample}",
+        #       initial_ingest: Faker::Date.between(2.days.ago, Date.today),
+        #       last_ingest: Date::today.to_s,
+        #       metadata_status: "complete",
+        #     )
+        #   end
+        # end
+
+        # benchmark.report "AnnexFaker build" do
+        #   iterations.times do |i|
+        #     Item.new(
+        #       barcode: AnnexFaker::Item.barcode_sequence(i),
+        #       title: Faker::Lorem.sentence,
+        #       author: Faker::Name.name,
+        #       chron: "Vol 1",
+        #       thickness: 1,
+        #       tray: nil,
+        #       bib_number: AnnexFaker::Item.bib_number_sequence(i),
+        #       isbn_issn: [true, false].sample ? AnnexFaker::Item.isbn : AnnexFaker::Item.issn,
+        #       conditions: AnnexFaker::Item.conditions,
+        #       call_number: AnnexFaker::Item.call_number,
+        #       initial_ingest: Faker::Date.between(2.days.ago, Date.today),
+        #       last_ingest: Date::today.to_s,
+        #       metadata_status: "complete",
+        #     )
+        #   end
+        # end
+
+        benchmark.report "Original" do
+          iterations.times do |i|
+            {
+              barcode: "000012345#{i}",
+              title: Faker::Lorem.sentence,
+              author: Faker::Name.name,
+              chron: "Vol 1",
+              thickness: 1,
+              tray: nil,
+              bib_number: "0037612#{Faker::Number.number(2)}",
+              isbn_issn: [true, false].sample ? Faker::Code.isbn : "#{Faker::Number.number(4)}-#{Faker::Number.number(4)}",
+              conditions: [Item::CONDITIONS.sample, Item::CONDITIONS.sample, Item::CONDITIONS.sample, Item::CONDITIONS.sample].uniq,
+              call_number: "#{("A".."Z").to_a.sample}#{("A".."Z").to_a.sample}#{Faker::Number.number(4)}.#{("A".."Z").to_a.sample}#{Faker::Number.number(2)} #{(1900..2014).to_a.sample}",
+              initial_ingest: Faker::Date.between(2.days.ago, Date.today),
+              last_ingest: Date::today.to_s,
+              metadata_status: "complete",
+            }
+          end
         end
-        Item.delete_all
+
+        benchmark.report "AnnexFaker attributes" do
+          iterations.times do |i|
+            {
+              barcode: AnnexFaker::Item.barcode_sequence(i),
+              title: Faker::Lorem.sentence,
+              author: Faker::Name.name,
+              chron: "Vol 1",
+              thickness: 1,
+              tray: nil,
+              bib_number: AnnexFaker::Item.bib_number_sequence(i),
+              isbn_issn: [true, false].sample ? AnnexFaker::Item.isbn : AnnexFaker::Item.issn,
+              conditions: AnnexFaker::Item.conditions,
+              call_number: AnnexFaker::Item.call_number,
+              # initial_ingest: Faker::Date.between(2.days.ago, Date.today),
+              last_ingest: Date::today.to_s,
+              metadata_status: "complete",
+            }
+          end
+        end
+
+        benchmark.report "AnnexFaker small attributes" do
+          iterations.times do |i|
+            {
+              barcode: AnnexFaker::Item.barcode_sequence(i),
+              # title: Faker::Lorem.sentence,
+              # author: Faker::Name.name,
+              chron: "Vol 1",
+              thickness: 1,
+              tray: nil,
+              bib_number: AnnexFaker::Item.bib_number_sequence(i),
+              isbn_issn: [true, false].sample ? AnnexFaker::Item.isbn : AnnexFaker::Item.issn,
+              conditions: AnnexFaker::Item.conditions,
+              call_number: AnnexFaker::Item.call_number,
+              # initial_ingest: Faker::Date.between(2.days.ago, Date.today),
+              last_ingest: Date::today.to_s,
+              metadata_status: "complete",
+            }
+          end
+        end
+
+        benchmark.report "Hash" do
+          iterations.times do |i|
+            {
+              barcode: "AnnexFaker::Item.barcode_sequence(i)",
+              title: "Faker::Lorem.sentence",
+              author: "Faker::Name.name",
+              chron: "Vol 1",
+              thickness: 1,
+              tray: nil,
+              bib_number: "AnnexFaker::Item.bib_number_sequence(i)",
+              isbn_issn: "[true, false].sample ? AnnexFaker::Item.isbn : AnnexFaker::Item.issn",
+              conditions: "AnnexFaker::Item.conditions",
+              call_number: "AnnexFaker::Item.call_number",
+              initial_ingest: "Faker::Date.between(2.days.ago, Date.today)",
+              last_ingest: "Date::today.to_s",
+              metadata_status: "complete",
+            }
+          end
+        end
       end
     end
   end
@@ -54,9 +251,9 @@ RSpec.describe "Benchmark" do
           end
         end
 
-        benchmark.report "init + calc" do
+        benchmark.report "AnnexFaker" do
           iterations.times do
-            "#{letters.sample}#{letters.sample}#{Faker::Number.number(4)}.#{letters.sample}#{Faker::Number.number(2)} #{years.sample}"
+            AnnexFaker::Item.call_number
           end
         end
       end
@@ -173,7 +370,7 @@ RSpec.describe "Benchmark" do
 
           benchmark.report "AnnexFaker" do
             iterations.times do
-              AnnexFaker::Letter.uppercase_letter
+              AnnexFaker::Letter.uletter
             end
           end
         end
@@ -210,7 +407,7 @@ RSpec.describe "Benchmark" do
 
           benchmark.report "AnnexFaker" do
             iterations.times do
-              AnnexFaker::Letter.uppercase_letters(5)
+              AnnexFaker::Letter.uletters(5)
             end
           end
         end
