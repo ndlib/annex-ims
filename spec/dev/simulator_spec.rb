@@ -20,6 +20,10 @@ RSpec.describe Simulator do
     expect(subject.create_user).to be_a_kind_of(User)
   end
 
+  it "creates a request" do
+    expect(subject.create_request).to be_a_kind_of(Request)
+  end
+
   context "benchmarks", benchmark: true do
     it "create_item" do
       iterations = 500

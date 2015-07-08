@@ -25,6 +25,12 @@ class Simulator
     end
   end
 
+  def create_request(**attributes)
+    Request.new(AnnexFaker::Request.attributes(**attributes)) do |request|
+      request.save!
+    end
+  end
+
   def create_user
     User.new(AnnexFaker::User.attributes) do |user|
       5.times do

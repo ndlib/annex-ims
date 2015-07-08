@@ -40,4 +40,12 @@ RSpec.describe AnnexFaker::Item do
   it "generates an issn" do
     expect(subject.issn).to match(/^\d{4}-?\d{4}$/)
   end
+
+  it "generates a title" do
+    expect(subject.title).to match(/^[a-z ]+[.]$/i)
+  end
+
+  it "generates an author" do
+    expect(subject.author).to match(/^[a-z .']+$/i)
+  end
 end

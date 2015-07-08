@@ -6,8 +6,8 @@ module AnnexFaker
       def attributes
         {
           barcode: barcode,
-          title: Faker::Lorem.sentence,
-          author: Faker::Name.name,
+          title: title,
+          author: author,
           chron: "Vol 1",
           thickness: 1,
           tray: nil,
@@ -24,8 +24,8 @@ module AnnexFaker
       def attributes_sequence(i)
         {
           barcode: barcode_sequence(i),
-          title: Faker::Lorem.sentence,
-          author: Faker::Name.name,
+          title: title,
+          author: author,
           chron: "Vol 1",
           thickness: 1,
           tray: nil,
@@ -69,6 +69,14 @@ module AnnexFaker
 
       def issn
         "#{AnnexFaker::Number.number(4)}-#{AnnexFaker::Number.number(4)}"
+      end
+
+      def title
+        Faker::Lorem.sentence
+      end
+
+      def author
+        Faker::Name.name
       end
     end
   end
