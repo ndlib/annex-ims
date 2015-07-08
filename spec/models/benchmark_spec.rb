@@ -63,9 +63,10 @@ RSpec.describe "Benchmark" do
     end
 
     context "numbers", disabled: true do
-      let(:digits) { 14 }
+      let(:iterations) { 150_000 }
 
       it "benchmarks" do
+        digits = 14
         Benchmark.bmbm(10) do |benchmark|
           benchmark.report "Faker" do
             iterations.times do
@@ -73,10 +74,17 @@ RSpec.describe "Benchmark" do
             end
           end
 
-          # Fastest (10% of Faker)
+          # Fastest (10% of Faker, tied with AnnexFaker)
           benchmark.report "custom" do
             iterations.times do
               rand(10 ** digits).to_s.rjust(digits, "0")
+            end
+          end
+
+          # Fastest (10% of Faker, tied with custom)
+          benchmark.report "AnnexFaker" do
+            iterations.times do
+              AnnexFaker::Number.number(digits)
             end
           end
         end
@@ -117,14 +125,14 @@ RSpec.describe "Benchmark" do
       end
     end
 
-    context "letters", disabled: true do
+    context "letter", disabled: true do
       let(:iterations) { 500_000 }
 
       it "benchmarks" do
         init_letters = ("A".."Z").to_a
         init_numbers = (65..90).to_a
         Benchmark.bmbm(10) do |benchmark|
-          benchmark.report "Letters original" do
+          benchmark.report "Letter original" do
             iterations.times do
               ("A".."Z").to_a.sample
             end
@@ -152,7 +160,7 @@ RSpec.describe "Benchmark" do
           # Fastest (1.5% of original, tie with init)
           benchmark.report "constant" do
             iterations.times do
-              Faker::Base::ULetters.sample
+              AnnexFaker::Letter::ULetters.sample
             end
           end
 
@@ -160,6 +168,49 @@ RSpec.describe "Benchmark" do
           benchmark.report "calc" do
             iterations.times do
               (rand(26) + 65).chr
+            end
+          end
+
+          benchmark.report "AnnexFaker" do
+            iterations.times do
+              AnnexFaker::Letter.uppercase_letter
+            end
+          end
+        end
+      end
+    end
+
+    context "letters", disabled: true do
+      let(:iterations) { 150_000 }
+
+      it "benchmarks" do
+        number_of_letters = 5
+        init_letters = ("A".."Z").to_a
+        init_numbers = (65..90).to_a
+        Benchmark.bmbm(10) do |benchmark|
+          benchmark.report "let" do
+            iterations.times do
+              ([nil]*number_of_letters).map { letters.sample }.join
+            end
+          end
+
+          # Fastest
+          benchmark.report "init" do
+            iterations.times do
+              ([nil]*number_of_letters).map { init_letters.sample }.join
+            end
+          end
+
+          # Fastest
+          benchmark.report "constant" do
+            iterations.times do
+              ([nil]*number_of_letters).map { AnnexFaker::Letter::ULetters.sample }.join
+            end
+          end
+
+          benchmark.report "AnnexFaker" do
+            iterations.times do
+              AnnexFaker::Letter.uppercase_letters(5)
             end
           end
         end
