@@ -1,12 +1,13 @@
-= select_tag :source, options_for_select([["Aleph", "aleph"], ["ILLiad", "illiad"]]), onchange: "table.draw();"
-= select_tag :req_type, options_for_select([["Loan", "loan"], ["Scan", "scan"]]), onchange: "table.draw();"
-= label_tag :rapid, "ILLiad Rapid Requests"
-= check_box_tag :rapid, 1, false, onchange: "table.draw();"
+.filter
+  = select_tag :source, options_for_select([["Aleph", "aleph"], ["ILLiad", "illiad"]]), onchange: "table.draw();"
+  = select_tag :req_type, options_for_select([["Loan", "loan"], ["Scan", "scan"]]), onchange: "table.draw();"
+  = label_tag :rapid, "ILLiad Rapid Requests"
+  = check_box_tag :rapid, 1, false, onchange: "table.draw();"
 = form_tag create_batch_path do |f|
   %table.table.table-striped.condensed.datatable{"id" => "requests"}
     %thead
       %tr
-        %th
+        %th.add
           'Add to Batch'
           = check_box_tag 'selectAll'
         %th= 'Rapid Request Indicator'
@@ -147,7 +148,7 @@
         str += "<td>"+item['tray']+"</td>";
         str += "<td>"+item['title']+"</td>";
         str += "<td>"+item['author']+"</td>";
-        str += "<td>"+item['chron']+"</td>"; 
+        str += "<td>"+item['chron']+"</td>";
         str += "</tr>";
       } );
       str += "</table>";

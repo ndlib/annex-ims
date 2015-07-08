@@ -119,9 +119,11 @@ a.navbar-brand {
 }
 
 a.list-group-item:link, a.list-group-item-success:link, a.list-group-item-success {
-  border: none;
-  background: none;
+  border: 2px #bcbcbc;
+  border-radius: 5px;
+  background: #ccc;
   color: #333;
+  margin-bottom:5px;
 }
 
 .list-group-item:first-child {
@@ -150,7 +152,8 @@ a.list-group-item[aria-expanded="true"] {
     background-repeat: no-repeat;
     background-position: 10px 10px;
     background-size: auto 25px;
-
+    background-color: #fff;
+    margin-left:8px;
   }
   .barcode {
     background-image: image_url("barcode.png");
@@ -254,6 +257,33 @@ hr {
       }
     }
   }
+}
+
+.actions {
+  .btn {
+    margin-left: 6px;
+  }
+}
+
+label input {
+  margin-left: 6px;
+}
+
+.filter {
+  padding-top: 12px;
+  margin-bottom: 1.12em;
+  select {
+    margin-right:5px;
+  }
+}
+
+.add {
+  width: 150px;
+  padding-left: 5px;
+}
+
+table.dataTable thead > tr > th {
+
 }
 
 @media only screen and (max-width: 720px) {
