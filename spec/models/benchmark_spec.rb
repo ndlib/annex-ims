@@ -60,10 +60,10 @@ RSpec.describe "Benchmark" do
           Item.delete_all
         end
 
-        benchmark.report "AnnexFaker Item.save! without validations" do
+        benchmark.report "Simulator#create_item" do
+          simulator = Simulator.new
           iterations.times do |i|
-            item = Item.new(AnnexFaker::Item.attributes_sequence(i))
-            item.save!(validate: false)
+            simulator.create_item
           end
           Item.delete_all
         end

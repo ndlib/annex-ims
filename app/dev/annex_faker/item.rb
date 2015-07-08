@@ -1,29 +1,4 @@
 module AnnexFaker
-  class Base
-  end
-
-  class Letter
-    ULetters = ("A".."Z").to_a
-
-    class << self
-      def uletters(number)
-        ([nil]*number).map { ULetters.sample }.join
-      end
-
-      def uletter
-        ULetters.sample
-      end
-    end
-  end
-
-  class Number
-    class << self
-      def number(digits)
-        rand(10 ** digits).to_s.rjust(digits, "0")
-      end
-    end
-  end
-
   class Item
     YEARS = (1900..Date.today.year).to_a
 
