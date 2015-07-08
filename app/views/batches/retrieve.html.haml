@@ -14,8 +14,9 @@
       %th= "Request"
       %th
         %span= "Item"
-        - if IsPartOfSet.call(@match)
-          - match_set = GetMatchSet.call(@match)
+        - match_query = MatchQuery.new(Match.all)
+        - if match_query.part_of_set?(@match)
+          - match_set = match_query.retrieve_set(@match)
           = "(" + t("item.set", ordinal_number: match_set[@match.item.id], total_number: match_set.count.to_s) + ")"
   %tbody
     %tr

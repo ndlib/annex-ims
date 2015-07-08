@@ -1,18 +1,13 @@
-class GetMatchSet
-  # Retrieve set of matches based on a request
+class MatchQuery
+  attr_reader :relation
 
-  def self.call(match)
-    new(match).get_set
+  def initialize(relation = Match.all, match)
+    @relation = relation
   end
 
-  def initialize(match)
-    @match = match
-    @request = match.request
-  end
-
-  def get_set
+  def retrieve_set(match)
     set = {}
-    Match.where(request: @request).
+    relation.where(request: match.request).
       includes(item: { tray: :shelf }).
       order("shelves.barcode").
       order("trays.barcode").
@@ -21,5 +16,9 @@ class GetMatchSet
       map.
       with_index { |m,i| set[m.item.id] = "#{i + 1}".to_i.ordinalize }
     set
+  end
+
+  def part_of_set?(match)
+    relation.where(request: match.request).count > 1
   end
 end
