@@ -14,6 +14,7 @@ class ProcessMatch
     ActiveRecord::Base.transaction do
       dissociate_bin
       scan_send
+      complete_match
     end
     notify_api
     true
@@ -54,5 +55,13 @@ class ProcessMatch
 
   def notify_api
     ApiScanSendJob.perform_later(match: match)
+  end
+
+  def complete_match
+    @match.processed = "completed"
+    @match.save!
+    if @match.request.remaining_matches.count == 0
+      CompleteRequest.call(request: @match.request, user: user)
+    end
   end
 end
