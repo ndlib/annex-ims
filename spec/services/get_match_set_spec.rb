@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.describe GetMatchSet do
-  
   let!(:item_1) { FactoryGirl.create(:item) }
   let!(:item_2) { FactoryGirl.create(:item) }
   let!(:item_3) { FactoryGirl.create(:item) }
@@ -15,7 +14,6 @@ RSpec.describe GetMatchSet do
   subject { GetMatchSet }
 
   context "when set includes three items" do
-
     describe "::call" do
 
       it "returns three entries" do
@@ -31,7 +29,6 @@ RSpec.describe GetMatchSet do
   end
 
   context "when set includes one item" do
-
     describe "::call" do
 
       it "returns one entry" do
@@ -43,5 +40,4 @@ RSpec.describe GetMatchSet do
       end
     end
   end
- 
 end

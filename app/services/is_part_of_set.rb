@@ -11,6 +11,6 @@ class IsPartOfSet
   end
 
   def part_of_set?
-    Match.where(request: @request).count > 1    
+    Match.where(request: @request).count > 1
   end
 end

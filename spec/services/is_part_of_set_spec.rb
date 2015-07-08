@@ -1,7 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe IsPartOfSet do
-
   let!(:item_1) { FactoryGirl.create(:item) }
   let!(:item_2) { FactoryGirl.create(:item) }
   let!(:item_3) { FactoryGirl.create(:item) }
@@ -17,7 +16,7 @@ RSpec.describe IsPartOfSet do
   context "is part of set" do
     describe "::call" do
       it "should return true" do
-        expect(subject.call(match_1)).to be_truthy 
+        expect(subject.call(match_1)).to be_truthy
       end
     end
   end
@@ -25,9 +24,8 @@ RSpec.describe IsPartOfSet do
   context "is not part of set" do
     describe "::call" do
       it "should return false" do
-        expect(subject.call(match_4)).to be_falsey 
+        expect(subject.call(match_4)).to be_falsey
       end
     end
   end
-
 end
