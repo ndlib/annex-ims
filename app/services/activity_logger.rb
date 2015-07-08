@@ -10,6 +10,14 @@ class ActivityLogger
     call(action: "ApiGetItemMetadata", item: item, params: params, api_response: api_response)
   end
 
+  def self.api_scan_item(item:, params:, api_response:)
+    call(action: "ApiScanItem", item: item, params: params, api_response: api_response)
+  end
+
+  def self.api_send_item(item:, params:, api_response:)
+    call(action: "ApiSendItem", item: item, params: params, api_response: api_response)
+  end
+
   def self.api_remove_request(request:, params:, api_response:)
     call(action: "ApiRemoveRequest", request: request, params: params, api_response: api_response)
   end
