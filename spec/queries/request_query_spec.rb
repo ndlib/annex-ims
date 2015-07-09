@@ -30,4 +30,9 @@ RSpec.describe RequestQuery do
       expect(subject.remaining_matches.count).to eq(1)
     end
   end
+
+  context "#find_all_by_id" do
+    it "returns request for each id"
+    it "does not return other requests"
+  end
 end

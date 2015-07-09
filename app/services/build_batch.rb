@@ -20,23 +20,29 @@ class BuildBatch
       batch = user.batches.where(active: true).first
     end
 
-    batch_data.each do |data|
+    if batch_data.length > 0
+      new_request_ids = []
+      batch_data.each do |data|
 
-      lexed_data = data.split('-')
+        lexed_data = data.split('-')
 
-      request = Request.find(lexed_data[0])
-      item = Item.find(lexed_data[1])
+        request = Request.find(lexed_data[0])
+        item = Item.find(lexed_data[1])
 
-      match = Match.new
-      match.item = item
-      match.batch = batch
-      match.request = request
-      match.save!
-      ActivityLogger.match_item(item: item, request: request, user: user)
-    end
+        match = Match.new
+        match.item = item
+        match.batch = batch
+        match.request = request
+        match.save!
+        ActivityLogger.match_item(item: item, request: request, user: user)
 
-    batch.requests.each do |r|
-      ActivityLogger.batch_request(request: r, user: user)
+        new_request_ids.append request
+      end
+
+      new_requests = RequestQuery.new(batch.requests).find_all_by_id(id_array: new_request_ids)
+      new_requests.each do |r|
+        ActivityLogger.batch_request(request: r, user: user)
+      end
     end
 
     return batch
