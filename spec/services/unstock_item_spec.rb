@@ -5,12 +5,12 @@ RSpec.describe UnstockItem do
   let(:tray) { double(Tray, barcode: "TRAY-AH1234") }
   let(:item) do
     instance_double(Item,
-      unstocked?: false,
-      save: true,
-      "unstocked!" => nil,
-      tray: tray,
-      barcode: "1234",
-      "save!" => true)
+                    unstocked?: false,
+                    save: true,
+                    "unstocked!" => nil,
+                    tray: tray,
+                    barcode: "1234",
+                    "save!" => true)
   end
   let(:user) { double(User, username: "bob", id: 1)}
 
@@ -32,12 +32,12 @@ RSpec.describe UnstockItem do
   context "item already unstocked" do
     let(:item) do
       instance_double(Item,
-        unstocked?: true,
-        save: true,
-        "unstocked!" => nil,
-        tray: tray,
-        barcode: "1234",
-        "save!" => true)
+                      unstocked?: true,
+                      save: true,
+                      "unstocked!" => nil,
+                      tray: tray,
+                      barcode: "1234",
+                      "save!" => true)
     end
 
     it "doesn't log the activity if it was already stocked" do
