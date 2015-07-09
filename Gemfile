@@ -135,5 +135,5 @@ group :development do
   # Better error page
   gem "better_errors"
   gem "binding_of_caller"
+  gem 'quiet_assets'
 end
-
