@@ -1,18 +1,6 @@
-class IsBinBarcode
-  PREFIX = '(BIN-)(ILL-LOAN|ILL-SCAN|ALEPH-LOAN)(-)'
-
-  attr_reader :barcode
-
+module IsBinBarcode
+  PREFIX = "(BIN-)(ILL-LOAN|ILL-SCAN|ALEPH-LOAN)(-)".freeze
   def self.call(barcode)
-    new(barcode).compare
+    (barcode =~ /^#{PREFIX}(.*)/) ? true : false
   end
-
-  def initialize(barcode)
-    @barcode = barcode
-  end
-
-  def compare
-    (barcode =~ /^#{PREFIX}(.*)/ ) ? true : false
-  end
-
 end

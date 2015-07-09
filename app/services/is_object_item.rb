@@ -1,16 +1,6 @@
-class IsObjectItem
-  attr_reader :item
-
+module IsObjectItem
+  CLASS_NAME = "Item".freeze
   def self.call(item)
-    new(item).compare
+    (item.class.to_s == CLASS_NAME) ? true : false
   end
-
-  def initialize(item)
-    @item = item
-  end
-
-  def compare
-    (@item.class.to_s == "Item") ? true : false
-  end
-
 end

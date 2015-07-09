@@ -1,16 +1,6 @@
-class IsObjectTray
-  attr_reader :tray
-
+module IsObjectTray
+  CLASS_NAME = "Tray".freeze
   def self.call(tray)
-    new(tray).compare
+    (tray.class.to_s == CLASS_NAME) ? true : false
   end
-
-  def initialize(tray)
-    @tray = tray
-  end
-
-  def compare
-    (@tray.class.to_s == "Tray") ? true : false
-  end
-
 end
