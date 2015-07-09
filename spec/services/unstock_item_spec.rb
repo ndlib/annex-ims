@@ -3,7 +3,13 @@ require 'rails_helper'
 RSpec.describe UnstockItem do
   subject { described_class.call(item, user)}
   let(:tray) { double(Tray, barcode: "TRAY-AH1234") }
-  let(:item) { double(Item, "unstocked" => false, unstocked?: false, save: true, "unstocked!" => nil, tray: tray, barcode: "1234", "save!" => true)} # insert used methods
+  let(:item) { instance_double(Item,
+                               unstocked?: false,
+                               save: true,
+                               "unstocked!" => nil,
+                               tray: tray,
+                               barcode: "1234",
+                               "save!" => true) }
   let(:user) { double(User, username: "bob", id: 1)}
 
   before(:each) do
@@ -21,10 +27,19 @@ RSpec.describe UnstockItem do
     subject
   end
 
-  it "doesn't log the activity if it was already stocked" do
-    item = instance_double(Item, "unstocked" => false, unstocked?: false, save: true, "unstocked!" => nil, tray: tray, barcode: "1234", "save!" => true)
-    expect(ActivityLogger).not_to receive(:unstock_item).with(item: item, tray: tray, user: user)
-    described_class.call(item, user)
+  context "item already unstocked" do
+    let(:item) { instance_double(Item,
+                                 unstocked?: true,
+                                 save: true,
+                                 "unstocked!" => nil,
+                                 tray: tray,
+                                 barcode: "1234",
+                                 "save!" => true) }
+
+    it "doesn't log the activity if it was already stocked" do
+      expect(ActivityLogger).not_to receive(:unstock_item).with(item: item, tray: tray, user: user)
+      described_class.call(item, user)
+    end
   end
 
   it "returns the item when it is successful" do
