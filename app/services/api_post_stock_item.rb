@@ -13,8 +13,8 @@ class ApiPostStockItem
 
   def post_data!
     response = ApiHandler.post(action: :stock, params: params)
+    ActivityLogger.api_stock_item(item: item, params: params, api_response: response)
     if response.success?
-      ActivityLogger.api_stock_item(item: item, params: params, api_response: response)
       response
     else
       raise ApiStockItemError, "Error sending stock request to API. params: #{params.inspect}, response: #{response.inspect}"
