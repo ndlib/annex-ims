@@ -1,5 +1,5 @@
 require 'rails_helper'
 
-RSpec.describe Tray, :type => :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+RSpec.describe Tray, type: :model do
+  it { should_not validate_presence_of :shelf }
 end
