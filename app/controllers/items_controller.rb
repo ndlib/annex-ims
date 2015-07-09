@@ -44,7 +44,7 @@ class ItemsController < ApplicationController
   end
 
   def issues
-    @issues = Issue.where("resolved_at IS NULL")
+    @issues = UnresolvedIssueQuery.call(params)
   end
 
   def resolve
