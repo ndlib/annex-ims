@@ -70,6 +70,10 @@ class ActivityLogger
     call(action: "FilledRequest", user: user, request: request)
   end
 
+  def self.match_item(item:, request:, user:)
+    call(action: "MatchedItem", item: item, request: request, user: user)
+  end
+
   def self.remove_request(request:, user:)
     call(action: "RemovedRequest", request: request, user: user)
   end

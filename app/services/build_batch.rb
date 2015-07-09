@@ -32,6 +32,7 @@ class BuildBatch
       match.batch = batch
       match.request = request
       match.save!
+      ActivityLogger.match_item(item: item, request: request, user: user)
     end
 
     batch.requests.each do |r|
