@@ -2,11 +2,11 @@ class ApiPostStockItem
   class ApiStockItemError < StandardError; end
   attr_reader :item
 
-  def self.call(item: item)
+  def self.call(item:)
     new(item: item).post_data!
   end
 
-  def initialize(item: item)
+  def initialize(item:)
     @item = item
   end
 
