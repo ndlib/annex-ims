@@ -21,3 +21,27 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+Getting Started:
+
+Requirements:
+
+* Ruby (~> 2.1.4)
+* RabbitMQ (~> 3.5.0) - https://www.rabbitmq.com/download.html
+* Postgres - (~> 9.4) - http://www.postgresql.org/download/
+
+Installation:
+
+```
+$ bundle install
+
+Start guard which will also start Solr
+
+```
+$ bundle exec guard
+
+To setup the database, run: 
+
+```
+$ bundle exec rake db:create db:migrate db:seed
