@@ -7,4 +7,5 @@ class Match < ActiveRecord::Base
   validates_presence_of :batch_id
   validates_presence_of :request_id
   validates_presence_of :item_id
+  validates :bin_id, presence: true
 end
