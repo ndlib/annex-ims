@@ -34,6 +34,10 @@ class BuildBatch
       match.save!
     end
 
+    batch.requests.each do |r|
+      ActivityLogger.batch_request(request: r, user: user)
+    end
+
     return batch
 
   end

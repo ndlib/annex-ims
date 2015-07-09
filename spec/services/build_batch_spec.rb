@@ -90,5 +90,16 @@ RSpec.describe BuildBatch, search: true do
       Sunspot.commit
     end
 
+    it "logs a BatchedRequest" do
+      test = ["#{request1.id}-#{item.id}"]
+      expect(ActivityLogger).to receive(:batch_request).with(request: request1, user: current_user)
+      described_class.call(test, current_user)
+    end
+
+    it "only logs one BatchedRequest log for a Request with multiple items" do
+      test = ["#{request1.id}-#{item.id}", "#{request1.id}-#{item2.id}"]
+      expect(ActivityLogger).to receive(:batch_request).with(request: request1, user: current_user).once
+      described_class.call(test, current_user)
+    end
   end
 end
