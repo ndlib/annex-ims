@@ -9,6 +9,7 @@ class TraysController < ApplicationController
       @tray = GetTrayFromBarcode.call(params[:tray][:barcode])
       @size = TraySize.call(@tray.barcode)
     rescue StandardError => e
+      NotifyError.call(exception: e)
       flash[:error] = e.message
       redirect_to trays_path
       return
@@ -43,6 +44,7 @@ class TraysController < ApplicationController
     begin
       AssociateTrayWithShelfBarcode.call(@tray, barcode, current_user)
     rescue StandardError => e
+      NotifyError.call(exception: e)
       flash[:error] = e.message
       redirect_to show_tray_path(:id => @tray.id)
       return
@@ -120,6 +122,7 @@ class TraysController < ApplicationController
       @tray = GetTrayFromBarcode.call(params[:tray][:barcode])
       @size = TraySize.call(@tray.barcode)
     rescue StandardError => e
+      NotifyError.call(exception: e)
       flash[:error] = e.message
       redirect_to trays_items_path
       return
@@ -185,6 +188,7 @@ class TraysController < ApplicationController
       redirect_to show_tray_item_path(:id => @tray.id)
       return
     rescue StandardError => e
+      NotifyError.call(exception: e)
       flash[:error] = e.message
       redirect_to show_tray_item_path(:id => @tray.id)
       return
