@@ -8,6 +8,7 @@ class ShelvesController < ApplicationController
     begin
       @shelf = GetShelfFromBarcode.call(params[:shelf][:barcode])
     rescue StandardError => e
+      NotifyError.call(exception: e)
       flash[:error] = e.message
       redirect_to shelves_path
       return
@@ -61,6 +62,7 @@ class ShelvesController < ApplicationController
       redirect_to show_shelf_path(:id => @shelf.id)
       return
     rescue StandardError => e
+      NotifyError.call(exception: e)
       flash[:error] = e.message
       redirect_to show_shelf_path(:id => @shelf.id)
       return
