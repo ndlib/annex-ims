@@ -10,4 +10,10 @@ RSpec.describe GetRequests do
     expect(subject.count).to eq(2)
     expect(subject.first.trans).to eq("illiad_85132100")
   end
+
+  it "logs requests" do
+    stub_api_active_requests
+    expect(ActivityLogger).to receive(:receive_request).with(request: kind_of(Request)).twice
+    subject
+  end
 end
