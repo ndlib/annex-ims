@@ -125,7 +125,7 @@ end
 group :test do
   # For mocking up APIs
   gem "webmock"
-
+  gem "shoulda-matchers"
 end
 
 group :development do
