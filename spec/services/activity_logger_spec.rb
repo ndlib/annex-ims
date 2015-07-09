@@ -69,6 +69,20 @@ RSpec.describe ActivityLogger do
     it_behaves_like "an activity log", "ApiRemoveRequest"
   end
 
+  context "ApiScanItem" do
+    let(:arguments) { { item: item, params: { test: "test" }, api_response: api_response } }
+    subject { described_class.api_scan_item(**arguments) }
+
+    it_behaves_like "an activity log", "ApiScanItem"
+  end
+
+  context "ApiSendItem" do
+    let(:arguments) { { item: item, params: { test: "test" }, api_response: api_response } }
+    subject { described_class.api_send_item(**arguments) }
+
+    it_behaves_like "an activity log", "ApiSendItem"
+  end
+
   context "AssociatedItemAndBin" do
     let(:arguments) { { item: item, bin: bin, user: user } }
     subject { described_class.associate_item_and_bin(**arguments) }
