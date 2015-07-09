@@ -3,13 +3,15 @@ require 'rails_helper'
 RSpec.describe UnstockItem do
   subject { described_class.call(item, user)}
   let(:tray) { double(Tray, barcode: "TRAY-AH1234") }
-  let(:item) { instance_double(Item,
-                               unstocked?: false,
-                               save: true,
-                               "unstocked!" => nil,
-                               tray: tray,
-                               barcode: "1234",
-                               "save!" => true) }
+  let(:item) do
+    instance_double(Item,
+      unstocked?: false,
+      save: true,
+      "unstocked!" => nil,
+      tray: tray,
+      barcode: "1234",
+      "save!" => true)
+  end
   let(:user) { double(User, username: "bob", id: 1)}
 
   before(:each) do
@@ -28,13 +30,15 @@ RSpec.describe UnstockItem do
   end
 
   context "item already unstocked" do
-    let(:item) { instance_double(Item,
-                                 unstocked?: true,
-                                 save: true,
-                                 "unstocked!" => nil,
-                                 tray: tray,
-                                 barcode: "1234",
-                                 "save!" => true) }
+    let(:item) do
+      instance_double(Item,
+        unstocked?: true,
+        save: true,
+        "unstocked!" => nil,
+        tray: tray,
+        barcode: "1234",
+        "save!" => true)
+    end
 
     it "doesn't log the activity if it was already stocked" do
       expect(ActivityLogger).not_to receive(:unstock_item).with(item: item, tray: tray, user: user)
