@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe ApiGetRequestList do
-  let(:response) { ApiResponse.new(status_code: 200, body: {requests: []}) }
+  let(:response) { ApiResponse.new(status_code: 200, body: { requests: [] }) }
 
   context "self" do
     subject { described_class }
