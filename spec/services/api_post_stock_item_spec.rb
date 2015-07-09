@@ -12,9 +12,9 @@ RSpec.describe ApiPostStockItem do
       subject { described_class.call(item: item) }
 
       it "retrieves data" do
-        expect(ApiHandler).to receive(:post)
-          .with(action: :stock, params: { :item_id => item.id, :barcode=> item.barcode, :tray_code=> tray.barcode })
-          .and_return(response)
+        expect(ApiHandler).to receive(:post).
+          with(action: :stock, params: { item_id: item.id, barcode: item.barcode, tray_code: tray.barcode }).
+          and_return(response)
         expect(ActivityLogger).to receive(:api_stock_item).with(item: item, params: anything, api_response: response)
         stub_api_stock_item(item: item)
         expect(subject).to be_a_kind_of(ApiResponse)
