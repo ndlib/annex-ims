@@ -146,6 +146,13 @@ RSpec.describe ActivityLogger do
     it_behaves_like "an activity log", "DissociatedTrayAndShelf"
   end
 
+  context "FilledRequest" do
+    let(:arguments) { { request: request, user: user } }
+    subject { described_class.fill_request(**arguments) }
+
+    it_behaves_like "an activity log", "FilledRequest"
+  end
+
   context "RemovedRequest" do
     let(:arguments) { { request: request, user: user } }
     subject { described_class.remove_request(**arguments) }

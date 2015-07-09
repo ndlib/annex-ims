@@ -12,6 +12,8 @@ class Request < ActiveRecord::Base
   belongs_to :filled_by_item, class_name: "Item", foreign_key: "item_id"
   belongs_to :filled_in_batch, class_name: "Batch", foreign_key: "batch_id"
 
+  enum status: { received: 0, completed: 1 }
+
   def bin_type
     if self.source == "aleph"
       bt = "ALEPH-LOAN"

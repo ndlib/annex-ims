@@ -58,6 +58,10 @@ class ActivityLogger
     call(action: "DissociatedTrayAndShelf", user: user, tray: tray, shelf: shelf)
   end
 
+  def self.fill_request(user:, request:)
+    call(action: "FilledRequest", user: user, request: request)
+  end
+
   def self.remove_request(request:, user:)
     call(action: "RemovedRequest", request: request, user: user)
   end
