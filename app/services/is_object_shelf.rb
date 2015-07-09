@@ -1,16 +1,5 @@
-class IsObjectShelf
-  attr_reader :shelf
-
+module IsObjectShelf
   def self.call(shelf)
-    new(shelf).compare
+    (shelf.class.to_s == "Shelf") ? true : false
   end
-
-  def initialize(shelf)
-    @shelf = shelf
-  end
-
-  def compare
-    (@shelf.class.to_s == "Shelf") ? true : false
-  end
-
 end

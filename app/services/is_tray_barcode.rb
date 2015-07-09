@@ -1,18 +1,6 @@
-class IsTrayBarcode
-  PREFIX = "(TRAY-)(([A-E][H,L])|(#{IsShelfBarcode::PREFIX}))"
-
-  attr_reader :barcode
-
+module IsTrayBarcode
+  PREFIX = "(TRAY-)(([A-E][H,L])|(#{IsShelfBarcode::PREFIX}))".freeze
   def self.call(barcode)
-    new(barcode).compare
-  end
-
-  def initialize(barcode)
-    @barcode = barcode
-  end
-
-  def compare
     (barcode =~ /^#{PREFIX}(.*)/ ) ? true : false
   end
-
 end
