@@ -256,6 +256,8 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
+    quiet_assets (1.1.0)
+      railties (>= 3.1, < 5.0)
     rack (1.6.4)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -446,6 +448,7 @@ DEPENDENCIES
   newrelic_rpm
   pg (~> 0.18.2)
   progress_bar
+  quiet_assets
   rails (~> 4.2.0)
   rails-erd
   rails_layout
@@ -464,3 +467,6 @@ DEPENDENCIES
   web-console (~> 2.0)
   webmock
   whenever
+
+BUNDLED WITH
+   1.10.5
