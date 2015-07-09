@@ -19,10 +19,18 @@ class SearchItems
     @filter = filter
   end
 
+  class EmptyResults
+    def results
+      []
+    end
+
+    def total
+      0
+    end
+  end
+
   def search!
-    empty = OpenStruct.new
-    empty.results = []
-    empty.total = 0
+    empty = EmptyResults.new
 
     if filter[:criteria].blank? && filter[:conditions].blank? && filter[:date_type].blank?
       results = empty
