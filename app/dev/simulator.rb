@@ -18,6 +18,19 @@ class Simulator
     end
   end
 
+  def create_shelf
+    Shelf.new(AnnexFaker::Shelf.attributes) do |shelf|
+      5.times do
+        if shelf.save
+          break
+        else
+          shelf.barcode = AnnexFaker::Shelf.barcode
+        end
+        shelf.validate!
+      end
+    end
+  end
+
   def create_item
     Item.new(AnnexFaker::Item.attributes) do |item|
       item.save!(validate: false)

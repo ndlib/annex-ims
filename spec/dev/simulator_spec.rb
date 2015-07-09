@@ -16,6 +16,10 @@ RSpec.describe Simulator do
     expect(subject.create_and_log_item).to be_a_kind_of(Item)
   end
 
+  it "creates a shelf" do
+    expect(subject.create_shelf).to be_a_kind_of(Shelf)
+  end
+
   it "creates a tray" do
     expect(subject.create_tray).to be_a_kind_of(Tray)
   end

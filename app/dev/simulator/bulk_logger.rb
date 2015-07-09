@@ -25,11 +25,40 @@ class Simulator
     end
 
     def create_log!
-      data = {item: item_attributes, tray: tray_attributes}.to_json
-      log_attributes[:data] = data
+      chance = rand(100)
+      if chance < 45
+        setup_create_item
+      elsif chance < 90
+        setup_stock_item
+      else
+        setup_shelve_tray
+      end
       result = insert_log
-      increment_count
+      self.current_count += 1
       result
+    end
+
+    def setup_create_item
+      set_log_action("CreatedItem")
+      set_log_data(
+        item: item_attributes,
+      )
+    end
+
+    def setup_stock_item
+      set_log_action("StockedItem")
+      set_log_data(
+        item: item_attributes,
+        tray: tray_attributes,
+      )
+    end
+
+    def setup_shelve_tray
+      set_log_action("ShelvedTray")
+      set_log_data(
+        tray: tray_attributes,
+        shelf: shelf_attributes
+      )
     end
 
     def simulator
@@ -38,10 +67,32 @@ class Simulator
 
     def item_attributes
       @item_attributes ||= build_item_attributes
+      @item_attributes.tap do |hash|
+        if rand(3) == 0
+          hash[:id] += 1
+          hash[:barcode] = AnnexFaker::Item.barcode
+        end
+      end
     end
 
     def tray_attributes
       @tray_attributes ||= build_tray_attributes
+      @tray_attributes.tap do |hash|
+        if rand(10) == 0
+          hash[:id] += 1
+          hash[:barcode] = AnnexFaker::Tray.barcode
+        end
+      end
+    end
+
+    def shelf_attributes
+      @shelf_attributes ||= build_shelf_attributes
+      @shelf_attributes.tap do |hash|
+        if rand(10) == 0
+          hash[:id] += 1
+          hash[:barcode] = AnnexFaker::Shelf.barcode
+        end
+      end
     end
 
     def log_attributes
@@ -49,6 +100,14 @@ class Simulator
     end
 
     private
+
+    def set_log_action(value)
+      log_attributes[:action] = value
+    end
+
+    def set_log_data(value)
+      log_attributes[:data] = value.to_json
+    end
 
     def insert_log
       setup_prepared_insert
@@ -95,16 +154,6 @@ class Simulator
       @log_value_placeholders ||= ((1..log_keys.count).map{ |i| "$#{i}" }).join(", ")
     end
 
-    def increment_count
-      self.current_count += 1
-      item_attributes[:id] += 1
-      item_attributes[:barcode] = AnnexFaker::Item.barcode
-      if current_count % 10 == 0
-        tray_attributes[:id] += 1
-        tray_attributes[:barcode] = AnnexFaker::Tray.barcode
-      end
-    end
-
     def build_item_attributes
       object = simulator.create_item
       object.attributes.with_indifferent_access.tap do |hash|
@@ -117,6 +166,14 @@ class Simulator
 
     def build_tray_attributes
       object = simulator.create_tray
+      object.attributes.with_indifferent_access.tap do |hash|
+        hash[:created_at] = hash[:created_at].to_s(:db)
+        hash[:updated_at] = hash[:updated_at].to_s(:db)
+      end
+    end
+
+    def build_shelf_attributes
+      object = simulator.create_shelf
       object.attributes.with_indifferent_access.tap do |hash|
         hash[:created_at] = hash[:created_at].to_s(:db)
         hash[:updated_at] = hash[:updated_at].to_s(:db)
