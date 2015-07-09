@@ -36,4 +36,9 @@ en:
       not_for_annex: "Item not marked for annex."
   requests:
     synchronized: "Synchronized %{count} requests."
+  activity_log:
+    StockedItem: "Stocked"
+    UnstockedItem: "Unstocked"
+    SentItem: "Shipped"
+    ScanItem: "Scanned"
 
