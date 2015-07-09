@@ -62,6 +62,13 @@ RSpec.describe ActivityLogger do
     it_behaves_like "an activity log", "ApiGetItemMetadata"
   end
 
+  context "ApiGetRequestList" do
+    let(:arguments) { { api_response: api_response } }
+    subject { described_class.api_get_request_list(**arguments) }
+
+    it_behaves_like "an activity log", "ApiGetRequestList"
+  end
+
   context "ApiStockItem" do
     let(:arguments) { { item: item, params: { test: "test" }, api_response: api_response } }
     subject { described_class.api_stock_item(**arguments) }

@@ -10,6 +10,10 @@ class ActivityLogger
     call(action: "ApiGetItemMetadata", item: item, params: params, api_response: api_response)
   end
 
+  def self.api_get_request_list(api_response:)
+    call(action: "ApiGetRequestList", api_response: api_response)
+  end
+
   def self.api_scan_item(item:, params:, api_response:)
     call(action: "ApiScanItem", item: item, params: params, api_response: api_response)
   end
