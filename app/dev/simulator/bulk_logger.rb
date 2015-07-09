@@ -9,6 +9,38 @@ class Simulator
       new(count: count, show_progress: show_progress).bulk_create!
     end
 
+    def self.threaded(thread_count: 4, count: 1_000, show_progress: false)
+      master_logger = new(count: count, show_progress: show_progress)
+      master_logger.prepare_threaded
+      threads = []
+      loggers = []
+      mutex = Mutex.new
+      thread_count.times do |i|
+        threads << Thread.new do
+          logger = new(count: (count / thread_count), show_progress: false)
+          mutex.synchronize do
+            loggers << logger
+          end
+          logger.bulk_create!
+        end
+      end
+      sleep(0.2)
+      spy = Thread.new do
+        loop do
+          master_logger.current_count = loggers.map(&:current_count).sum
+          master_logger.set_progress
+          sleep(0.05)
+        end
+      end
+      threads.each { |t| t.join }
+      spy.kill
+      master_logger.current_count = loggers.map(&:current_count).sum
+      master_logger.set_progress_complete
+    ensure
+      threads.each { |t| t.kill }
+      spy.kill
+    end
+
     def initialize(count: 1_000, show_progress: false)
       @count = count
       @show_progress = show_progress
@@ -22,6 +54,13 @@ class Simulator
       end
       set_progress_complete
       self
+    end
+
+    def prepare_threaded
+      setup_prepared_insert
+      setup_create_item
+      setup_stock_item
+      setup_shelve_tray
     end
 
     def create_log!
@@ -99,6 +138,20 @@ class Simulator
       @log_attributes ||= build_log_attributes
     end
 
+    def set_progress
+      if show_progress
+        $stdout.write "\r#{progress_message}"
+        $stdout.flush
+      end
+    end
+
+    def set_progress_complete
+      if show_progress
+        set_progress
+        $stdout.write("\n")
+      end
+    end
+
     private
 
     def set_log_action(value)
@@ -155,17 +208,17 @@ class Simulator
     end
 
     def build_item_attributes
-      object = simulator.create_item
+      object = Item.take || simulator.create_item
       object.attributes.with_indifferent_access.tap do |hash|
         hash[:created_at] = hash[:created_at].to_s(:db)
         hash[:updated_at] = hash[:updated_at].to_s(:db)
-        hash[:initial_ingest] = hash[:initial_ingest].to_s(:db)
-        hash[:last_ingest] = hash[:last_ingest].to_s(:db)
+        hash[:initial_ingest] = (hash[:initial_ingest] || Time.now).to_s(:db)
+        hash[:last_ingest] = (hash[:last_ingest] || Time.now).to_s(:db)
       end
     end
 
     def build_tray_attributes
-      object = simulator.create_tray
+      object = Tray.take || simulator.create_tray
       object.attributes.with_indifferent_access.tap do |hash|
         hash[:created_at] = hash[:created_at].to_s(:db)
         hash[:updated_at] = hash[:updated_at].to_s(:db)
@@ -173,7 +226,7 @@ class Simulator
     end
 
     def build_shelf_attributes
-      object = simulator.create_shelf
+      object = Shelf.take || simulator.create_shelf
       object.attributes.with_indifferent_access.tap do |hash|
         hash[:created_at] = hash[:created_at].to_s(:db)
         hash[:updated_at] = hash[:updated_at].to_s(:db)
@@ -189,20 +242,6 @@ class Simulator
         hash[:action_timestamp] = now
         hash[:created_at] = now
         hash[:updated_at] = now
-      end
-    end
-
-    def set_progress
-      if show_progress
-        $stdout.write "\r#{progress_message}"
-        $stdout.flush
-      end
-    end
-
-    def set_progress_complete
-      if show_progress
-        set_progress
-        $stdout.write("\n")
       end
     end
 
