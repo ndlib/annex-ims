@@ -38,6 +38,10 @@ class ActivityLogger
     call(action: "AssociatedTrayAndShelf", user: user, tray: tray, shelf: shelf)
   end
 
+  def self.batch_request(request:, user:)
+    call(action: "BatchedRequest", user: user, request: request)
+  end
+
   def self.create_issue(issue:, item:)
     call(action: "CreatedIssue", issue: issue, item: item)
   end

@@ -111,6 +111,13 @@ RSpec.describe ActivityLogger do
     it_behaves_like "an activity log", "AssociatedTrayAndShelf"
   end
 
+  context "BatchedRequest" do
+    let(:arguments) { { request: request, user: user } }
+    subject { described_class.batch_request(**arguments) }
+
+    it_behaves_like "an activity log", "BatchedRequest"
+  end
+
   context "CreatedIssue" do
     let(:arguments) { { issue: issue, item: item } }
     subject { described_class.create_issue(**arguments) }
