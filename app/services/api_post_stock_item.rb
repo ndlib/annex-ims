@@ -1,6 +1,5 @@
 class ApiPostStockItem
   class ApiStockItemError < StandardError; end
-
   attr_reader :item
 
   def self.call(item: item)
