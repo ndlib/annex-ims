@@ -12,11 +12,10 @@ class ApiPostDeliverItem
 
   def post_data!
     response = ApiHandler.post(action: delivery_type, params: params)
+    log_activity(response)
     if response.success?
-      log_activity(response)
       response
     else
-      log_activity(response)
       raise ApiDeliverItemError, "Error sending #{delivery_type} request to API. params: #{params.inspect}, response: #{response.inspect}"
     end
   end
