@@ -13,8 +13,11 @@ class UnstockItem
   def unstock!
     validate_input!
 
-    item.unstocked!
+    if item.unstocked?
+      return false
+    end
 
+    item.unstocked!
     if item.save!
       unless item.tray.nil?
         ActivityLogger.unstock_item(item: item, tray: item.tray, user: user)
