@@ -13,21 +13,22 @@ class ApiPostDeliverItem
   def post_data!
     response = ApiHandler.post(action: delivery_type, params: params)
     if response.success?
-      log_activity(delivery_type, params, response)
+      log_activity(response)
       response
     else
+      log_activity(response)
       raise ApiDeliverItemError, "Error sending #{delivery_type} request to API. params: #{params.inspect}, response: #{response.inspect}"
     end
   end
 
   private
 
-  def log_activity(delivery_type, params, response)
+  def log_activity(response)
     case delivery_type
     when "scan"
-      ActivityLogger.api_scan_item(item: match.item, params: params, api_response: response)
+      ActivityLogger.api_scan_item(item: item, params: params, api_response: response)
     when "send"
-      ActivityLogger.api_send_item(item: match.item, params: params, api_response: response)
+      ActivityLogger.api_send_item(item: item, params: params, api_response: response)
     end
   end
 
