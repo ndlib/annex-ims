@@ -7,9 +7,13 @@ RSpec.describe Simulator do
     expect(subject.current_user).to be_a_kind_of(User)
   end
 
-  it "creates an item and logs the activity" do
-    expect(ActivityLogger).to receive(:create_item)
+  it "creates an item" do
     expect(subject.create_item).to be_a_kind_of(Item)
+  end
+
+  it "creates an item and logs the activity" do
+    expect(ActivityLogger).to receive(:create_item).and_call_original
+    expect(subject.create_and_log_item).to be_a_kind_of(Item)
   end
 
   it "creates a tray" do

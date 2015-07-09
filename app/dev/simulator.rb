@@ -21,6 +21,11 @@ class Simulator
   def create_item
     Item.new(AnnexFaker::Item.attributes) do |item|
       item.save!(validate: false)
+    end
+  end
+
+  def create_and_log_item
+    create_item.tap do |item|
       ActivityLogger.create_item(item: item, user: current_user)
     end
   end
