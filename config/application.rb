@@ -30,5 +30,18 @@ module AnnexIms
 
     # ActiveJob needs a back end. In our case, it's RabbitMQ, via sneakers.
     config.active_job.queue_adapter = :sneakers
+
+    config.generators do |g|
+      g.assets = false # Don't auto generate assets as part of a resource generation
+      g.helper = false # Don't auto generate helper modules as part of a resource generation
+
+      g.test_framework(
+        :rspec, fixtures: false, view_specs: false, helper_specs: false, routing_specs: false, controller_specs: false, request_specs: false
+      )
+    end
+
+    # It appears that we are not using helpers, so don't make it
+    # easy to keep using them.
+    config.action_controller.include_all_helpers = false
   end
 end
