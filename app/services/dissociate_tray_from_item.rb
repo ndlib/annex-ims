@@ -25,12 +25,4 @@ class DissociateTrayFromItem
       false
     end
   end
-
-
-  private
-
-    def transaction_log
-      # log transaction here
-    end
-
 end

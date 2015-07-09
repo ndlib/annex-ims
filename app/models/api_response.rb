@@ -1,7 +1,7 @@
 class ApiResponse
   attr_reader :status_code, :body
 
-  def initialize(status_code: status_code, body: body)
+  def initialize(status_code:, body:)
     @status_code = status_code
     @body = body
     if @body.is_a?(Hash)

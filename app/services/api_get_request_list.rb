@@ -9,8 +9,6 @@ class ApiGetRequestList
   end
 
   def get_data!
-    requests = []
-
     response = ApiHandler.get(action: :active_requests)
     if response.success?
       response
