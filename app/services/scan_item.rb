@@ -14,7 +14,6 @@ class ScanItem
   def scan!
     validate_input!
 
-    UnstockItem.call(item, user) # Just in case it's not already unstocked, make sure.
     ActivityLogger.scan_item(item: item, request: request, user: user)
 
     item
