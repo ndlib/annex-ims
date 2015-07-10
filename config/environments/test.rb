@@ -44,7 +44,7 @@ Rails.application.configure do
   config.active_job.queue_adapter = :test
 
   # Configures a user as an administrator
-  #config.admin_user_name = ""
+  # config.admin_user_name = ""
 end
 
 Devise.setup do |config|

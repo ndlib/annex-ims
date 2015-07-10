@@ -1,6 +1,5 @@
 require "rails_helper"
 
-
 RSpec.describe ApplicationController, type: :controller do
   controller do
     def dummy
@@ -26,7 +25,7 @@ RSpec.describe ApplicationController, type: :controller do
     let(:user) { FactoryGirl.create(:user, admin: true) }
 
     it "does not throw a routing error" do
-      expect{ get "dummy" }.not_to raise_error
+      expect { get "dummy" }.not_to raise_error
     end
   end
 end
