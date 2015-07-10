@@ -43,7 +43,7 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 
   # Configures a user as an administrator
-  config.admin_user_name = ""
+  config.admin_user_name = "jgondron"
 end
 
 Devise.setup do |config|
