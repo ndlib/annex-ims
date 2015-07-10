@@ -46,3 +46,22 @@ end
     req_type: "doc_del",
   )
 end
+
+
+50.times do |i|
+  barcode = Item.order("RANDOM()").first.barcode
+  Issue.create!(
+    user_id: 1,
+    barcode: barcode,
+    issue_type: "not_found"
+  )
+end
+
+50.times do |i|
+  barcode = Item.order("RANDOM()").first.barcode
+  Issue.create!(
+    user_id: 1,
+    barcode: barcode,
+    issue_type: "not_for_annex"
+  )
+end
