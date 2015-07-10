@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
   end
 
   def redirect_to_unauthorized
-    raise_404("User not an admin")
+    raise_404
   end
 
   def raise_404(message = "Not Found")
