@@ -195,6 +195,13 @@ RSpec.describe ActivityLogger do
     it_behaves_like "an activity log", "RemovedRequest"
   end
 
+  context "ResolvedIssue" do
+    let(:arguments) { { issue: issue, user: user } }
+    subject { described_class.resolve_issue(**arguments) }
+
+    it_behaves_like "an activity log", "ResolvedIssue"
+  end
+
   context "ScannedItem" do
     let(:arguments) { { item: item, request: request, user: user } }
     subject { described_class.scan_item(**arguments) }

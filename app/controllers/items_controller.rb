@@ -48,7 +48,8 @@ class ItemsController < ApplicationController
   end
 
   def resolve
-    ResolveIssue.call(current_user.id, params[:issue_id])
+    issue = Issue.find(params[:issue_id])
+    ResolveIssue.call(user: current_user, issue: issue)
 
     redirect_to issues_path
     return

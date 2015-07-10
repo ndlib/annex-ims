@@ -86,6 +86,10 @@ class ActivityLogger
     call(action: "RemovedRequest", request: request, user: user)
   end
 
+  def self.resolve_issue(issue:, user:)
+    call(action: "ResolvedIssue", issue: issue, user: user)
+  end
+
   def self.scan_item(item:, request:, user:)
     call(action: "ScannedItem", item: item, request: request, user: user)
   end
