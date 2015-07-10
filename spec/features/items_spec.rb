@@ -16,8 +16,8 @@ feature "Items", :type => :feature do
       @request = FactoryGirl.create(:request)
 
       stub_request(:post, api_stock_url).
-        with(:body => {"barcode"=>"#{@item.barcode}", "item_id"=>"#{@item.id}", "tray_code"=>"#{@item.tray.barcode}"},
-          :headers => {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
+        with(:body => {"barcode" => "#{@item.barcode}", "item_id" => "#{@item.id}", "tray_code" => "#{@item.tray.barcode}"},
+          :headers => {'Content-Type' => 'application/x-www-form-urlencoded', 'User-Agent' => 'Faraday v0.9.1'}).
         to_return{ |response| { :status => 200, :body => {:results => {:status => "OK", :message => "Item stocked"}}.to_json, :headers => {} } }
 
       response_body = api_fixture_data("item_metadata.json")
@@ -35,34 +35,33 @@ feature "Items", :type => :feature do
     end
 
     context "stocking items" do
-
       it "can scan a new item" do
         visit items_path
-        fill_in "Item", :with => @item.barcode
+        fill_in "Item", with: @item.barcode
         click_button "Find"
-        expect(current_path).to eq(show_item_path(:id => @item.id))
+        expect(current_path).to eq(show_item_path(id: @item.id))
         expect(page).to have_content @item.title
         expect(page).to have_content @item.chron
       end
 
       it "can scan an item and then scan another item to change tasks" do
         visit items_path
-        fill_in "Item", :with => @item.barcode
+        fill_in "Item", with: @item.barcode
         click_button "Find"
-        expect(current_path).to eq(show_item_path(:id => @item.id))
-        fill_in "Item", :with => @item.barcode
+        expect(current_path).to eq(show_item_path(id: @item.id))
+        fill_in "Item", with: @item.barcode
         click_button "Scan"
-        expect(current_path).to eq(show_item_path(:id => @item.id))
+        expect(current_path).to eq(show_item_path(id: @item.id))
         expect(page).to have_content @item.title
         expect(page).to have_content @item.chron
       end
 
       it "can scan an item and then scan a tray to stock it" do
         visit items_path
-        fill_in "Item", :with => @item.barcode
+        fill_in "Item", with: @item.barcode
         click_button "Find"
-        expect(current_path).to eq(show_item_path(:id => @item.id))
-        fill_in "Tray", :with => @tray.barcode
+        expect(current_path).to eq(show_item_path(id: @item.id))
+        fill_in "Tray", with: @tray.barcode
         click_button "Scan"
         expect(current_path).to eq(items_path)
         expect(page).to have_content "Item #{@item.barcode} stocked in #{@tray.barcode}."
@@ -70,20 +69,19 @@ feature "Items", :type => :feature do
 
       it "can scan an item and then scan a tray and show an error for the wrong tray" do
         visit items_path
-        fill_in "Item", :with => @item.barcode
+        fill_in "Item", with: @item.barcode
         click_button "Find"
-        expect(current_path).to eq(show_item_path(:id => @item.id))
-        fill_in "Tray", :with => @tray2.barcode
+        expect(current_path).to eq(show_item_path(id: @item.id))
+        fill_in "Tray", with: @tray2.barcode
         click_button "Scan"
-        expect(current_path).to eq(wrong_restock_path(:id => @item.id))
+        expect(current_path).to eq(wrong_restock_path(id: @item.id))
         expect(page).to have_content "Item #{@item.barcode} is already assigned to #{@tray.barcode}."
         click_button "OK"
-        expect(current_path).to eq(show_item_path(:id => @item.id))
+        expect(current_path).to eq(show_item_path(id: @item.id))
       end
     end
 
     context "item issues" do
-
       it "can view a list of issues associated with retrieving item data" do
         @issues = []
         5.times do
@@ -129,7 +127,7 @@ feature "Items", :type => :feature do
       end
 
       it "displays item details" do
-        visit item_detail_path(@item.barcode) 
+        visit item_detail_path(@item.barcode)
         expect(page).to have_content @item.status.humanize
         expect(page).to have_content @item.title
         expect(page).to have_content @item.author
@@ -137,15 +135,15 @@ feature "Items", :type => :feature do
       end
 
       it "displays item history" do
-        visit item_detail_path(@item2.barcode) 
+        visit item_detail_path(@item2.barcode)
         expect(page).to have_content "Stocked"
         expect(page).to have_content "Unstocked"
       end
 
       it "displays item usage" do
-        visit item_detail_path(@item.barcode) 
+        visit item_detail_path(@item.barcode)
         expect(page).to have_content "Scanned"
-        visit item_detail_path(@item2.barcode) 
+        visit item_detail_path(@item2.barcode)
         expect(page).to have_content "Shipped"
       end
     end
