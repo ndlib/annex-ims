@@ -16,9 +16,9 @@ feature "Items", :type => :feature do
       @request = FactoryGirl.create(:request)
 
       stub_request(:post, api_stock_url).
-        with(:body => {"barcode" => "#{@item.barcode}", "item_id" => "#{@item.id}", "tray_code" => "#{@item.tray.barcode}"},
-          :headers => {'Content-Type' => 'application/x-www-form-urlencoded', 'User-Agent' => 'Faraday v0.9.1'}).
-        to_return{ |response| { :status => 200, :body => {:results => {:status => "OK", :message => "Item stocked"}}.to_json, :headers => {} } }
+        with(:body => { barcode: "#{@item.barcode}", item_id: "#{@item.id}", tray_code: "#{@item.tray.barcode}" },
+          :headers => { "Content-Type" => "application/x-www-form-urlencoded", "User-Agent" => "Faraday v0.9.1" }).
+        to_return{ |response| { status: 200, body: {results: { status: "OK", message: "Item stocked" }}.to_json, :headers => {} } }
 
       response_body = api_fixture_data("item_metadata.json")
 
