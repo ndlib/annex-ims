@@ -23,4 +23,12 @@ RSpec.describe UsersController, type: :controller do
       put :update, user_id: 1
     end
   end
+
+
+  describe "PUT create" do
+    it "creates the user" do
+      expect(User).to receive(:new).with(username: "tester")
+      put :create, user_name: "tester"
+    end
+  end
 end

@@ -67,6 +67,7 @@ Rails.application.routes.draw do
 
   get "users", to: "users#index", as: "users"
   put "users", to: "users#update", as: "update_users"
+  post "users", to: "users#create", as: "create_users"
 
   resources :requests, only: [] do
     collection do
