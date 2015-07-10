@@ -1,5 +1,5 @@
 = form_tag search_path, method: :get do |f|
-  .list-group.panel
+  .list-group.panel.search
     %a.list-group-item.list-group-item-success Criteria
     #criteria.input-group
       = select_tag :criteria_type, options_for_select(SearchItems::CRITERIA_TYPES, @params[:criteria_type])

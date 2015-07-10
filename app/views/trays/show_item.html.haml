@@ -1,21 +1,22 @@
 = @tray.barcode
 %br
-= form_tag associate_tray_item_path(@tray) do |f|
-  - if @tray.errors.any?
-    #error_explanation
-      %h2= "#{pluralize(@tray.errors.count, "error")} prohibited this tray from being saved:"
-      %ul
-        - @tray.errors.full_messages.each do |msg|
-          %li= msg
+.scan.tray
+  = form_tag associate_tray_item_path(@tray) do |f|
+    - if @tray.errors.any?
+      #error_explanation
+        %h2= "#{pluralize(@tray.errors.count, "error")} prohibited this tray from being saved:"
+        %ul
+          - @tray.errors.full_messages.each do |msg|
+            %li= msg
 
-  .field
-    = label_tag :thickness
-    = text_field_tag :thickness, nil, autofocus: "autofocus"
-  .field
-    = label_tag :barcode, "Item"
-    = text_field_tag :barcode, @barcode
-  .actions
-    = submit_tag 'Save', class: 'btn btn-primary'
+    .field
+      = label_tag :thickness
+      = text_field_tag :thickness, nil, autofocus: "autofocus"
+    .field
+      = label_tag :barcode, "Item"
+      = text_field_tag :barcode, @barcode
+    .actions
+      = submit_tag 'Save', class: 'btn btn-primary'
 %br
 = button_to "Done", trays_items_path, method: :get, class: 'btn pull-right btn-primary'
 %table.table.table-striped.condensed{"data-toggle" => "table"}

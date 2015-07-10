@@ -1,17 +1,18 @@
 = @shelf.barcode
 %br
-= form_tag associate_shelf_item_path(@shelf) do |f|
-  - if @shelf.errors.any?
-    #error_explanation
-      %h2= "#{pluralize(@shelf.errors.count, "error")} prohibited this shelf from being saved:"
-      %ul
-        - @shelf.errors.full_messages.each do |msg|
-          %li= msg
-  .field
-    = label_tag :barcode, "Item"
-    = text_field_tag :barcode, @barcode, autofocus: "autofocus"
-  .actions
-    = submit_tag 'Save', class: 'btn btn-primary'
+.scan
+  = form_tag associate_shelf_item_path(@shelf) do |f|
+    - if @shelf.errors.any?
+      #error_explanation
+        %h2= "#{pluralize(@shelf.errors.count, "error")} prohibited this shelf from being saved:"
+        %ul
+          - @shelf.errors.full_messages.each do |msg|
+            %li= msg
+    .field
+      = label_tag :barcode, "Item"
+      = text_field_tag :barcode, @barcode, autofocus: "autofocus"
+    .actions
+      = submit_tag 'Save', class: 'btn btn-primary'
 %br
 = button_to "Done", shelves_path, method: :get, class: 'btn pull-right btn-primary'
 %table.table.table-striped.condensed{"data-toggle" => "table"}
