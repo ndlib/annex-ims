@@ -232,6 +232,14 @@ hr {
   }
 }
 
+  .tray {
+
+    label {
+      width: 70px;
+      display: inline-block;
+    }
+  }
+
 .table-striped {
   > tbody {
     tr:nth-of-type(odd),
@@ -271,6 +279,35 @@ label input {
 
 .dataTables_info {
   margin-bottom: 1.2em;
+}
+
+.search {
+
+  .input-group, .collapse {
+    margin: 0.8em 0;
+  }
+}
+
+#requests_filter {
+  clear: both;
+}
+
+#requests {
+
+  th {
+    font-size: 12px;
+    vertical-align: top;
+
+
+  }
+
+  .sorting {
+      background-position: right 8px !important;
+    }
+
+  td {
+    font-size: 12px;
+  }
 }
 
 @media only screen and (max-width: 720px) {
@@ -373,6 +410,8 @@ td:before {
       }
     }
   }
+
+
 
   a.list-group-item  {
     font-size: 24px;
