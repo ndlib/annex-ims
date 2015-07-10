@@ -10,6 +10,6 @@ class RequestQuery
   end
 
   def find_all_by_id(id_array:)
-    relation.where('requests.id IN (?)', id_array)
+    relation.where("requests.id IN (?)", id_array)
   end
 end

@@ -111,7 +111,6 @@ RSpec.describe BuildBatch, search: true do
 
     it "logs one BatchedRequest log for a new Request but doesn't log for Requests that were previously added to the batch" do
       batch = FactoryGirl.create(:batch, user: current_user)
-      match1 = FactoryGirl.create(:match, batch: batch, request: request1)
       test = ["#{request2.id}-#{item.id}", "#{request2.id}-#{item2.id}"]
       expect(ActivityLogger).not_to receive(:batch_request).with(request: request1, user: current_user)
       expect(ActivityLogger).to receive(:batch_request).with(request: request2, user: current_user)

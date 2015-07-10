@@ -32,16 +32,16 @@ RSpec.describe RequestQuery do
   end
 
   context "#find_all_by_id" do
-    let(:subject)  { RequestQuery.new }
+    let(:subject) { RequestQuery.new }
     let(:request2) { FactoryGirl.create(:request, id: 2) }
     let(:request3) { FactoryGirl.create(:request, id: 3) }
 
     it "returns request for each id" do
-      expect(subject.find_all_by_id(id_array: [1,2])).to include(request, request2)
+      expect(subject.find_all_by_id(id_array: [1, 2])).to include(request, request2)
     end
 
     it "does not return other requests" do
-      expect(subject.find_all_by_id(id_array: [1,2])).not_to include(request3)
+      expect(subject.find_all_by_id(id_array: [1, 2])).not_to include(request3)
     end
   end
 end

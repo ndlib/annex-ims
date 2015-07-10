@@ -24,7 +24,7 @@ class BuildBatch
       new_request_ids = []
       batch_data.each do |data|
 
-        lexed_data = data.split('-')
+        lexed_data = data.split("-")
 
         request = Request.find(lexed_data[0])
         item = Item.find(lexed_data[1])
