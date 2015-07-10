@@ -30,7 +30,7 @@ RSpec.describe SyncItemMetadata do
 
       shared_examples "an issue logger" do |expected_issue_type|
         it "calls AddIssue with #{expected_issue_type}" do
-          expect(AddIssue).to receive(:call).with(item: item, user_id: user.id, type: expected_issue_type)
+          expect(AddIssue).to receive(:call).with(item: item, user: user, type: expected_issue_type)
           subject
         end
       end
