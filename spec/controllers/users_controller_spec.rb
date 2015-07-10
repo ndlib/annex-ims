@@ -24,10 +24,9 @@ RSpec.describe UsersController, type: :controller do
     end
   end
 
-
   describe "PUT create" do
     it "creates the user" do
-      expect(User).to receive(:new).with(username: "tester")
+      expect(User).to receive(:new).with(username: "tester").and_return(user)
       put :create, user_name: "tester"
     end
   end

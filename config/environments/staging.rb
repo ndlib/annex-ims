@@ -41,6 +41,9 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
+  # Configures a user as an administrator
+  #config.admin_user_name = ""
 end
 
 Devise.setup do |config|

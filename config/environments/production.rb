@@ -75,6 +75,9 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  # Configures a user as an administrator
+  #config.admin_user_name = ""
 end
 
 Devise.setup do |config|
