@@ -20,6 +20,10 @@ end
 # set :deploy_to, "/var/www/my_app_name"
 set :deploy_to, "/home/app/annex-ims"
 
+set :ssh_options, {
+  paranoid: false,
+}
+
 # Default value for :scm is :git
 # set :scm, :git
 
