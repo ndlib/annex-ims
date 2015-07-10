@@ -27,6 +27,12 @@ class ItemsController < ApplicationController
     @item = Item.find(params[:id])
   end
 
+  def item_detail
+    @item = Item.where(barcode: params[:barcode]).take
+    @history = ActivityLogQuery.item_history(@item)
+    @usage = ActivityLogQuery.item_usage(@item)
+  end
+
   def restock
     item_id = params[:id]
     barcode = params[:barcode]
