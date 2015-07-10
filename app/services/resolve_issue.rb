@@ -1,20 +1,20 @@
 class ResolveIssue
-  attr_reader :user_id, :issue_id
+  attr_reader :issue, :user
 
-  def self.call(user_id, issue_id)
-    new(user_id, issue_id).resolve
+  def self.call(issue:, user:)
+    new(issue: issue, user: user).resolve
   end
 
-  def initialize(user_id, issue_id)
-    @user_id = user_id
-    @issue_id = issue_id
+  def initialize(issue:, user:)
+    @issue = issue
+    @user = user
   end
 
   def resolve
-    issue = Issue.find(@issue_id)
-    issue.resolver_id = @user_id
+    issue.resolver = user
     issue.resolved_at = Time.now
     issue.save!
+    ActivityLogger.resolve_issue(issue: issue, user: user)
   end
 
 end

@@ -14,11 +14,12 @@ class AddIssue
   def add
     if valid?
       issue = Issue.find_or_initialize_by(barcode: barcode, issue_type: issue_type, resolved_at: nil)
+      new_record = issue.new_record?
       issue.user_id = user_id
-      if issue.new_record?
+      issue.save!
+      if new_record
         ActivityLogger.create_issue(item: item, issue: issue)
       end
-      issue.save!
       issue
     end
   end
