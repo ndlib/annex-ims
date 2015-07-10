@@ -126,7 +126,7 @@ RSpec.describe ActivityLogger do
   end
 
   context "CreatedIssue" do
-    let(:arguments) { { issue: issue, item: item } }
+    let(:arguments) { { issue: issue, item: item, user: user } }
     subject { described_class.create_issue(**arguments) }
 
     it_behaves_like "an activity log", "CreatedIssue"

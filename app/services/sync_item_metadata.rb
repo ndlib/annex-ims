@@ -70,7 +70,7 @@ class SyncItemMetadata
   def handle_error(error)
     save_metadata_status(error[:status])
     if error[:issue_type]
-      AddIssue.call(item: item, user_id: user_id, type: error[:issue_type])
+      AddIssue.call(item: item, user: user, type: error[:issue_type])
     end
     if error[:enqueue]
       process_in_background(error)
