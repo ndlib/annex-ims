@@ -19,7 +19,6 @@ RSpec.describe ActivityLogQuery do
 
   context "item shipped" do
     describe "#item_usage" do
-
       before(:each) do
         ActivityLogger.ship_item(item: item_1, request: request_1, user: user)
         ActivityLogger.ship_item(item: item_2, request: request_2, user: user)
@@ -32,14 +31,13 @@ RSpec.describe ActivityLogQuery do
       end
 
       it "returns the logs in chronological order" do
-        expect(subject.item_usage(item_2).first.data['request']['id']).to eq request_3.id        
+        expect(subject.item_usage(item_2).first.data["request"]["id"]).to eq request_3.id
       end
     end
   end
 
   context "item stocked" do
     describe "#item_history" do
-
       before(:each) do
         ActivityLogger.stock_item(item: item_1, tray: tray_1, user: user)
         ActivityLogger.stock_item(item: item_1, tray: tray_2, user: user)
@@ -53,7 +51,7 @@ RSpec.describe ActivityLogQuery do
       end
 
       it "returns the logs in chronological order" do
-        expect(subject.item_history(item_1)[1].data['tray']['id']).to eq tray_1.id        
+        expect(subject.item_history(item_1)[1].data["tray"]["id"]).to eq tray_1.id
       end
     end
   end

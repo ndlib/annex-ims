@@ -39,6 +39,6 @@ en:
   activity_log:
     StockedItem: "Stocked"
     UnstockedItem: "Unstocked"
-    SentItem: "Shipped"
+    ShippedItem: "Shipped"
     ScanItem: "Scanned"
 
