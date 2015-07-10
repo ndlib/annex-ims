@@ -269,6 +269,10 @@ label input {
   width: 150px;
 }
 
+.dataTables_info {
+  margin-bottom: 1.2em;
+}
+
 @media only screen and (max-width: 720px) {
   .navbar-header::before, .navbar-header::after {
     display: inline;

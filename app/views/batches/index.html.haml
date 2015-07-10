@@ -36,7 +36,8 @@
     %tbody
       - @data.each do |row|
         %tr{"data-params" => row['item_data'].to_json}
-          %td{class: "details-control btn btn-primary", "id" => 'request_' + row['id'].to_s}= 'Results'
+          %td
+            %div{class: "details-control btn btn-primary", "id" => 'request_' + row['id'].to_s}= 'Results'
           %td= row['rapid']
           %td= row['source']
           %td= row['del_type']
@@ -113,8 +114,8 @@
     } );
   } );
   function addHandler() {
-    $("td.details-control").unbind('click');
-    $("td.details-control").click(function() {
+    $(".details-control").unbind('click');
+    $(".details-control").click(function() {
       var tr = $(this).closest('tr');
       var row = table.row( tr );
       console.log("my row: %o", tr)
