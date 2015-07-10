@@ -1,16 +1,9 @@
-class IsItemBarcode
-  attr_reader :barcode
-
+module IsItemBarcode
   def self.call(barcode)
-    new(barcode).compare
+    return false unless barcode.present?
+    return false if IsTrayBarcode.call(barcode)
+    return false if IsShelfBarcode.call(barcode)
+    return false if IsBinBarcode.call(barcode)
+    true
   end
-
-  def initialize(barcode)
-    @barcode = barcode
-  end
-
-  def compare
-    !(IsTrayBarcode.call(barcode) || IsShelfBarcode.call(barcode) || IsBinBarcode.call(barcode))
-  end
-
 end

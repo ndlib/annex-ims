@@ -8,6 +8,7 @@ class ItemsController < ApplicationController
     begin
       @item = GetItemFromBarcode.call(barcode: params[:item][:barcode], user_id: current_user.id)
     rescue StandardError => e
+      NotifyError.call(exception: e)
       flash[:error] = e.message
       redirect_to items_path
       return
@@ -43,7 +44,7 @@ class ItemsController < ApplicationController
   end
 
   def issues
-    @issues = Issue.where("resolved_at IS NULL")
+    @issues = UnresolvedIssueQuery.call(params)
   end
 
   def resolve

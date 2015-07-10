@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe ApiGetRequestList do
+  let(:response) { ApiResponse.new(status_code: 200, body: { requests: [] }) }
+
   context "self" do
     subject { described_class }
 
@@ -14,6 +16,12 @@ RSpec.describe ApiGetRequestList do
         expect(subject.body["requests"]).to be_a_kind_of(Array)
         expect(subject.body["requests"].count).to eq(2)
         expect(subject.body["requests"].first["transaction"]).to eq("illiad-85132100")
+      end
+
+      it "logs the activity" do
+        expect(ApiHandler).to receive(:get).and_return(response)
+        expect(ActivityLogger).to receive(:api_get_request_list).with(api_response: kind_of(ApiResponse))
+        subject
       end
 
       it "raises an exception on API failure" do

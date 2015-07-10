@@ -40,4 +40,14 @@ RSpec.describe ProcessMatch do
     expect(ApiScanSendJob).to receive(:perform_later).with(match: match)
     subject
   end
+
+  it "completes the match" do
+    expect(match).to receive("processed=").with("completed")
+    subject
+  end
+
+  it "completes the request if it was the last match in that request" do
+    expect(CompleteRequest).to receive(:call)
+    subject
+  end
 end

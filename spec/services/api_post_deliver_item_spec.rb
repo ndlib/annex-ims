@@ -5,26 +5,30 @@ RSpec.describe ApiPostDeliverItem do
   let(:tray) { FactoryGirl.create(:tray) }
   let(:item) { FactoryGirl.create(:item, tray: tray) }
   let(:request) { FactoryGirl.create(:request, del_type: "loan") }
+  let(:response) { ApiResponse.new(status_code: 200, body: {}) }
 
   describe "#call" do
     subject { described_class.call(match: match) }
 
-    it "retrieves data" do
-      stub_api_scan_send(match: match)
-      expect(subject).to be_a_kind_of(ApiResponse)
-      expect(subject.success?).to eq(true)
-      expect(subject.body).to eq("status" => "OK", "message" => "Item status updated")
-    end
+    context "send request" do
+      it "retrieves data" do
+        stub_api_scan_send(match: match)
+        expect(subject).to be_a_kind_of(ApiResponse)
+        expect(subject.success?).to eq(true)
+        expect(subject.body).to eq("status" => "OK", "message" => "Item status updated")
+      end
 
-    it "posts the send action" do
-      stub_api_scan_send(match: match)
-      expect(ApiHandler).to receive(:post).with(action: "send", params: anything).and_call_original
-      subject
-    end
+      it "posts the send action" do
+        stub_api_scan_send(match: match)
+        expect(ApiHandler).to receive(:post).with(action: "send", params: anything).and_return(response)
+        expect(ActivityLogger).to receive(:api_send_item).with(item: item, params: anything, api_response: response)
+        subject
+      end
 
-    it "raises an exception on API failure" do
-      stub_api_scan_send(match: match, status_code: 500, body: {}.to_json)
-      expect { subject }.to raise_error(described_class::ApiDeliverItemError)
+      it "raises an exception on API failure" do
+        stub_api_scan_send(match: match, status_code: 500, body: {}.to_json)
+        expect { subject }.to raise_error(described_class::ApiDeliverItemError)
+      end
     end
 
     context "scan request" do
@@ -39,7 +43,8 @@ RSpec.describe ApiPostDeliverItem do
 
       it "posts the scan action" do
         stub_api_scan_send(match: match)
-        expect(ApiHandler).to receive(:post).with(action: "scan", params: anything).and_call_original
+        expect(ApiHandler).to receive(:post).with(action: "scan", params: anything).and_return(response)
+        expect(ActivityLogger).to receive(:api_scan_item).with(item: item, params: anything, api_response: response)
         subject
       end
     end

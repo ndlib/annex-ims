@@ -22,4 +22,12 @@ RSpec.describe BatchesController, type: :controller do
       get :item, commit: "Save", barcode: match.item.barcode
     end
   end
+
+  describe "GET scan_bin" do
+    it "logs a SkippedItem activity on Skip" do
+      allow_any_instance_of(Batch).to receive(:current_match).and_return(match)
+      expect(ActivityLogger).to receive(:skip_item)
+      get :scan_bin, commit: "Skip"
+    end
+  end
 end

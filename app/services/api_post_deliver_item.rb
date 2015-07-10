@@ -12,6 +12,7 @@ class ApiPostDeliverItem
 
   def post_data!
     response = ApiHandler.post(action: delivery_type, params: params)
+    log_activity(response)
     if response.success?
       response
     else
@@ -20,6 +21,15 @@ class ApiPostDeliverItem
   end
 
   private
+
+  def log_activity(response)
+    case delivery_type
+    when "scan"
+      ActivityLogger.api_scan_item(item: item, params: params, api_response: response)
+    when "send"
+      ActivityLogger.api_send_item(item: item, params: params, api_response: response)
+    end
+  end
 
   def params
     {

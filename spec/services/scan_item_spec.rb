@@ -12,8 +12,7 @@ RSpec.describe ScanItem do
     subject
   end
 
-  it "unstocks the item and logs the scan activity" do
-    expect(UnstockItem).to receive(:call).with(item, user)
+  it "logs the scan activity" do
     expect(ActivityLogger).to receive(:scan_item).with(item: item, request: request, user: user)
     subject
   end

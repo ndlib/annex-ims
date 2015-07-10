@@ -125,7 +125,7 @@ end
 group :test do
   # For mocking up APIs
   gem "webmock"
-
+  gem "shoulda-matchers"
 end
 
 group :development do
@@ -135,5 +135,5 @@ group :development do
   # Better error page
   gem "better_errors"
   gem "binding_of_caller"
+  gem 'quiet_assets'
 end
-

@@ -10,6 +10,22 @@ class ActivityLogger
     call(action: "ApiGetItemMetadata", item: item, params: params, api_response: api_response)
   end
 
+  def self.api_get_request_list(api_response:)
+    call(action: "ApiGetRequestList", api_response: api_response)
+  end
+
+  def self.api_scan_item(item:, params:, api_response:)
+    call(action: "ApiScanItem", item: item, params: params, api_response: api_response)
+  end
+
+  def self.api_send_item(item:, params:, api_response:)
+    call(action: "ApiSendItem", item: item, params: params, api_response: api_response)
+  end
+
+  def self.api_stock_item(item:, params:, api_response:)
+    call(action: "ApiStockItem", item: item, params: params, api_response: api_response)
+  end
+
   def self.api_remove_request(request:, params:, api_response:)
     call(action: "ApiRemoveRequest", request: request, params: params, api_response: api_response)
   end
@@ -24,6 +40,10 @@ class ActivityLogger
 
   def self.associate_tray_and_shelf(tray:, shelf:, user:)
     call(action: "AssociatedTrayAndShelf", user: user, tray: tray, shelf: shelf)
+  end
+
+  def self.batch_request(request:, user:)
+    call(action: "BatchedRequest", user: user, request: request)
   end
 
   def self.create_issue(issue:, item:)
@@ -48,6 +68,18 @@ class ActivityLogger
 
   def self.dissociate_tray_and_shelf(tray:, shelf:, user:)
     call(action: "DissociatedTrayAndShelf", user: user, tray: tray, shelf: shelf)
+  end
+
+  def self.fill_request(user:, request:)
+    call(action: "FilledRequest", user: user, request: request)
+  end
+
+  def self.match_item(item:, request:, user:)
+    call(action: "MatchedItem", item: item, request: request, user: user)
+  end
+
+  def self.receive_request(request:)
+    call(action: "ReceivedRequest", request: request)
   end
 
   def self.remove_request(request:, user:)
