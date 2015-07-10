@@ -21,6 +21,10 @@ class ApplicationController < ActionController::Base
   end
 
   def user_admin?
-    current_user.admin
+    config_admin = ""
+    if Rails.configuration.respond_to? :admin_user_name
+      config_admin = Rails.configuration.admin_user_name
+    end
+    current_user.admin || (config_admin == current_user.username)
   end
 end
