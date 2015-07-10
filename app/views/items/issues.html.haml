@@ -2,12 +2,6 @@
   %span
     = "There are no current outstanding issues."
 - else
-  = form_tag request.path, method: :get do
-    .field
-      = label_tag :barcode
-      = search_field_tag :barcode, params[:barcode], autofocus: "autofocus", placholder: 'A barcode'
-    .actions
-      = submit_tag 'Filter', class: 'btn btn-primary'
   %table.table.table-striped.condensed.datatable{"id" => "issues"}
     %thead
       %tr
@@ -31,4 +25,5 @@
   :javascript
       $(document).ready(function() {
         window.table = $('#issues').DataTable();
+        $('div.dataTables_filter input').focus();
       } );
