@@ -25,8 +25,12 @@ class GetRequests
 
   def create_or_update_request(attributes)
     request = Request.find_or_initialize_by(trans: attributes["trans"])
+    new_record = request.new_record?
     request.attributes = attributes
     request.save!
+    if new_record
+      ActivityLogger.receive_request(request: request)
+    end
     request
   end
 
