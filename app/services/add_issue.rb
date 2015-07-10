@@ -18,7 +18,7 @@ class AddIssue
       issue.user_id = user_id
       issue.save!
       if new_record
-        ActivityLogger.create_issue(item: item, issue: issue)
+        ActivityLogger.create_issue(item: item, issue: issue, user: user)
       end
       issue
     end
@@ -26,6 +26,10 @@ class AddIssue
 
 
   private
+
+  def user
+    @user ||= User.find(user_id)
+  end
 
   def barcode
     item.barcode

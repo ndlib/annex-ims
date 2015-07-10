@@ -46,8 +46,8 @@ class ActivityLogger
     call(action: "BatchedRequest", user: user, request: request)
   end
 
-  def self.create_issue(issue:, item:)
-    call(action: "CreatedIssue", issue: issue, item: item)
+  def self.create_issue(issue:, item:, user:)
+    call(action: "CreatedIssue", issue: issue, item: item, user: user)
   end
 
   def self.create_item(item:, user:)

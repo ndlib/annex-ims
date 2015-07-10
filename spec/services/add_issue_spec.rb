@@ -14,7 +14,7 @@ RSpec.describe AddIssue do
   end
 
   it "logs the issue creation" do
-    expect(ActivityLogger).to receive(:create_issue).with(item: item, issue: kind_of(Issue))
+    expect(ActivityLogger).to receive(:create_issue).with(item: item, issue: kind_of(Issue), user: user)
     subject
   end
 
