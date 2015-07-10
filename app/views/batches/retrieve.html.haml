@@ -42,7 +42,7 @@
         %ul
           %li= @match.item.shelf ? @match.item.shelf.barcode : "No Shelf"
           %li= @match.item.tray ? @match.item.tray.barcode : "No Tray"
-          %li= @match.item.barcode
+          %li= link_to @match.item.barcode, item_detail_path(@match.item.barcode)
           - if !@match.item.title.blank?
             %li= @match.item.title
           - if !@match.item.author.blank?

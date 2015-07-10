@@ -16,7 +16,7 @@
       - @bin.matches.each do |match|
         %tr
           %td= match.batch.user.username
-          %td= match.item.barcode
+          %td= link_to match.item.barcode, item_detail_path(match.item.barcode)
           %td= match.request.trans
           %td= match.item.title
           %td= match.item.author

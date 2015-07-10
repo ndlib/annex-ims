@@ -39,7 +39,9 @@
           %td= row['title']
           %td= row['author']
           %td= row['description']
-          %td= row['barcode']
+          %td
+            - unless row['barcode'].blank?
+              = link_to row['barcode'], item_detail_path(row['barcode'])
           %td= row['isbn_issn']
           %td= row['bib_number']
           %td

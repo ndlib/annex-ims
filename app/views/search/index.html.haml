@@ -56,7 +56,7 @@
     %tbody
       - @results.each do |item|
         %tr
-          %td= item.barcode
+          %td= link_to item.barcode, item_detail_path(item.barcode)
           %td= item.bib_number
           %td= item.isbn_issn
           %td= item.title
