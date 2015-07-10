@@ -38,6 +38,12 @@
           %td= @item.bib_number
         %tr
           %td
+            %strong= "Catalog Record:"
+          %td
+            %a{ href: Rails.configuration.settings.catalog_link + @item.barcode }
+              View Catalog Record
+        %tr
+          %td
             %strong= "Shelf Location:"
           %td= (@item.tray.nil? ? 'STAGING' : (@item.tray.shelf.nil? ? 'STAGING' : @item.tray.shelf.barcode))
         %tr
