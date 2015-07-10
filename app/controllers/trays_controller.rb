@@ -151,15 +151,21 @@ class TraysController < ApplicationController
       thickness = params[:thickness]
     else
       flash[:error] = 'select a valid thickness'
-      redirect_to show_tray_item_path(:id => @tray.id, :barcode => barcode)
+      redirect_to show_tray_item_path(id: @tray.id, barcode: barcode, thickness: params[:thickness])
       return
     end
 
-    item = GetItemFromBarcode.call(barcode: barcode, user_id: current_user.id)
+    begin
+      item = GetItemFromBarcode.call(barcode: barcode, user_id: current_user.id)
+    rescue StandardError
+      flash[:error] = I18n.t("errors.barcode_not_found", barcode: barcode)
+      redirect_to show_tray_item_path(id: @tray.id, barcode: barcode, thickness: params[:thickness])
+      return
+    end
 
     if item.nil?
-      flash[:error] = I18n.t("errors.barcode_not_found", barcode: barcode)
-      redirect_to missing_tray_item_path(:id => @tray.id)
+      flash[:error] = I18n.t("errors.barcode_not_found", barcode: barcode, thickness: params[:thickness])
+      redirect_to missing_tray_item_path(id: @tray.id)
       return
     end
 
