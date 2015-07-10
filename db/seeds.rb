@@ -47,8 +47,7 @@ end
   )
 end
 
-
-50.times do |i|
+50.times do
   barcode = Item.order("RANDOM()").first.barcode
   Issue.create!(
     user_id: 1,
@@ -57,7 +56,7 @@ end
   )
 end
 
-50.times do |i|
+50.times do
   barcode = Item.order("RANDOM()").first.barcode
   Issue.create!(
     user_id: 1,
