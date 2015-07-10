@@ -17,7 +17,7 @@ RSpec.describe ApplicationController, type: :controller do
     let(:user) { FactoryGirl.create(:user, admin: false) }
 
     it "throws a routing error" do
-      expect{ get "dummy" }.to raise_error(ActionController::RoutingError)
+      expect { get "dummy" }.to raise_error(ActionController::RoutingError)
     end
   end
 
