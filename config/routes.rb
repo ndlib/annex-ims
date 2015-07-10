@@ -66,7 +66,7 @@ Rails.application.routes.draw do
   post "bins", to: "bins#remove", as: "bin_remove"
 
   get "users", to: "users#index", as: "users"
-  post "users", to: "users#edit", as: "edit_users"
+  put "users", to: "users#update", as: "update_users"
 
   resources :requests, only: [] do
     collection do

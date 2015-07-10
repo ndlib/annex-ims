@@ -3,7 +3,7 @@ class UsersController < ApplicationController
     @users = User.all
   end
 
-  def edit
+  def update
     user_id = params["user_id"]
     # If the checkbox was false on submit, the admin param will be null :(
     admin = params["admin"] || false
