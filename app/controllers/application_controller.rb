@@ -1,12 +1,22 @@
 class ApplicationController < ActionController::Base
-  before_action :redirect_to_sign_in, unless: :user_signed_in?
-  before_action :redirect_to_unauthorized, unless: :user_admin?
+  before_action :check_authentication
 
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
   protected
+
+  def check_authentication
+    unless user_signed_in?
+      redirect_to_sign_in
+      return
+    end
+    unless user_admin?
+      redirect_to_unauthorized
+      return
+    end
+  end
 
   def redirect_to_sign_in
     redirect_to new_user_session_path
