@@ -41,6 +41,5 @@ RSpec.describe UsersController, type: :controller do
       put :create, user_name: "tester"
       expect(flash[:error]).to be_present
     end
-
   end
 end
