@@ -64,3 +64,16 @@ end
     issue_type: "not_for_annex"
   )
 end
+
+[
+  "jhartzle",
+  "dwolfe2",
+  "rfox2",
+  "jkennel",
+  "awetheri",
+  "jgondron"
+].each do |username|
+  u = User.where(username: username).first || User.new(username: username)
+  u.admin = true
+  u.save!
+end
