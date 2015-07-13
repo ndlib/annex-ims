@@ -3,6 +3,7 @@ defaults: &defaults
   api_foreground_timeout: 3
   api_foreground_max_retries: 0
   api_max_retries: 2
+  catalog_link: "http://library.nd.edu/utilities/search/ndu/nd_campus?q="
 
 development:
   <<: *defaults
