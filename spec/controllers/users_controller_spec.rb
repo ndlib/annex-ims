@@ -29,5 +29,17 @@ RSpec.describe UsersController, type: :controller do
       expect(User).to receive(:new).with(username: "tester").and_return(user)
       put :create, user_name: "tester"
     end
+
+    it "does not try to create the user if one already exists by that name" do
+      FactoryGirl.create(:user, id: 2, username: "tester", admin: true)
+      expect(User).not_to receive(:new)
+      put :create, user_name: "tester"
+    end
+
+    it "flashes an error if a user already exists by that name" do
+      FactoryGirl.create(:user, id: 2, username: "tester", admin: true)
+      put :create, user_name: "tester"
+      expect(flash[:error]).to be_present
+    end
   end
 end

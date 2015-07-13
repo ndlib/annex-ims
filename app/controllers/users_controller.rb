@@ -5,8 +5,12 @@ class UsersController < ApplicationController
 
   def create
     user_name = params["user_name"]
-    user = User.new(username: user_name)
-    user.save!
+    if User.exists?(username: user_name)
+      flash[:error] = "User already exists"
+    else
+      user = User.new(username: user_name)
+      user.save!
+    end
     redirect_to users_path
   end
 
