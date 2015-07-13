@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe BatchesController, type: :controller do
-  let(:user) { FactoryGirl.create(:user) }
+  let(:user) { FactoryGirl.create(:user, admin: true) }
   let(:batch) { FactoryGirl.create(:batch, user: user) }
   let(:match) { FactoryGirl.create(:match, batch: batch) }
 

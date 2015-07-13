@@ -66,6 +66,10 @@ Rails.application.routes.draw do
   get "bins/:id", to: "bins#show", as: "show_bin"
   post "bins", to: "bins#remove", as: "bin_remove"
 
+  get "users", to: "users#index", as: "users"
+  put "users", to: "users#update", as: "update_users"
+  post "users", to: "users#create", as: "create_users"
+
   resources :requests, only: [] do
     collection do
       post :sync

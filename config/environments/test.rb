@@ -42,6 +42,9 @@ Rails.application.configure do
 
   # ActiveJob needs a back end. In our case, it's RabbitMQ, via sneakers. Except for testing. Here it's "test".
   config.active_job.queue_adapter = :test
+
+  # Configures a user as an administrator
+  # config.admin_user_name = ""
 end
 
 Devise.setup do |config|

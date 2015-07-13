@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe TraysController, :type => :controller do
 
   before(:each) do
-    @user = FactoryGirl.create(:user)
+    @user = FactoryGirl.create(:user, admin: true)
     sign_in(@user)
   end
 
