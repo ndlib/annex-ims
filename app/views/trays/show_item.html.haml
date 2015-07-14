@@ -36,8 +36,8 @@
             = hidden_field_tag :item_id, item.id
             .actions{ style: "display: inline-block;" }
               = submit_tag 'Remove', class: 'btn btn-primary'
-              - if(item.status == 'stocked')
-                = submit_tag 'Unstock', class: 'btn btn-secondary'
+              -#- if(item.status == 'stocked')
+              -#  = submit_tag 'Unstock', class: 'btn btn-secondary'
         %td= item.status.titleize
         %td= item.barcode
         %td= item.thickness
