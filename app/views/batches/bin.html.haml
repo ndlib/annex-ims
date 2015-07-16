@@ -1,10 +1,12 @@
-= form_tag scan_bin_batch_path do |f|
-  .field
-    = label_tag :barcode, "Bin"
-    = text_field_tag :barcode, nil, autofocus: "autofocus"
-  .actions
-    = submit_tag 'Save', class: 'btn pull-left btn-primary'
-    = submit_tag 'Skip', class: 'btn pull-right btn-warning'
+.scan
+  = form_tag scan_bin_batch_path do |f|
+    .field
+      = label_tag :barcode, "Bin"
+      = text_field_tag :barcode, nil, autofocus: "autofocus"
+    .actions
+      = submit_tag 'Save', class: 'btn pull-left btn-primary'
+      = submit_tag 'Skip', class: 'btn pull-right btn-warning'
+%br
 %section.req
   .request= "Request data"
   .req_title= "Title: #{@match.request.title}"

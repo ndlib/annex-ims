@@ -409,9 +409,15 @@ td:before {
         font-size: 32px;
       }
     }
+    form {
+      padding: 0;
+    }
   }
 
-
+  h2 {
+    font-size: 26px;
+    margin: 8px 0;
+  }
 
   a.list-group-item  {
     font-size: 24px;

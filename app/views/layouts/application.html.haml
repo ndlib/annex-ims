@@ -11,5 +11,6 @@
     %header
       = render 'layouts/navigation'
     %main{:role => "main"}
+      %h2= t("page_title.#{params[:controller] + '_' + params[:action]}")
       = render 'layouts/messages'
       = yield
