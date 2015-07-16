@@ -1,0 +1,60 @@
+- if @shelf.blank?
+  %div.panel.panel-primary
+    %div.panel-heading
+      %h3.panel-title= "Shelf Details"
+    %div.panel-body
+      %span= "Shelf Not Found"
+- else
+  %div.panel.panel-primary
+    %div.panel-heading
+      %h3.panel-title= "Shelf Details"
+    %div.panel-body
+      %table.table.table-striped
+        %tbody
+          %tr
+            %td
+              %strong= "Created At:"
+            %td= @shelf.created_at.strftime("%m-%d-%Y %I:%M%p")
+          %tr
+            %td
+              %strong= "Barcode:"
+            %td= @shelf.barcode
+          %tr
+            %td
+              %strong= "Size:"
+            %td= @shelf.size
+
+  %div.panel.panel-success
+    %div.panel-heading
+      %h3.panel-title= "Associated Trays"
+    %div.panel-body
+      %table.table.table-striped
+        %thead
+          %tr
+            %th= "Barcode"
+            %th= "Status"
+            %th= "Created At"
+        %tbody
+          - @trays.each do |record|
+            %tr
+              %td= record.barcode
+              %td= record.shelved ? "Shelved" : "Unshelved"
+              %td= record.created_at.strftime("%m-%d-%Y %I:%M%p")
+  %div.panel.panel-warning
+    %div.panel-heading
+      %h3.panel-title= "History"
+    %div.panel-body
+      %table.table.table-striped
+        %thead
+          %tr
+            %th= "Activity"
+            %th= "Tray"
+            %th= "When"
+            %th= "Who"
+        %tbody
+          - @history.each do |record|
+            %tr
+              %td= t("activity_log." + record.action)
+              %td= record.data['tray'].blank? ? 'NO TRAY' : record.data['tray']['barcode']
+              %td= record.action_timestamp.strftime("%m-%d-%Y %I:%M%p")
+              %td= record.username        
