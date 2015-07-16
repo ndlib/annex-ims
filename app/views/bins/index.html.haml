@@ -13,7 +13,7 @@
         %tr
           %td= bin.barcode
           %td= bin.matches.count
-          %td= bin.updated_at
+          %td= bin.updated_at.strftime("%m-%d-%Y %I:%M%p")
           %td= button_to 'Process', show_bin_path(:id => bin.id), method: :get, class: 'btn btn-primary'
   :javascript
       $(document).ready(function() {
