@@ -12,7 +12,7 @@
         %tr
           %td= batch.id
           %td= batch.user.username
-          %td= link_to batch.updated_at, view_single_processed_batch_path(:id => batch.id)
+          %td= link_to batch.updated_at.strftime("%m-%d-%Y %I:%M%p"), view_single_processed_batch_path(:id => batch.id)
   :javascript
     $(document).ready(function() {
       window.table = $('#batches').DataTable( {

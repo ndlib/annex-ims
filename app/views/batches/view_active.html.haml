@@ -13,7 +13,7 @@
         %tr
           %td= batch.id
           %td= batch.user.username
-          %td= link_to batch.updated_at, view_single_active_batch_path(:id => batch.id)
+          %td= link_to batch.updated_at.strftime("%m-%d-%Y %I:%M%p"), view_single_active_batch_path(:id => batch.id)
           %td
             = form_tag cancel_single_active_batch_path do |f|
               = hidden_field_tag :batch_id, batch.id
