@@ -24,3 +24,8 @@
       %a.list-group-item{:href => current_batch_path} View Current Batch
       %a.list-group-item{:href => view_processed_batches_path} View Processed Batches
       %a.list-group-item{:href => view_active_batches_path} View Active Batches
+    %a.list-group-item.list-group-item-success{"data-parent" => "#MainMenu", "data-toggle" => "collapse", :href => "#reports"}
+      %span.glyphicon.glyphicon-plus
+      Reports
+    #reports.collapse
+      %a.list-group-item{:href => reports_path} Report By Barcode
