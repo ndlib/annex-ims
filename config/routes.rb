@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   get "trays/items", to: "trays#items", as: "trays_items"
   post "trays/items", to: "trays#scan_item", as: "scan_tray_item"
   get "trays/items/:id", to: "trays#show_item", as: "show_tray_item"
+  get "trays/detail/:barcode", to: "trays#tray_detail", as: "tray_detail"
   post "trays/items/:id", to: "trays#associate_item", as: "associate_tray_item"
   post "trays/items/:id/dissociate", to: "trays#dissociate_item", as: "dissociate_tray_item"
   get "trays/items/:id/missing", to: "trays#missing", as: "missing_tray_item"
@@ -28,6 +29,7 @@ Rails.application.routes.draw do
   get "shelves/items", to: "shelves#index", as: "shelves"
   post "shelves/items", to: "shelves#scan", as: "scan_shelf"
   get "shelves/items/:id", to: "shelves#show", as: "show_shelf"
+  get "shelves/detail/:barcode", to: "shelves#shelf_detail", as: "shelf_detail"
   post "shelves/items/:id", to: "shelves#associate", as: "associate_shelf_item"
   post "shelves/items/:id/dissociate", to: "shelves#dissociate", as: "dissociate_shelf_item"
   get "shelves/items/:id/wrong/:barcode", to: "shelves#wrong", as: "wrong_shelf_item"
@@ -65,6 +67,9 @@ Rails.application.routes.draw do
   get "bins", to: "bins#index", as: "bins"
   get "bins/:id", to: "bins#show", as: "show_bin"
   post "bins", to: "bins#remove", as: "bin_remove"
+
+  get "reports", to: "reports#index", as: "reports"
+  get "reports/call_report", to: "reports#call_report", as: "call_report"
 
   get "users", to: "users#index", as: "users"
   put "users", to: "users#update", as: "update_users"
