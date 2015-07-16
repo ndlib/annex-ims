@@ -1,5 +1,4 @@
 class ShelvesController < ApplicationController
-
   def index
     @shelf = Shelf.new
   end
@@ -13,11 +12,19 @@ class ShelvesController < ApplicationController
       redirect_to shelves_path
       return
     end
-    redirect_to show_shelf_path(:id => @shelf.id)
+    redirect_to show_shelf_path(id: @shelf.id)
   end
 
   def show
-      @shelf = Shelf.find(params[:id])
+    @shelf = Shelf.find(params[:id])
+  end
+
+  def shelf_detail
+    @shelf = Shelf.where(barcode: params[:barcode]).take
+    if @shelf
+      @trays = @shelf.trays
+      @history = ActivityLogQuery.shelf_history(@shelf)
+    end
   end
 
   def associate
@@ -45,7 +52,7 @@ class ShelvesController < ApplicationController
     if !item.shelf.nil?
       if item.shelf != @shelf
         flash[:error] = "Item #{barcode} is already assigned to #{item.shelf.barcode}."
-        redirect_to wrong_shelf_item_path(:id => @shelf.id, :barcode => barcode)
+        redirect_to wrong_shelf_item_path(id: @shelf.id, barcode: barcode)
         return
       else
         already = true
@@ -59,12 +66,12 @@ class ShelvesController < ApplicationController
       else
         flash[:notice] = "Item #{barcode} stocked in #{@shelf.barcode}."
       end
-      redirect_to show_shelf_path(:id => @shelf.id)
+      redirect_to show_shelf_path(id: @shelf.id)
       return
     rescue StandardError => e
       NotifyError.call(exception: e)
       flash[:error] = e.message
-      redirect_to show_shelf_path(:id => @shelf.id)
+      redirect_to show_shelf_path(id: @shelf.id)
       return
     end
   end
@@ -82,19 +89,18 @@ class ShelvesController < ApplicationController
     @shelf = Shelf.find(params[:id])
     @item = Item.find(params[:item_id])
 
-    if params[:commit] == 'Unstock'
+    if params[:commit] == "Unstock"
       if UnstockItem.call(@item, current_user)
-        redirect_to show_shelf_path(:id => @shelf.id)
+        redirect_to show_shelf_path(id: @shelf.id)
       else
         raise "unable to unstock item"
       end
     else
       if DissociateShelfFromItem.call(@item, current_user)
-        redirect_to show_shelf_path(:id => @shelf.id)
+        redirect_to show_shelf_path(id: @shelf.id)
       else
         raise "unable to dissociate"
       end
     end
   end
-
 end

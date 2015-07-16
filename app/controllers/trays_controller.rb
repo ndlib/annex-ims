@@ -1,5 +1,4 @@
 class TraysController < ApplicationController
-
   def index
     @tray = Tray.new
   end
@@ -14,7 +13,7 @@ class TraysController < ApplicationController
       redirect_to trays_path
       return
     end
-    redirect_to show_tray_path(:id => @tray.id)
+    redirect_to show_tray_path(id: @tray.id)
   end
 
   def show
@@ -34,9 +33,9 @@ class TraysController < ApplicationController
     end
 
     unless (params[:force] == "true")
-      if !@tray.shelf.nil? and (@tray.shelf.barcode != barcode)
+      if !@tray.shelf.nil? && (@tray.shelf.barcode != barcode)
         flash[:error] = "#{@tray.barcode} belongs to #{@tray.shelf.barcode}, but #{barcode} was scanned."
-        redirect_to wrong_shelf_path(:id => @tray.id, :barcode => barcode)
+        redirect_to wrong_shelf_path(id: @tray.id, barcode: barcode)
         return
       end
     end
@@ -46,12 +45,11 @@ class TraysController < ApplicationController
     rescue StandardError => e
       NotifyError.call(exception: e)
       flash[:error] = e.message
-      redirect_to show_tray_path(:id => @tray.id)
+      redirect_to show_tray_path(id: @tray.id)
       return
     end
 
     redirect_to trays_path
-    return
   end
 
   # The only reason to get here is to set the tray's shelf to nil, so let's do that.
@@ -73,9 +71,9 @@ class TraysController < ApplicationController
     barcode = params[:barcode]
 
     unless (params[:force] == "true")
-      if !@tray.shelf.nil? and (@tray.shelf.barcode != barcode)
+      if !@tray.shelf.nil? && (@tray.shelf.barcode != barcode)
         flash[:error] = "#{@tray.barcode} belongs to #{@tray.shelf.barcode}, but #{barcode} was scanned."
-        redirect_to wrong_shelf_path(:id => @tray.id, :barcode => barcode)
+        redirect_to wrong_shelf_path(id: @tray.id, barcode: barcode)
         return
       end
     end
@@ -111,7 +109,6 @@ class TraysController < ApplicationController
     @item = GetItemFromBarcode.call(barcode: @barcode, user_id: current_user.id)
   end
 
-
   # Should this area be pulled out into a separate controller? It's all about trays, but with items.
   def items
     @tray = Tray.new
@@ -127,7 +124,7 @@ class TraysController < ApplicationController
       redirect_to trays_items_path
       return
     end
-    redirect_to show_tray_item_path(:id => @tray.id)
+    redirect_to show_tray_item_path(id: @tray.id)
   end
 
   def show_item
@@ -150,7 +147,7 @@ class TraysController < ApplicationController
     if IsValidThickness.call(params[:thickness])
       thickness = params[:thickness]
     else
-      flash[:error] = 'select a valid thickness'
+      flash[:error] = "select a valid thickness"
       redirect_to show_tray_item_path(id: @tray.id, barcode: barcode, thickness: params[:thickness])
       return
     end
@@ -174,7 +171,7 @@ class TraysController < ApplicationController
     if !item.tray.nil?
       if item.tray != @tray
         flash[:error] = "Item #{barcode} is already assigned to #{item.tray.barcode}."
-        redirect_to wrong_tray_path(:id => @tray.id, :barcode => barcode)
+        redirect_to wrong_tray_path(id: @tray.id, barcode: barcode)
         return
       else
         already = true
@@ -189,32 +186,31 @@ class TraysController < ApplicationController
         flash[:notice] = "Item #{barcode} stocked in #{@tray.barcode}."
       end
       if TrayFull.call(@tray)
-        flash[:error] = 'warning - tray may be full'
+        flash[:error] = "warning - tray may be full"
       end
-      redirect_to show_tray_item_path(:id => @tray.id)
+      redirect_to show_tray_item_path(id: @tray.id)
       return
     rescue StandardError => e
       NotifyError.call(exception: e)
       flash[:error] = e.message
-      redirect_to show_tray_item_path(:id => @tray.id)
+      redirect_to show_tray_item_path(id: @tray.id)
       return
     end
-
   end
 
   def dissociate_item
     @tray = Tray.find(params[:id])
     @item = Item.find(params[:item_id])
 
-    if params[:commit] == 'Unstock'
+    if params[:commit] == "Unstock"
       if UnstockItem.call(@item, current_user)
-        redirect_to show_tray_item_path(:id => @tray.id)
+        redirect_to show_tray_item_path(id: @tray.id)
       else
         raise "unable to dissociate tray"
       end
     else
       if DissociateTrayFromItem.call(@item, current_user)
-        redirect_to show_tray_item_path(:id => @tray.id)
+        redirect_to show_tray_item_path(id: @tray.id)
       else
         raise "unable to dissociate tray"
       end
@@ -226,8 +222,7 @@ class TraysController < ApplicationController
 
     WithdrawTray.call(@tray, current_user)
 
-    redirect_to show_tray_path(:id => @tray.id)
-    return
+    redirect_to show_tray_path(id: @tray.id)
   end
 
   def missing

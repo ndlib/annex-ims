@@ -6,6 +6,9 @@ RSpec.describe ActivityLogQuery do
   let!(:item_3) { FactoryGirl.create(:item) }
   let!(:tray_1) { FactoryGirl.create(:tray) }
   let!(:tray_2) { FactoryGirl.create(:tray) }
+  let!(:tray_3) { FactoryGirl.create(:tray) }
+  let!(:shelf_1) { FactoryGirl.create(:shelf) }
+  let!(:shelf_2) { FactoryGirl.create(:shelf) }
   let!(:batch) { FactoryGirl.create(:batch) }
   let!(:request_1) { FactoryGirl.create(:request, requested: 2.days.ago) }
   let!(:request_2) { FactoryGirl.create(:request, requested: 1.day.ago) }
@@ -52,6 +55,27 @@ RSpec.describe ActivityLogQuery do
 
       it "returns the logs in chronological order" do
         expect(subject.item_history(item_1)[1].data["tray"]["id"]).to eq tray_1.id
+      end
+    end
+  end
+
+  context "tray shelved" do
+    describe "#shelf_history" do
+      before(:each) do
+        ActivityLogger.shelve_tray(tray: tray_1, shelf: shelf_1, user: user)
+        ActivityLogger.shelve_tray(tray: tray_2, shelf: shelf_1, user: user)
+        ActivityLogger.shelve_tray(tray: tray_3, shelf: shelf_2, user: user)
+        ActivityLogger.unshelve_tray(tray: tray_1, shelf: shelf_1, user: user)
+        ActivityLogger.shelve_tray(tray: tray_1, shelf: shelf_1, user: user)
+      end
+
+      it "returns correct number of shelf logs" do
+        expect(subject.shelf_history(shelf_1).count).to eq 4
+        expect(subject.shelf_history(shelf_2).count).to eq 1
+      end
+
+      it "returns the logs in chronological order" do
+        expect(subject.shelf_history(shelf_1)[1].data["tray"]["id"]).to eq tray_1.id
       end
     end
   end

@@ -37,7 +37,7 @@ feature "Bins", :type => :feature do
       visit bins_path
       expect(page).to have_content @bin.barcode
       expect(page).to have_content @bin.matches.count
-      expect(page).to have_content @bin.updated_at
+      expect(page).to have_content @bin.updated_at.strftime("%m-%d-%Y %I:%M%p")
     end
 
     it "sees the contents of a bin" do

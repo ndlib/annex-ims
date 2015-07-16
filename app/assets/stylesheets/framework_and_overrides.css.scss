@@ -144,7 +144,10 @@ a.list-group-item[aria-expanded="true"] {
   margin-bottom: 5px;
 }
 
-#stocking, #items, #batches {
+#stocking,
+#items,
+#batches,
+#reports {
   .list-group-item {
     border: solid 2px #bcbcbc;
     border-radius: 5px;

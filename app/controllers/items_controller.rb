@@ -20,7 +20,7 @@ class ItemsController < ApplicationController
       return
     end
 
-    redirect_to show_item_path(:id => @item.id)
+    redirect_to show_item_path(id: @item.id)
   end
 
   def show
@@ -29,8 +29,10 @@ class ItemsController < ApplicationController
 
   def item_detail
     @item = Item.where(barcode: params[:barcode]).take
-    @history = ActivityLogQuery.item_history(@item)
-    @usage = ActivityLogQuery.item_usage(@item)
+    if @item
+      @history = ActivityLogQuery.item_history(@item)
+      @usage = ActivityLogQuery.item_usage(@item)
+    end
   end
 
   def restock
@@ -42,7 +44,6 @@ class ItemsController < ApplicationController
     flash[:error] = results[:error]
     flash[:notice] = results[:notice]
     redirect_to results[:path]
-    return
   end
 
   def wrong_restock
@@ -58,7 +59,5 @@ class ItemsController < ApplicationController
     ResolveIssue.call(user: current_user, issue: issue)
 
     redirect_to issues_path
-    return
   end
-
 end

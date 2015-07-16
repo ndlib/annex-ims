@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-feature "Items", :type => :feature do
+feature "Items", type: :feature do
   include AuthenticationHelper
 
   describe "when signed in" do
@@ -17,7 +17,7 @@ feature "Items", :type => :feature do
 
       stub_request(:post, api_stock_url).
         with(body: { barcode: "#{@item.barcode}", item_id: "#{@item.id}", tray_code: "#{@item.tray.barcode}" },
-          headers: { "Content-Type" => "application/x-www-form-urlencoded", "User-Agent" => "Faraday v0.9.1" }).
+             headers: { "Content-Type" => "application/x-www-form-urlencoded", "User-Agent" => "Faraday v0.9.1" }).
         to_return(status: 200, body: { results: { status: "OK", message: "Item stocked" } }.to_json, headers: {})
 
       response_body = api_fixture_data("item_metadata.json")
@@ -25,13 +25,7 @@ feature "Items", :type => :feature do
       item_uri = api_item_url(@item)
       stub_request(:get, item_uri).
         with(headers: { "User-Agent" => "Faraday v0.9.1" }).
-        to_return{ { status: 200, body: response_body, headers: {} } }
-    end
-
-    after(:each) do
-      ActivityLog.all.each do |log|
-        log.destroy!
-      end
+        to_return { { status: 200, body: response_body, headers: {} } }
     end
 
     context "stocking items" do
@@ -93,7 +87,7 @@ feature "Items", :type => :feature do
           expect(page).to have_content issue.user.username
           expect(page).to have_content issue.barcode
           expect(page).to have_content I18n.t("issues.issue_type.#{issue.issue_type}")
-          expect(page).to have_content issue.created_at
+          expect(page).to have_content issue.created_at.strftime("%m-%d-%Y %I:%M%p")
         end
       end
 
@@ -108,7 +102,7 @@ feature "Items", :type => :feature do
           expect(page).to have_content issue.user.username
           expect(page).to have_content issue.barcode
           expect(page).to have_content I18n.t("issues.issue_type.#{issue.issue_type}")
-          expect(page).to have_content issue.created_at
+          expect(page).to have_content issue.created_at.strftime("%m-%d-%Y %I:%M%p")
           click_button "issue-#{issue.id}"
           expect(current_path).to eq(issues_path)
           expect(page).to_not have_content issue.barcode

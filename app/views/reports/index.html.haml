@@ -1,0 +1,7 @@
+.scan
+  = form_for :report, url: call_report_path, method: :get do |f|
+    .field
+      = f.label :barcode, "Barcode"
+      = f.text_field :barcode, autofocus: "autofocus"
+    .actions
+      = f.submit "Send", class: "btn btn-primary"
