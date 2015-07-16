@@ -1,5 +1,4 @@
 class ReportsController < ApplicationController
-
   def call_report
     barcode = params[:report][:barcode]
 
