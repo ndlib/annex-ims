@@ -1,5 +1,4 @@
-= @shelf.barcode
-%br
+%h4= @shelf.barcode
 .scan
   = form_tag associate_shelf_item_path(@shelf) do |f|
     - if @shelf.errors.any?

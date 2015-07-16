@@ -1,5 +1,4 @@
-= @tray.barcode
-%br
+%h4= @tray.barcode
 .scan.tray
   = form_tag associate_tray_item_path(@tray) do |f|
     - if @tray.errors.any?
