@@ -66,6 +66,7 @@ Rails.application.routes.draw do
 
   get "bins", to: "bins#index", as: "bins"
   get "bins/:id", to: "bins#show", as: "show_bin"
+  get "bins/detail/:barcode", to: "bins#bin_detail", as: "bin_detail"
   post "bins", to: "bins#remove", as: "bin_remove"
 
   get "reports", to: "reports#index", as: "reports"

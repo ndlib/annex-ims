@@ -43,6 +43,7 @@ en:
     ScanItem: "Scanned"
   page_title:
     welcome_index: " "
+    bins_bin_detail: "Bin Detail"
     items_index: "Item Lookup"
     items_item_detail: "Item Detail"
     items_show: " "
@@ -51,6 +52,7 @@ en:
     trays_show_item: "Add Item"
     trays_show: "Tray Location"
     trays_index: "Tray to Shelf"
+    trays_tray_detail: "Tray Detail"
     shelves_index: "Item Direct to Shelf"
     shelves_show: "Add Items to Shelf"
     shelves_shelf_detail: "Shelf Detail"

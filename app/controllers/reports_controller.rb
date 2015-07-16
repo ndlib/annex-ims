@@ -8,6 +8,8 @@ class ReportsController < ApplicationController
       redirect_to tray_detail_path(barcode)
     elsif IsShelfBarcode.call(barcode)
       redirect_to shelf_detail_path(barcode)
+    else
+      redirect_to bin_detail_path(barcode)
     end
   end
 end
