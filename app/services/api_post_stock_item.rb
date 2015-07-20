@@ -16,7 +16,7 @@ class ApiPostStockItem
     if response.success?
       response
     else
-      raise ApiStockItemError, "Error sending stock request to API. params: #{params.inspect}, response: #{response.inspect}"
+      raise ApiStockItemError, "Error sending stock request to API. params: #{params}, response: #{response.attributes}"
     end
   end
 

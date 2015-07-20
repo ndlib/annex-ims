@@ -14,7 +14,7 @@ class ApiGetRequestList
     if response.success?
       response
     else
-      raise ApiGetRequestsError, "Error getting active requests from API. response: #{response.inspect}"
+      raise ApiGetRequestsError, "Error getting active requests from API. response: #{response.attributes}"
     end
   end
 
