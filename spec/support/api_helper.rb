@@ -1,6 +1,6 @@
 module ApiHelper
   def api_url(action, params_hash = {})
-    base_url = ApiHandler.base_url || "http:/"
+    base_url = ApiHandler.base_url || "http://"
     path = ApiHandler.path(action)
     if params_hash.present?
       path += "&#{params_hash.to_param}"
