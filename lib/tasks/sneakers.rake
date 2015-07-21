@@ -127,10 +127,10 @@ namespace :sneakers do
         File.delete SneakersRakeHelper::pid_file
       end
     rescue SystemExit
-      # Don't log SystemExit errors
+      # Don't notify on SystemExit errors
       raise e
     rescue Interrupt
-      # Don't log Interrupt errors
+      # Don't notify on Interrupt errors
       raise e
     rescue Exception => e
       NotifyError.call(exception: e)
@@ -145,7 +145,7 @@ namespace :sneakers do
       SneakersRakeHelper::info "Stopping sneakers... (pid: #{pid})"
       if SneakersRakeHelper::process_running?(pid)
         Process.kill("TERM", pid)
-        30.times do
+        60.times do
           if SneakersRakeHelper::process_running?(pid)
             sleep(1)
           else
