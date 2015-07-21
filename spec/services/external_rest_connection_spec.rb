@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe ExternalRestConnection do
   let(:base_url) { "http://example.com" }
-  let(:connection_opts) { { } }
+  let(:connection_opts) { {} }
   let(:request_path) { "/test" }
   let(:request_body) { { body: "body" } }
   let(:response_body) { { test: "test" }.to_json }
