@@ -78,7 +78,7 @@ class ExternalRestConnection
     faraday_instance.request :retry, request_retry_opts
     faraday_instance.request :url_encoded
     faraday_instance.response :json, content_type: /text\/plain/
-    faraday_instance.response :xml,  content_type: /\bxml$/
+    faraday_instance.response :xml, content_type: /\bxml$/
     if cache_response?
       faraday_instance.response :caching, file_cache, ignore_params: %w(access_token)
     end
@@ -86,7 +86,6 @@ class ExternalRestConnection
   end
 
   def cache_response?
-    # !(Rails.env.test? || Rails.env.development?)
     false
   end
 
