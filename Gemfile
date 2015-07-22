@@ -41,8 +41,6 @@ group :application do
   # For consuming the API for items
   gem "faraday"
   gem "faraday_middleware"
-  gem "excon"
-  gem "typhoeus"
   gem "multi_xml"
 
   # For item search

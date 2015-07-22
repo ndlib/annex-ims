@@ -1,98 +1,82 @@
-require "typhoeus/adapters/faraday"
-
 # class for establishing a rest connection to an external source
 class ExternalRestConnection
   DEFAULT_CONNECTION_OPTIONS = {
     max_retries: Rails.configuration.settings.api_max_retries,
-    response_format: "json",
-  }
+    timeout: nil
+  }.freeze
 
-  attr_reader :base_url, :faraday_instance, :connection, :opts, :response
-  attr_accessor :request_body
+  attr_reader :base_url, :connection, :opts, :response
 
   def initialize(base_url: nil, connection_opts: {})
     @opts = DEFAULT_CONNECTION_OPTIONS.merge(connection_opts)
     @base_url = base_url
-    @connection = establish_connection
   end
 
   def max_retries
-    opts[:max_retries]
-  end
-
-  def response_format
-    opts[:response_format]
+    opts.fetch(:max_retries)
   end
 
   def timeout
-    opts[:timeout]
+    opts.fetch(:timeout)
   end
 
   # GET verb
   def get(path)
-    @response = connection.get do |req|
-      req.url path
-      if timeout
-        req.options.timeout = timeout
-      end
-    end
-    process_response
+    make_request(method: :get, path: path)
   end
 
   # PUT verb
-  def put(path, payload)
-    @response = connection.put do |req|
-      req.url path
-      req.body = payload
-      if timeout
-        req.options.timeout = timeout
-      end
-    end
-    process_response
+  def put(path, body)
+    make_request(method: :put, path: path, body: body)
   end
 
   # POST verb
-  def post(path, payload)
-    @response = connection.post do |req|
-      req.url path
-      req.body = payload
-      if timeout
-        req.options.timeout = timeout
-      end
-    end
-    process_response
+  def post(path, body)
+    make_request(method: :post, path: path, body: body)
   end
 
-  # custom error class
-  class Error < StandardError
+  def connection
+    @connection ||= establish_connection
   end
 
   private
 
+  def make_request(method:, path:, body: nil)
+    @response = connection.send(method) do |req|
+      req.url path
+      if body
+        req.body = body
+      end
+      if timeout
+        req.options.timeout = timeout
+      end
+    end
+    process_response
+  end
+
   def establish_connection
     Faraday.new(url: base_url) do |conn|
-      @faraday_instance = conn
-      setup_connection
+      setup_connection(conn)
     end
   end
 
-  def setup_connection
-      faraday_instance.request :retry, request_retry_opts
-      faraday_instance.request :url_encoded
-      faraday_instance.response :json, content_type: /text\/plain/
-      faraday_instance.response :xml,  content_type: /\bxml$/
-      if cache_response?
-        faraday_instance.response :caching, file_cache, ignore_params: %w(access_token)
-      end
-      faraday_instance.adapter :typhoeus
+  def setup_connection(new_connection)
+    new_connection.request :retry, request_retry_opts
+    new_connection.request :url_encoded
+    new_connection.response :json, content_type: /text\/plain/
+    new_connection.response :xml, content_type: /\bxml$/
+    if cache_response?
+      new_connection.response :caching, file_cache, ignore_params: %w(access_token)
+    end
+    new_connection.adapter :net_http
   end
 
   def cache_response?
-    !(Rails.env.test? || Rails.env.development?)
+    false
   end
 
   def file_cache
-    ActiveSupport::Cache::FileStore.new(
+    @file_cache ||= ActiveSupport::Cache::FileStore.new(
       File.join(rails_root, "/tmp", "cache"),
       namespace: "api_rest_data",
       expires_in: 240  # four minutes
@@ -120,17 +104,5 @@ class ExternalRestConnection
       result["results"] = {}
     end
     result
-  end
-
-  def expected_type?(type)
-    if response_format == "json"
-      type =~ /text\/plain/
-    else
-      type =~ /#{response_format}/
-    end
-  end
-
-  def response_content_type
-    response.headers["Content-Type"]
   end
 end

@@ -16,7 +16,7 @@ class ApiPostDeliverItem
     if response.success?
       response
     else
-      raise ApiDeliverItemError, "Error sending #{delivery_type} request to API. params: #{params.inspect}, response: #{response.inspect}"
+      raise ApiDeliverItemError, "Error sending #{delivery_type} request to API. params: #{params}, response: #{response.attributes}"
     end
   end
 

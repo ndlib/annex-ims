@@ -10,99 +10,103 @@ namespace :sneakers do
   class SneakersWorkerError < StandardError
   end
 
-  def sneakers_logger
-    @sneakers_logger ||= Logger.new(STDOUT)
-  end
-
-  def sneakers_info(message)
-    sneakers_logger.info("[Sneakers Rake] #{message}")
-  end
-
-  def pid_file
-    Rails.root.join('tmp/pids/sneakers.pid')
-  end
-
-  def pid_file_exists?
-    File.exists?(pid_file)
-  end
-
-  def sneakers_pid
-    if pid_file_exists?
-      pid_value = File.read(pid_file).strip
-      if pid_value.present?
-        pid_value.to_i
+  class SneakersRakeHelper
+    class << self
+      def sneakers_logger
+        @sneakers_logger ||= Logger.new(STDOUT)
       end
-    end
-  end
 
-  def process_running?(pid)
-    begin
-      if pid
-        # Send a null signal to get the process status
-        Process.kill(0, pid)
-        true
-      else
-        false
+      def info(message)
+        sneakers_logger.info("[Sneakers Rake] #{message}")
       end
-    rescue Errno::ESRCH
-      false
-    end
-  end
 
-  # Start and stop a worker to make sure it is functional
-  def test_worker(worker_class)
-    worker = worker_class.new
-    begin
-      Timeout::timeout(60) do
-        worker.run
+      def pid_file
+        Rails.root.join('tmp/pids/sneakers.pid')
       end
-      true
-    rescue Timeout::Error
-      raise SneakersWorkerError, "Timed out while testing #{worker_class}"
-      false
-    ensure
-      worker.stop
+
+      def pid_file_exists?
+        File.exists?(pid_file)
+      end
+
+      def current_pid
+        if pid_file_exists?
+          pid_value = File.read(pid_file).strip
+          if pid_value.present?
+            pid_value.to_i
+          end
+        end
+      end
+
+      def process_running?(pid)
+        begin
+          if pid
+            # Send a null signal to get the process status
+            Process.kill(0, pid)
+            true
+          else
+            false
+          end
+        rescue Errno::ESRCH
+          false
+        end
+      end
+
+      # Start and stop a worker to make sure it is functional
+      def test_worker(worker_class)
+        worker = worker_class.new
+        begin
+          Timeout::timeout(60) do
+            worker.run
+          end
+          true
+        rescue Timeout::Error
+          raise SneakersWorkerError, "Timed out while testing #{worker_class}"
+          false
+        ensure
+          worker.stop
+        end
+      end
     end
   end
 
   desc "Ensures that sneakers is running"
   task :ensure_running do
-    sneakers_info "Ensuring sneakers is running"
+    SneakersRakeHelper::info "Ensuring sneakers is running"
     running = false
-    if pid_file_exists?
-      pid = sneakers_pid
-      if process_running?(pid)
+    if SneakersRakeHelper::pid_file_exists?
+      pid = SneakersRakeHelper::current_pid
+      if SneakersRakeHelper::process_running?(pid)
         running = true
       else
         timestamp = Time.now.strftime("%Y%m%d%H%M%S")
-        broken_name = "#{pid_file}.#{timestamp}"
-        File.rename(pid_file, broken_name)
-        sneakers_info "PID file exists, but sneakers is not running. Moving broken PID file: #{broken_name}"
+        broken_name = "#{SneakersRakeHelper::pid_file}.#{timestamp}"
+        File.rename(SneakersRakeHelper::pid_file, broken_name)
+        SneakersRakeHelper::info "PID file exists, but sneakers is not running. Moving broken PID file: #{broken_name}"
       end
     end
     if !running
       Rake::Task["sneakers:start"].invoke
     else
-      sneakers_info "Sneakers already running"
+      SneakersRakeHelper::info "Sneakers already running"
     end
   end
 
   desc "Start sneakers workers as a background process"
   task :start do |t, args|
-    sneakers_info "Starting sneakers in background"
+    SneakersRakeHelper::info "Starting sneakers in background"
     Process.fork do
       Rake::Task["sneakers:run"].invoke
     end
-    sneakers_info "Started sneakers"
+    SneakersRakeHelper::info "Started sneakers"
   end
 
   desc "Start the sneakers workers"
   task :run  => :environment do
     begin
-      if pid_file_exists?
-        raise SneakersPidFileExists, "Sneakers pid file already exists: #{pid_file}"
+      if SneakersRakeHelper::pid_file_exists?
+        raise SneakersPidFileExists, "Sneakers pid file already exists: #{SneakersRakeHelper::pid_file}"
       end
-      File.open(pid_file, 'w'){|f| f.puts Process.pid}
+      File.open(SneakersRakeHelper::pid_file, 'w') { |f| f.puts Process.pid }
       begin
         workers = []
         worker_classes = [
@@ -110,7 +114,7 @@ namespace :sneakers do
           ItemMetadataWorker,
         ]
         worker_classes.each do |worker_class|
-          test_worker(worker_class)
+          SneakersRakeHelper::test_worker(worker_class)
           worker_class.number_of_workers.times do
             workers << worker_class
           end
@@ -120,12 +124,14 @@ namespace :sneakers do
 
         runner.run
       ensure
-        File.delete pid_file
+        File.delete SneakersRakeHelper::pid_file
       end
     rescue SystemExit
-      # Ignore SystemExit errors
+      # Don't notify on SystemExit errors
+      raise e
     rescue Interrupt
-      # Ignore Interrupt errors
+      # Don't notify on Interrupt errors
+      raise e
     rescue Exception => e
       NotifyError.call(exception: e)
       raise e
@@ -134,13 +140,13 @@ namespace :sneakers do
 
   desc "Stop the sneakers background process"
   task :stop do
-    if pid = sneakers_pid
+    if pid = SneakersRakeHelper::current_pid
       stopped = false
-      sneakers_info "Stopping sneakers..."
-      if process_running?(pid)
-        Process.kill("INT", pid)
+      SneakersRakeHelper::info "Stopping sneakers... (pid: #{pid})"
+      if SneakersRakeHelper::process_running?(pid)
+        Process.kill("TERM", pid)
         60.times do
-          if process_running?(pid)
+          if SneakersRakeHelper::process_running?(pid)
             sleep(1)
           else
             stopped = true
@@ -151,18 +157,18 @@ namespace :sneakers do
         stopped = true
       end
       if stopped
-        sneakers_info "Stopped sneakers"
+        SneakersRakeHelper::info "Stopped sneakers"
       else
-        sneakers_info "INT sent to pid #{pid}, sneakers not stopped"
+        SneakersRakeHelper::info "TERM sent to pid #{pid}, sneakers not stopped"
       end
     else
-      sneakers_info "Sneakers not running"
+      SneakersRakeHelper::info "Sneakers not running"
     end
   end
 
   desc "Restart the sneakers background process"
   task :restart do
-    sneakers_info "Restarting sneakers"
+    SneakersRakeHelper::info "Restarting sneakers"
     Rake::Task["sneakers:stop"].invoke
     Rake::Task["sneakers:start"].invoke
   end
