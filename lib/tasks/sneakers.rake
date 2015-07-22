@@ -1,8 +1,6 @@
 require 'sneakers'
 require 'sneakers/runner'
 
-task :environment
-
 namespace :sneakers do
   class SneakersPidFileExists < StandardError
   end
@@ -70,7 +68,8 @@ namespace :sneakers do
   end
 
   desc "Ensures that sneakers is running"
-  task :ensure_running do
+  task ensure_running: :environment do
+    Airbrake.configuration.rescue_rake_exceptions = true
     SneakersRakeHelper::info "Ensuring sneakers is running"
     running = false
     if SneakersRakeHelper::pid_file_exists?
@@ -92,7 +91,8 @@ namespace :sneakers do
   end
 
   desc "Start sneakers workers as a background process"
-  task :start do |t, args|
+  task start: :environment do
+    Airbrake.configuration.rescue_rake_exceptions = true
     SneakersRakeHelper::info "Starting sneakers in background"
     Process.fork do
       Rake::Task["sneakers:run"].invoke
@@ -101,45 +101,36 @@ namespace :sneakers do
   end
 
   desc "Start the sneakers workers"
-  task :run  => :environment do
+  task run: :environment do
+    Airbrake.configuration.rescue_rake_exceptions = true
+    if SneakersRakeHelper::pid_file_exists?
+      raise SneakersPidFileExists, "Sneakers pid file already exists: #{SneakersRakeHelper::pid_file}"
+    end
+    File.open(SneakersRakeHelper::pid_file, 'w') { |f| f.puts Process.pid }
     begin
-      if SneakersRakeHelper::pid_file_exists?
-        raise SneakersPidFileExists, "Sneakers pid file already exists: #{SneakersRakeHelper::pid_file}"
-      end
-      File.open(SneakersRakeHelper::pid_file, 'w') { |f| f.puts Process.pid }
-      begin
-        workers = []
-        worker_classes = [
-          ApiWorker,
-          ItemMetadataWorker,
-        ]
-        worker_classes.each do |worker_class|
-          SneakersRakeHelper::test_worker(worker_class)
-          worker_class.number_of_workers.times do
-            workers << worker_class
-          end
+      workers = []
+      worker_classes = [
+        ApiWorker,
+        ItemMetadataWorker,
+      ]
+      worker_classes.each do |worker_class|
+        SneakersRakeHelper::test_worker(worker_class)
+        worker_class.number_of_workers.times do
+          workers << worker_class
         end
-
-        runner = Sneakers::Runner.new(workers)
-
-        runner.run
-      ensure
-        File.delete SneakersRakeHelper::pid_file
       end
-    rescue SystemExit
-      # Don't notify on SystemExit errors
-      raise e
-    rescue Interrupt
-      # Don't notify on Interrupt errors
-      raise e
-    rescue Exception => e
-      NotifyError.call(exception: e)
-      raise e
+
+      runner = Sneakers::Runner.new(workers)
+
+      runner.run
+    ensure
+      File.delete SneakersRakeHelper::pid_file
     end
   end
 
   desc "Stop the sneakers background process"
-  task :stop do
+  task stop: :environment do
+    Airbrake.configuration.rescue_rake_exceptions = true
     if pid = SneakersRakeHelper::current_pid
       stopped = false
       SneakersRakeHelper::info "Stopping sneakers... (pid: #{pid})"
@@ -167,7 +158,8 @@ namespace :sneakers do
   end
 
   desc "Restart the sneakers background process"
-  task :restart do
+  task restart: :environment do
+    Airbrake.configuration.rescue_rake_exceptions = true
     SneakersRakeHelper::info "Restarting sneakers"
     Rake::Task["sneakers:stop"].invoke
     Rake::Task["sneakers:start"].invoke

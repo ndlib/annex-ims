@@ -83,15 +83,29 @@ RSpec.describe ApiHandler do
       end
     end
 
-    it "handles a timeout exception" do
-      expect(subject).to receive(:raw_transact!).and_raise(Timeout::Error)
-      expect(subject.transact!.timeout?).to eq(true)
-    end
+    context "timeout" do
+      let(:error_arguments) do
+        {
+          exception: kind_of(Timeout::Error),
+          parameters: { action: action, params: params },
+          component: described_class.to_s,
+          action: "transact!"
+        }
+      end
 
-    it "handles a faraday timeout" do
-      stub_request(:get, api_url(action, params)).to_timeout
-      expect(ExternalRestConnection).to receive(:new).and_call_original
-      expect(subject.transact!.timeout?).to eq(true)
+      it "handles a timeout exception" do
+        expect(subject).to receive(:raw_transact!).and_raise(Timeout::Error)
+        expect(NotifyError).to receive(:call).with(error_arguments)
+        expect(subject.transact!.timeout?).to eq(true)
+      end
+
+      it "handles a faraday timeout" do
+        stub_request(:get, api_url(action, params)).to_timeout
+        expect(ExternalRestConnection).to receive(:new).and_call_original
+        error_arguments[:exception] = kind_of(Faraday::TimeoutError)
+        expect(NotifyError).to receive(:call).with(error_arguments)
+        expect(subject.transact!.timeout?).to eq(true)
+      end
     end
   end
 

@@ -33,5 +33,25 @@ RSpec.describe RetryWorker, type: :worker do
       expect(queue_options[:handler]).to eq(Sneakers::Handlers::Maxretry)
       expect(queue_options[:routing_key]).to eq(["testdefaults"])
     end
+
+    describe "#work" do
+      it "calls original_work" do
+        expect(subject).to receive(:original_work).with(test: "test").and_return("worked!")
+        expect(subject.work(test: "test")).to eq("worked!")
+      end
+
+      it "notifies on errors and rejects" do
+        error_arguments = {
+          exception: kind_of(RuntimeError),
+          parameters: { args: [{ test: "test" }] },
+          component: "DefaultsWorker",
+          action: "work"
+        }
+        expect(subject).to receive(:original_work).and_raise(RuntimeError)
+        expect(NotifyError).to receive(:call).with(error_arguments)
+        expect(subject).to receive(:reject!).and_return(:reject)
+        expect(subject.work(test: "test")).to eq(:reject)
+      end
+    end
   end
 end
