@@ -20,10 +20,12 @@ class RetryWorker < ActiveJob::QueueAdapters::SneakersAdapter::JobWrapper
     self::WORKERS
   end
 
+  alias_method :original_work, :work
+
   def work(*args)
-    super(*args)
+    original_work(*args)
   rescue StandardError => e
-    NotifyError.call(exception: e, args: args)
+    NotifyError.call(exception: e, parameters: { args: args }, component: self.class.to_s, action: "work")
     logger.error e.message
     logger.error args
     logger.error e.backtrace.join("\n")

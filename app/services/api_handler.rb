@@ -52,7 +52,7 @@ class ApiHandler
   private
 
   def handle_timeout_exception(exception)
-    NotifyError.call(exception: exception)
+    NotifyError.call(exception: exception, parameters: { action: action, params: params }, component: self.class.to_s, action: "transact!")
     ApiResponse.new(status_code: 599, body: {})
   end
 

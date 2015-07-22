@@ -8,7 +8,7 @@ class ItemsController < ApplicationController
     begin
       @item = GetItemFromBarcode.call(barcode: params[:item][:barcode], user_id: current_user.id)
     rescue StandardError => e
-      NotifyError.call(exception: e)
+      notify_airbrake(e)
       flash[:error] = e.message
       redirect_to items_path
       return
