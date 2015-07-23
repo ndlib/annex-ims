@@ -92,4 +92,4 @@ end
 
 after "deploy:finished", "sneakers:restart"
 
-after "deploy:finished", "airbrake:deploy"
+# after "deploy:finished", "airbrake:deploy"
