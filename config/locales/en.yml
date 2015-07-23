@@ -44,7 +44,7 @@ en:
   page_title:
     welcome_index: " "
     bins_bin_detail: "Bin Detail"
-    items_index: "Item Lookup"
+    items_index: "Directed Put Away"
     items_item_detail: "Item Detail"
     items_show: " "
     items_issues: "Items with Issues"
