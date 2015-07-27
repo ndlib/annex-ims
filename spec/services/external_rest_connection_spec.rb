@@ -8,7 +8,7 @@ RSpec.describe ExternalRestConnection do
   let(:response_body) { { test: "test" }.to_json }
   let(:response_status) { 200 }
   let(:expected_response_body) { JSON.parse(response_body) }
-  let(:expected_response) { { :status => response_status, :results => expected_response_body } }
+  let(:expected_response) { { status: response_status, results: expected_response_body } }
   let(:instance) { described_class.new(base_url: base_url, connection_opts: connection_opts) }
 
   subject { instance }
