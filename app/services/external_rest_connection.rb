@@ -79,8 +79,7 @@ class ExternalRestConnection
     @file_cache ||= ActiveSupport::Cache::FileStore.new(
       File.join(rails_root, "/tmp", "cache"),
       namespace: "api_rest_data",
-      expires_in: 240  # four minutes
-    )
+      expires_in: 240)
   end
 
   def rails_root
@@ -97,11 +96,13 @@ class ExternalRestConnection
   end
 
   def process_response
-    result = {"status" => response.status}
+    result = { status: response.status }
     if response.status == 200
-      result["results"] = JSON.parse(response.body)
+      result[:results] = JSON.parse(response.body)
+    elsif response.status == 422
+      result[:results] = JSON.parse(response.body)
     else
-      result["results"] = {}
+      result[:results] = {}
     end
     result
   end

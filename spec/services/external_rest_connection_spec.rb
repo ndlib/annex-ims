@@ -8,7 +8,7 @@ RSpec.describe ExternalRestConnection do
   let(:response_body) { { test: "test" }.to_json }
   let(:response_status) { 200 }
   let(:expected_response_body) { JSON.parse(response_body) }
-  let(:expected_response) { { "status" => response_status, "results" => expected_response_body } }
+  let(:expected_response) { { status: response_status, results: expected_response_body } }
   let(:instance) { described_class.new(base_url: base_url, connection_opts: connection_opts) }
 
   subject { instance }
@@ -81,6 +81,20 @@ RSpec.describe ExternalRestConnection do
       end
 
       it "makes a #{method} request and returns an empty body" do
+        expect(subject.send(method, *arguments)).to eq(expected_response)
+      end
+    end
+
+    context "422 error" do
+      let(:response_status) { 422 }
+
+      before do
+        stub_request(method, File.join(base_url, request_path)).
+          with(body: request_body).
+          to_return(status: response_status, body: response_body)
+      end
+
+      it "makes a #{method} request and returns body" do
         expect(subject.send(method, *arguments)).to eq(expected_response)
       end
     end
