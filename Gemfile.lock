@@ -464,5 +464,5 @@ DEPENDENCIES
   webmock
   whenever
 
-  BUNDLED WITH
-     1.10.5
+BUNDLED WITH
+   1.10.5
