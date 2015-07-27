@@ -84,6 +84,20 @@ RSpec.describe ExternalRestConnection do
         expect(subject.send(method, *arguments)).to eq(expected_response)
       end
     end
+
+    context "422 error" do
+      let(:response_status) { 422 }
+
+      before do
+        stub_request(method, File.join(base_url, request_path)).
+          with(body: request_body).
+          to_return(status: response_status, body: response_body)
+      end
+
+      it "makes a #{method} request and returns body" do
+        expect(subject.send(method, *arguments)).to eq(expected_response)
+      end
+    end
   end
 
   describe "#get" do
