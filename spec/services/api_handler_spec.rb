@@ -4,8 +4,8 @@ RSpec.describe ApiHandler do
   let(:response_status) { 200 }
   let(:raw_response) do
     {
-      "status" => response_status,
-      "results" => { "test" => "test" }
+      status: response_status,
+      results: { "test" => "test" }
     }
   end
 

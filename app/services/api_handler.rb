@@ -42,7 +42,7 @@ class ApiHandler
 
   def transact!
     raw_response = raw_transact!
-    ApiResponse.new(status_code: raw_response["status"], body: raw_response["results"])
+    ApiResponse.new(status_code: raw_response[:status], body: raw_response[:results])
   rescue Timeout::Error => e
     handle_timeout_exception(e)
   rescue Faraday::TimeoutError => e
