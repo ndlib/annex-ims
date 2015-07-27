@@ -29,5 +29,4 @@ class ApiPostStockItem
       tray_code: item.tray.barcode
     }
   end
-
 end
