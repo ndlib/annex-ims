@@ -3,7 +3,6 @@ class Issue < ActiveRecord::Base
 
   validates :barcode, presence: true
   validates :issue_type, presence: true, inclusion: ISSUE_TYPES
-  validates :user_id, presence: true
 
   belongs_to :user
   belongs_to :resolver, class_name: "User"
