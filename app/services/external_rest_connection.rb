@@ -97,7 +97,11 @@ class ExternalRestConnection
 
   def process_response
     result = { status: response.status }
-    response.status == (200 || 422) ? result[:results] = JSON.parse(response.body) : result[:results] = {}
+    if [200, 422].include?(response.status)
+      result[:results] = JSON.parse(response.body)
+    else
+      result[:results] = {}
+    end
     result
   end
 end
