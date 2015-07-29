@@ -28,6 +28,7 @@ en:
       error: "Error loading metadata, will retry automatically"
       not_for_annex: "Item not flagged for annex"
       not_found: "Barcode not found"
+      aleph_error: "Aleph processing error"
       pending: "Metadata sync pending"
     set: "%{ordinal_number} of %{total_number}"
   issues:

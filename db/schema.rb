@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150710142409) do
+ActiveRecord::Schema.define(version: 20150728200747) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,13 +49,14 @@ ActiveRecord::Schema.define(version: 20150710142409) do
   add_index "bins", ["barcode"], name: "index_bins_on_barcode", unique: true, using: :btree
 
   create_table "issues", force: :cascade do |t|
-    t.integer  "user_id",     null: false
+    t.integer  "user_id"
     t.string   "barcode",     null: false
     t.integer  "resolver_id"
     t.datetime "resolved_at"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.string   "issue_type",  null: false
+    t.string   "message"
   end
 
   add_index "issues", ["resolver_id"], name: "index_issues_on_resolver_id", using: :btree
@@ -161,7 +162,6 @@ ActiveRecord::Schema.define(version: 20150710142409) do
   add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
 
   add_foreign_key "batches", "users"
-  add_foreign_key "issues", "users"
   add_foreign_key "issues", "users", column: "resolver_id"
   add_foreign_key "items", "bins"
   add_foreign_key "items", "trays"
