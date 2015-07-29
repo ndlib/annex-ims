@@ -4,13 +4,15 @@ RSpec.describe AddIssue do
   let(:item) { FactoryGirl.create(:item) }
   let(:user) { FactoryGirl.create(:user) }
   let(:issue_type) { "not_found" }
-  subject { described_class.call(item: item, user: user, type: issue_type) }
+  let(:message) { "item was not found" }
+  subject { described_class.call(item: item, user: user, type: issue_type, message: message) }
 
-  it "creates an issue with the correct type, barcode and user" do
+  it "creates an issue with the correct type, barcode, message and user" do
     expect { subject }.to change { Issue.count }.from(0).to(1)
     expect(subject.user).to eq(user)
     expect(subject.issue_type).to eq(issue_type)
     expect(subject.barcode).to eq(item.barcode)
+    expect(subject.message).to eq(message)
   end
 
   it "logs the issue creation" do
@@ -19,7 +21,7 @@ RSpec.describe AddIssue do
   end
 
   it "does not create a second issue for the same type" do
-    issue = described_class.call(item: item, user: user, type: issue_type)
+    issue = described_class.call(item: item, user: user, type: issue_type, message: message)
     expect(subject).to eq(issue)
   end
 

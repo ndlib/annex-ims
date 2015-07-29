@@ -26,6 +26,16 @@ RSpec.describe ApiPostStockItem do
         stub_api_stock_item(item: item, status_code: 500, body: {}.to_json)
         expect { subject }.to raise_error(described_class::ApiStockItemError)
       end
+
+      it "raises an exception and adds an issue on unprocessable entities" do
+        stub_api_stock_item(
+          item: item,
+          status_code: 422,
+          body: { "status" => "error", "message" => "this is the error" }.to_json
+        )
+        expect(AddIssue).to receive(:call).with(hash_including(item: item, type: "aleph_error", message: "this is the error"))
+        expect { subject }.to raise_error(described_class::ApiStockItemError)
+      end
     end
   end
 end
