@@ -28,7 +28,7 @@ class ItemsController < ApplicationController
   end
 
   def item_detail
-    @item = Item.where(barcode: params[:barcode]).take
+    @item = Item.where(barcode: params[:barcode]).take.extend(ItemWithIssue)
     if @item
       @history = ActivityLogQuery.item_history(@item)
       @usage = ActivityLogQuery.item_usage(@item)
