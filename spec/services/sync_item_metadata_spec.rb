@@ -84,6 +84,13 @@ RSpec.describe SyncItemMetadata do
         end
       end
 
+      context "no user id" do
+        subject { described_class.new(item: item, user_id: nil, background: background) }
+        it "returns nil" do
+          expect(subject.send(:user)).to be_nil
+        end
+      end
+
       context "not_found item" do
         let(:item) { instance_double(Item, barcode: barcode, metadata_status: "not_found", update!: true, metadata_updated_at: 1.day.ago, attributes: {}) }
 

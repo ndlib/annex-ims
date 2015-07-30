@@ -56,7 +56,7 @@ class SyncItemMetadata
   end
 
   def user
-    @user ||= User.find(user_id)
+    @user ||= User.where(id: user_id).take
   end
 
   def process_in_background(error)
@@ -100,8 +100,6 @@ class SyncItemMetadata
   def get_data_error(response)
     if !(response.body.has_key?(:sublibrary)) || response.body[:sublibrary] != "ANNEX"
       { type: :not_for_annex, status: :not_for_annex, issue_type: "not_for_annex" }
-    else
-      nil
     end
   end
 
@@ -130,7 +128,7 @@ class SyncItemMetadata
 
   def save_metadata(data)
     update_attributes = map_item_attributes(data).
-      merge(metadata_status_attributes("complete"))
+                        merge(metadata_status_attributes("complete"))
     item.update!(update_attributes)
     ActivityLogger.update_item_metadata(item: item)
   end
