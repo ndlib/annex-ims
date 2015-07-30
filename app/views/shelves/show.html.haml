@@ -1,9 +1,11 @@
 %h4= @shelf.barcode
 .scan
-  = form_tag associate_shelf_item_path(@shelf) do |f|
+  = form_tag associate_shelf_item_path(@shelf) do
     - if @shelf.errors.any?
       #error_explanation
-        %h2= "#{pluralize(@shelf.errors.count, "error")} prohibited this shelf from being saved:"
+        %h2
+          #{pluralize(@shelf.errors.count, 'error')},
+          prohibited this shelf from being saved:
         %ul
           - @shelf.errors.full_messages.each do |msg|
             %li= msg
@@ -11,29 +13,32 @@
       = label_tag :barcode, "Item"
       = text_field_tag :barcode, @barcode, autofocus: "autofocus"
     .actions
-      = submit_tag 'Save', class: 'btn btn-primary'
+      = submit_tag "Save",
+                   class: "btn btn-primary"
 %br
-= button_to "Done", shelves_path, method: :get, class: 'btn pull-right btn-primary'
-%table.table.table-striped.condensed{"data-toggle" => "table"}
+= button_to "Done",
+            shelves_path,
+            method: :get,
+            class: "btn pull-right btn-primary"
+%table.table.table-striped.condensed{ "data-toggle" => "table" }
   %thead
     %tr
-      %th= "#{@shelf.items.count} Item(s)"
-      %th= 'Status'
-      %th= 'Barcode'
-      %th= 'Title'
-      %th= 'Chron'
+      %th #{@shelf.items.count} Item(s)
+      %th Status
+      %th Barcode
+      %th Title
+      %th Chron
   %tbody
     - @shelf.items.each do |item|
       %tr
         %td{ style: "white-space:nowrap;" }
-          = form_tag dissociate_shelf_item_path(@shelf) do |f|
+          = form_tag dissociate_shelf_item_path(@shelf) do
             = hidden_field_tag :item_id, item.id
             .actions{ style: "display: inline-block;" }
-              = submit_tag 'Remove', class: 'btn btn-primary'
-              - if(item.status == 'stocked')
-                = submit_tag 'Unstock', class: 'btn btn-secondary'
+              = submit_tag "Remove", class: "btn btn-primary"
+              -# - if(item.status == "stocked")
+                -# = submit_tag "Unstock", class: "btn btn-secondary"
         %td= item.status.titleize
         %td= item.barcode
         %td= item.title
         %td= item.chron
-
