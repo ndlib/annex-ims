@@ -3,13 +3,26 @@ module ActivityLogQuery
 
   def shelf_history(shelf)
     for_shelf(shelf).
-      where(action: ["AssociatedTrayAndShelf", "DissociatedTrayAndShelf", "ShelvedTray", "UnshelvedTray"]).
+      where(action: [
+        "AssociatedTrayAndShelf",
+        "DissociatedTrayAndShelf",
+        "ShelvedTray",
+        "UnshelvedTray"]).
       order(action_timestamp: :desc)
   end
 
   def item_history(item)
     for_item(item).
-      where(action: ["StockedItem", "UnstockedItem", "CreatedItem", "DestroyedItem"]).
+      where(action: [
+        "AcceptedItem",
+        "StockedItem",
+        "UnstockedItem",
+        "CreatedItem",
+        "CreatedIssue",
+        "DestroyedItem",
+        "DissociatedItemAndTray",
+        "DissociatedItemAndBin",
+        "ShippedItem"]).
       order(action_timestamp: :desc)
   end
 

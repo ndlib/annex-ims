@@ -159,7 +159,7 @@ class ActivityLogger
       data: data,
       username: username,
       user_id: user_id,
-      action_timestamp: Time.now,
+      action_timestamp: Time.zone.now,
     )
   end
 
