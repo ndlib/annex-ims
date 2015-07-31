@@ -2,6 +2,7 @@
 lock "3.4.0"
 
 require "airbrake/capistrano3"
+require "capistrano/maintenance"
 
 set :application, "annex-ims"
 set :repo_url, "git@github.com:ndlib/annex-ims.git"
