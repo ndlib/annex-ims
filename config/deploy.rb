@@ -90,6 +90,11 @@ namespace :sneakers do
   end
 end
 
+after "deploy:started", "maintenance:enable"
+
+after "deploy:published", "maintenance:disable"
+after "deploy:reverted", "maintenance:disable"
+
 after "deploy:finished", "sneakers:restart"
 
 after "deploy:finished", "airbrake:deploy"
