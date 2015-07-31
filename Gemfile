@@ -64,8 +64,9 @@ gem "whenever", require: false
 
 group :deployment do
   # Use Capistrano for deployment
-  gem "capistrano", "~>3.4"
-  gem "capistrano-rails", "~>1.1"
+  gem "capistrano", "~> 3.4"
+  gem "capistrano-rails", "~> 1.1"
+  gem "capistrano-maintenance", "~> 1.0"
 end
 
 group :development, :test, :staging do

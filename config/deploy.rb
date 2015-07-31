@@ -2,6 +2,7 @@
 lock "3.4.0"
 
 require "airbrake/capistrano3"
+require "capistrano/maintenance"
 
 set :application, "annex-ims"
 set :repo_url, "git@github.com:ndlib/annex-ims.git"
@@ -89,6 +90,11 @@ namespace :sneakers do
     end
   end
 end
+
+after "deploy:started", "maintenance:enable"
+
+after "deploy:published", "maintenance:disable"
+after "deploy:reverted", "maintenance:disable"
 
 after "deploy:finished", "sneakers:restart"
 
