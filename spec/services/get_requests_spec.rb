@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe GetRequests do
   subject { described_class.call }
-  let!(:item) { FactoryGirl.create(:item, barcode: "987654321")}
+  let!(:item) { FactoryGirl.create(:item, barcode: "987654321") }
 
   it "creates requests" do
     stub_api_active_requests
