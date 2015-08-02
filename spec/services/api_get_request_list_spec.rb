@@ -14,7 +14,7 @@ RSpec.describe ApiGetRequestList do
         expect(subject).to be_a_kind_of(ApiResponse)
         expect(subject.success?).to eq(true)
         expect(subject.body["requests"]).to be_a_kind_of(Array)
-        expect(subject.body["requests"].count).to eq(2)
+        expect(subject.body["requests"].count).to eq(4)
         expect(subject.body["requests"].first["transaction"]).to eq("illiad-85132100")
       end
 

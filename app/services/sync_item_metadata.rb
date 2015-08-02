@@ -44,7 +44,15 @@ class SyncItemMetadata
   end
 
   def sync_required_based_on_status?
-    item.metadata_status != "complete"
+    item.metadata_status != "complete" || recent_metadata_update?
+  end
+
+  def recent_metadata_update?
+    if !item.metadata_updated_at.blank?
+      item.metadata_updated_at < 24.hours.ago
+    else
+      false
+    end
   end
 
   def sync_allowed_based_on_time?

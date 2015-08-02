@@ -27,8 +27,8 @@ class GetRequests
     request = Request.find_or_initialize_by(trans: attributes["trans"])
     new_record = request.new_record?
     request.attributes = attributes
-    if attributes[:barcode]
-      update_item_metadata(attributes[:barcode])
+    unless attributes["barcode"].blank?
+      update_item_metadata(attributes["barcode"])
     end
     request.save!
     if new_record
@@ -88,7 +88,7 @@ class GetRequests
   end
 
   def update_item_metadata(barcode)
-    item = Item.where(barcode: barcode)
-    SyncItemMetadata.call(item: item, user_id: nil, background: true)
+    item = Item.where(barcode: barcode).take
+    SyncItemMetadata.call(item: item, user_id: nil, background: true) if item
   end
 end
