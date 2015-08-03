@@ -89,6 +89,6 @@ class GetRequests
 
   def update_item_metadata(barcode)
     item = Item.where(barcode: barcode).take
-    SyncItemMetadata.call(item: item, user_id: nil, background: true) if item
+    SyncItemMetadataJob.perform_later(item: item, user_id: nil) if item
   end
 end

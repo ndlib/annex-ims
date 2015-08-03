@@ -6,7 +6,7 @@ RSpec.describe GetRequests do
 
   it "creates requests" do
     stub_api_active_requests
-    expect(SyncItemMetadata).to receive(:call).exactly(:once)
+    expect(SyncItemMetadataJob).to receive(:perform_later).exactly(:once)
     expect { subject }.to change { Request.count }.by(4)
     expect(subject).to be_a_kind_of(Array)
     expect(subject.count).to eq(4)
