@@ -1,5 +1,4 @@
 class ItemsController < ApplicationController
-
   def index
     @item = Item.new
   end
@@ -28,10 +27,11 @@ class ItemsController < ApplicationController
   end
 
   def item_detail
-    @item = Item.where(barcode: params[:barcode]).take
-    if @item
-      @history = ActivityLogQuery.item_history(@item)
-      @usage = ActivityLogQuery.item_usage(@item)
+    item = Item.where(barcode: params[:barcode]).take
+    @item = ItemViewPresenter.new(item)
+    if item
+      @history = ActivityLogQuery.item_history(item)
+      @usage = ActivityLogQuery.item_usage(item)
     end
   end
 
