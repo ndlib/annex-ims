@@ -1,7 +1,7 @@
 class Request < ActiveRecord::Base
   validates_presence_of :criteria_type
   validates_presence_of :criteria
-  validates :rapid, :inclusion => {:in => [true, false]}
+  validates :rapid, inclusion: { in: [true, false] }
   validates_presence_of :source
   validates_presence_of :req_type
 
@@ -15,16 +15,16 @@ class Request < ActiveRecord::Base
   enum status: { received: 0, completed: 1 }
 
   def bin_type
-    if self.source == "aleph"
+    if source == "aleph"
       bt = "ALEPH-LOAN"
     else
-      if self.del_type != "loan"
+      if del_type != "loan"
         bt = "ILL-SCAN"
       else
         bt = "ILL-LOAN"
       end
     end
 
-    return bt
+    bt
   end
 end

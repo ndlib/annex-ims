@@ -23,7 +23,6 @@ class BuildBatch
     if batch_data.length > 0
       new_request_ids = []
       batch_data.each do |data|
-
         lexed_data = data.split("-")
 
         request = Request.find(lexed_data[0])
@@ -45,9 +44,6 @@ class BuildBatch
       end
     end
 
-    return batch
-
+    batch
   end
-
-
 end

@@ -36,10 +36,19 @@ RSpec.describe SyncItemMetadata do
       end
 
       context "previously synced item" do
-        let(:item) { instance_double(Item, metadata_status: "complete", metadata_updated_at: 1.day.ago) }
+        let(:item) { instance_double(Item, metadata_status: "complete", metadata_updated_at: 23.hours.ago) }
 
         it "does not perform a sync" do
           expect(ApiGetItemMetadata).to_not receive(:call)
+          expect(subject).to eq(true)
+        end
+      end
+
+      context "item synced more than 24 hours ago" do
+        let(:item) { instance_double(Item, metadata_status: "complete", metadata_updated_at: 28.hours.ago, update!: true, attributes: {}) }
+
+        it "does not perform a sync" do
+          expect(ApiGetItemMetadata).to receive(:call).and_return(response)
           expect(subject).to eq(true)
         end
       end
@@ -81,6 +90,13 @@ RSpec.describe SyncItemMetadata do
         it "performs a sync" do
           expect(ApiGetItemMetadata).to receive(:call).and_return(response)
           expect(subject).to eq(true)
+        end
+      end
+
+      context "no user id" do
+        subject { described_class.new(item: item, user_id: nil, background: background) }
+        it "returns nil" do
+          expect(subject.send(:user)).to be_nil
         end
       end
 

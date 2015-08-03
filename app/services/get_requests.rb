@@ -27,6 +27,9 @@ class GetRequests
     request = Request.find_or_initialize_by(trans: attributes["trans"])
     new_record = request.new_record?
     request.attributes = attributes
+    unless attributes["barcode"].blank?
+      update_item_metadata(attributes["barcode"])
+    end
     request.save!
     if new_record
       ActivityLogger.receive_request(request: request)
@@ -82,5 +85,10 @@ class GetRequests
       "isbn_issn" => request_data["isbn_issn"],
       "bib_number" => request_data["bib_number"]
     }
+  end
+
+  def update_item_metadata(barcode)
+    item = Item.where(barcode: barcode).take
+    SyncItemMetadataJob.perform_later(item: item, user_id: nil) if item
   end
 end

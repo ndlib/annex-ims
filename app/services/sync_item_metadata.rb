@@ -44,7 +44,15 @@ class SyncItemMetadata
   end
 
   def sync_required_based_on_status?
-    item.metadata_status != "complete"
+    item.metadata_status != "complete" || metadata_stale?
+  end
+
+  def metadata_stale?
+    if !item.metadata_updated_at.blank?
+      item.metadata_updated_at < 24.hours.ago
+    else
+      false
+    end
   end
 
   def sync_allowed_based_on_time?
@@ -56,7 +64,7 @@ class SyncItemMetadata
   end
 
   def user
-    @user ||= User.find(user_id)
+    @user ||= User.where(id: user_id).take
   end
 
   def process_in_background(error)
@@ -100,8 +108,6 @@ class SyncItemMetadata
   def get_data_error(response)
     if !(response.body.has_key?(:sublibrary)) || response.body[:sublibrary] != "ANNEX"
       { type: :not_for_annex, status: :not_for_annex, issue_type: "not_for_annex" }
-    else
-      nil
     end
   end
 
@@ -130,7 +136,7 @@ class SyncItemMetadata
 
   def save_metadata(data)
     update_attributes = map_item_attributes(data).
-      merge(metadata_status_attributes("complete"))
+                        merge(metadata_status_attributes("complete"))
     item.update!(update_attributes)
     ActivityLogger.update_item_metadata(item: item)
   end
