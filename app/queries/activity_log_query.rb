@@ -38,12 +38,12 @@ module ActivityLogQuery
 
   def for_item(item)
     relation.
-      where("data -> 'item' ->> 'barcode' = ?", item.barcode)
+      where("data -> 'item' -> 'barcode' ? '#{item.barcode}'")
   end
 
   def for_shelf(shelf)
     relation.
-      where("data -> 'shelf' ->> 'barcode' = ?", shelf.barcode)
+      where("data -> 'shelf' -> 'barcode' ? '#{shelf.barcode}'")
   end
 
   private_class_method :relation
