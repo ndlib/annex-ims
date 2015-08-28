@@ -92,6 +92,14 @@ section {
     .doNotPrint, .doNotPrint * { display: none !important; }
 }
 
+.compact {
+  p {
+    padding: 0px 0 0 0;
+    margin: 0px 0;
+    line-height: 14px;
+  }
+}
+
 .container > .navbar-header,
   main > .navbar-header,
   .container > .navbar-collapse,
@@ -427,4 +435,3 @@ td:before {
   }
 
 }
-
