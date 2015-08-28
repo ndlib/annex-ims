@@ -1,12 +1,4 @@
 %h2 Scan Item/Tray
-= form_tag item_restock_path(@item) do |f|
-  .scan
-    .field
-      = label_tag :barcode, "Item or Tray"
-      = text_field_tag :barcode, nil, autofocus: "autofocus"
-    .actions
-      = submit_tag 'Scan', class: 'btn btn-primary'
-
 %p
   Shelf Location:
   = (@item.tray.nil? ? 'STAGING' : (@item.tray.shelf.nil? ? 'STAGING' : @item.tray.shelf.barcode))
@@ -22,4 +14,10 @@
 %p
   Chron:
   = @item.chron
-%br
+
+= form_tag item_restock_path(@item) do |f|
+  .scan
+    .field
+      = label_tag :barcode, "Item or Tray"
+      = text_field_tag :barcode, nil, autofocus: "autofocus"
+      = submit_tag 'Scan', class: 'btn btn-primary'
