@@ -15,7 +15,10 @@
       - @issues.each do |issue|
         %tr
           %td= link_to issue.barcode, item_detail_path(issue.barcode)
-          %td= t "issues.issue_type.#{issue.issue_type}"
+          %td
+            =t "issues.issue_type.#{issue.issue_type}"
+            %br
+            %small= issue.message
           %td= issue.created_at.strftime("%m-%d-%Y %I:%M%p")
           %td= issue.user ? issue.user.username : "system"
           %td
