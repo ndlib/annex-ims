@@ -34,6 +34,10 @@ class BuildRequestData
       }
 
       if !items.blank?
+        if items.total_pages > 1
+          request_data["error"] = "Too many matches found. Not all items are being displayed."
+        end
+
         items.each do |item|
           temp = {
             "id" => "#{request.id}-#{item.id}",

@@ -29,7 +29,7 @@
         %th= 'Remove Request'
     %tbody
       - @data.each do |row|
-        %tr{"data-params" => row['item_data'].to_json}
+        %tr{"data-items" => row['item_data'].to_json, "data-error" => row['error'] }
           %td
             %div{class: "details-control btn btn-primary", "id" => 'request_' + row['id'].to_s}= 'Results'
           %td= row['rapid']
@@ -114,43 +114,66 @@
     $(".details-control").click(function() {
       var tr = $(this).closest('tr');
       var row = table.row( tr );
-      console.log("my row: %o", tr)
+
+      // if this is the first click, the child row needs to be created
+      if(!row.child()) {
+        createChild(tr.data.bind(tr), row);
+      }
+
       if ( row.child.isShown() ) {
         // This row is already open - close it
         row.child.hide();
         tr.removeClass('shown');
       }
       else {
-        // Open this row
-        row.child( format(tr.data("params")) ).show();
+        row.child.show();
         tr.addClass('shown');
       };
-    } );
+    });
   };
+
+  function createChild(data, parent) {
+    var child = "";
+    if(data("error")) {
+      child = "<div class='alert-danger'>" + data("error") + "</div>";
+    }
+    child += format(data("items"));
+    parent.child(child);
+  }
+
   function format(json) {
-    console.log("my object: %o", json)
     if (json.length < 1) {
       str = "No results.";
     }
     else {
       str = "<table class='table table-striped condensed datatable'>";
+      str += "<tr>";
       str += "<th>Add to Batch</th>";
       str += "<th>Shelf</th>";
       str += "<th>Tray</th>";
       str += "<th>Title</th>";
       str += "<th>Author</th>";
       str += "<th>Chron</th>";
+      str += "</tr>";
       $.each(json, function( index, item ) {
         str += "<tr>";
-        if (item['status'] == 'stocked') {
-          str += "<td><input class='item' type='checkbox' name='batch[]' id='"+item['id']+"' value='"+item['id']+"' /></td>";
+        str += "<td>";
+        switch(item['status'])
+        {
+          case 'stocked':
+            str += "<input class='item' type='checkbox' name='batch[]' id='"+item['id']+"' value='"+item['id']+"' />";
+            break;
+          case 'unstocked':
+            str += "<span style='color: red'>Unstocked</span>";
+            break;
+          case 'shipped':
+            str += "<span style='color: red'>Shipped</span>";
+            break;
+          default:
+            str += "<span style='color: red'>Unknown</span>"
+            break;
         }
-        if (item['status'] == 'unstocked') {
-          str += "<td><span style='color: red'>Unstocked</span></td>";
-        }
-        if (item['status'] == 'shipped') {
-          str += "<td><span style='color: red'>Shipped</span></td>";
-        }
+        str += "</td>";
         str += "<td>"+item['shelf']+"</td>";
         str += "<td>"+item['tray']+"</td>";
         str += "<td>"+item['title']+"</td>";
@@ -162,4 +185,3 @@
     }
     return str;
   };
-

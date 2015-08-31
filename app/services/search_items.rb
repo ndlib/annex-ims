@@ -35,7 +35,7 @@ class SearchItems
     if filter[:criteria].blank? && filter[:conditions].blank? && filter[:date_type].blank?
       results = empty
     else
-      count = 50 # We could customize this, but let's stick with 50 for now.
+      count = 5_000 # We could customize this, but let's stick with 5,000 for now.
       if filter[:page].blank?
         page = 1
       else
