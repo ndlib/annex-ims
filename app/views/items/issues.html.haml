@@ -7,16 +7,15 @@
       %tr
         %th= 'Barcode'
         %th= 'Type'
-        %th= 'Message'
         %th= 'Created'
         %th= 'User'
         %th= ''
+        %th= 'Created Timestamp'
     %tbody
       - @issues.each do |issue|
         %tr
           %td= link_to issue.barcode, item_detail_path(issue.barcode)
           %td= t "issues.issue_type.#{issue.issue_type}"
-          %td= issue.message
           %td= issue.created_at.strftime("%m-%d-%Y %I:%M%p")
           %td= issue.user ? issue.user.username : "system"
           %td
@@ -24,8 +23,34 @@
               = hidden_field_tag :issue_id, issue.id
               .actions
                 = submit_tag 'Resolve', class: 'btn btn-primary', id: "issue-#{issue.id}"
+          %td= issue.created_at.to_i
   :javascript
       $(document).ready(function() {
-        window.table = $('#issues').DataTable();
+        var columns = {
+          barcode: 0,
+          type: 1,
+          createdDisplay: 2,
+          user: 3,
+          action: 4,
+          createdTimestamp: 5,
+        }
+        window.table = $('#issues').DataTable({
+          columnDefs: [
+            {
+              targets: columns.barcode,
+              width: '100px',
+            },
+            {
+              targets: columns.createdDisplay,
+              orderData: [columns.createdTimestamp],
+            },
+            {
+              targets: columns.createdTimestamp,
+              searchable: false,
+              visible: false,
+            }
+          ],
+        });
+        $('#issues').width("100%");
         $('div.dataTables_filter input').focus();
       } );
