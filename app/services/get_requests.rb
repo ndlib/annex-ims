@@ -83,7 +83,11 @@ class GetRequests
       "description" => request_data["description"],
       "barcode" => request_data["barcode"],
       "isbn_issn" => request_data["isbn_issn"],
-      "bib_number" => request_data["bib_number"]
+      "bib_number" => request_data["bib_number"],
+      "patron_institution" => request_data["patron_institution"],
+      "patron_department" => request_data["patron_department"],
+      "patron_status" => request_data["patron_status"],
+      "pickup_location" => request_data["pickup_location"],
     }
   end
 

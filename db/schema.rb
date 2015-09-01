@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150814204601) do
+ActiveRecord::Schema.define(version: 20150901194225) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -101,15 +101,15 @@ ActiveRecord::Schema.define(version: 20150814204601) do
   add_index "matches", ["item_id", "request_id", "batch_id"], name: "index_matches_on_item_id_and_request_id_and_batch_id", unique: true, using: :btree
 
   create_table "requests", force: :cascade do |t|
-    t.string   "criteria_type",              null: false
-    t.string   "criteria",                   null: false
+    t.string   "criteria_type",                   null: false
+    t.string   "criteria",                        null: false
     t.integer  "item_id"
     t.date     "requested"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
-    t.boolean  "rapid",                      null: false
-    t.string   "source",                     null: false
-    t.string   "req_type",                   null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.boolean  "rapid",                           null: false
+    t.string   "source",                          null: false
+    t.string   "req_type",                        null: false
     t.integer  "batch_id"
     t.string   "trans"
     t.string   "title"
@@ -119,8 +119,12 @@ ActiveRecord::Schema.define(version: 20150814204601) do
     t.string   "barcode"
     t.string   "isbn_issn"
     t.string   "bib_number"
-    t.string   "del_type",      default: "", null: false
-    t.integer  "status",        default: 0
+    t.string   "del_type",           default: "", null: false
+    t.integer  "status",             default: 0
+    t.string   "patron_institution"
+    t.string   "patron_department"
+    t.string   "patron_status"
+    t.string   "pickup_location"
   end
 
   add_index "requests", ["batch_id"], name: "index_requests_on_batch_id", using: :btree
