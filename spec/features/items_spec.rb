@@ -43,7 +43,7 @@ feature "Items", type: :feature do
         fill_in "Item", with: @item.barcode
         click_button "Find"
         expect(current_path).to eq(show_item_path(id: @item.id))
-        fill_in "Item", with: @item.barcode
+        fill_in "barcode", with: @item.barcode
         click_button "Scan"
         expect(current_path).to eq(show_item_path(id: @item.id))
         expect(page).to have_content @item.title
@@ -55,7 +55,7 @@ feature "Items", type: :feature do
         fill_in "Item", with: @item.barcode
         click_button "Find"
         expect(current_path).to eq(show_item_path(id: @item.id))
-        fill_in "Tray", with: @tray.barcode
+        fill_in "barcode", with: @tray.barcode
         click_button "Scan"
         expect(current_path).to eq(items_path)
         expect(page).to have_content "Item #{@item.barcode} stocked in #{@tray.barcode}."
@@ -66,7 +66,7 @@ feature "Items", type: :feature do
         fill_in "Item", with: @item.barcode
         click_button "Find"
         expect(current_path).to eq(show_item_path(id: @item.id))
-        fill_in "Tray", with: @tray2.barcode
+        fill_in "barcode", with: @tray2.barcode
         click_button "Scan"
         expect(current_path).to eq(wrong_restock_path(id: @item.id))
         expect(page).to have_content "Item #{@item.barcode} is already assigned to #{@tray.barcode}."
