@@ -117,7 +117,7 @@
 
       // if this is the first click, the child row needs to be created
       if(!row.child()) {
-        createChild(tr.data.bind(tr), row);
+        createChild(tr, row);
       }
 
       if ( row.child.isShown() ) {
@@ -132,12 +132,12 @@
     });
   };
 
-  function createChild(data, parent) {
+  function createChild(tr, parent) {
     var child = "";
-    if(data("error")) {
-      child = "<div class='alert-danger'>" + data("error") + "</div>";
+    if(tr.data("error")) {
+      child = "<div class='alert-danger'>" + tr.data("error") + "</div>";
     }
-    child += format(data("items"));
+    child += format(tr.data("items"));
     parent.child(child);
   }
 
