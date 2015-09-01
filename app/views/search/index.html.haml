@@ -3,7 +3,7 @@
     %a.list-group-item.list-group-item-success Criteria
     #criteria.input-group
       = select_tag :criteria_type, options_for_select(SearchItems::CRITERIA_TYPES, @params[:criteria_type])
-      = text_field_tag :criteria, @params[:criteria]
+      = text_field_tag :criteria, @params[:criteria], autofocus: "autofocus"
       = label_tag :criteria, 'Use * for wildcard matches.'
 
     %a.list-group-item.list-group-item-success{"data-toggle" => "collapse", :href => "#date-range"}
