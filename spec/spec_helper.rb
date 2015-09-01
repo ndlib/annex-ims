@@ -92,7 +92,10 @@ RSpec.configure do |config|
     # Preload the fields for ActiveRecord objects to allow use of instance_double
     [
       Item,
-      User
+      User,
+      Request,
+      Tray,
+      Shelf
     ].each do |database_model|
       instance = database_model.new
       # The first attribute is id, which does not cause the methods to be built on the class
