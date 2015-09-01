@@ -72,7 +72,7 @@ class GetRequests
       "trans" => trans,
       "criteria_type" => criteria_type,
       "criteria" => criteria,
-      "requested" => Date.today.to_s, # Should be date requested, but that doesn"t seem available.
+      "requested" => request_data["request_date_time"],
       "rapid" => rapid,
       "source" => source,
       "del_type" => del_type,
