@@ -39,6 +39,8 @@
           createdTimestamp: 5,
         }
         window.table = $('#issues').DataTable({
+          stateSave: true,
+          stateDuration: 60 * 5,
           columnDefs: [
             {
               targets: columns.barcode,
