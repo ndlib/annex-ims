@@ -39,15 +39,15 @@ class GetRequests
 
   def request_attributes(request_data)
     attributes = build_request_attributes(request_data)
-    attributes.each do |key, value|
+    attributes.each do |_key, value|
       if value.is_a?(String)
-        value.encode!('UTF-8', invalid: :replace, undef: :replace)
+        value.encode!("UTF-8", invalid: :replace, undef: :replace)
       end
     end
     attributes
   end
 
-  def build_request_attributes(request_data)
+  def build_request_attributes(request_data) # rubocop:disable Metrics/AbcSize
     if !request_data["barcode"].blank?
       criteria_type = "barcode"
       criteria = request_data["barcode"]
