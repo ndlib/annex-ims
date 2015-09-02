@@ -18,4 +18,60 @@ RSpec.describe GetRequests do
     expect(ActivityLogger).to receive(:receive_request).with(request: kind_of(Request)).exactly(4).times
     subject
   end
+
+  describe "request data" do
+    let(:requests_data) { { requests: [data] } }
+    let(:data) do
+      {
+        transaction: "aleph-000367092",
+        request_date_time: "2015-08-28T15:00:00Z",
+        request_type: "Doc Del",
+        delivery_type: "Loan",
+        source: "Aleph",
+        title: "Chemistry in Britain.",
+        author: "author",
+        description: "v.25 (1989)",
+        pages: "pages",
+        journal_title: "journal_title",
+        article_title: "article_title",
+        article_author: "article_author",
+        barcode: "00000014443212",
+        isbn_issn: "isbn_issn",
+        bib_number: "000663270",
+        adm_number: "000663270",
+        ill_system_id: "ill_system_id",
+        item_sequence: "00070",
+        call_number: "TP 1 .C5174",
+        send_to: "Hesburgh Library",
+        rush: "No",
+        patron_status: "Grad",
+        patron_department: "Chemical Engineering",
+        patron_institution: "University of Notre Dame",
+        pickup_location: "Hesburgh Library"
+      }
+    end
+    let(:request) { subject.first }
+
+    before do
+      stub_api_active_requests(body: requests_data.to_json)
+    end
+
+    it "sets expected values" do
+      [
+        :title,
+        :article_title,
+        :author,
+        :description,
+        :barcode,
+        :isbn_issn,
+        :bib_number,
+        :patron_status,
+        :patron_department,
+        :patron_institution,
+        :pickup_location,
+      ].each do |field|
+        expect(request.send(field)).to eq(data.fetch(field))
+      end
+    end
+  end
 end
