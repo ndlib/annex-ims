@@ -73,5 +73,11 @@ RSpec.describe GetRequests do
         expect(request.send(field)).to eq(data.fetch(field))
       end
     end
+
+    it "calls NotifyError on an error and doesn't return a request" do
+      expect_any_instance_of(Request).to receive(:save!).and_raise("error!")
+      expect(NotifyError).to receive(:call).and_call_original
+      expect(request).to be_nil
+    end
   end
 end
