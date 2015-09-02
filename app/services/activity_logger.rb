@@ -82,6 +82,10 @@ class ActivityLogger
     call(action: "ReceivedRequest", request: request)
   end
 
+  def self.remove_match(item:, request:, user:)
+    call(action: "RemovedMatch", item: item, request: request, user: user)
+  end
+
   def self.remove_request(request:, user:)
     call(action: "RemovedRequest", request: request, user: user)
   end

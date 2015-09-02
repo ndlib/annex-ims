@@ -30,4 +30,12 @@ RSpec.describe BatchesController, type: :controller do
       get :scan_bin, commit: "Skip"
     end
   end
+
+  describe "remove match" do
+    it "logs a RemovedMatch activity" do
+      allow_any_instance_of(Batch).to receive(:current_match).and_return(match)
+      expect(ActivityLogger).to receive(:remove_match)
+      post :remove, commit: "Remove", match_id: match.id
+    end
+  end
 end

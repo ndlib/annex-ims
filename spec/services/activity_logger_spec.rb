@@ -188,6 +188,13 @@ RSpec.describe ActivityLogger do
     it_behaves_like "an activity log", "ReceivedRequest"
   end
 
+  context "RemovedMatch" do
+    let(:arguments) { { item: item, request: request, user: user } }
+    subject { described_class.remove_match(**arguments) }
+
+    it_behaves_like "an activity log", "RemovedMatch"
+  end
+
   context "RemovedRequest" do
     let(:arguments) { { request: request, user: user } }
     subject { described_class.remove_request(**arguments) }
