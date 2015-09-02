@@ -29,7 +29,7 @@
         %th= 'Remove Request'
     %tbody
       - @data.each do |row|
-        %tr{"data-items" => row['item_data'].to_json, "data-error" => row['error'] }
+        %tr{"id" => "request-" + row['id'].to_s, "data-items" => row['item_data'].to_json, "data-error" => row['error'] }
           %td
             %div{class: "details-control btn btn-primary", "id" => 'request_' + row['id'].to_s}= 'Results'
           %td= row['rapid']
@@ -137,16 +137,29 @@
     if(tr.data("error")) {
       child = "<div class='alert-danger'>" + tr.data("error") + "</div>";
     }
-    child += format(tr.data("items"));
+    child += format(tr);
     parent.child(child);
+
+    // Add datatable to the child table
+    parent.child().find('table').DataTable(
+      {
+        "paging": false,
+        "ordering": true,
+        "searching": false,
+        "info": false
+      }
+    );
   }
 
-  function format(json) {
+  function format(tr) {
+    json = tr.data('items');
     if (json.length < 1) {
       str = "No results.";
     }
     else {
-      str = "<table class='table table-striped condensed datatable'>";
+      str = "<table id='" + tr.attr('id') + "-items' class='table table-striped condensed datatable'>";
+
+      str += "<thead>";
       str += "<tr>";
       str += "<th>Add to Batch</th>";
       str += "<th>Shelf</th>";
@@ -155,6 +168,9 @@
       str += "<th>Author</th>";
       str += "<th>Chron</th>";
       str += "</tr>";
+      str += "</thead>";
+
+      str += "<tbody>";
       $.each(json, function( index, item ) {
         str += "<tr>";
         str += "<td>";
@@ -181,6 +197,8 @@
         str += "<td>"+item['chron']+"</td>";
         str += "</tr>";
       } );
+      str += "</tbody>";
+
       str += "</table>";
     }
     return str;
