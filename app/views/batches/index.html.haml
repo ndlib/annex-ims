@@ -132,7 +132,7 @@
           addHandler();
         }
     } );
-    
+
     $("#selectAll").click(function() {
       $(".item").prop("checked", $("#selectAll").prop("checked"));
     } );
@@ -167,17 +167,36 @@
       child = "<div class='alert-danger'>" + tr.data("error") + "</div>";
     }
     child += format(tr);
-    parent.child(child);
+    child = "<div class='batch-request-results'>" + child + "</div>";
+    // Add two child rows and hide the first to prevent zebra striping from
+    //  coloring the child row differently than the parent row
+    var rows = ["", child]
+    parent.child(rows);
+    var children = parent.child();
+    children.first().hide();
+    var resultsRow = children.last()
+    resultsRow.addClass('batch-request-results-row');
 
     // Add datatable to the child table
-    parent.child().find('table').DataTable(
-      {
-        "useRequestFilters": false,
-        "paging": false,
-        "ordering": true,
-        "info": false
-      }
-    );
+    var options = {
+      "dom": "<'row'<'col-sm-12'fl>>" +
+        "<'row'<'col-sm-12'tr>>" +
+        "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+      "useRequestFilters": false,
+      "searching": false,
+      "paging": false,
+      "ordering": true,
+      "info": false,
+      "order": [[ 5, "asc" ]], // Sort by chron by default
+    }
+
+    if (tr.data('items').length > 10) {
+      options.searching = true;
+      options.paging = true;
+      options.info = true;
+    }
+
+    resultsRow.find('table').DataTable(options);
   }
 
   function format(tr) {
