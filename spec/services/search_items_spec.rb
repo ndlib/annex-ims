@@ -1,18 +1,23 @@
 require 'rails_helper'
 
 RSpec.describe SearchItems do
+  include SolrSpecHelper
 
-# I'm not sure how to test this. All attributes of the items match except id, barcode, and timestamps. How it gets different barcodes is beyond me, because this works in feature testing.
-=begin
-  it "can find an item by barcode" do
-    @item = FactoryGirl.create(:item, chron: 'TEST CHRON')
-    @filter = { "criteria_type" => "barcode", "criteria" => @item.barcode }
-p @filter.inspect
-    @items = SearchItems.call(@filter)
-p @items.inspect
-p @item.inspect
-    expect(@item).to eq @items[0]
+  before :all do
+    solr_setup
+    Item.remove_all_from_index!
   end
-=end
+
+  after :all do
+    Item.remove_all_from_index!
+  end
+
+  it "can find an item by barcode" do
+    item = FactoryGirl.create(:item, chron: 'TEST CHRON')
+    Sunspot.index(item)
+    Sunspot.commit
+    search = SearchItems.call(criteria_type: "barcode", criteria: item.barcode)
+    expect(item).to eq search.results.first
+  end
 
 end
