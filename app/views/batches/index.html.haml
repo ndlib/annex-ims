@@ -166,7 +166,8 @@
     "tray": 2,
     "title": 3,
     "author": 4,
-    "chron": 5
+    "chron": 5,
+    "chronSort": 6,
   }
 
   function createChild(tr, parent) {
@@ -196,6 +197,17 @@
       "ordering": true,
       "info": false,
       "order": [[ resultsColumns.chron, "asc" ]], // Sort by chron by default
+      "columnDefs": [
+        {
+          targets: resultsColumns.chron,
+          orderData: [resultsColumns.chronSort],
+        },
+        {
+          targets: resultsColumns.chronSort,
+          searchable: false,
+          visible: false,
+        },
+      ],
     }
 
     if (tr.data('items').length > 10) {
@@ -203,8 +215,9 @@
       options.paging = true;
       options.info = true;
     }
-
-    resultsRow.find('table').DataTable(options);
+    var resultsTable = resultsRow.find('table');
+    resultsTable.DataTable(options);
+    resultsTable.width("100%");
   }
 
   function format(tr) {
@@ -223,6 +236,7 @@
         "title": "Title",
         "author": "Author",
         "chron": "Chron",
+        "chronSort": "Chron Sort",
       };
       var columns = mapColumns(headerData);
       str += "<tr><th>" + columns.join("</th>\n<th>") + "</th></tr>";
@@ -238,6 +252,12 @@
           "author": item.author,
           "chron": item.chron,
         };
+        if (item.chron) {
+          // Find the first number in the chron string and use that value to sort
+          rowData.chronSort = item.chron.replace(/^[^\d]*([\d]+)[^\d]*.*$/, "$1");
+        } else {
+          rowData.chronSort = "";
+        }
         switch(item['status'])
         {
           case 'stocked':
