@@ -64,7 +64,6 @@ class BatchesController < ApplicationController
       redirect_to finalize_batch_path
       return
     end
-
   end
 
   def item
@@ -112,7 +111,6 @@ class BatchesController < ApplicationController
     end
 
     @match = @batch.current_match
-
   end
 
   def scan_bin
