@@ -12,12 +12,27 @@ RSpec.describe SearchItems do
     Item.remove_all_from_index!
   end
 
-  it "can find an item by barcode" do
-    item = FactoryGirl.create(:item, chron: 'TEST CHRON')
-    Sunspot.index(item)
+  let(:unindexed_item) { FactoryGirl.create(:item, chron: "TEST CHRON") }
+  let(:item) do
+    Sunspot.index(unindexed_item)
     Sunspot.commit
-    search = SearchItems.call(criteria_type: "barcode", criteria: item.barcode)
-    expect(item).to eq search.results.first
+    unindexed_item
+  end
+  let(:filter) { {} }
+  subject { described_class.call(filter) }
+  let(:results) { subject.results }
+
+  context "barcode" do
+    let(:filter) { { criteria_type: "barcode", criteria: item.barcode } }
+    it "can find an item by barcode" do
+      expect(subject).to be_kind_of(Sunspot::Search::StandardSearch)
+      expect(results.first).to eq item
+    end
+  end
+
+  it "returns an empty result" do
+    expect(subject).to be_kind_of(described_class::EmptyResults)
+    expect(results).to eq []
   end
 
 end

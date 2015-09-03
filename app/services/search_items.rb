@@ -19,15 +19,18 @@ class SearchItems
     @filter = filter
   end
 
-  class EmptyResults
-    def results
-      []
-    end
-
-    def total
-      0
-    end
-  end
+  # def criteria
+  #   fetch(:criteria)
+  # end
+  #
+  # def page
+  #   requested_page = fetch(:page)
+  #   if requested_page.present?
+  #     requested_page
+  #   else
+  #     1
+  #   end
+  # end
 
   def search!
     empty = EmptyResults.new
@@ -113,6 +116,22 @@ class SearchItems
 
     end
 
+  end
+
+  private
+
+  def fetch(key)
+    filter.fetch(key, nil)
+  end
+
+  class EmptyResults
+    def results
+      []
+    end
+
+    def total
+      0
+    end
   end
 
 end
