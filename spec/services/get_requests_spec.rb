@@ -56,6 +56,11 @@ RSpec.describe GetRequests do
       stub_api_active_requests(body: requests_data.to_json)
     end
 
+    it "does not error on non-utf8 characters" do
+      stub_api_active_requests(body: api_fixture_data("active_requests_latin1.json"))
+      expect { subject }.to_not raise_error
+    end
+
     it "sets expected values" do
       [
         :title,
