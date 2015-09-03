@@ -50,8 +50,21 @@
   .actions
     = submit_tag 'Save', class: 'btn btn-primary'
 :javascript
+  // Test a specific instance of data table settings to determine if
+  // we should skip applying the top level request filters.
+  // Returns true if "useRequestFilters" is not set on the instance
+  function skipRequestFilters(settings){
+    var api = new $.fn.dataTable.Api( settings );
+    return !settings.oInit.useRequestFilters;
+  }
+
+  // Add filter by source to all DataTables
   $.fn.dataTable.ext.search.push(
     function( settings, data, dataIndex ) {
+      if(skipRequestFilters(settings)) {
+        return true;
+      }
+
       var select_source = $('#source').val().toLowerCase();
       var data_source = data[2].toLowerCase();
       if (select_source == data_source) {
@@ -60,8 +73,14 @@
       return false;
     }
   );
+
+  // Add filter by request type to all DataTables
   $.fn.dataTable.ext.search.push(
     function( settings, data, dataIndex ) {
+      if(skipRequestFilters(settings)) {
+        return true;
+      }
+
       var select_req = $('#req_type').val().toLowerCase();
       var data_req = data[3].toLowerCase();
       if (select_req == data_req) {
@@ -70,8 +89,14 @@
       return false;
     }
   );
+
+  // Add filter by rapid requests to all DataTables
   $.fn.dataTable.ext.search.push(
     function( settings, data, dataIndex ) {
+      if(skipRequestFilters(settings)) {
+        return true;
+      }
+
       var checkbox_rapid = $('#rapid').is(':checked');
       var data_rapid = data[1].toLowerCase();
       if (checkbox_rapid) {
@@ -85,8 +110,10 @@
       }
     }
   );
+
   $(document).ready(function() {
     window.table = $('#requests').DataTable( {
+        "useRequestFilters": true,
         "dom": 'T<"clear">lfrtip',
         "tableTools": {
           "aButtons": [ {
@@ -105,10 +132,12 @@
           addHandler();
         }
     } );
+    
     $("#selectAll").click(function() {
       $(".item").prop("checked", $("#selectAll").prop("checked"));
     } );
   } );
+
   function addHandler() {
     $(".details-control").unbind('click');
     $(".details-control").click(function() {
@@ -143,9 +172,9 @@
     // Add datatable to the child table
     parent.child().find('table').DataTable(
       {
+        "useRequestFilters": false,
         "paging": false,
         "ordering": true,
-        "searching": false,
         "info": false
       }
     );
