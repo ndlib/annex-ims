@@ -41,6 +41,33 @@ RSpec.describe SearchItems do
     end
   end
 
+  context "per_page" do
+    let(:item) { FactoryGirl.create(:item, chron: "1") }
+    let(:filter) { { criteria_type: "any", criteria: item.title } }
+
+    it "defaults to 50 per page" do
+      50.times do
+        i = FactoryGirl.create(:item, title: item.title, chron: "2")
+        Sunspot.index(i)
+      end
+      Sunspot.commit
+      expect(subject.total).to eq(51)
+      expect(results.count).to eq(50)
+      expect(results.first).to eq(item)
+    end
+
+    context "1 per page" do
+      it "limits to 1 per page" do
+        filter[:per_page] = 1
+        i = FactoryGirl.create(:item, title: item.title, chron: "2")
+        Sunspot.index(i)
+        Sunspot.commit
+        expect(subject.total).to eq(2)
+        expect(results).to eq([item])
+      end
+    end
+  end
+
   describe "criteria_type" do
     describe "any" do
       let(:filter) { { criteria_type: "any" } }
