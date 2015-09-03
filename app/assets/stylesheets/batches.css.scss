@@ -1,0 +1,21 @@
+.table > tbody > tr.batch-request-results-row > td {
+  border-top-style: dashed;
+}
+
+.batch-request-results {
+  border-left: 1px solid #ddd;
+  padding: 0 0 1em 2em;
+
+  .dataTables_filter {
+    float: left;
+    margin-right: 1em;
+
+    label {
+      float: none;
+    }
+  }
+
+  .dataTables_length {
+    float: left;
+  }
+}
