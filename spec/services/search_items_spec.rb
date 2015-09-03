@@ -237,4 +237,32 @@ RSpec.describe SearchItems do
       end
     end
   end
+
+  context "date_type" do
+    let(:filter_date) { 1.week.ago }
+
+    context "request" do
+      let(:request) { FactoryGirl.create(:request, requested: filter_date) }
+      let(:item) do
+        FactoryGirl.create(:item).tap do |i|
+          allow(i).to receive(:requests).and_return([request])
+        end
+      end
+      let(:filter) { { date_type: "request", start: filter_date.ago(1.week).to_s, finish: filter_date.since(1.week).to_s } }
+
+      it "matches the request date" do
+        expect(results.first).to eq(item)
+      end
+
+      it "does not match if the start date is after the request date" do
+        filter[:start] = filter_date.since(1.day).to_s
+        expect(results).to eq([])
+      end
+
+      it "does not match if the finish date is before the request date" do
+        filter[:finish] = filter_date.ago(1.day).to_s
+        expect(results).to eq([])
+      end
+    end
+  end
 end
