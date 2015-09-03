@@ -142,4 +142,99 @@ RSpec.describe SearchItems do
       end
     end
   end
+
+  context "conditions" do
+    let(:conditions) { ["COVER-MISS", "PAGES-BRITTLE", "SPINE-DET"] }
+    let(:other_conditions) { ["COVER-TORN", "NEEDS-ENCLS"] }
+    let(:item) { FactoryGirl.create(:item, conditions: conditions) }
+
+    context "all" do
+      let(:filter) { { condition_bool: "all" } }
+
+      it "matches all conditions" do
+        filter[:conditions] = {}.tap do |hash|
+          conditions.each { |c| hash[c] = true }
+        end
+        expect(results.first).to eq(item)
+      end
+
+      it "matches partial conditions" do
+        filter[:conditions] = {}.tap do |hash|
+          conditions[0,2].each { |c| hash[c] = true }
+        end
+        expect(results.first).to eq(item)
+      end
+
+      it "does not match an extra condition" do
+        filter[:conditions] = {}.tap do |hash|
+          (conditions + other_conditions).each { |c| hash[c] = true }
+        end
+        expect(results).to eq([])
+      end
+    end
+
+    context "any" do
+      let(:filter) { { condition_bool: "any" } }
+
+      it "matches all conditions" do
+        filter[:conditions] = {}.tap do |hash|
+          conditions.each { |c| hash[c] = true }
+        end
+        expect(results.first).to eq(item)
+      end
+
+      it "matches partial conditions" do
+        filter[:conditions] = {}.tap do |hash|
+          conditions[0,2].each { |c| hash[c] = true }
+        end
+        expect(results.first).to eq(item)
+      end
+
+      it "matches as long as one condition matches" do
+        filter[:conditions] = {}.tap do |hash|
+          (conditions[0,1] + other_conditions).each { |c| hash[c] = true }
+        end
+        expect(results.first).to eq(item)
+      end
+
+      it "does not match if no conditions match" do
+        filter[:conditions] = {}.tap do |hash|
+          other_conditions.each { |c| hash[c] = true }
+        end
+        expect(results).to eq([])
+      end
+    end
+
+    context "any" do
+      let(:filter) { { condition_bool: "none" } }
+
+      it "does not match all conditions" do
+        filter[:conditions] = {}.tap do |hash|
+          conditions.each { |c| hash[c] = true }
+        end
+        expect(results).to eq([])
+      end
+
+      it "does not match partial conditions" do
+        filter[:conditions] = {}.tap do |hash|
+          conditions[0,2].each { |c| hash[c] = true }
+        end
+        expect(results).to eq([])
+      end
+
+      it "does not match if one condition matches" do
+        filter[:conditions] = {}.tap do |hash|
+          (conditions[0,1] + other_conditions).each { |c| hash[c] = true }
+        end
+        expect(results).to eq([])
+      end
+
+      it "matches if no conditions match" do
+        filter[:conditions] = {}.tap do |hash|
+          other_conditions.each { |c| hash[c] = true }
+        end
+        expect(results.first).to eq(item)
+      end
+    end
+  end
 end
