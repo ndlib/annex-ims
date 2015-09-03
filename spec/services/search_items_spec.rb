@@ -314,14 +314,40 @@ RSpec.describe SearchItems do
           expect(results.first).to eq(item)
         end
 
-        it "does not match if the start date is after the request date" do
+        it "does not match if the start date is after the filter date" do
           filter[:start] = filter_date.since(1.day).to_s
           expect(results).to eq([])
         end
 
-        it "does not match if the finish date is before the request date" do
+        it "does not match if the finish date is before the filter date" do
           filter[:finish] = filter_date.ago(1.day).to_s
           expect(results).to eq([])
+        end
+
+        context "no start date" do
+          let(:filter) { { date_type: date_type.to_s, finish: filter_date.since(1.week).to_s } }
+
+          it "matches the date" do
+            expect(results.first).to eq(item)
+          end
+
+          it "does not match if the finish date is before the filter date" do
+            filter[:finish] = filter_date.ago(1.day).to_s
+            expect(results).to eq([])
+          end
+        end
+
+        context "no finish date" do
+          let(:filter) { { date_type: date_type.to_s, start: filter_date.ago(1.week).to_s } }
+
+          it "matches the date" do
+            expect(results.first).to eq(item)
+          end
+
+          it "does not match if the start date is after the filter date" do
+            filter[:start] = filter_date.since(1.day).to_s
+            expect(results).to eq([])
+          end
         end
       end
     end

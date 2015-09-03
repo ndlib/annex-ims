@@ -10,7 +10,6 @@ class SearchItems
     ["Shelf", "shelf"]]
 
   DEFAULT_PER_PAGE = 50 # We could customize this, but let's stick with 50 for now.
-  DEFAULT_START_DATE = "2015-01-01" # I needed a reasonable date before which there would be no requests or ingests. Can adjust if needed.
 
   attr_reader :filter
 
@@ -42,7 +41,7 @@ class SearchItems
   end
 
   def search!
-    if search_fulltext? || has_filter?(:conditions) || has_filter?(:date_type)
+    if search_fulltext? || search_conditions? || search_date?
       search_results
     else
       empty_results
@@ -80,17 +79,15 @@ class SearchItems
         end
       end
 
-      if has_filter?(:date_type)
-        range = date_start..date_finish
-        case filter[:date_type]
-        when "request"
-          any_of do
-            with(:requested, range)
+      if search_date?
+        any_of do
+          if date_start && date_finish
+            with(date_field, date_start..date_finish)
+          elsif date_start
+            with(date_field).greater_than_or_equal_to(date_start)
+          elsif date_finish
+            with(date_field).less_than_or_equal_to(date_finish)
           end
-        when "initial"
-          with(:initial_ingest, range)
-        when "last"
-          with(:last_ingest, range)
         end
       end
 
@@ -99,19 +96,22 @@ class SearchItems
   end
 
   def date_start
-    @date_start ||= Date.parse(filter_start)
+    @date_start ||= has_filter?(:start) ? Date.parse(fetch(:start)) : nil
   end
 
   def date_finish
-    @date_finish ||= Date.parse(filter_finish)
+    @date_finish ||= has_filter?(:finish) ? Date.parse(fetch(:finish)) : nil
   end
 
-  def filter_start
-    @filter_start ||= has_filter?(:start) ? fetch(:start) : DEFAULT_START_DATE
-  end
-
-  def filter_finish
-    @filter_finish ||= has_filter?(:finish) ? fetch(:finish) : Date::today.to_s
+  def date_field
+    case fetch(:date_type)
+    when "request"
+      :requested
+    when "initial"
+      :initial_ingest
+    when "last"
+      :last_ingest
+    end
   end
 
   def search_fulltext?
@@ -123,6 +123,10 @@ class SearchItems
 
   def search_conditions?
     has_filter?(:conditions) && has_filter?(:condition_bool)
+  end
+
+  def search_date?
+    has_filter?(:date_type) && (has_filter?(:start) || has_filter?(:finish)) && date_field.present?
   end
 
   def fulltext_fields
