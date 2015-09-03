@@ -160,6 +160,14 @@
       };
     });
   };
+  var resultsColumns = {
+    "status": 0,
+    "shelf": 1,
+    "tray": 2,
+    "title": 3,
+    "author": 4,
+    "chron": 5
+  }
 
   function createChild(tr, parent) {
     var child = "";
@@ -187,7 +195,7 @@
       "paging": false,
       "ordering": true,
       "info": false,
-      "order": [[ 5, "asc" ]], // Sort by chron by default
+      "order": [[ resultsColumns.chron, "asc" ]], // Sort by chron by default
     }
 
     if (tr.data('items').length > 10) {
@@ -208,42 +216,45 @@
       str = "<table id='" + tr.attr('id') + "-items' class='table table-striped condensed datatable'>";
 
       str += "<thead>";
-      str += "<tr>";
-      str += "<th>Add to Batch</th>";
-      str += "<th>Shelf</th>";
-      str += "<th>Tray</th>";
-      str += "<th>Title</th>";
-      str += "<th>Author</th>";
-      str += "<th>Chron</th>";
+      var headerData = {
+        "status": "Add to Batch",
+        "shelf": "Shelf",
+        "tray": "Tray",
+        "title": "Title",
+        "author": "Author",
+        "chron": "Chron",
+      };
+      var columns = mapColumns(headerData);
+      str += "<tr><th>" + columns.join("</th>\n<th>") + "</th></tr>";
       str += "</tr>";
       str += "</thead>";
 
       str += "<tbody>";
       $.each(json, function( index, item ) {
-        str += "<tr>";
-        str += "<td>";
+        var rowData = {
+          "shelf": item.shelf,
+          "tray": item.tray,
+          "title": item.title,
+          "author": item.author,
+          "chron": item.chron,
+        };
         switch(item['status'])
         {
           case 'stocked':
-            str += "<input class='item' type='checkbox' name='batch[]' id='"+item['id']+"' value='"+item['id']+"' />";
+            rowData.status = "<input class='item' type='checkbox' name='batch[]' id='"+item['id']+"' value='"+item['id']+"' />";
             break;
           case 'unstocked':
-            str += "<span style='color: red'>Unstocked</span>";
+            rowData.status = "<span style='color: red'>Unstocked</span>";
             break;
           case 'shipped':
-            str += "<span style='color: red'>Shipped</span>";
+            rowData.status = "<span style='color: red'>Shipped</span>";
             break;
           default:
-            str += "<span style='color: red'>Unknown</span>"
+            rowData.status = "<span style='color: red'>Unknown</span>"
             break;
         }
-        str += "</td>";
-        str += "<td>"+item['shelf']+"</td>";
-        str += "<td>"+item['tray']+"</td>";
-        str += "<td>"+item['title']+"</td>";
-        str += "<td>"+item['author']+"</td>";
-        str += "<td>"+item['chron']+"</td>";
-        str += "</tr>";
+        var columns = mapColumns(rowData);
+        str += "<tr><td>" + columns.join("</td>\n<td>") + "</td></tr>";
       } );
       str += "</tbody>";
 
@@ -251,3 +262,11 @@
     }
     return str;
   };
+
+  function mapColumns(rowData) {
+    var columns = [];
+    for (var key in resultsColumns) {
+      columns[resultsColumns[key]] = "" + rowData[key];
+    }
+    return columns;
+  }
