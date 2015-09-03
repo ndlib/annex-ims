@@ -18,7 +18,10 @@ class GetRequests
     requests = []
     requests_data.each do |request_data|
       attributes = request_attributes(request_data)
-      requests << create_or_update_request(attributes)
+      request = create_or_update_request(attributes)
+      if request.present?
+        requests << request
+      end
     end
     requests
   end
@@ -26,6 +29,7 @@ class GetRequests
   def create_or_update_request(attributes)
     request = Request.find_or_initialize_by(trans: attributes["trans"])
     new_record = request.new_record?
+    begin
     request.attributes = attributes
     unless attributes["barcode"].blank?
       update_item_metadata(attributes["barcode"])
@@ -35,6 +39,10 @@ class GetRequests
       ActivityLogger.receive_request(request: request)
     end
     request
+    rescue StandardError => e
+      NotifyError.call(exception: e, parameters: { attributes: attributes, request: request }, component: self.class.to_s, action: "create_or_update_request")
+      nil
+    end
   end
 
   def request_attributes(request_data)
