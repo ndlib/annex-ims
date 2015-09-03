@@ -197,7 +197,7 @@ RSpec.describe SearchItems do
 
       it "matches partial conditions" do
         filter[:conditions] = {}.tap do |hash|
-          conditions[0,2].each { |c| hash[c] = true }
+          conditions[0, 2].each { |c| hash[c] = true }
         end
         expect(results.first).to eq(item)
       end
@@ -222,14 +222,14 @@ RSpec.describe SearchItems do
 
       it "matches partial conditions" do
         filter[:conditions] = {}.tap do |hash|
-          conditions[0,2].each { |c| hash[c] = true }
+          conditions[0, 2].each { |c| hash[c] = true }
         end
         expect(results.first).to eq(item)
       end
 
       it "matches as long as one condition matches" do
         filter[:conditions] = {}.tap do |hash|
-          (conditions[0,1] + other_conditions).each { |c| hash[c] = true }
+          (conditions[0, 1] + other_conditions).each { |c| hash[c] = true }
         end
         expect(results.first).to eq(item)
       end
@@ -254,14 +254,14 @@ RSpec.describe SearchItems do
 
       it "does not match partial conditions" do
         filter[:conditions] = {}.tap do |hash|
-          conditions[0,2].each { |c| hash[c] = true }
+          conditions[0, 2].each { |c| hash[c] = true }
         end
         expect(results).to eq([])
       end
 
       it "does not match if one condition matches" do
         filter[:conditions] = {}.tap do |hash|
-          (conditions[0,1] + other_conditions).each { |c| hash[c] = true }
+          (conditions[0, 1] + other_conditions).each { |c| hash[c] = true }
         end
         expect(results).to eq([])
       end

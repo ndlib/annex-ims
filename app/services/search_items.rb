@@ -51,7 +51,7 @@ class SearchItems
 
   private
 
-  def search_results
+  def search_results # rubocop:disable Metrics/AbcSize
     Item.search do
       paginate page: page, per_page: per_page
 
@@ -126,7 +126,11 @@ class SearchItems
   end
 
   def fulltext_fields
-    @fulltext_fields ||= case fetch(:criteria_type)
+    @fulltext_fields ||= get_fulltext_fields
+  end
+
+  def get_fulltext_fields
+    case fetch(:criteria_type)
     when "any"
       [:barcode, :bib_number, :call_number, :isbn_issn, :title, :author, :tray_barcode, :shelf_barcode]
     when "barcode"
