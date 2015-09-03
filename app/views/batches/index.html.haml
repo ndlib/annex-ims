@@ -133,9 +133,16 @@
         }
     } );
 
-    $("#selectAll").click(function() {
-      $(".item").prop("checked", $("#selectAll").prop("checked"));
+    $("#selectAll").click(function(event) {
+      event.stopPropagation();
+      $(".item").prop("checked", $("#selectAll").prop("checked")).each(function() {
+        checkboxChanged(this);
+      });
     } );
+
+    $("form").on("change", ".item", function() {
+      checkboxChanged(this);
+    });
   } );
 
   function addHandler() {
@@ -160,6 +167,7 @@
       };
     });
   };
+
   var resultsColumns = {
     "status": 0,
     "shelf": 1,
@@ -261,7 +269,7 @@
         switch(item['status'])
         {
           case 'stocked':
-            rowData.status = "<input class='item' type='checkbox' name='batch[]' id='"+item['id']+"' value='"+item['id']+"' />";
+            rowData.status = "<input class='item' type='checkbox' id='"+item['id']+"' value='"+item['id']+"' />";
             break;
           case 'unstocked':
             rowData.status = "<span style='color: red'>Unstocked</span>";
@@ -289,4 +297,21 @@
       columns[resultsColumns[key]] = "" + rowData[key];
     }
     return columns;
+  }
+
+  function checkboxChanged(checkbox) {
+    var $checkbox = $(checkbox);
+    console.log(checkbox);
+    var $form = $checkbox.parents("form");
+    var hiddenID = "hidden-" + $checkbox.attr("id");
+    var $hiddenField = $form.find("#" + hiddenID);
+    if ($checkbox.prop("checked")) {
+      if ($hiddenField.length == 0) {
+        $hiddenField = $("<input type='hidden' name='batch[]'>");
+        $hiddenField.attr("id", hiddenID).attr("value", $checkbox.attr("value"));
+        $form.append($hiddenField);
+      }
+    } else {
+      $hiddenField.remove();
+    }
   }
