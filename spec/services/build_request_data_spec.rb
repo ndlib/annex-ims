@@ -39,6 +39,14 @@ RSpec.describe BuildRequestData do
       allow(results).to receive(:each).and_yield(item)
     end
 
+    it "calls SearchItems with expected values" do
+      request = requests.first
+      expect(SearchItems).to receive(:call).
+        with(criteria_type: request.criteria_type, criteria: request.criteria, per_page: 5_000).
+        and_return(search)
+      described_class.call(requests)
+    end
+
     it "returns request data" do
       result = described_class.call(requests)
       expect(result[0].symbolize_keys).to include(request_data)

@@ -14,7 +14,11 @@ class BuildRequestData
     data = []
 
     requests.each do |request|
-      filter = {:criteria_type => request.criteria_type, :criteria => request.criteria}
+      filter = {
+        criteria_type: request.criteria_type,
+        criteria: request.criteria,
+        per_page: 5_000,
+      }
       items = SearchItems.call(filter).results
 
       request_data = {
