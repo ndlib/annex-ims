@@ -29,7 +29,7 @@
         %th= 'Remove Request'
     %tbody
       - @data.each do |row|
-        %tr{"data-items" => row['item_data'].to_json, "data-error" => row['error'] }
+        %tr{"id" => "request-" + row['id'].to_s, "data-items" => row['item_data'].to_json, "data-error" => row['error'] }
           %td
             %div{class: "details-control btn btn-primary", "id" => 'request_' + row['id'].to_s}= 'Results'
           %td= row['rapid']
@@ -50,8 +50,21 @@
   .actions
     = submit_tag 'Save', class: 'btn btn-primary'
 :javascript
+  // Test a specific instance of data table settings to determine if
+  // we should skip applying the top level request filters.
+  // Returns true if "useRequestFilters" is not set on the instance
+  function skipRequestFilters(settings){
+    var api = new $.fn.dataTable.Api( settings );
+    return !settings.oInit.useRequestFilters;
+  }
+
+  // Add filter by source to all DataTables
   $.fn.dataTable.ext.search.push(
     function( settings, data, dataIndex ) {
+      if(skipRequestFilters(settings)) {
+        return true;
+      }
+
       var select_source = $('#source').val().toLowerCase();
       var data_source = data[2].toLowerCase();
       if (select_source == data_source) {
@@ -60,8 +73,14 @@
       return false;
     }
   );
+
+  // Add filter by request type to all DataTables
   $.fn.dataTable.ext.search.push(
     function( settings, data, dataIndex ) {
+      if(skipRequestFilters(settings)) {
+        return true;
+      }
+
       var select_req = $('#req_type').val().toLowerCase();
       var data_req = data[3].toLowerCase();
       if (select_req == data_req) {
@@ -70,8 +89,14 @@
       return false;
     }
   );
+
+  // Add filter by rapid requests to all DataTables
   $.fn.dataTable.ext.search.push(
     function( settings, data, dataIndex ) {
+      if(skipRequestFilters(settings)) {
+        return true;
+      }
+
       var checkbox_rapid = $('#rapid').is(':checked');
       var data_rapid = data[1].toLowerCase();
       if (checkbox_rapid) {
@@ -85,8 +110,10 @@
       }
     }
   );
+
   $(document).ready(function() {
     window.table = $('#requests').DataTable( {
+        "useRequestFilters": true,
         "dom": 'T<"clear">lfrtip',
         "tableTools": {
           "aButtons": [ {
@@ -105,10 +132,19 @@
           addHandler();
         }
     } );
-    $("#selectAll").click(function() {
-      $(".item").prop("checked", $("#selectAll").prop("checked"));
+
+    $("#selectAll").click(function(event) {
+      event.stopPropagation();
+      $(".item").prop("checked", $("#selectAll").prop("checked")).each(function() {
+        checkboxChanged(this);
+      });
     } );
+
+    $("form").on("change", ".item", function() {
+      checkboxChanged(this);
+    });
   } );
+
   function addHandler() {
     $(".details-control").unbind('click');
     $(".details-control").click(function() {
@@ -132,56 +168,150 @@
     });
   };
 
+  var resultsColumns = {
+    "status": 0,
+    "shelf": 1,
+    "tray": 2,
+    "title": 3,
+    "author": 4,
+    "chron": 5,
+    "chronSort": 6,
+  }
+
   function createChild(tr, parent) {
     var child = "";
     if(tr.data("error")) {
       child = "<div class='alert-danger'>" + tr.data("error") + "</div>";
     }
-    child += format(tr.data("items"));
-    parent.child(child);
+    child += format(tr);
+    child = "<div class='batch-request-results'>" + child + "</div>";
+    // Add two child rows and hide the first to prevent zebra striping from
+    //  coloring the child row differently than the parent row
+    var rows = ["", child]
+    parent.child(rows);
+    var children = parent.child();
+    children.first().hide();
+    var resultsRow = children.last()
+    resultsRow.addClass('batch-request-results-row');
+
+    // Add datatable to the child table
+    var options = {
+      "dom": "<'row'<'col-sm-12'fl>>" +
+        "<'row'<'col-sm-12'tr>>" +
+        "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+      "useRequestFilters": false,
+      "searching": false,
+      "paging": false,
+      "ordering": true,
+      "info": false,
+      "order": [[ resultsColumns.chron, "asc" ]], // Sort by chron by default
+      "columnDefs": [
+        {
+          targets: resultsColumns.chron,
+          orderData: [resultsColumns.chronSort],
+        },
+        {
+          targets: resultsColumns.chronSort,
+          searchable: false,
+          visible: false,
+        },
+      ],
+    }
+
+    if (tr.data('items').length > 10) {
+      options.searching = true;
+      options.paging = true;
+      options.info = true;
+    }
+    var resultsTable = resultsRow.find('table');
+    resultsTable.DataTable(options);
+    resultsTable.width("100%");
   }
 
-  function format(json) {
+  function format(tr) {
+    json = tr.data('items');
     if (json.length < 1) {
       str = "No results.";
     }
     else {
-      str = "<table class='table table-striped condensed datatable'>";
-      str += "<tr>";
-      str += "<th>Add to Batch</th>";
-      str += "<th>Shelf</th>";
-      str += "<th>Tray</th>";
-      str += "<th>Title</th>";
-      str += "<th>Author</th>";
-      str += "<th>Chron</th>";
+      str = "<table id='" + tr.attr('id') + "-items' class='table table-striped condensed datatable'>";
+
+      str += "<thead>";
+      var headerData = {
+        "status": "Add to Batch",
+        "shelf": "Shelf",
+        "tray": "Tray",
+        "title": "Title",
+        "author": "Author",
+        "chron": "Chron",
+        "chronSort": "Chron Sort",
+      };
+      var columns = mapColumns(headerData);
+      str += "<tr><th>" + columns.join("</th>\n<th>") + "</th></tr>";
       str += "</tr>";
+      str += "</thead>";
+
+      str += "<tbody>";
       $.each(json, function( index, item ) {
-        str += "<tr>";
-        str += "<td>";
+        var rowData = {
+          "shelf": item.shelf,
+          "tray": item.tray,
+          "title": item.title,
+          "author": item.author,
+          "chron": item.chron,
+        };
+        if (item.chron) {
+          // Find the first number in the chron string and use that value to sort
+          rowData.chronSort = item.chron.replace(/^[^\d]*([\d]+)[^\d]*.*$/, "$1");
+        } else {
+          rowData.chronSort = "";
+        }
         switch(item['status'])
         {
           case 'stocked':
-            str += "<input class='item' type='checkbox' name='batch[]' id='"+item['id']+"' value='"+item['id']+"' />";
+            rowData.status = "<input class='item' type='checkbox' id='"+item['id']+"' value='"+item['id']+"' />";
             break;
           case 'unstocked':
-            str += "<span style='color: red'>Unstocked</span>";
+            rowData.status = "<span style='color: red'>Unstocked</span>";
             break;
           case 'shipped':
-            str += "<span style='color: red'>Shipped</span>";
+            rowData.status = "<span style='color: red'>Shipped</span>";
             break;
           default:
-            str += "<span style='color: red'>Unknown</span>"
+            rowData.status = "<span style='color: red'>Unknown</span>"
             break;
         }
-        str += "</td>";
-        str += "<td>"+item['shelf']+"</td>";
-        str += "<td>"+item['tray']+"</td>";
-        str += "<td>"+item['title']+"</td>";
-        str += "<td>"+item['author']+"</td>";
-        str += "<td>"+item['chron']+"</td>";
-        str += "</tr>";
+        var columns = mapColumns(rowData);
+        str += "<tr><td>" + columns.join("</td>\n<td>") + "</td></tr>";
       } );
+      str += "</tbody>";
+
       str += "</table>";
     }
     return str;
   };
+
+  function mapColumns(rowData) {
+    var columns = [];
+    for (var key in resultsColumns) {
+      columns[resultsColumns[key]] = "" + rowData[key];
+    }
+    return columns;
+  }
+
+  function checkboxChanged(checkbox) {
+    var $checkbox = $(checkbox);
+    console.log(checkbox);
+    var $form = $checkbox.parents("form");
+    var hiddenID = "hidden-" + $checkbox.attr("id");
+    var $hiddenField = $form.find("#" + hiddenID);
+    if ($checkbox.prop("checked")) {
+      if ($hiddenField.length == 0) {
+        $hiddenField = $("<input type='hidden' name='batch[]'>");
+        $hiddenField.attr("id", hiddenID).attr("value", $checkbox.attr("value"));
+        $form.append($hiddenField);
+      }
+    } else {
+      $hiddenField.remove();
+    }
+  }
