@@ -44,9 +44,13 @@ Rails.application.configure do
 
   # Configures a user as an administrator
   config.admin_user_name = "mvanneve"
+
+  # Configures time before user is logged out due to inactivity
+  config.user_timeout = 24.hours
 end
 
 Devise.setup do |config|
   # CAS auth
   config.cas_base_url = 'https://cas.library.nd.edu/cas'
+  config.cas_login_url = 'https://cas.library.nd.edu/cas/login?renew=true'
 end

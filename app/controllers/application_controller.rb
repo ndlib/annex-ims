@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   before_action :check_authentication
+  before_action :check_activity
 
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
@@ -16,6 +17,14 @@ class ApplicationController < ActionController::Base
       redirect_to_unauthorized
       return
     end
+  end
+
+  def check_activity
+    if !current_user.present? || IsUserSessionExpired.call(user: current_user)
+      render "users/timed_out"
+      return
+    end
+    update_activity
   end
 
   def redirect_to_sign_in
@@ -36,5 +45,11 @@ class ApplicationController < ActionController::Base
       config_admin = Rails.configuration.admin_user_name
     end
     current_user.admin || (config_admin == current_user.username)
+  end
+
+  def update_activity
+    if current_user
+      current_user.touch(:last_activity_at)
+    end
   end
 end
