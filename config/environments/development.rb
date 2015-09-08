@@ -51,6 +51,6 @@ end
 
 Devise.setup do |config|
   # CAS auth
-  config.cas_base_url = 'https://cas.library.nd.edu/cas'
-  config.cas_login_url = 'https://cas.library.nd.edu/cas/login?renew=true'
+  config.cas_base_url = "https://cas.library.nd.edu/cas"
+  config.cas_login_url = "https://cas.library.nd.edu/cas/login?renew=true"
 end
