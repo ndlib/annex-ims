@@ -21,6 +21,7 @@ class ApplicationController < ActionController::Base
 
   def check_activity
     if !current_user.present? || IsUserSessionExpired.call(user: current_user)
+      sign_out
       render "users/timed_out"
       return
     end
