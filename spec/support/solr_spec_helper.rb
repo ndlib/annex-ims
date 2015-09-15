@@ -15,7 +15,7 @@ module SolrSpecHelper
       # shut down the Solr server
       at_exit { Process.kill("TERM", pid) }
       # wait for solr to start
-      20.times do
+      50.times do
         if solr_running?
           break
         end
