@@ -1,0 +1,7 @@
+- if @transfer.shelf.trays.count >= 1
+  %h4
+    Transfer from
+    = @transfer.shelf.barcode
+  %br
+  = render 'transfers/shelf_barcode'
+  = render 'transfers/tray_listing'

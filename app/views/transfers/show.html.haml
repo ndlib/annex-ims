@@ -1,0 +1,10 @@
+- if @transfer.shelf.trays.count >= 1
+  %h4
+    Transfer from
+    = @transfer.shelf.barcode
+  %br
+  = render 'transfers/tray_barcode'
+  = render 'transfers/tray_listing'
+- else
+  %h4{ :style => "color: red;" }
+    Shelf does not have any associated trays

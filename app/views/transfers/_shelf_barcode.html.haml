@@ -1,0 +1,7 @@
+.scan
+  = form_for @shelf, url: tray_transfer_path(@transfer.id, @tray.id), html: { method: 'put' } do |t|
+    .field
+      = t.label :barcode, "Shelf"
+      = t.text_field :barcode, autofocus: "autofocus"
+    .actions
+      = t.submit 'Submit', class: 'btn btn-primary'

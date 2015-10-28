@@ -63,7 +63,8 @@ en:
     batches_current: "Current Batch"
     batches_view_processed: "Processed Batches"
     batches_view_active: "Active Batches"
+    transfers_new: "Shelf Transfer"
+    transfers_show: "Shelf Transfer Status"
+    transfers_view_active: "Active Shelf Transfers"
     bins_index: "Process Batch"
     reports_index: "Reporting"
-
-

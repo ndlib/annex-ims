@@ -1,0 +1,15 @@
+.scan
+  = form_for @transfer do |t|
+    - if @transfer.errors.any?
+      #error_explanation
+        %h2= "#{pluralize(@transfer.errors.count, "error")} prohibited this transfer from being created:"
+        %ul
+          - @transfer.errors.full_messages.each do |msg|
+            %li= msg
+
+    .field
+      = t.fields_for :shelf do |s|
+        = s.label :barcode, "Shelf"
+        = s.text_field :barcode, autofocus: "autofocus"
+    .actions
+      = t.submit 'Submit', class: 'btn btn-primary'
