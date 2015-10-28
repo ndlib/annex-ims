@@ -17,7 +17,7 @@ class  AssociateTrayWithShelfBarcode
     shelf = GetShelfFromBarcode.call(barcode)
     tray_size = TraySize.call(tray.barcode)
 
-    if (shelf.size.nil?) or (shelf.size == tray_size)
+    if (shelf.size.nil?) || (shelf.size == tray_size)
       tray.shelf = shelf
       shelf.size = tray_size
 
