@@ -9,13 +9,17 @@
       %a.list-group-item.items{ :href => shelves_path } Item Direct to Shelf
       %a.list-group-item.tray{ :href => trays_path } Tray to Shelf
       %a.list-group-item.shelft{ :href => new_transfer_path } Shelf Transfer
-    %a.list-group-item.list-group-item-success{ "data-parent" => "#MainMenu", "data-toggle" => "collapse", :href => "#items" }
+    %a.list-group-item.list-group-item-success{ "data-parent" => "#MainMenu",
+      "data-toggle" => "collapse",
+      :href => "#items" }
       %span.glyphicon.glyphicon-plus
       Items
     #items.collapse
       %a.list-group-item.barcode{ :href => search_path } Item Search
       %a.list-group-item{ :href => issues_path } Items with Issues
-    %a.list-group-item.list-group-item-success{ "data-parent" => "#MainMenu", "data-toggle" => "collapse", :href => "#batches" }
+    %a.list-group-item.list-group-item-success{ "data-parent" => "#MainMenu",
+      "data-toggle" => "collapse",
+      :href => "#batches" }
       %span.glyphicon.glyphicon-plus
       Batches
     #batches.collapse
@@ -26,7 +30,9 @@
       %a.list-group-item{ :href => view_processed_batches_path } View Processed Batches
       %a.list-group-item{ :href => view_active_batches_path } View Active Batches
       %a.list-group-item{ :href => view_active_transfers_path } View Active Shelf Transfers
-    %a.list-group-item.list-group-item-success{ "data-parent" => "#MainMenu", "data-toggle" => "collapse", :href => "#reports" }
+    %a.list-group-item.list-group-item-success{ "data-parent" => "#MainMenu",
+      "data-toggle" => "collapse",
+      :href => "#reports" }
       %span.glyphicon.glyphicon-plus
       Reports
     #reports.collapse
