@@ -44,7 +44,7 @@ class TransfersController < ApplicationController
     end
 
     if dissociate_and_reassociate_tray(@tray, @shelf, @transfer.shelf)
-      flash[:notice] = "Tray with barcode #{tray_barcode} transfered."
+      flash[:notice] = "Tray with barcode #{tray_barcode} transfered to shelf #{@transfer.shelf.barcode}."
     else
       flash[:error] = "An error occured: " + @dissociate_error
     end
