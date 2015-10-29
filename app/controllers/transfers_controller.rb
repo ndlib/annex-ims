@@ -8,7 +8,8 @@ class TransfersController < ApplicationController
     @transfers = Transfer.all
   end
 
-  def scan_tray # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/AbcSize
+  def scan_tray
     @transfer = Transfer.find(params[:id])
     tray_barcode = params[:tray][:barcode]
     @tray = Tray.where(barcode: tray_barcode).take
@@ -26,8 +27,10 @@ class TransfersController < ApplicationController
       return
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
-  def transfer_tray # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/AbcSize
+  def transfer_tray
     @transfer = Transfer.find(params[:id])
     shelf_barcode = params[:shelf][:barcode]
     @shelf = Shelf.where(barcode: shelf_barcode).take
@@ -53,11 +56,13 @@ class TransfersController < ApplicationController
       redirect_to transfer_path(id: params[:id])
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
   def new
     @transfer = Transfer.new
   end
 
+  # rubocop:disable Metrics/AbcSize
   def create # rubocop:disable Metrics/AbcSize
     shelf_barcode = params[:transfer][:shelf][:barcode]
     shelf = Shelf.where(barcode: shelf_barcode).take
@@ -74,6 +79,7 @@ class TransfersController < ApplicationController
     transfer = BuildTransfer.call(shelf, current_user)
     redirect_to transfer_path(id: transfer.id)
   end
+  # rubocop:enable Metrics/AbcSize
 
   private
 

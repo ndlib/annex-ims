@@ -3,8 +3,8 @@
     - if @transfer.errors.any?
       #error_explanation
         %h2
-          #{pluralize(@transfer.errors.count, "error")}
-           prohibited this transfer from being created:
+          #{pluralize(@transfer.errors.count, "error")} 
+          prohibited this transfer from being created:
         %ul
           - @transfer.errors.full_messages.each do |msg|
             %li= msg

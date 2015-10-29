@@ -1,5 +1,7 @@
 .scan
-  = form_for @tray, url: scan_tray_transfer_path(id: @transfer.id), html: { method: 'put' } do |t|
+  = form_for @tray, 
+    url: scan_tray_transfer_path(id: @transfer.id),
+    html: { method: 'put' } do |t|
     .field
       = t.label :barcode, "Tray"
       = t.text_field :barcode, autofocus: "autofocus"
