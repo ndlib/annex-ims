@@ -166,23 +166,28 @@ a.list-group-item[aria-expanded="true"] {
     background-color: #fff;
     margin-left: 8px;
   }
+
   .barcode {
     background-image: image_url("barcode.png");
     padding-left: 45px;
 
   }
+
   .tray {
     background-image: image_url("traytoshelf.png");
     padding-left: 95px;
   }
+
   .shelft {
     background-image: image_url("shelftoshelf.png");
     padding-left: 95px;
   }
+
   .itemt {
     background-image: image_url("itemtotray.png");
     padding-left: 95px;
   }
+
   .items {
     background-image: image_url("itemtoshelf.png");
     padding-left: 95px;
