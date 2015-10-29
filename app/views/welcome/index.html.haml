@@ -1,6 +1,8 @@
 #MainMenu
   .list-group.panel
-    %a.list-group-item.list-group-item-success{ "data-parent" => "#MainMenu", "data-toggle" => "collapse", :href => "#stocking" }
+    %a.list-group-item.list-group-item-success{ "data-parent" => "#MainMenu",
+      "data-toggle" => "collapse",
+      :href => "#stocking" }
       %span.glyphicon.glyphicon-plus
       Stocking
     #stocking.collapse
@@ -27,9 +29,12 @@
       %a.list-group-item{ :href => retrieve_batch_path } Retrieve Batch
       %a.list-group-item{ :href => bins_path } Process Batch
       %a.list-group-item{ :href => current_batch_path } View Current Batch
-      %a.list-group-item{ :href => view_processed_batches_path } View Processed Batches
-      %a.list-group-item{ :href => view_active_batches_path } View Active Batches
-      %a.list-group-item{ :href => view_active_transfers_path } View Active Shelf Transfers
+      %a.list-group-item{ :href => view_processed_batches_path }
+        View Processed Batches
+      %a.list-group-item{ :href => view_active_batches_path }
+        View Active Batches
+      %a.list-group-item{ :href => view_active_transfers_path }
+        View Active Shelf Transfers
     %a.list-group-item.list-group-item-success{ "data-parent" => "#MainMenu",
       "data-toggle" => "collapse",
       :href => "#reports" }
