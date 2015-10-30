@@ -8,78 +8,38 @@ class TransfersController < ApplicationController
     @transfers = Transfer.all
   end
 
-  # rubocop:disable Metrics/AbcSize
   def scan_tray
     @transfer = Transfer.find(params[:id])
-    tray_barcode = params[:tray][:barcode]
-    @tray = Tray.where(barcode: tray_barcode).take
+    @tray = Tray.where(barcode: params[:tray][:barcode]).take
     @shelf = Shelf.new
 
-    if @tray.blank?
-      flash[:error] = "Tray with barcode #{tray_barcode} does not exist."
-      redirect_to transfer_path(id: params[:id])
-      return
-    end
-
-    if !@transfer.shelf.trays.include?(@tray)
-      flash[:error] = "Tray with barcode #{tray_barcode} is not accociated with this shelf. Rescan tray."
-      redirect_to transfer_path(id: params[:id])
-      return
-    end
+    check_for_blank_tray
+    check_for_tray_membership
   end
-  # rubocop:enable Metrics/AbcSize
 
-  # rubocop:disable Metrics/AbcSize
   def transfer_tray
     @transfer = Transfer.find(params[:id])
-    shelf_barcode = params[:shelf][:barcode]
-    @shelf = Shelf.where(barcode: shelf_barcode).take
+    @shelf = Shelf.where(barcode: params[:shelf][:barcode]).take
     @tray = Tray.find(params[:tray_id])
-    tray_barcode = @tray.barcode
 
-    if @shelf.blank?
-      flash[:error] = "Shelf with barcode #{shelf_barcode} does not exist. Rescan tray."
-      redirect_to transfer_path(id: params[:id])
-      return
-    end
-
-    if dissociate_and_reassociate_tray(@tray, @shelf, @transfer.shelf)
-      flash[:notice] = "Tray with barcode #{tray_barcode} transfered to shelf #{@transfer.shelf.barcode}."
-    else
-      flash[:error] = "An error occured: " + @dissociate_error
-    end
-
-    if @transfer.shelf.trays.count == 0
-      @transfer.destroy!
-      redirect_to new_transfer_path
-    else
-      redirect_to transfer_path(id: params[:id])
-    end
+    check_for_blank_shelf("existing")
+    dissociate_tray
+    check_for_final_tray
   end
-  # rubocop:enable Metrics/AbcSize
 
   def new
     @transfer = Transfer.new
   end
 
-  # rubocop:disable Metrics/AbcSize
-  def create # rubocop:disable Metrics/AbcSize
-    shelf_barcode = params[:transfer][:shelf][:barcode]
-    shelf = Shelf.where(barcode: shelf_barcode).take
-    if shelf.blank?
-      flash[:error] = "Shelf with barcode #{shelf_barcode} does not exist."
-      redirect_to new_transfer_path
-      return
-    end
-    if shelf.trays.count == 0
-      flash[:error] = "Shelf with barcode #{shelf_barcode} does not have any associated trays."
-      redirect_to new_transfer_path
-      return
-    end
+  def create
+    shelf = Shelf.where(barcode: params[:transfer][:shelf][:barcode]).take
+
+    check_for_blank_shelf("new")
+    check_for_trays
+
     transfer = BuildTransfer.call(shelf, current_user)
     redirect_to transfer_path(id: transfer.id)
   end
-  # rubocop:enable Metrics/AbcSize
 
   private
 
@@ -91,5 +51,73 @@ class TransfersController < ApplicationController
     UnshelveTray.call(tray, current_user)
     @dissociate_error = e.message
     false
+  end
+
+  def assign_class_variables(transfer = Transfer.new, tray = Tray.new, shelf = Shelf.new)
+    @transfer = transfer
+    @tray = tray
+    @shelf = shelf
+  end
+
+  def assign_error_message(type, object)
+    case type
+    when "tray_blank"
+      flash[:error] = "Tray with barcode #{object.barcode} does not exist."
+    when "tray_not_associated"
+      flash[:error] = "Tray with barcode #{object.barcode} is not accociated with this shelf. Rescan tray."
+    end
+  end
+
+  def check_for_blank_tray
+    if @tray.blank?
+      assign_error_message("tray_blamk", @tray)
+      redirect_to transfer_path(id: params[:id])
+      return
+    end
+  end
+
+  def check_for_tray_membership
+    if !@transfer.shelf.trays.include?(@tray)
+      assign_error_message("tray_not_associated", @tray)
+      redirect_to transfer_path(id: params[:id])
+      return
+    end
+  end
+
+  def check_for_blank_shelf(type)
+    if @shelf.blank?
+      flash[:error] = "Shelf with barcode #{params[:shelf][:barcode]} does not exist. Please rescan."
+      if type == "new"
+        redirect_to transfer_path(id: params[:id])
+      else
+        redirect_to new_transfer_path
+      end
+      return
+    end
+  end
+
+  def check_for_final_tray
+    if @transfer.shelf.trays.count == 0
+      @transfer.destroy!
+      redirect_to new_transfer_path
+    else
+      redirect_to transfer_path(id: params[:id])
+    end
+  end
+
+  def check_for_trays
+    if shelf.trays.count == 0
+      flash[:error] = "Shelf with barcode #{shelf_barcode} does not have any associated trays."
+      redirect_to new_transfer_path
+      return
+    end
+  end
+
+  def dissociate_tray
+    if dissociate_and_reassociate_tray(@tray, @shelf, @transfer.shelf)
+      flash[:notice] = "Tray with barcode #{@tray.barcode} transfered to shelf #{@transfer.shelf.barcode}."
+    else
+      flash[:error] = "An error occured: " + @dissociate_error
+    end
   end
 end
