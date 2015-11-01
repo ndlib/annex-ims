@@ -32,12 +32,12 @@ class TransfersController < ApplicationController
   end
 
   def create
-    shelf = Shelf.where(barcode: params[:transfer][:shelf][:barcode]).take
+    @shelf = Shelf.where(barcode: params[:transfer][:shelf][:barcode]).take
 
     check_for_blank_shelf("new")
     check_for_trays
 
-    transfer = BuildTransfer.call(shelf, current_user)
+    transfer = BuildTransfer.call(@shelf, current_user)
     redirect_to transfer_path(id: transfer.id)
   end
 
@@ -106,8 +106,8 @@ class TransfersController < ApplicationController
   end
 
   def check_for_trays
-    if shelf.trays.count == 0
-      flash[:error] = "Shelf with barcode #{shelf_barcode} does not have any associated trays."
+    if @shelf.trays.count == 0
+      flash[:error] = "Shelf with barcode #{@shelf.barcode} does not have any associated trays."
       redirect_to new_transfer_path
       return
     end
