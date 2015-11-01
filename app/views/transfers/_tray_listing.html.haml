@@ -1,0 +1,18 @@
+%table.table.table-striped.condensed.datatable{ "id" => "trays" }
+  %thead
+    %tr
+      %th= 'Tray Barcode'
+      %th= 'Current Status'
+  %tbody
+    - @transfer.shelf.trays.each do |tray|
+      %tr
+        %td= tray.barcode
+        %td= tray.shelved ? "Shelved" : "Unshelved"
+:javascript
+  $(document).ready(function() {
+    window.table = $('#trays').DataTable({
+      paging: false,
+      ordering: false,
+      searching: false
+    });
+  } );

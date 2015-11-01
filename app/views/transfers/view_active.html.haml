@@ -1,0 +1,22 @@
+%table.table.table-striped.condensed.datatable{ "id" => "transfers" }
+  %thead
+    %tr
+      %th= 'Transfer Job'
+      %th= 'Initiated By'
+  %tbody
+    - @transfers.each do |transfer|
+      %tr
+        %td
+          %a{ :href => transfer_path(transfer.id) }= transfer.shelf.barcode
+        %td= transfer.initiated_by.username
+:javascript
+  $(document).ready(function() {
+    window.table = $('#transfers').DataTable({
+      paging: false,
+      ordering: false,
+      searching: false,
+      language: {
+        emptyTable: 'There are no active transfers'
+      }
+    });
+  } );

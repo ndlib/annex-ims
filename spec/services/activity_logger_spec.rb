@@ -8,6 +8,7 @@ RSpec.describe ActivityLogger do
   let(:user) { FactoryGirl.create(:user) }
   let(:issue) { FactoryGirl.create(:issue) }
   let(:request) { FactoryGirl.create(:request) }
+  let(:transfer) { FactoryGirl.create(:transfer) }
   let(:api_response) { ApiResponse.new(status_code: 200, body: { status: "OK" }) }
 
   shared_examples "an activity log" do |message|
@@ -137,6 +138,13 @@ RSpec.describe ActivityLogger do
     subject { described_class.create_item(**arguments) }
 
     it_behaves_like "an activity log", "CreatedItem"
+  end
+
+  context "CreatedTransfer" do
+    let(:arguments) { { shelf: shelf, transfer: transfer, user: user } }
+    subject { described_class.create_transfer(**arguments) }
+
+    it_behaves_like "an activity log", "CreatedTransfer"
   end
 
   context "DestroyedItem" do
