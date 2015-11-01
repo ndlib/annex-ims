@@ -6,6 +6,7 @@ RSpec.describe TransfersController, type: :controller do
   let(:tray3) { FactoryGirl.create(:tray, barcode: "TRAY-AL789") }
   let(:shelf) { FactoryGirl.create(:shelf, trays: [tray, tray3], barcode: "SHELF-AL123") }
   let(:shelf2) { FactoryGirl.create(:shelf, trays: [tray2], barcode: "SHELF-AL456") }
+  let(:shelf3) { FactoryGirl.create(:shelf, trays: [], barcode: "SHELF-AL789") }
   let(:transfer) { FactoryGirl.create(:transfer, shelf: shelf, initiated_by: @user) }
   let(:transfer2) { FactoryGirl.create(:transfer, shelf: shelf2, initiated_by: @user) }
 
@@ -99,6 +100,76 @@ RSpec.describe TransfersController, type: :controller do
         shelf
         put :transfer_tray, id: transfer2.id, tray_id: tray2.id, shelf: { barcode: "SHELF-AL123" }
         expect(response).to redirect_to new_transfer_path
+      end
+    end
+  end
+
+  describe "#assign_error_message" do
+    context "when type is 'tray_blank'" do
+      it "returns tray does not exist message" do
+        return_message = "Tray with barcode #{tray.barcode} does not exist."
+        expect(controller.send(:assign_error_message, "tray_blank", tray)).to eq return_message
+      end
+    end
+
+    context "when type is 'tray_not_associated'" do
+      it "returns tray not associated message" do
+        return_message = "Tray with barcode #{tray.barcode} is not accociated with this shelf. Rescan tray."
+        expect(controller.send(:assign_error_message, "tray_not_associated", tray)).to eq return_message
+      end
+    end
+  end
+
+  describe "#check_for_blank_tray" do
+    it "assigns error message when tray blank" do
+      controller.instance_variable_set :@tray, Tray.where(barcode: "TRAY-999999").take
+      expect(controller).to receive(:assign_error_message).with("tray_blank", @tray)
+      expect(controller).to receive(:redirect_to).with(any_args).and_return(nil)
+      expect(controller).to receive(:transfer_path).with(any_args).and_return(nil)
+      controller.send(:check_for_blank_tray)
+    end
+  end
+
+  describe "#check_for_tray_membership" do
+    it "assigns error message when tray not assigned to shelf" do
+      controller.instance_variable_set :@tray, Tray.where(barcode: "TRAY-999999").take
+      controller.instance_variable_set :@transfer, transfer
+      expect(controller).to receive(:assign_error_message).with("tray_not_associated", @tray)
+      expect(controller).to receive(:redirect_to).with(any_args).and_return(nil)
+      expect(controller).to receive(:transfer_path).with(any_args).and_return(nil)
+      controller.send(:check_for_tray_membership)
+    end
+  end
+
+  describe "#check_for_blank_shelf" do
+    context "when type is new" do
+      it "redirects back to transfer path" do
+        controller.instance_variable_set :@shelf, Shelf.where(barcode: "SHELF-999999").take
+        controller.instance_variable_set :@transfer, transfer
+        controller.stub(:params).and_return(shelf: { barcode: "SHELF-999999" }, id: transfer.id)
+        expect(controller).to receive(:redirect_to).with(transfer_path(id: transfer.id))
+        controller.send(:check_for_blank_shelf, "new")
+      end
+    end
+
+    context "when type is not new" do
+      it "redirects to new transfer path" do
+        controller.instance_variable_set :@shelf, Shelf.where(barcode: "SHELF-999999").take
+        controller.instance_variable_set :@transfer, transfer
+        controller.stub(:params).and_return(shelf: { barcode: "SHELF-999999" }, id: transfer.id)
+        expect(controller).to receive(:redirect_to).with(new_transfer_path)
+        controller.send(:check_for_blank_shelf, "existing")
+      end
+    end
+  end
+
+  describe "#check_for_trays" do
+    context "when tray count is zero" do
+      it "redirects to new transfer path" do
+        shelf3
+        controller.instance_variable_set :@shelf, Shelf.where(barcode: "SHELF-AL789").take
+        expect(controller).to receive(:redirect_to).with(new_transfer_path)
+        controller.send(:check_for_trays)
       end
     end
   end

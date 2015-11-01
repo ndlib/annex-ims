@@ -53,12 +53,6 @@ class TransfersController < ApplicationController
     false
   end
 
-  def assign_class_variables(transfer = Transfer.new, tray = Tray.new, shelf = Shelf.new)
-    @transfer = transfer
-    @tray = tray
-    @shelf = shelf
-  end
-
   def assign_error_message(type, object)
     case type
     when "tray_blank"
@@ -70,7 +64,7 @@ class TransfersController < ApplicationController
 
   def check_for_blank_tray
     if @tray.blank?
-      assign_error_message("tray_blamk", @tray)
+      assign_error_message("tray_blank", @tray)
       redirect_to transfer_path(id: params[:id])
       return
     end
