@@ -75,7 +75,6 @@ RSpec.describe TransfersController, type: :controller do
   describe "PUT #transfer_tray" do
     it "calls .check_for_blank_shelf" do
       shelf2
-      expect(controller).to receive(:check_for_blank_shelf).with("existing")
       put :transfer_tray, id: transfer.id, tray_id: tray.id, shelf: { barcode: "SHELF-AL456" }
       expect(response).to be_redirect
     end
@@ -142,23 +141,23 @@ RSpec.describe TransfersController, type: :controller do
   end
 
   describe "#check_for_blank_shelf" do
-    context "when type is new" do
+    context "when type is not new" do
       it "redirects back to transfer path" do
         controller.instance_variable_set :@shelf, Shelf.where(barcode: "SHELF-999999").take
         controller.instance_variable_set :@transfer, transfer
         controller.stub(:params).and_return(shelf: { barcode: "SHELF-999999" }, id: transfer.id)
         expect(controller).to receive(:redirect_to).with(transfer_path(id: transfer.id))
-        controller.send(:check_for_blank_shelf, "new")
+        controller.send(:check_for_blank_shelf, "existing")
       end
     end
 
-    context "when type is not new" do
+    context "when type is new" do
       it "redirects to new transfer path" do
         controller.instance_variable_set :@shelf, Shelf.where(barcode: "SHELF-999999").take
         controller.instance_variable_set :@transfer, transfer
         controller.stub(:params).and_return(shelf: { barcode: "SHELF-999999" }, id: transfer.id)
         expect(controller).to receive(:redirect_to).with(new_transfer_path)
-        controller.send(:check_for_blank_shelf, "existing")
+        controller.send(:check_for_blank_shelf, "new")
       end
     end
   end

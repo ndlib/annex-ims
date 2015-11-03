@@ -13,8 +13,8 @@ class TransfersController < ApplicationController
     @tray = Tray.where(barcode: params[:tray][:barcode]).take
     @shelf = Shelf.new
 
-    check_for_blank_tray
-    check_for_tray_membership
+    return if !check_for_blank_tray
+    return if !check_for_tray_membership
   end
 
   def transfer_tray
@@ -24,7 +24,7 @@ class TransfersController < ApplicationController
 
     return if !check_for_blank_shelf("existing")
     dissociate_tray
-    check_for_final_tray
+    return if !check_for_final_tray
   end
 
   def new
