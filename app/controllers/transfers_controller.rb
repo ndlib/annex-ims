@@ -86,7 +86,7 @@ class TransfersController < ApplicationController
 
   def check_for_blank_shelf(type)
     if @shelf.blank?
-      flash[:error] = "Shelf with barcode #{params[:shelf][:barcode]} does not exist. Please rescan."
+      flash[:error] = "Shelf with barcode #{params[:transfer][:shelf][:barcode]} does not exist. Please rescan."
       if type == "new"
         redirect_to new_transfer_path
         return false
@@ -101,6 +101,7 @@ class TransfersController < ApplicationController
   def check_for_final_tray
     if @transfer.shelf.trays.count == 0
       @transfer.destroy!
+      ActivityLogger.destroy_transfer(transfer: @transfer, shelf: @transfer.shelf, user: current_user)
       redirect_to new_transfer_path
       return false
     else

@@ -62,6 +62,10 @@ class ActivityLogger
     call(action: "DestroyedItem", item: item, user: user)
   end
 
+  def self.destroy_transfer(shelf:, transfer:, user:)
+    call(action: "DestroyedTransfer", shelf: shelf, transfer: transfer, user: user)
+  end
+
   def self.dissociate_item_and_bin(item:, bin:, user:)
     call(action: "DissociatedItemAndBin", user: user, item: item, bin: bin)
   end

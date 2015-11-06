@@ -154,6 +154,13 @@ RSpec.describe ActivityLogger do
     it_behaves_like "an activity log", "DestroyedItem"
   end
 
+  context "DestroyedTransfer" do
+    let(:arguments) { { shelf: shelf, transfer: transfer, user: user } }
+    subject { described_class.destroy_transfer(**arguments) }
+
+    it_behaves_like "an activity log", "DestroyedTransfer"
+  end
+
   context "DissociatedItemAndBin" do
     let(:arguments) { { item: item, bin: bin, user: user } }
     subject { described_class.dissociate_item_and_bin(**arguments) }
