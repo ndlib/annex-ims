@@ -145,7 +145,7 @@ RSpec.describe TransfersController, type: :controller do
       it "redirects back to transfer path" do
         controller.instance_variable_set :@shelf, Shelf.where(barcode: "SHELF-999999").take
         controller.instance_variable_set :@transfer, transfer
-        controller.stub(:params).and_return(shelf: { barcode: "SHELF-999999" }, id: transfer.id)
+        controller.stub(:params).and_return(transfer: { shelf: { barcode: "SHELF-999999" } }, id: transfer.id)
         expect(controller).to receive(:redirect_to).with(transfer_path(id: transfer.id))
         controller.send(:check_for_blank_shelf, "existing")
       end
@@ -155,7 +155,7 @@ RSpec.describe TransfersController, type: :controller do
       it "redirects to new transfer path" do
         controller.instance_variable_set :@shelf, Shelf.where(barcode: "SHELF-999999").take
         controller.instance_variable_set :@transfer, transfer
-        controller.stub(:params).and_return(shelf: { barcode: "SHELF-999999" }, id: transfer.id)
+        controller.stub(:params).and_return(transfer: { shelf: { barcode: "SHELF-999999" } }, id: transfer.id)
         expect(controller).to receive(:redirect_to).with(new_transfer_path)
         controller.send(:check_for_blank_shelf, "new")
       end
