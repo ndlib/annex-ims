@@ -41,6 +41,16 @@ class TransfersController < ApplicationController
     redirect_to transfer_path(id: transfer.id)
   end
 
+  def destroy
+    returned_value = DestroyTransfer.call(Transfer.find(params[:id]), current_user)
+    if  returned_value == "success"
+      flash[:notice] = "Transfer canceled."
+    else
+      flash[:error] = "System Error: #{returned_value}. Transaction has been canceled. Please try again and/or open a support ticket."
+    end
+    redirect_to view_active_transfers_path
+  end
+
   private
 
   def get_existing_shelf
@@ -100,8 +110,7 @@ class TransfersController < ApplicationController
 
   def check_for_final_tray
     if @transfer.shelf.trays.count == 0
-      @transfer.destroy!
-      ActivityLogger.destroy_transfer(transfer: @transfer, shelf: @transfer.shelf, user: current_user)
+      DestroyTransfer.call(@transfer, current_user)
       redirect_to new_transfer_path
       return false
     else

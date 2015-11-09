@@ -3,12 +3,18 @@
     %tr
       %th= 'Transfer Job'
       %th= 'Initiated By'
+      %th= 'Date Initiated'
+      %th= ''
   %tbody
     - @transfers.each do |transfer|
       %tr
         %td
           %a{ :href => transfer_path(transfer.id) }= transfer.shelf.barcode
         %td= transfer.initiated_by.username
+        %td= transfer.created_at.strftime("%D %r")
+        %td
+          .actions
+            = link_to "Cancel", destroy_transfer_path(transfer.id), method: :delete, data: { confirm: 'Cancel transfer?' }, class: 'btn btn-danger'
 :javascript
   $(document).ready(function() {
     window.table = $('#transfers').DataTable({

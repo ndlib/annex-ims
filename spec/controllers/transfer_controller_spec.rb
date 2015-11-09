@@ -103,6 +103,35 @@ RSpec.describe TransfersController, type: :controller do
     end
   end
 
+  describe "DELETE #destroy_transfer" do
+    it "deletes one transfer record" do
+      transfer
+      transfer2
+      expect(Transfer.all.count).to eq 2
+      delete :destroy, id: transfer2.id
+      expect(Transfer.all.count).to eq 1
+    end
+
+    it "redirects to active transfer page" do
+      transfer
+      transfer2
+      delete :destroy, id: transfer2.id
+      expect(response).to redirect_to view_active_transfers_path
+    end
+
+    it "displays error when transfer not deleted" do
+      expect(DestroyTransfer).to receive(:call).and_return(false)
+      delete :destroy, id: transfer2.id
+      expect(flash[:error]).to be_present
+    end
+
+    it "displays notice when transfer deleted" do
+      expect(DestroyTransfer).to receive(:call).and_return("success")
+      delete :destroy, id: transfer2.id
+      expect(flash[:notice]).to be_present
+    end
+  end
+
   describe "#assign_error_message" do
     context "when type is 'tray_blank'" do
       it "returns tray does not exist message" do
