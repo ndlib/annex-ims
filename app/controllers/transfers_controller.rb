@@ -45,7 +45,7 @@ class TransfersController < ApplicationController
     if DestroyTransfer.call(Transfer.find(params[:id]), current_user)
       flash[:notice] = "Transfer canceled."
     else
-      flash[:error] = "Transer not canceled due to system error."
+      flash[:error] = "System Error: Transaction has been canceled. Please try again and/or open a support ticket."
     end
     redirect_to view_active_transfers_path
   end
