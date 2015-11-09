@@ -15,4 +15,12 @@ class DestroyRequest
     ActivityLogger.remove_request(request: request, user: user)
     status
   end
+
+  def self.shelve_trays(shelf, user)
+    shelf.trays.each do |tray|
+      ShelveTray.call(tray, user)
+    end
+  end
+
+  private_class_method :shelve_trays
 end

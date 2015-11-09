@@ -69,6 +69,7 @@ Rails.application.routes.draw do
   resources :transfers, only: [:new, :create, :show] do
     member do
       put :scan_tray, as: "scan_tray"
+      delete :destroy, as: "destroy"
       resources :trays, controller: "transfers", only: [:transfer_tray] do
         put :transfer_tray, as: "transfer"
       end
