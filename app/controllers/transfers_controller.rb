@@ -42,10 +42,11 @@ class TransfersController < ApplicationController
   end
 
   def destroy
-    if DestroyTransfer.call(Transfer.find(params[:id]), current_user)
+    returned_value = DestroyTransfer.call(Transfer.find(params[:id]), current_user)
+    if  returned_value == "success"
       flash[:notice] = "Transfer canceled."
     else
-      flash[:error] = "System Error: Transaction has been canceled. Please try again and/or open a support ticket."
+      flash[:error] = "System Error: #{returned_value}. Transaction has been canceled. Please try again and/or open a support ticket."
     end
     redirect_to view_active_transfers_path
   end

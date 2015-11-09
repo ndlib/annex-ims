@@ -10,10 +10,14 @@ class DestroyTransfer
   end
 
   def destroy
-    status = @transfer.destroy!
-    self.class.send :shelve_trays, @shelf, @user
-    ActivityLogger.destroy_transfer(shelf: @shelf, transfer: @transfer, user: @user)
-    status
+    ActiveRecord::Base.transaction do
+      @transfer.destroy!
+      self.class.send :shelve_trays, @shelf, @user
+      ActivityLogger.destroy_transfer(shelf: @shelf, transfer: @transfer, user: @user)
+      "success"
+    end
+  rescue StandardError => e
+    e.message
   end
 
   def self.shelve_trays(shelf, user)

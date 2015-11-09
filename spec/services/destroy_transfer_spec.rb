@@ -25,7 +25,14 @@ describe "DestroyTransfer" do
     it "returns true on success" do
       transfer
       transfer2
-      expect(subject).to be_truthy
+      expect(subject).to eq "success"
+    end
+
+    it "returns an error message when failed" do
+      transfer
+      transfer2
+      expect(transfer).to receive(:destroy!).and_raise("error")
+      expect(subject).to eq "error"
     end
 
     it "logs the activity" do

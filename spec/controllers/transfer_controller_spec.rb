@@ -126,7 +126,7 @@ RSpec.describe TransfersController, type: :controller do
     end
 
     it "displays notice when transfer deleted" do
-      expect(DestroyTransfer).to receive(:call).and_return(true)
+      expect(DestroyTransfer).to receive(:call).and_return("success")
       delete :destroy, id: transfer2.id
       expect(flash[:notice]).to be_present
     end
