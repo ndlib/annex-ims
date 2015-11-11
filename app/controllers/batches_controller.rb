@@ -2,7 +2,7 @@ class BatchesController < ApplicationController
 
   def index
     # Should this be in a service object? It's a relatively simple one-liner.
-    requests = Request.all.where("id NOT IN (SELECT request_id FROM matches WHERE processed IS NULL OR processed = 'skipped')")
+    requests = Request.all.where("id NOT IN (SELECT request_id FROM matches WHERE processed IS NULL OR processed != 'skipped')")
     @data = BuildRequestData.call(requests)
 
     respond_to do |format|
