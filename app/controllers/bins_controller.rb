@@ -1,5 +1,4 @@
 class BinsController < ApplicationController
-
   def index
     @bins = Bin.includes(:matches).where.not(matches: { id: nil })
   end
@@ -19,7 +18,6 @@ class BinsController < ApplicationController
       flash[:warning] = "Processed transaction #{@match.request.trans}. There are remaining requests for the item."
     end
 
-    redirect_to show_bin_path(:id => bin.id)
+    redirect_to show_bin_path(id: bin.id)
   end
-
 end

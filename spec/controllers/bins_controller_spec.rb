@@ -29,7 +29,7 @@ RSpec.describe BinsController, type: :controller do
     end
 
     it "redirects back to show" do
-      expect(subject).to redirect_to show_bin_path(:id => bin.id)
+      expect(subject).to redirect_to show_bin_path(id: bin.id)
     end
   end
 end
