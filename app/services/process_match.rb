@@ -39,10 +39,13 @@ class ProcessMatch
   end
 
   def dissociate_bin
-    ActivityLogger.dissociate_item_and_bin(item: item, bin: item.bin, user: user)
-
-    item.update!(bin: nil)
+    bin = match.bin
     match.update!(bin: nil)
+    # If there are no remaining matches for this item and bin, dissociate the item/bin
+    if bin.matches.where(item: item).empty?
+      ActivityLogger.dissociate_item_and_bin(item: item, bin: item.bin, user: user)
+      item.update!(bin: nil)
+    end
   end
 
   def scan_send
