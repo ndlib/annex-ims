@@ -11,6 +11,8 @@
         %th= 'Transaction'
         %th= 'Title'
         %th= 'Author'
+        %th= 'Article Title'
+        %th= 'Description'
         %th= ''
     %tbody
       - @bin.matches.each do |match|
@@ -20,6 +22,8 @@
           %td= match.request.trans
           %td= match.item.title
           %td= match.item.author
+          %td= match.request.article_title
+          %td= match.request.description
           %td
             = form_tag bin_remove_path do |f|
               = hidden_field_tag :match_id, match.id
