@@ -5,7 +5,7 @@ describe "DestroyItem" do
   let(:user) { FactoryGirl.create(:user) }
   subject { DestroyItem.call(item, user) }
 
-  describe "#destroy" do
+  describe "#destroy!" do
     it "deletes one request" do
       item
       expect { subject }.to change { Item.count }.from(1).to(0)
@@ -17,6 +17,12 @@ describe "DestroyItem" do
 
     it "logs the activity" do
       expect(ActivityLogger).to receive(:destroy_item).with(item: item, user: user).and_call_original
+      subject
+    end
+
+    it "does not log the activity if it fails" do
+      allow_any_instance_of(Item).to receive(:destroy!).and_return(false)
+      expect(ActivityLogger).not_to receive(:destroy_item)
       subject
     end
   end
