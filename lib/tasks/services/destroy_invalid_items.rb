@@ -18,9 +18,9 @@ module Lib
 
         def destroy
           items = Item.
-                    where(tray_id: nil).
-                    where("metadata_updated_at < ?", 1.hour.ago).
-                    where(metadata_status: ["not_found", "not_for_annex"])
+                  where(tray_id: nil).
+                  where("metadata_updated_at < ?", 1.hour.ago).
+                  where(metadata_status: ["not_found", "not_for_annex"])
           destroyed = []
           failures = []
           items.each do |item|
