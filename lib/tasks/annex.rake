@@ -8,7 +8,7 @@ namespace :annex do
     logger.info("[annex:get_active_requests] #{message}")
   end
 
-  desc "Destroys invalid items. These are typically created due to the optimistic way that items are created when scanning."
+  desc "Destroys items created by inaccurate barcode scans or items that were not meant for annex."
   task destroy_invalid_items: :environment do
     require 'csv'
     require Rails.root.join("lib", "tasks", "services", "destroy_invalid_items.rb").to_s
