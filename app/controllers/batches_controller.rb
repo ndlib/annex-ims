@@ -34,19 +34,12 @@ class BatchesController < ApplicationController
       redirect_to batches_path
       return
     end
-
   end
 
   def remove
-    if !params[:match_id].blank?
-      match = Match.find(params[:match_id])
-      if !match.blank?
-        ActivityLogger.remove_match(item: match.item, request: match.request, user: current_user)
-        match.destroy!
-      end
-    end
-
-    redirect_to current_batch_path
+    check_for_params(params[:match_id])
+    return_value = DestroyMatch.call(Match.find(params[:match_id]), current_user)
+    route_remove_request(return_value)
   end
 
   def retrieve
@@ -161,7 +154,6 @@ class BatchesController < ApplicationController
         end
       end
     end
-
   end
 
   def finalize
@@ -210,5 +202,24 @@ class BatchesController < ApplicationController
     CancelBatch.call(params[:batch_id])
 
     redirect_to view_active_batches_path
+  end
+
+  private
+
+  def check_for_params(param)
+    if param.blank?
+      redirect_to current_batch_path
+      return
+    end
+  end
+
+  def route_remove_request(return_value)
+    if return_value == "batch destroyed"
+      flash[:notice] = "Batch completed"
+      redirect_to batches_path
+    else
+      flash[:notice] = "Request removed"
+      redirect_to current_batch_path
+    end
   end
 end

@@ -38,4 +38,25 @@ RSpec.describe BatchesController, type: :controller do
       post :remove, commit: "Remove", match_id: match.id
     end
   end
+
+  describe "#check_for_params" do
+    it "calls a redirect when the param is blank" do
+      expect(controller).to receive(:redirect_to)
+      expect(controller.send(:check_for_params, nil))
+    end
+  end
+
+  describe "#route_remove_request" do
+    it "routes request to batches path when batch destroyed" do
+      expect(controller).to receive(:redirect_to)
+      expect(controller.send(:route_remove_request, "batch destroyed"))
+      expect(flash[:notice]).to eq "Batch completed"
+    end
+
+    it "routes request to create batch path when batch not completed" do
+      expect(controller).to receive(:redirect_to)
+      expect(controller.send(:route_remove_request, nil))
+      expect(flash[:notice]).to eq "Request removed"
+    end
+  end
 end
