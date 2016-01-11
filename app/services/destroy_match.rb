@@ -1,6 +1,4 @@
 class DestroyMatch
-  attr_reader :match, :user
-
   def self.call(match:, user:)
     new(match, user).destroy!
   end
@@ -11,8 +9,21 @@ class DestroyMatch
   end
 
   def destroy!
-    status = match.destroy!
-    ActivityLogger.remove_match(item: match.item, request: match.request, user: user)
+    status = @match.destroy!
+    ActivityLogger.remove_match(item: @match.item, request: @match.request, user: @user)
     status
+  end
+
+  def determine_batch_status
+    if !remaining_matches(@match.batch)
+      FinishBatch.call(@match.batch)
+      "batch destroyed"
+    else
+      "continue batch"
+    end
+  end
+
+  def remaining_matches(batch)
+    true if batch.matches.count >= 1
   end
 end
