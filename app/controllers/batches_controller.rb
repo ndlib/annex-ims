@@ -1,9 +1,14 @@
 class BatchesController < ApplicationController
-
   def index
     # Should this be in a service object? It's a relatively simple one-liner.
     requests = Request.all.where("id NOT IN (SELECT request_id FROM matches)")
     @data = BuildRequestData.call(requests)
+
+    if current_batch?
+      flash[:notice] = flash_message("active_batch")
+      redirect_to current_batch_path
+      return
+    end
 
     respond_to do |format|
       format.html # index.html.erb
@@ -11,10 +16,13 @@ class BatchesController < ApplicationController
   end
 
   def create
-    if params[:batch].blank?
-      flash[:error] = "No items selected."
-
+    if batch_blank?
+      flash[:error] = flash_message("empty_batch")
       redirect_to batches_path
+      return
+    elsif current_batch?
+      flash[:notice] = flash_message("active_batch")
+      redirect_to current_batch_path
       return
     else
       @batch = BuildBatch.call(params[:batch], current_user)
@@ -34,7 +42,6 @@ class BatchesController < ApplicationController
       redirect_to batches_path
       return
     end
-
   end
 
   def remove
@@ -210,5 +217,28 @@ class BatchesController < ApplicationController
     CancelBatch.call(params[:batch_id])
 
     redirect_to view_active_batches_path
+  end
+
+  private
+
+  def flash_message(type)
+    case type
+    when "active_batch"
+      "You already have an active batch in process"
+    when "empty_batch"
+      "No items selected."
+    end
+  end
+
+  def batch_blank?
+    if params[:batch].blank?
+      true
+    end
+  end
+
+  def current_batch?
+    if current_user.batches.where(active: true).count >= 1
+      true
+    end
   end
 end
