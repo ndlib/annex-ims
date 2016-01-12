@@ -41,8 +41,7 @@ class BatchesController < ApplicationController
     if !params[:match_id].blank?
       match = Match.find(params[:match_id])
       if !match.blank?
-        ActivityLogger.remove_match(item: match.item, request: match.request, user: current_user)
-        match.destroy!
+        DestroyMatch.call(match: match, user: current_user)
       end
     end
 

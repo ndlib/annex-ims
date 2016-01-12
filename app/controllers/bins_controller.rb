@@ -7,7 +7,21 @@ class BinsController < ApplicationController
     @bin = Bin.find(params[:id])
   end
 
-  def remove
+  def remove_match
+    @match = Match.find(params[:match_id])
+    item = @match.item
+    bin = @match.bin
+
+    DestroyMatch.call(match: @match, user: current_user)
+
+    unless bin.matches.where(item: item).empty?
+      flash[:warning] = "Removed transaction #{@match.request.trans}. There are remaining requests for the item."
+    end
+
+    redirect_to show_bin_path(id: bin.id)
+  end
+
+  def process_match
     @match = Match.find(params[:match_id])
     item = @match.item
     bin = @match.bin
