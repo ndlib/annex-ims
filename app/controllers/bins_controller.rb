@@ -8,13 +8,12 @@ class BinsController < ApplicationController
   end
 
   def remove_match
-    @match = Match.find(params[:match_id])
-    item = @match.item
-    bin = @match.bin
+    item = match.item
+    bin = match.bin
 
     DestroyMatch.call(match: @match, user: current_user)
 
-    unless bin.matches.where(item: item).empty?
+    unless can_remove_item?(bin: bin, item: item)
       flash[:warning] = "Removed transaction #{@match.request.trans}. There are remaining requests for the item."
     end
 
@@ -22,16 +21,25 @@ class BinsController < ApplicationController
   end
 
   def process_match
-    @match = Match.find(params[:match_id])
-    item = @match.item
-    bin = @match.bin
+    item = match.item
+    bin = match.bin
 
     ProcessMatch.call(match: @match, user: current_user)
 
-    unless bin.matches.where(item: item).empty?
+    unless can_remove_item?(bin: bin, item: item)
       flash[:warning] = "Processed transaction #{@match.request.trans}. There are remaining requests for the item."
     end
 
     redirect_to show_bin_path(id: bin.id)
+  end
+
+  private
+
+  def can_remove_item?(bin:, item:)
+    bin.matches.where(item: item).empty?
+  end
+
+  def match
+    @match ||= Match.find(params[:match_id])
   end
 end
