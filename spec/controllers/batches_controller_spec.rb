@@ -37,5 +37,10 @@ RSpec.describe BatchesController, type: :controller do
       expect(DestroyMatch).to receive(:call).with(match: match, user: user)
       post :remove, commit: "Remove", match_id: match.id
     end
+
+    it "trys to dissociate the item from the bin" do
+      expect(DissociateItemFromBin).to receive(:call).with(item: match.item, user: user)
+      post :remove, commit: "Remove", match_id: match.id
+    end
   end
 end

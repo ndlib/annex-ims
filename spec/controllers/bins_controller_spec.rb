@@ -21,6 +21,11 @@ RSpec.describe BinsController, type: :controller do
       subject
     end
 
+    it "trys to dissociate the item from the bin" do
+      expect(DissociateItemFromBin).to receive(:call).with(item: item, user: user)
+      subject
+    end
+
     it "flashes a message when there are remaining matches associated with the item" do
       request2 = FactoryGirl.create(:request, del_type: "loan")
       FactoryGirl.create(:match, item: item, bin: bin, request: request2)

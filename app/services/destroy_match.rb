@@ -11,30 +11,8 @@ class DestroyMatch
   end
 
   def destroy!
-    ActiveRecord::Base.transaction do
-      status = match.destroy!
-      ActivityLogger.remove_match(item: item, request: match.request, user: user)
-      dissociate_bin
-      return status
-    end
-    false
-  end
-
-  private
-
-  def item
-    match.item
-  end
-
-  def can_remove_item?
-    match.bin.matches.where(item: item).empty?
-  end
-
-  def dissociate_bin
-    # If there are no remaining matches for this item and bin, dissociate the item/bin
-    if match.bin && can_remove_item?
-      ActivityLogger.dissociate_item_and_bin(item: item, bin: item.bin, user: user)
-      item.update!(bin: nil)
-    end
+    status = match.destroy!
+    ActivityLogger.remove_match(item: match.item, request: match.request, user: user)
+    status
   end
 end

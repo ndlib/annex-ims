@@ -8,26 +8,21 @@ class BinsController < ApplicationController
   end
 
   def remove_match
-    item = match.item
-    bin = match.bin
-
-    DestroyMatch.call(match: @match, user: current_user)
-
-    unless can_remove_item?(bin: bin, item: item)
-      flash[:warning] = "Removed transaction #{@match.request.trans}. There are remaining requests for the item."
+    @match = Match.find(params[:match_id])
+    ActiveRecord::Base.transaction do
+      DestroyMatch.call(match: @match, user: current_user)
+      try_dissociate_item_and_bin(warning_verb: "Removed")
     end
 
-    redirect_to show_bin_path(id: bin.id)
+    redirect_to show_bin_path(id: @match.bin.id)
   end
 
   def process_match
-    item = match.item
-    bin = match.bin
-
-    ProcessMatch.call(match: @match, user: current_user)
-
-    unless can_remove_item?(bin: bin, item: item)
-      flash[:warning] = "Processed transaction #{@match.request.trans}. There are remaining requests for the item."
+    @match = Match.find(params[:match_id])
+    bin = @match.bin
+    ActiveRecord::Base.transaction do
+      ProcessMatch.call(match: @match, user: current_user)
+      try_dissociate_item_and_bin(warning_verb: "Processed")
     end
 
     redirect_to show_bin_path(id: bin.id)
@@ -35,11 +30,9 @@ class BinsController < ApplicationController
 
   private
 
-  def can_remove_item?(bin:, item:)
-    bin.matches.where(item: item).empty?
-  end
-
-  def match
-    @match ||= Match.find(params[:match_id])
+  def try_dissociate_item_and_bin(warning_verb:)
+    unless DissociateItemFromBin.call(item: @match.item, user: current_user)
+      flash[:warning] = "#{warning_verb} transaction #{@match.request.trans}. There are remaining requests for the item."
+    end
   end
 end
