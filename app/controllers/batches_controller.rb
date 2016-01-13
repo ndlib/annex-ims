@@ -227,9 +227,9 @@ class BatchesController < ApplicationController
   def flash_message(type)
     case type
     when "active_batch"
-      "You already have an active batch in process"
+      I18n.t("batches.status.active")
     when "empty_batch"
-      "No items selected."
+      I18n.t("batches.status.empty_items")
     end
   end
 

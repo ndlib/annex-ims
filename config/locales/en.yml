@@ -22,6 +22,10 @@
 en:
   errors:
     barcode_not_found: "Barcode %{barcode} not found. Put item with barcode %{barcode} on problem shelf."
+  batches:
+    status:
+      active: "You already have an active batch in process"
+      empty_items: "No items were selected"
   item:
     metadata_status:
       complete: "Metadata synchronized"
