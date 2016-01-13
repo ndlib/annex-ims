@@ -7,17 +7,32 @@ class BinsController < ApplicationController
     @bin = Bin.find(params[:id])
   end
 
-  def remove
+  def remove_match
     @match = Match.find(params[:match_id])
-    item = @match.item
+    ActiveRecord::Base.transaction do
+      DestroyMatch.call(match: @match, user: current_user)
+      try_dissociate_item_and_bin(warning_verb: "Removed")
+    end
+
+    redirect_to show_bin_path(id: @match.bin.id)
+  end
+
+  def process_match
+    @match = Match.find(params[:match_id])
     bin = @match.bin
-
-    ProcessMatch.call(match: @match, user: current_user)
-
-    unless bin.matches.where(item: item).empty?
-      flash[:warning] = "Processed transaction #{@match.request.trans}. There are remaining requests for the item."
+    ActiveRecord::Base.transaction do
+      ProcessMatch.call(match: @match, user: current_user)
+      try_dissociate_item_and_bin(warning_verb: "Processed")
     end
 
     redirect_to show_bin_path(id: bin.id)
+  end
+
+  private
+
+  def try_dissociate_item_and_bin(warning_verb:)
+    unless DissociateItemFromBin.call(item: @match.item, user: current_user)
+      flash[:warning] = "#{warning_verb} transaction #{@match.request.trans}. There are remaining requests for the item."
+    end
   end
 end

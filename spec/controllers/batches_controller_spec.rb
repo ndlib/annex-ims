@@ -32,9 +32,14 @@ RSpec.describe BatchesController, type: :controller do
   end
 
   describe "remove match" do
-    it "logs a RemovedMatch activity" do
+    it "uses DestroyMatch" do
       allow_any_instance_of(Batch).to receive(:current_match).and_return(match)
-      expect(ActivityLogger).to receive(:remove_match)
+      expect(DestroyMatch).to receive(:call).with(match: match, user: user)
+      post :remove, commit: "Remove", match_id: match.id
+    end
+
+    it "trys to dissociate the item from the bin" do
+      expect(DissociateItemFromBin).to receive(:call).with(item: match.item, user: user)
       post :remove, commit: "Remove", match_id: match.id
     end
   end

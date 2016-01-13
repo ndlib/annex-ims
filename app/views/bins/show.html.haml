@@ -24,11 +24,15 @@
           %td= match.item.author
           %td= match.request.article_title
           %td= match.request.description
-          %td
-            = form_tag bin_remove_path do |f|
+          %td{ style: "white-space:nowrap; display:inline-flex;" }
+            = form_tag bin_process_path do |f|
               = hidden_field_tag :match_id, match.id
               .actions
                 = submit_tag 'Done', class: 'btn btn-primary'
+            = form_tag bin_remove_path do |f|
+              = hidden_field_tag :match_id, match.id
+              .actions
+                = submit_tag 'Remove', class: 'btn btn-primary'
   :javascript
     $(document).ready(function() {
       window.table = $('#matches').DataTable();

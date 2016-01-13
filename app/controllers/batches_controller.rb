@@ -1,5 +1,4 @@
 class BatchesController < ApplicationController
-
   def index
     # Should this be in a service object? It's a relatively simple one-liner.
     requests = Request.all.where("id NOT IN (SELECT request_id FROM matches)")
@@ -34,16 +33,12 @@ class BatchesController < ApplicationController
       redirect_to batches_path
       return
     end
-
   end
 
   def remove
     if !params[:match_id].blank?
       match = Match.find(params[:match_id])
-      if !match.blank?
-        ActivityLogger.remove_match(item: match.item, request: match.request, user: current_user)
-        match.destroy!
-      end
+      remove_match(match: match) unless match.blank?
     end
 
     redirect_to current_batch_path
@@ -161,7 +156,6 @@ class BatchesController < ApplicationController
         end
       end
     end
-
   end
 
   def finalize
@@ -210,5 +204,12 @@ class BatchesController < ApplicationController
     CancelBatch.call(params[:batch_id])
 
     redirect_to view_active_batches_path
+  end
+
+  def remove_match(match:)
+    ActiveRecord::Base.transaction do
+      DestroyMatch.call(match: match, user: current_user)
+      DissociateItemFromBin.call(item: match.item, user: current_user)
+    end
   end
 end
