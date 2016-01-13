@@ -188,7 +188,7 @@ class BatchesController < ApplicationController
       return
     end
 
-    FinishBatch.call(@batch)
+    FinishBatch.call(@batch, current_user)
     flash[:notice] = "Finished processing batch, ready to begin a new batch."
     redirect_to batches_path
   end

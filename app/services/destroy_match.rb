@@ -16,7 +16,7 @@ class DestroyMatch
 
   def determine_batch_status
     if !remaining_matches(@match.batch)
-      FinishBatch.call(@match.batch)
+      FinishBatch.call(@match.batch, @user)
       "batch destroyed"
     else
       "continue batch"
