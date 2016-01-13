@@ -4,16 +4,25 @@ class BatchesController < ApplicationController
     requests = Request.all.where("id NOT IN (SELECT request_id FROM matches)")
     @data = BuildRequestData.call(requests)
 
+    if current_batch?
+      flash[:notice] = flash_message("active_batch")
+      redirect_to current_batch_path
+      return
+    end
+
     respond_to do |format|
       format.html # index.html.erb
     end
   end
 
   def create
-    if params[:batch].blank?
-      flash[:error] = "No items selected."
-
+    if batch_blank?
+      flash[:error] = flash_message("empty_batch")
       redirect_to batches_path
+      return
+    elsif current_batch?
+      flash[:notice] = flash_message("active_batch")
+      redirect_to current_batch_path
       return
     else
       @batch = BuildBatch.call(params[:batch], current_user)
@@ -206,10 +215,33 @@ class BatchesController < ApplicationController
     redirect_to view_active_batches_path
   end
 
+  private
+
   def remove_match(match:)
     ActiveRecord::Base.transaction do
       DestroyMatch.call(match: match, user: current_user)
       DissociateItemFromBin.call(item: match.item, user: current_user)
+    end
+  end
+
+  def flash_message(type)
+    case type
+    when "active_batch"
+      I18n.t("batches.status.active")
+    when "empty_batch"
+      I18n.t("batches.status.empty_items")
+    end
+  end
+
+  def batch_blank?
+    if params[:batch].blank?
+      true
+    end
+  end
+
+  def current_batch?
+    if current_user.batches.where(active: true).count >= 1
+      true
     end
   end
 end
