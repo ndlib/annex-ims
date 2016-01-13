@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe DissociateItemFromBin do
   let(:shelf) { FactoryGirl.create(:shelf) }
