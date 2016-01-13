@@ -2,7 +2,7 @@ class DestroyItem
   attr_reader :item, :user
 
   def self.call(item, user)
-    new(item, user).destroy
+    new(item, user).destroy!
   end
 
   def initialize(item, user)
@@ -10,9 +10,9 @@ class DestroyItem
     @user = user
   end
 
-  def destroy
-    status = item.destroy!
-    ActivityLogger.destroy_item(item: item, user: user)
-    status
+  def destroy!
+    destroyed = item.destroy!
+    ActivityLogger.destroy_item(item: item, user: user) if destroyed
+    destroyed
   end
 end
