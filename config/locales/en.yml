@@ -25,7 +25,7 @@ en:
   batches:
     status:
       active: "You already have an active batch in process"
-      empty_items: "No items were selected"
+      empty_items: "No items were selected."
   item:
     metadata_status:
       complete: "Metadata synchronized"
