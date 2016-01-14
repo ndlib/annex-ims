@@ -28,44 +28,4 @@ RSpec.describe DestroyMatch do
     expect(match).to receive(:destroy!)
     subject
   end
-
-  describe "#determine_batch_status" do
-    let(:current_instance) { DestroyMatch.new(match1, user) }
-    before(:each) do
-      match1
-      match2
-      match3
-    end
-
-    it "returns continue batch when if there are remaining batches" do
-      expect(current_instance.determine_batch_status).to eq "continue batch"
-    end
-
-    it "returns batch destroyed when there are no remaining batches" do
-      match1.destroy!
-      match2.destroy!
-      match3.destroy!
-      expect(current_instance.determine_batch_status).to eq "batch destroyed"
-    end
-  end
-
-  describe "#remaining_matches" do
-    let(:current_instance) { DestroyMatch.new(match1, user) }
-    before(:each) do
-      match1
-      match2
-      match3
-    end
-
-    it "returns true when there are remaining matches" do
-      expect(current_instance.remaining_matches(match1.batch)).to be_truthy
-    end
-
-    it "returns false when there are no remaining matches" do
-      match1.destroy!
-      match2.destroy!
-      match3.destroy!
-      expect(current_instance.remaining_matches(match1.batch)).to be_falsey
-    end
-  end
 end

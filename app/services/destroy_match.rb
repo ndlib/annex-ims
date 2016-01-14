@@ -13,17 +13,4 @@ class DestroyMatch
     ActivityLogger.remove_match(item: @match.item, request: @match.request, user: @user)
     status
   end
-
-  def determine_batch_status
-    if !remaining_matches(@match.batch)
-      FinishBatch.call(@match.batch, @user)
-      "batch destroyed"
-    else
-      "continue batch"
-    end
-  end
-
-  def remaining_matches(batch)
-    true if batch.matches.count >= 1
-  end
 end
