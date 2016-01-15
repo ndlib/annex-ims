@@ -6,6 +6,10 @@ RSpec.describe DestroyMatch do
   let(:item) { FactoryGirl.create(:item, tray: tray, thickness: 1) }
   let(:bin) { FactoryGirl.create(:bin, items: [item]) }
   let(:match) { FactoryGirl.create(:match, item: item, bin: bin, request: request) }
+  let(:batch) { FactoryGirl.create(:batch, user: user) }
+  let(:match1) { FactoryGirl.create(:match, batch: batch) }
+  let(:match2) { FactoryGirl.create(:match, batch: batch) }
+  let(:match3) { FactoryGirl.create(:match, batch: batch) }
   let(:user) { FactoryGirl.create(:user) }
   let(:request) { FactoryGirl.create(:request, del_type: "loan") }
 

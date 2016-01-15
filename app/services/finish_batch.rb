@@ -1,21 +1,26 @@
 class FinishBatch
-  attr_reader :batch
-
-  def self.call(batch)
-    new(batch).finish!
+  def self.call(batch, user)
+    new(batch, user).finish!
   end
 
-  def initialize(batch)
+  def initialize(batch, user)
     @batch = batch
+    @user = user
   end
 
   def finish!
-    @batch.skipped_matches.each do |s|
-      s.destroy! #accepted matches will remain, so those requests will stay out of queue. Skipped requests will go back in the queue.
+    @batch.skipped_matches.each do |match|
+      # Skipped requests will go back in the queue.
+      DestroyMatch.call(match: match, user: @user)
     end
 
-    @batch.active = false
-    @batch.save!
+    unless remaining_matches?
+      @batch.active = false
+      @batch.save!
+    end
   end
 
+  def remaining_matches?
+    true if @batch.unprocessed_matches.count >= 1
+  end
 end
