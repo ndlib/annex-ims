@@ -14,7 +14,13 @@ class FinishBatch
       DestroyMatch.call(match: match, user: @user)
     end
 
-    @batch.active = false
-    @batch.save!
+    unless remaining_matches?
+      @batch.active = false
+      @batch.save!
+    end
+  end
+
+  def remaining_matches?
+    true if @batch.unprocessed_matches.count >= 1
   end
 end

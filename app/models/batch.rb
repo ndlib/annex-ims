@@ -14,6 +14,10 @@ class Batch < ActiveRecord::Base
     matches.where(processed: nil, request: request.id)
   end
 
+  def unprocessed_matches
+    matches.where("processed is null or processed = ?", "accepted")
+  end
+
   def current_match
     matches.
       where(processed: nil).
