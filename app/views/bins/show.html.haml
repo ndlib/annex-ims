@@ -32,7 +32,7 @@
             = form_tag bin_remove_path do |f|
               = hidden_field_tag :match_id, match.id
               .actions
-                = submit_tag 'Remove', class: 'btn btn-primary'
+                = submit_tag 'Skip', class: 'btn btn-warning'
   :javascript
     $(document).ready(function() {
       window.table = $('#matches').DataTable();
