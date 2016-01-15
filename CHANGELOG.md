@@ -11,7 +11,7 @@
 
 **Bug fixes:**
 - User was unable to fulfill multiple scans for the same item ([AIMS-331](https://jira.library.nd.edu/browse/AIMS-331), [AIMS-332](https://jira.library.nd.edu/browse/AIMS-332), [#129](https://github.com/ndlib/annex-ims/pull/129))
-- Users were able to create batches using requests that were skipped in another active batch [AIMS-328](https://jira.library.nd.edu/browse/AIMS-328), [#128](https://github.com/ndlib/annex-ims/pull/128)
+- Users were able to create batches using requests that were skipped in another active batch ([AIMS-328](https://jira.library.nd.edu/browse/AIMS-328), [#128](https://github.com/ndlib/annex-ims/pull/128))
 - Items that were created in error during ingest have been removed ([AIMS-219](https://jira.library.nd.edu/browse/AIMS-219), [#131](https://github.com/ndlib/annex-ims/pull/131))
 - Users should no longer be able to create a new batch if they already have an active batch ([AIMS-329](https://jira.library.nd.edu/browse/AIMS-329), [#133](https://github.com/ndlib/annex-ims/pull/133))
 - As a user of the IMS, when I remove the last item from a batch, the batch should be destroyed ([AIMS-339](https://jira.library.nd.edu/browse/AIMS-339), [#132](https://github.com/ndlib/annex-ims/pull/132))
