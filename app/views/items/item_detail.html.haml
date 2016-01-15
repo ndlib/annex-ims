@@ -57,6 +57,10 @@
             %td
               %strong= "Tray Number:"
             %td= (@item.tray.nil? ? 'STAGING' : @item.tray.barcode)
+          %tr
+            %td
+              %strong= "Location:"
+            %td= @item.location
   %div.panel.panel-success
     %div.panel-heading
       %h3.panel-title= "Item History"
@@ -97,4 +101,3 @@
               %td= record.data['request']['trans']
               %td= record.action_timestamp.strftime("%m-%d-%Y %I:%M%p")
               %td= record.username
-             
