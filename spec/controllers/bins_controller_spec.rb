@@ -26,6 +26,11 @@ RSpec.describe BinsController, type: :controller do
       subject
     end
 
+    it "trys to finish the batch" do
+      expect(FinishBatch).to receive(:call).with(match.batch, user)
+      subject
+    end
+
     it "flashes a message when there are remaining matches associated with the item" do
       request2 = FactoryGirl.create(:request, del_type: "loan")
       FactoryGirl.create(:match, item: item, bin: bin, request: request2)
