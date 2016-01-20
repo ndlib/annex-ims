@@ -32,27 +32,4 @@ RSpec.describe ItemViewPresenter do
       expect(item_presenter.status).to eq "stocked (on issue list)"
     end
   end
-
-  describe "#location" do
-    it "returns tray barcode when item is stocked" do
-      item_presenter = described_class.new(item4)
-      expect(item_presenter.location).to eq "#{tray.barcode}"
-    end
-
-    it "returns bin barcode when item is unstocked and in a bin" do
-      bin
-      item_presenter = described_class.new(item5)
-      expect(item_presenter.location).to eq "#{bin.barcode}"
-    end
-
-    it "returns staging when item is unstocked and not in a bin" do
-      item_presenter = described_class.new(item1)
-      expect(item_presenter.location).to eq "Staging"
-    end
-
-    it "returns shipped message when item is shipped" do
-      item_presenter = described_class.new(item3)
-      expect(item_presenter.location).to eq "Shipped - Not In Annex"
-    end
-  end
 end

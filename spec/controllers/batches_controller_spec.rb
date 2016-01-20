@@ -42,5 +42,10 @@ RSpec.describe BatchesController, type: :controller do
       expect(DissociateItemFromBin).to receive(:call).with(item: match.item, user: user)
       post :remove, commit: "Remove", match_id: match.id
     end
+
+    it "trys to finish the batch" do
+      expect(FinishBatch).to receive(:call).with(match.batch, user)
+      post :remove, commit: "Remove", match_id: match.id
+    end
   end
 end

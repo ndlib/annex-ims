@@ -221,7 +221,7 @@ class BatchesController < ApplicationController
     ActiveRecord::Base.transaction do
       DestroyMatch.call(match: match, user: current_user)
       DissociateItemFromBin.call(item: match.item, user: current_user)
-      CompleteBatch.call(batch: match.batch, user: current_user)
+      FinishBatch.call(match.batch, current_user)
     end
   end
 
