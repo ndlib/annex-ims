@@ -11,7 +11,7 @@ class BinsController < ApplicationController
     @match = Match.find(params[:match_id])
     ActiveRecord::Base.transaction do
       DestroyMatch.call(match: @match, user: current_user)
-      CompleteBatch.call(batch: @match.batch, user: current_user)
+      FinishBatch.call(@match.batch, current_user)
       try_dissociate_item_and_bin(warning_verb: "Removed")
     end
 
