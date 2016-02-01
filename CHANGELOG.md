@@ -1,7 +1,7 @@
 # Change Log
 
 ## [1.0.1](https://github.com/ndlib/annex-ims/tree/v1.0.1) (2016-01-15)
-[Full Changelog](https://github.com/ndlib/annex-ims/compare/v1.0.0...v1.0.1)
+[Full Changelog](https://github.com/ndlib/annex-ims/compare/v1.0.0...v1.1.0)
 
 **New features/enhancements:**
 - Added request description and article title to the "Process Batch" view ([AIMS-336](https://jira.library.nd.edu/browse/AIMS-336), [#130](https://github.com/ndlib/annex-ims/pull/130))
