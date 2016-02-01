@@ -1,6 +1,6 @@
 # Change Log
 
-## [1.0.1](https://github.com/ndlib/annex-ims/tree/v1.0.1) (2016-01-15)
+## [1.0.1](https://github.com/ndlib/annex-ims/tree/v1.1.0) (2016-01-15)
 [Full Changelog](https://github.com/ndlib/annex-ims/compare/v1.0.0...v1.1.0)
 
 **New features/enhancements:**
