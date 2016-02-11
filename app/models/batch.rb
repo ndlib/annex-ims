@@ -15,7 +15,7 @@ class Batch < ActiveRecord::Base
   end
 
   def unprocessed_matches
-    matches.where("processed is null or processed = ?", "accepted")
+    matches.where("processed is null")
   end
 
   def current_match
