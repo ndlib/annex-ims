@@ -1,8 +1,6 @@
 class BatchesController < ApplicationController
+  before_action :require_admin
   def index
-    # Only admin has rights to call this method
-    require_admin
-
     # Should this be in a service object? It's a relatively simple one-liner.
     requests = Request.all.where("id NOT IN (SELECT request_id FROM matches)")
     @data = BuildRequestData.call(requests)
@@ -19,10 +17,7 @@ class BatchesController < ApplicationController
   end
 
   def create
-    # Only admin has rights to call this method
-    require_admin
-
-    if batch_blank?
+      if batch_blank?
       flash[:error] = flash_message("empty_batch")
       redirect_to batches_path
       return
@@ -41,9 +36,6 @@ class BatchesController < ApplicationController
   end
 
   def current
-    # Only admin has rights to call this method
-    require_admin
-
     @batch = current_user.batches.where(active: true).first
 
     if @batch.blank?
@@ -54,9 +46,6 @@ class BatchesController < ApplicationController
   end
 
   def remove
-    # Only admin has rights to call this method
-    require_admin
-
     if !params[:match_id].blank?
       match = Match.find(params[:match_id])
       remove_match(match: match) unless match.blank?
@@ -66,9 +55,6 @@ class BatchesController < ApplicationController
   end
 
   def retrieve
-    # Only admin has rights to call this method
-    require_admin
-
     @batch = current_user.batches.where(active: true).first
 
     if @batch.blank?
@@ -86,9 +72,6 @@ class BatchesController < ApplicationController
   end
 
   def item
-    # Only admin has rights to call this method
-    require_admin
-
     @batch = current_user.batches.where(active: true).first
 
     if @batch.blank?
@@ -124,9 +107,6 @@ class BatchesController < ApplicationController
   end
 
   def bin
-    # Only admin has rights to call this method
-    require_admin
-
     @batch = current_user.batches.where(active: true).first
 
     if @batch.blank?
@@ -139,9 +119,6 @@ class BatchesController < ApplicationController
   end
 
   def scan_bin
-    # Only admin has rights to call this method
-    require_admin
-
     @batch = current_user.batches.where(active: true).first
 
     if @batch.blank?
@@ -192,9 +169,6 @@ class BatchesController < ApplicationController
   end
 
   def finalize
-    # Only admin has rights to call this method
-    require_admin
-
     @batch = current_user.batches.where(active: true).first
 
     if @batch.blank?
@@ -207,9 +181,6 @@ class BatchesController < ApplicationController
   end
 
   def finish
-    # Only admin has rights to call this method
-    require_admin
-
     @batch = current_user.batches.where(active: true).first
 
     if @batch.blank?
@@ -224,37 +195,22 @@ class BatchesController < ApplicationController
   end
 
   def view_processed
-    # Only admin has rights to call this method
-    require_admin
-
     @batches = Batch.where(active: false)
   end
 
   def view_single_processed
-    # Only admin has rights to call this method
-    require_admin
-
     @batch = Batch.find(params[:id])
   end
 
   def view_active
-    # Only admin has rights to call this method
-    require_admin
-
     @batches = Batch.where(active: true)
   end
 
   def view_single_active
-    # Only admin has rights to call this method
-    require_admin
-
     @batch = Batch.find(params[:id])
   end
 
   def cancel_single_active
-    # Only admin has rights to call this method
-    require_admin
-
     CancelBatch.call(params[:batch_id])
 
     redirect_to view_active_batches_path
@@ -263,9 +219,6 @@ class BatchesController < ApplicationController
   private
 
   def remove_match(match:)
-    # Only admin has rights to call this method
-    require_admin
-
     ActiveRecord::Base.transaction do
       DestroyMatch.call(match: match, user: current_user)
       DissociateItemFromBin.call(item: match.item, user: current_user)
@@ -274,9 +227,6 @@ class BatchesController < ApplicationController
   end
 
   def flash_message(type)
-    # Only admin has rights to call this method
-    require_admin
-
     case type
     when "active_batch"
       I18n.t("batches.status.active")
@@ -286,18 +236,12 @@ class BatchesController < ApplicationController
   end
 
   def batch_blank?
-    # Only admin has rights to call this method
-    require_admin
-
     if params[:batch].blank?
       true
     end
   end
 
   def current_batch?
-    # Only admin has rights to call this method
-    require_admin
-
     if current_user.batches.where(active: true).count >= 1
       true
     end

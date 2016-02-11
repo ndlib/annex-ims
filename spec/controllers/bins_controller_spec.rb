@@ -28,7 +28,6 @@ RSpec.describe BinsController, type: :controller do
       end
 
       it "trys to finish the batch as admin" do
-        user.admin=false
         expect(FinishBatch).to receive(:call).with(match.batch, user)
         subject
       end
