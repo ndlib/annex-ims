@@ -1,4 +1,5 @@
 class BatchesController < ApplicationController
+  before_action :require_admin
   def index
     # Should this be in a service object? It's a relatively simple one-liner.
     requests = Request.all.where("id NOT IN (SELECT request_id FROM matches)")

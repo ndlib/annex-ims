@@ -19,22 +19,23 @@
     #items.collapse
       %a.list-group-item.barcode{ :href => search_path } Item Search
       %a.list-group-item{ :href => issues_path } Items with Issues
-    %a.list-group-item.list-group-item-success{ "data-parent" => "#MainMenu",
-      "data-toggle" => "collapse",
-      :href => "#batches" }
-      %span.glyphicon.glyphicon-plus
-      Batches
-    #batches.collapse
-      %a.list-group-item{ :href => batches_path } Create Batch
-      %a.list-group-item{ :href => retrieve_batch_path } Retrieve Batch
-      %a.list-group-item{ :href => bins_path } Process Bins
-      %a.list-group-item{ :href => current_batch_path } View Current Batch
-      %a.list-group-item{ :href => view_processed_batches_path }
-        View Processed Batches
-      %a.list-group-item{ :href => view_active_batches_path }
-        View Active Batches
-      %a.list-group-item{ :href => view_active_transfers_path }
-        View Active Shelf Transfers
+    - if user_admin?
+      %a.list-group-item.list-group-item-success{ "data-parent" => "#MainMenu",
+        "data-toggle" => "collapse",
+        :href => "#batches" }
+        %span.glyphicon.glyphicon-plus
+        Batches
+      #batches.collapse
+        %a.list-group-item{ :href => batches_path } Create Batch
+        %a.list-group-item{ :href => retrieve_batch_path } Retrieve Batch
+        %a.list-group-item{ :href => bins_path } Process Bins
+        %a.list-group-item{ :href => current_batch_path } View Current Batch
+        %a.list-group-item{ :href => view_processed_batches_path }
+          View Processed Batches
+        %a.list-group-item{ :href => view_active_batches_path }
+          View Active Batches
+        %a.list-group-item{ :href => view_active_transfers_path }
+          View Active Shelf Transfers
     %a.list-group-item.list-group-item-success{ "data-parent" => "#MainMenu",
       "data-toggle" => "collapse",
       :href => "#reports" }

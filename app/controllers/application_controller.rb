@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
+  helper_method :user_admin?
   protected
 
   def check_authentication
@@ -13,7 +14,7 @@ class ApplicationController < ActionController::Base
       redirect_to_sign_in
       return
     end
-    unless user_admin?
+    unless user_admin? || user_worker?
       redirect_to_unauthorized
       return
     end
@@ -46,6 +47,16 @@ class ApplicationController < ActionController::Base
       config_admin = Rails.configuration.admin_user_name
     end
     current_user.admin || (config_admin == current_user.username)
+  end
+
+  def user_worker?
+    current_user.worker
+  end
+
+  def require_admin
+    if user_admin? == false
+      redirect_to_unauthorized
+    end
   end
 
   def update_activity

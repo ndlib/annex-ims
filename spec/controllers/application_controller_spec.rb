@@ -8,8 +8,6 @@ RSpec.describe ApplicationController, type: :controller do
   end
 
   context "user" do
-    let(:user) { FactoryGirl.create(:user, last_activity_at: Time.now) }
-
     before(:each) do
       sign_in(user)
     end
@@ -22,8 +20,31 @@ RSpec.describe ApplicationController, type: :controller do
       end
     end
 
+    context "is not a worker" do
+      let(:user) { FactoryGirl.create(:user, worker: false, last_activity_at: Time.now) }
+
+      it "throws a routing error" do
+        expect { get :index }.to raise_error(ActionController::RoutingError)
+      end
+    end
+
     context "is an admin" do
       let(:user) { FactoryGirl.create(:user, admin: true, last_activity_at: Time.now) }
+
+      it "renders" do
+        get :index
+        expect(response).to be_success
+        expect(response.body).to eq("index")
+      end
+
+      it "checks if the user session is expired" do
+        expect(IsUserSessionExpired).to receive(:call)
+        get :index
+      end
+    end
+
+    context "is a worker" do
+      let(:user) { FactoryGirl.create(:user, worker: true, last_activity_at: Time.now) }
 
       it "renders" do
         get :index
@@ -45,7 +66,7 @@ RSpec.describe ApplicationController, type: :controller do
     end
   end
 
-  context "user session has not expired" do
+  context "admin user session has not expired" do
     let(:user) { FactoryGirl.create(:user, admin: true, last_activity_at: Time.now) }
 
     before(:each) do
@@ -63,8 +84,44 @@ RSpec.describe ApplicationController, type: :controller do
     end
   end
 
-  context "user session has expired" do
+  context "worker user session has not expired" do
+    let(:user) { FactoryGirl.create(:user, worker: true, last_activity_at: Time.now) }
+
+    before(:each) do
+      sign_in(user)
+    end
+
+    it "renders index" do
+      get :index
+      expect(response.body).to eq("index")
+    end
+
+    it "updates the activity" do
+      expect(subject).to receive(:update_activity)
+      get :index
+    end
+  end
+
+  context "admin user session has expired" do
     let(:user) { FactoryGirl.create(:user, admin: true, last_activity_at: Time.now - 2.days) }
+
+    before(:each) do
+      sign_in(user)
+    end
+
+    it "does not render index" do
+      get :index
+      expect(response.body).to eq("")
+    end
+
+    it "does not update the activity" do
+      expect(subject).not_to receive(:update_activity)
+      get :index
+    end
+  end
+
+  context "worker user session has expired" do
+    let(:user) { FactoryGirl.create(:user, worker: true, last_activity_at: Time.now - 2.days) }
 
     before(:each) do
       sign_in(user)
