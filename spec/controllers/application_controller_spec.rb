@@ -8,7 +8,7 @@ RSpec.describe ApplicationController, type: :controller do
   end
 
   context "user" do
-      before(:each) do
+    before(:each) do
       sign_in(user)
     end
 
