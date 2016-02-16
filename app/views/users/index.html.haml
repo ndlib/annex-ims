@@ -3,9 +3,9 @@
     = "There are no current users."
 - else
   = form_tag create_users_path, method: "post" do |f|
-    %div{:style => "display: inline-block; width: 100%;"}
-      %div{:style => "float: left;"}
-        %input{ name: "user_name", id: "user_name", type: "text", required: true}/
+    %div{ :style => "display: inline-block; width: 100%;" }
+      %div{ :style => "float: left;" }
+        %input{ name: "user_name", id: "user_name", type: "text", required: true }/
       .actions
         = submit_tag 'New User', class: 'btn btn-primary'
   %div
@@ -34,3 +34,5 @@
           window.table = $('#users').DataTable();
           $('div.dataTables_filter input').focus();
         } );
+- else
+- raise_404
