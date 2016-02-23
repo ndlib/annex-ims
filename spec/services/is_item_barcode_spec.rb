@@ -6,6 +6,10 @@ RSpec.describe IsItemBarcode do
     expect(IsItemBarcode.call("")).to eq(false)
   end
 
+  it "recognizes '123456789' as an invalid barcode" do
+    expect(IsItemBarcode.call("123456789")).to eq(false)
+  end
+
   it "recognizes '12345678901234' as a valid barcode" do
     barcode = '12345678901234'
     expect(IsItemBarcode.call(barcode)).to eq(true)

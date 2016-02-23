@@ -1,0 +1,22 @@
+# Store bar-code validation parameters here. Acessible from Rails.configuration.parameters
+common: &defaults
+  # The initial barcode parameter should be: 14 digits with no additional
+  # characters before or after. Flag (in/de)activates it without deleting it.
+  parameters:
+    - regex: '^\d{14}$'
+      enabled : true
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+staging:
+  <<: *defaults
+
+pre_production:
+  <<: *defaults
+
+production:
+  <<: *defaults
