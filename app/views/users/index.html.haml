@@ -16,7 +16,7 @@
         %th= 'User'
         %th= 'Sign in Count'
         %th= 'Last Sign In'
-        %th= 'Admin?'
+        %th= 'User type'
         %th
     %tbody
       - @users.each do |user|
@@ -24,12 +24,22 @@
           %td= user.username
           %td= user.sign_in_count
           %td= user.last_sign_in_at
-          = form_tag update_users_path, method: "put" do |f|
-            %td= check_box_tag "admin", "true", user.admin
+
+          - if current_user == user
+            %td= 'admin'
             %td
-              = hidden_field_tag :user_id, user.id
-              .actions
-                = submit_tag 'Save', class: 'btn btn-primary', id: "user-#{user.id}"
+          - else
+            = form_tag update_users_path, method: "put" do |f|
+              - if user.admin == true
+                %td= select_tag :user_type, options_for_select(["admin", "worker", "disabled"], "admin")
+              - elsif user.worker == true
+                %td= select_tag :user_type, options_for_select(["admin", "worker", "disabled"], "worker")
+              - else
+                %td= select_tag :user_type, options_for_select(["admin", "worker", "disabled"], "disabled")
+              %td
+                = hidden_field_tag :user_id, user.id
+                .actions
+                  = submit_tag 'Update', class: 'btn btn-primary', id: "user-#{user.id}"
     :javascript
         $(document).ready(function() {
           window.table = $('#users').DataTable();

@@ -17,12 +17,22 @@ class UsersController < ApplicationController
 
   def update
     user_id = params["user_id"]
-    # If the checkbox was false on submit, the admin param will be null :(
-    admin = params["admin"] || false
     user = User.find(user_id)
     if user
-      user.admin = admin
+      # If the admin was selected, then user is set to admin and otherwise to worker
+      if params["user_type"] == "admin"
+        user.admin = true
+        user.worker = false
+      # If the worker was selected, then user is set to worker and otherwise to disabled
+      elsif params["user_type"] == "worker"
+        user.admin = false
+        user.worker = true
+      else
+        user.admin = false
+        user.worker = false
+      end
       user.save!
+      flash[:notice] = "#{user.username}'s status is updated to #{params["user_type"]}."
     end
     redirect_to users_path
   end

@@ -8,18 +8,27 @@ RSpec.describe UsersController, type: :controller do
   end
 
   describe "PUT update" do
-    it "sets admin to the value given" do
+    it "sets admin to the value given for user type" do
       expect_any_instance_of(User).to receive(:admin=).with(true)
-      put :update, user_id: 1, admin: true
+      expect_any_instance_of(User).to receive(:worker=).with(false)
+      put :update, user_id: 1, user_type: "admin"
     end
 
-    it "sets admin to the value given" do
+    it "sets admin to the value given for user type" do
       expect_any_instance_of(User).to receive(:admin=).with(false)
-      put :update, user_id: 1, admin: false
+      expect_any_instance_of(User).to receive(:worker=).with(true)
+      put :update, user_id: 1, user_type: "worker"
     end
 
-    it "sets admin to false if no value given" do
+    it "sets admin to the value given for user type" do
       expect_any_instance_of(User).to receive(:admin=).with(false)
+      expect_any_instance_of(User).to receive(:worker=).with(false)
+      put :update, user_id: 1, user_type: "disabled"
+    end
+
+    it "sets admin to false if no value given for user type" do
+      expect_any_instance_of(User).to receive(:admin=).with(false)
+      expect_any_instance_of(User).to receive(:worker=).with(false)
       put :update, user_id: 1
     end
   end
