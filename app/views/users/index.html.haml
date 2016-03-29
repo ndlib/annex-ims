@@ -26,16 +26,12 @@
           %td= user.last_sign_in_at
 
           - if current_user == user
-            %td= 'admin'
+            %td= GetUserType.call(user)
             %td
           - else
             = form_tag update_users_path, method: "put" do |f|
-              - if user.admin == true
-                %td= select_tag :user_type, options_for_select(["admin", "worker", "disabled"], "admin")
-              - elsif user.worker == true
-                %td= select_tag :user_type, options_for_select(["admin", "worker", "disabled"], "worker")
-              - else
-                %td= select_tag :user_type, options_for_select(["admin", "worker", "disabled"], "disabled")
+              %td= select_tag :user_type, options_for_select(["admin", |
+                        "worker", "disabled"], GetUserType.call(user)) |
               %td
                 = hidden_field_tag :user_id, user.id
                 .actions
