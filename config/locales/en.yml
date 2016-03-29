@@ -22,6 +22,7 @@
 en:
   errors:
     barcode_not_found: "Barcode %{barcode} not found. Put item with barcode %{barcode} on problem shelf."
+    barcode_not_valid: "Barcode \"%{barcode}\" is not valid, please re-scan."
   batches:
     status:
       active: "You already have an active batch in process"
@@ -39,6 +40,7 @@ en:
     issue_type:
       not_found: "Barcode not found."
       not_for_annex: "Item not marked for annex."
+      not_valid_barcode: "Invalid Barcode."
   requests:
     synchronized: "Synchronized %{count} requests."
   activity_log:
@@ -57,6 +59,8 @@ en:
     trays_show_item: "Add Item"
     trays_show: "Tray Location"
     trays_index: "Tray to Shelf"
+    trays_missing: "Item Missing"
+    trays_invalid: "Item Invalid"
     trays_tray_detail: "Tray Detail"
     shelves_index: "Item Direct to Shelf"
     shelves_show: "Add Items to Shelf"

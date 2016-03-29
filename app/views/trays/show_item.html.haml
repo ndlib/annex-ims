@@ -10,10 +10,16 @@
 
     .field
       = label_tag :thickness
-      = text_field_tag :thickness, nil, autofocus: "autofocus"
+      - if IsValidThickness.call(@thickness)
+        = text_field_tag :thickness, @thickness
+      - else
+        = text_field_tag :thickness, nil, autofocus: "autofocus"
     .field
       = label_tag :barcode, "Item"
-      = text_field_tag :barcode, @barcode
+      - if IsValidThickness.call(@thickness)
+        = text_field_tag :barcode, nil, autofocus: "autofocus"
+      - else
+        = text_field_tag :barcode, nil
     .actions
       = submit_tag 'Save', class: 'btn btn-primary'
 %br

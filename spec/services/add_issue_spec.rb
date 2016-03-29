@@ -30,6 +30,11 @@ RSpec.describe AddIssue do
     expect(subject).to_not eq(issue)
   end
 
+  it "creates a third issue for a different type" do
+    issue = described_class.call(item: item, user: user, type: "not_valid_barcode")
+    expect(subject).to_not eq(issue)
+  end
+
   it "creates a second for a different item" do
     other_item = FactoryGirl.create(:item)
     issue = described_class.call(item: other_item, user: user, type: issue_type)
