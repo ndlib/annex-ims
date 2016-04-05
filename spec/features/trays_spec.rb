@@ -299,7 +299,7 @@ feature "Trays", type: :feature do
       fill_in "Tray", with: tray.barcode
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(id: tray.id))
-      fill_in "Thickness", with: rand(36**2).to_s(36)
+      fill_in "Thickness", with: 'error'
       fill_in "Item", with: item.barcode
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(id: tray.id))
@@ -581,7 +581,6 @@ feature "Trays", type: :feature do
         item = FactoryGirl.create(:item, barcode: rand.to_s[2..15])
         items << item
       end
-      item2 = FactoryGirl.create(:item, tray: tray, thickness: 6, barcode: rand.to_s[2..15])
       visit trays_items_path
       fill_in "Tray", with: tray.barcode
       click_button "Save"
@@ -598,7 +597,7 @@ feature "Trays", type: :feature do
             headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
           to_return{ |response| { status: 200, body: {results: {status: "OK", message: "Item stocked"}}.to_json, headers: {} } }
         fill_in "Item", with: item.barcode
-        fill_in "Thickness", with: 10
+        fill_in "Thickness", with: 100
         click_button "Save"
       end
       expect(page).to have_content 'warning - tray may be full'

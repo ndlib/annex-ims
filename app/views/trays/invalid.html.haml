@@ -1,4 +1,5 @@
-= link_to 'Rescan', show_tray_item_path(id: @tray.id, thickness: @thickness), method: :get, class: 'btn pull-left btn-primary'
+= link_to 'Rescan', show_tray_item_path(id: @tray.id, thickness: @thickness),
+                              method: :get, class: 'btn pull-left btn-primary'
 
 = form_tag create_tray_item_path(@tray, @id, @barcode, @thickness) do |f|
   = hidden_field_tag :id, @tray.id
@@ -6,4 +7,5 @@
   = hidden_field_tag :barcode, @barcode
   = hidden_field_tag :thickness, @thickness
   .actions
-    = submit_tag 'Set aside', class: 'btn pull-left btn-primary margin-left', id: 'set aside'
+    = submit_tag 'Set aside', class: 'btn pull-left btn-primary margin-left',
+                                                                id: 'set aside'
