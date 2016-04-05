@@ -299,7 +299,7 @@ feature "Trays", type: :feature do
       fill_in "Tray", with: tray.barcode
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(id: tray.id))
-      fill_in "Thickness", with: rand(36**4).to_s(36)
+      fill_in "Thickness", with: rand(36**2).to_s(36)
       fill_in "Item", with: item.barcode
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(id: tray.id))
@@ -408,26 +408,6 @@ feature "Trays", type: :feature do
     end
 
 
-    it "redirects to missing tray item path if an item has a valid barcode but doesn't exist in the system" do
-      visit show_tray_item_path(id: tray.id)
-      fill_in "Item", with: 12345678901234
-      fill_in "Thickness", with: Faker::Number.number(1)
-      click_button "Save"
-      expect(current_path).to eq(missing_tray_item_path(id: tray.id))
-    end
-
-
-    it "show tray item path after putting item with a valid barcode that doesn't exist in the system on problem shelf" do
-      visit show_tray_item_path(id: tray.id)
-      fill_in "Item", with: 12345678901234
-      fill_in "Thickness", with: Faker::Number.number(1)
-      click_button "Save"
-      expect(current_path).to eq(missing_tray_item_path(id: tray.id))
-      click_button "OK"
-      expect(current_path).to eq(show_tray_item_path(id: tray.id))
-    end
-
-
     it "redirects to invalid tray item path if an item has a invalid barcode" do
       item = FactoryGirl.create(:item, barcode: rand(36**7).to_s(36))
       visit show_tray_item_path(id: tray.id)
@@ -466,15 +446,15 @@ feature "Trays", type: :feature do
     end
 
 
-    it "Redirect to create tray item path after clicking 'Set aside' link on the invalid tray item page" do
-      item = FactoryGirl.create(:item, barcode: rand(36**7).to_s(36))
+    it "redirects to create tray item path after clicking 'Set aside' link on the invalid tray item page" do
+      item2 = FactoryGirl.create(:item, barcode: rand(36**7).to_s(36))
       visit show_tray_item_path(id: tray.id)
-      fill_in "Item", with: item.barcode
+      fill_in "Item", with: item2.barcode
       fill_in "Thickness", with: Faker::Number.number(1)
       click_button "Save"
       expect(current_path).to eq(invalid_tray_item_path(id: tray.id))
       click_button "Set aside"
-      expect(current_path).to eq(create_tray_item_path(id: tray.id)+"."+tray.id.to_s)
+      expect(current_path).to have_content(create_tray_item_path(id: tray.id))
     end
 
 
