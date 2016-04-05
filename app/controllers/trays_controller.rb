@@ -159,8 +159,8 @@ class TraysController < ApplicationController
       return
     end
 
-    create_item(@tray, barcode, current_user.id,thickness)
-end
+    create_item(@tray, barcode, current_user.id, thickness)
+  end
 
   def dissociate_item
     @tray = Tray.find(params[:id])
