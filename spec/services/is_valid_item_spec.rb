@@ -1,7 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe IsItemBarcode do
-
   it "recognizes '' as an invalid barcode" do
     expect(IsValidItem.call("")).to eq(false)
   end
