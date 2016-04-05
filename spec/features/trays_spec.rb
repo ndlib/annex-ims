@@ -299,7 +299,7 @@ feature "Trays", type: :feature do
       fill_in "Tray", with: tray.barcode
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(id: tray.id))
-      fill_in "Thickness", with: 'error'
+      fill_in "Thickness", with: "error"
       fill_in "Item", with: item.barcode
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(id: tray.id))
@@ -381,7 +381,6 @@ feature "Trays", type: :feature do
       expect(page).to have_content "Item #{item.barcode} already assigned to #{tray.barcode}. Record updated."
     end
 
-
     it "rejects associating an item to the wrong tray" do
       tray2 = FactoryGirl.create(:tray)
       item.tray = tray2
@@ -407,7 +406,6 @@ feature "Trays", type: :feature do
       expect(current_path).to eq(show_tray_item_path(id: tray.id))
     end
 
-
     it "redirects to invalid tray item path if an item has a invalid barcode" do
       item = FactoryGirl.create(:item, barcode: rand(36**7).to_s(36))
       visit show_tray_item_path(id: tray.id)
@@ -416,7 +414,6 @@ feature "Trays", type: :feature do
       click_button "Save"
       expect(current_path).to eq(invalid_tray_item_path(id: tray.id))
     end
-
 
     it "show tray item path after clicking 'Rescan' link on the invalid tray item page" do
       item = FactoryGirl.create(:item, barcode: rand(36**7).to_s(36))
@@ -428,7 +425,6 @@ feature "Trays", type: :feature do
       click_link "Rescan"
       expect(current_path).to eq(show_tray_item_path(id: tray.id))
     end
-
 
     it "redirects to invalid tray item path two times via clicking 'Rescan' link on the invalid tray item page" do
       item = FactoryGirl.create(:item, barcode: rand(36**7).to_s(36))
@@ -445,7 +441,6 @@ feature "Trays", type: :feature do
       expect(current_path).to eq(invalid_tray_item_path(id: tray.id))
     end
 
-
     it "redirects to create tray item path after clicking 'Set aside' link on the invalid tray item page" do
       item2 = FactoryGirl.create(:item, barcode: rand(36**7).to_s(36))
       visit show_tray_item_path(id: tray.id)
@@ -456,7 +451,6 @@ feature "Trays", type: :feature do
       click_button "Set aside"
       expect(current_path).to have_content(create_tray_item_path(id: tray.id))
     end
-
 
     it "displays a tray's barcode while processing an item" do
       item_uri = api_item_url(item)
