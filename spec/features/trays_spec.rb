@@ -291,7 +291,7 @@ feature "Trays", type: :feature do
       fill_in "Item", with: item.barcode
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(id: tray.id))
-      expect(page).to have_content 'select a valid thickness'
+      expect(page).to have_content "select a valid thickness"
     end
 
     it "requires a valid thickness for an item" do
@@ -303,7 +303,7 @@ feature "Trays", type: :feature do
       fill_in "Item", with: item.barcode
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(id: tray.id))
-      expect(page).to have_content 'select a valid thickness'
+      expect(page).to have_content "select a valid thickness"
     end
 
     it "displays an item after successfully adding it to a tray" do
