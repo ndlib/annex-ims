@@ -283,7 +283,7 @@ feature "Trays", type: :feature do
       expect(current_path).to eq(show_tray_item_path(id: tray.id))
     end
 
-    it "requires a width for an item" do
+    it "requires a thickness for an item" do
       visit trays_items_path
       fill_in "Tray", with: tray.barcode
       click_button "Save"
@@ -294,7 +294,7 @@ feature "Trays", type: :feature do
       expect(page).to have_content 'select a valid thickness'
     end
 
-    it "requires a valid width for an item" do
+    it "requires a valid thickness for an item" do
       visit trays_items_path
       fill_in "Tray", with: tray.barcode
       click_button "Save"

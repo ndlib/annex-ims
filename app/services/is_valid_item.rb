@@ -1,6 +1,6 @@
 module IsValidItem
   def self.call(barcode)
-    parameter_file = File.join(Rails.root, "config", "parameters.yml")
+    parameter_file = File.join(Rails.root, "config", "barcode_patterns.yml")
     settings = YAML.load(File.open(parameter_file))
     parameters = settings["common"]["parameters"]
 
@@ -18,6 +18,6 @@ module IsValidItem
       end
     end
 
-    return false
+    false
   end
 end
