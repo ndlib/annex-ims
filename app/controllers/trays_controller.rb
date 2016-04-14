@@ -201,7 +201,7 @@ class TraysController < ApplicationController
   end
 
   def create_item(tray = Tray.find(params[:id]), barcode = params[:barcode], thickness = params[:thickness])
-    result, item = CreateItem.call(tray, barcode, current_user.id, thickness, params[:flag])
+    result = CreateItem.call(tray, barcode, current_user.id, thickness, params[:flag])
 
     if result == "errors.barcode_not_found"
       flash[:error] = I18n.t(result, barcode: barcode)

@@ -35,7 +35,7 @@ class CreateItem
 
     if !item.tray.nil?
       if item.tray != tray
-        return "Item #{barcode} is already assigned to #{item.tray.barcode}.", item
+        return "Item #{barcode} is already assigned to #{item.tray.barcode}."
       else
         already = true
       end
