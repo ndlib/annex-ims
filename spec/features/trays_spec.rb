@@ -406,6 +406,24 @@ feature "Trays", type: :feature do
       expect(current_path).to eq(show_tray_item_path(id: tray.id))
     end
 
+    it "redirects to missing tray item path if an item has a valid barcode but doesn't exist in the system" do
+      visit show_tray_item_path(id: tray.id)
+      fill_in "Item", with: 12345678901234
+      fill_in "Thickness", with: Faker::Number.number(1)
+      click_button "Save"
+      expect(current_path).to eq(missing_tray_item_path(id: tray.id))
+    end
+
+    it "show tray item path after putting item with a valid barcode that doesn't exist in the system on problem shelf" do
+      visit show_tray_item_path(id: tray.id)
+      fill_in "Item", with: 12345678901234
+      fill_in "Thickness", with: Faker::Number.number(1)
+      click_button "Save"
+      expect(current_path).to eq(missing_tray_item_path(id: tray.id))
+      click_button "OK"
+      expect(current_path).to eq(show_tray_item_path(id: tray.id))
+    end
+
     it "redirects to invalid tray item path if an item has a invalid barcode" do
       item = FactoryGirl.create(:item, barcode: rand(36**7).to_s(36))
       visit show_tray_item_path(id: tray.id)
