@@ -10,7 +10,13 @@ describe "CreateItem" do
 
   describe "#create!" do
     it "create an item" do
-      expect { subject }.to change { Item.count }.from(0).to(1)
+
+      expect(GetItemFromBarcode).to receive(:call).with(barcode: item.barcode, user_id: user.id).and_return(item).at_least :once
+      stub_request(:post, api_stock_url).
+      with(body: {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{tray.barcode}"},
+        headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
+      to_return{ |response| { status: 200, body: {results: {status: "OK", message: "Item stocked"}}.to_json, headers: {} } }
+
       expect(subject).to eq("Item #{barcode} stocked in #{tray.barcode}.");
     end
   end
