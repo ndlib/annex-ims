@@ -38,7 +38,7 @@
               - if(item.status == 'stocked')
                 = submit_tag 'Unstock', class: 'btn btn-secondary'
         %td= item.status.titleize
-        %td= item.barcode
+        %td= link_to item.barcode, item_detail_path(item.barcode)
         %td= item.thickness
         %td
           - if item.metadata_status == "complete"
