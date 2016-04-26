@@ -43,3 +43,11 @@
       Reports
     #reports.collapse
       %a.list-group-item{ :href => reports_path } Report By Barcode
+    - if user_admin?
+      %a.list-group-item.list-group-item-success{ "data-parent" => "#MainMenu",
+        "data-toggle" => "collapse",
+        :href => "#settings" }
+        %span.glyphicon.glyphicon-plus
+        Settings
+      #settings.collapse
+        %a.list-group-item{ :href => users_path } Update users
