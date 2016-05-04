@@ -228,8 +228,8 @@ class TraysController < ApplicationController
 
   def count_item
     @tray = Tray.find(params[:id])
-    tray_count = (params[:tray_count])
-    items = Item.select {|item| item.tray_id == @tray.id}
+    tray_count = params[:tray_count]
+    items = Item.select { |item| item.tray_id == @tray.id }
 
     if !tray_count.nil?
       if tray_count.to_i != items.count
