@@ -1,0 +1,27 @@
+# Store bar-code validation parameters here. Acessible from Rails.configuration.parameters
+# Each parameter will be written as a regular expression
+# It needs to be possible to store multiple parameters
+# The parameters need to be stored in such a way that a UI can be built later to manage them
+# It should be possible to "inactivate" a parameter without deleting it (some sort of flag)
+
+common: &defaults
+  # The initial barcode parameter should be: 14 digits with no additional
+  # characters before or after. Flag (in/de)activates it without deleting it.
+  parameters:
+    - regex: '^\d{14}$'
+      enabled : true
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+staging:
+  <<: *defaults
+
+pre_production:
+  <<: *defaults
+
+production:
+  <<: *defaults

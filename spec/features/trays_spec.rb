@@ -5,7 +5,7 @@ feature "Trays", type: :feature do
 
   let(:tray_barcode) { "TRAY-AL1234" }
   let(:tray) { FactoryGirl.create(:tray, barcode: tray_barcode) }
-  let(:item) { FactoryGirl.create(:item) }
+  let(:item) { FactoryGirl.create(:item, barcode: rand.to_s[2..15]) }
   let(:shelf) { FactoryGirl.create(:shelf) }
   let(:response_body) { api_fixture_data("item_metadata.json") }
 
@@ -283,7 +283,7 @@ feature "Trays", type: :feature do
       expect(current_path).to eq(show_tray_item_path(id: tray.id))
     end
 
-    it "requires a width for an item" do
+    it "requires a thickness for an item" do
       visit trays_items_path
       fill_in "Tray", with: tray.barcode
       click_button "Save"
@@ -291,7 +291,19 @@ feature "Trays", type: :feature do
       fill_in "Item", with: item.barcode
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(id: tray.id))
-      expect(page).to have_content 'select a valid thickness'
+      expect(page).to have_content "select a valid thickness"
+    end
+
+    it "requires a valid thickness for an item" do
+      visit trays_items_path
+      fill_in "Tray", with: tray.barcode
+      click_button "Save"
+      expect(current_path).to eq(show_tray_item_path(id: tray.id))
+      fill_in "Thickness", with: "error"
+      fill_in "Item", with: item.barcode
+      click_button "Save"
+      expect(current_path).to eq(show_tray_item_path(id: tray.id))
+      expect(page).to have_content "select a valid thickness"
     end
 
     it "displays an item after successfully adding it to a tray" do
@@ -369,10 +381,9 @@ feature "Trays", type: :feature do
       expect(page).to have_content "Item #{item.barcode} already assigned to #{tray.barcode}. Record updated."
     end
 
-
     it "rejects associating an item to the wrong tray" do
       tray2 = FactoryGirl.create(:tray)
-      item = FactoryGirl.create(:item, tray: tray2)
+      item.tray = tray2
       expect(GetItemFromBarcode).to receive(:call).with(barcode: item.barcode, user_id: @user.id).and_return(item).at_least :once
       stub_request(:post, api_stock_url).
         with(body: {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{tray2.barcode}"},
@@ -395,6 +406,51 @@ feature "Trays", type: :feature do
       expect(current_path).to eq(show_tray_item_path(id: tray.id))
     end
 
+    it "redirects to invalid tray item path if an item has a invalid barcode" do
+      item = FactoryGirl.create(:item, barcode: rand(36**7).to_s(36))
+      visit show_tray_item_path(id: tray.id)
+      fill_in "Item", with: item.barcode
+      fill_in "Thickness", with: Faker::Number.number(1)
+      click_button "Save"
+      expect(current_path).to eq(invalid_tray_item_path(id: tray.id))
+    end
+
+    it "show tray item path after clicking 'Rescan' link on the invalid tray item page" do
+      item = FactoryGirl.create(:item, barcode: rand(36**7).to_s(36))
+      visit show_tray_item_path(id: tray.id)
+      fill_in "Item", with: item.barcode
+      fill_in "Thickness", with: Faker::Number.number(1)
+      click_button "Save"
+      expect(current_path).to eq(invalid_tray_item_path(id: tray.id))
+      click_link "Rescan"
+      expect(current_path).to eq(show_tray_item_path(id: tray.id))
+    end
+
+    it "redirects to invalid tray item path two times via clicking 'Rescan' link on the invalid tray item page" do
+      item = FactoryGirl.create(:item, barcode: rand(36**7).to_s(36))
+      visit show_tray_item_path(id: tray.id)
+      fill_in "Item", with: item.barcode
+      fill_in "Thickness", with: Faker::Number.number(1)
+      click_button "Save"
+      expect(current_path).to eq(invalid_tray_item_path(id: tray.id))
+      click_link "Rescan"
+      expect(current_path).to eq(show_tray_item_path(id: tray.id))
+      fill_in "Item", with: item.barcode
+      fill_in "Thickness", with: Faker::Number.number(1)
+      click_button "Save"
+      expect(current_path).to eq(invalid_tray_item_path(id: tray.id))
+    end
+
+    it "redirects to create tray item path after clicking 'Set aside' link on the invalid tray item page" do
+      item2 = FactoryGirl.create(:item, barcode: rand(36**7).to_s(36))
+      visit show_tray_item_path(id: tray.id)
+      fill_in "Item", with: item2.barcode
+      fill_in "Thickness", with: Faker::Number.number(1)
+      click_button "Save"
+      expect(current_path).to eq(invalid_tray_item_path(id: tray.id))
+      click_button "Set aside"
+      expect(current_path).to have_content(create_tray_item_path(id: tray.id))
+    end
 
     it "displays a tray's barcode while processing an item" do
       item_uri = api_item_url(item)
@@ -415,7 +471,7 @@ feature "Trays", type: :feature do
     it "displays items associated with a tray when processing items" do
       items = []
       5.times do |i|
-        item = FactoryGirl.create(:item)
+        item = FactoryGirl.create(:item, barcode: rand.to_s[2..15])
         items << item
       end
       visit trays_items_path
@@ -516,10 +572,9 @@ feature "Trays", type: :feature do
     it "warns when a try is probably full" do
       items = []
       14.times do
-        item = FactoryGirl.create(:item)
+        item = FactoryGirl.create(:item, barcode: rand.to_s[2..15])
         items << item
       end
-      item2 = FactoryGirl.create(:item, tray: tray, thickness: 6)
       visit trays_items_path
       fill_in "Tray", with: tray.barcode
       click_button "Save"
@@ -536,7 +591,7 @@ feature "Trays", type: :feature do
             headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
           to_return{ |response| { status: 200, body: {results: {status: "OK", message: "Item stocked"}}.to_json, headers: {} } }
         fill_in "Item", with: item.barcode
-        fill_in "Thickness", with: 10
+        fill_in "Thickness", with: 100
         click_button "Save"
       end
       expect(page).to have_content 'warning - tray may be full'

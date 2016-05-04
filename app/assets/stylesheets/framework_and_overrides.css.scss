@@ -88,6 +88,7 @@ section {
   @extend .btn-primary;
   @extend .btn-xs;
 }
+
 @media print {
     .doNotPrint, .doNotPrint * { display: none !important; }
 }
@@ -277,6 +278,9 @@ hr {
 
   .btn {
     margin-left: 6px;
+  }
+  .margin-left {
+    margin-left: 50px;
   }
 }
 

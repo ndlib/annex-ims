@@ -131,6 +131,7 @@ class TraysController < ApplicationController
     @tray = Tray.find(params[:id])
     @size = TraySize.call(@tray.barcode)
     @barcode = params[:barcode]
+    @thickness = params[:thickness]
   end
 
   def associate_item
@@ -138,64 +139,27 @@ class TraysController < ApplicationController
     @size = TraySize.call(@tray.barcode)
 
     barcode = params[:barcode]
+    thickness = params[:thickness]
 
     if barcode == @tray.barcode
       redirect_to trays_items_path
       return
     end
 
-    if IsValidThickness.call(params[:thickness])
-      thickness = params[:thickness]
-    else
+    unless IsValidThickness.call(thickness)
       flash[:error] = "select a valid thickness"
-      redirect_to show_tray_item_path(id: @tray.id, barcode: barcode, thickness: params[:thickness])
+      redirect_to show_tray_item_path(id: @tray.id, barcode: barcode)
       return
     end
 
-    begin
-      item = GetItemFromBarcode.call(barcode: barcode, user_id: current_user.id)
-    rescue StandardError
-      flash[:error] = I18n.t("errors.barcode_not_found", barcode: barcode)
-      redirect_to show_tray_item_path(id: @tray.id, barcode: barcode, thickness: params[:thickness])
+    # The system should validate the barcode against the stored regular expression(s)
+    unless IsValidItem.call(barcode)
+      flash[:error] = I18n.t("errors.barcode_not_valid", barcode: barcode)
+      redirect_to invalid_tray_item_path(id: @tray.id, thickness: thickness, barcode: barcode)
       return
     end
 
-    if item.nil?
-      flash[:error] = I18n.t("errors.barcode_not_found", barcode: barcode, thickness: params[:thickness])
-      redirect_to missing_tray_item_path(id: @tray.id)
-      return
-    end
-
-    already = false
-
-    if !item.tray.nil?
-      if item.tray != @tray
-        flash[:error] = "Item #{barcode} is already assigned to #{item.tray.barcode}."
-        redirect_to wrong_tray_path(id: @tray.id, barcode: barcode)
-        return
-      else
-        already = true
-      end
-    end
-
-    begin
-      AssociateTrayWithItemBarcode.call(current_user.id, @tray, barcode, thickness)
-      if already
-        flash[:notice] = "Item #{barcode} already assigned to #{@tray.barcode}. Record updated."
-      else
-        flash[:notice] = "Item #{barcode} stocked in #{@tray.barcode}."
-      end
-      if TrayFull.call(@tray)
-        flash[:error] = "warning - tray may be full"
-      end
-      redirect_to show_tray_item_path(id: @tray.id)
-      return
-    rescue StandardError => e
-      notify_airbrake(e)
-      flash[:error] = e.message
-      redirect_to show_tray_item_path(id: @tray.id)
-      return
-    end
+    create_item(@tray, barcode, thickness)
   end
 
   def dissociate_item
@@ -227,5 +191,38 @@ class TraysController < ApplicationController
 
   def missing
     @tray = Tray.find(params[:id])
+  end
+
+  def invalid
+    @tray = Tray.find(params[:id])
+    @thickness = params[:thickness]
+    @barcode = params[:barcode]
+    @set_aside_flag = true
+  end
+
+  def create_item(tray = Tray.find(params[:id]), barcode = params[:barcode], thickness = params[:thickness])
+    result = CreateItem.call(tray, barcode, current_user.id, thickness, params[:flag])
+
+    if result == "errors.barcode_not_found"
+      flash[:error] = I18n.t(result, barcode: barcode)
+      redirect_to missing_tray_item_path(id: tray.id)
+    elsif !result.nil?
+      if result["Item #{barcode} is already assigned to"]
+        flash[:error] = result
+        redirect_to wrong_tray_path(id: tray.id, barcode: barcode)
+      elsif result["Record updated."] || result["Item #{barcode} stocked in"]
+        flash[:notice] = result
+        if TrayFull.call(tray)
+          flash[:error] = "warning - tray may be full"
+        end
+        redirect_to show_tray_item_path(id: tray.id)
+      end
+    else
+      if !result.nil?
+        notify_airbrake(result)
+        flash[:error] = result.message
+      end
+      redirect_to show_tray_item_path(id: tray.id)
+    end
   end
 end
