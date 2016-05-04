@@ -543,7 +543,7 @@ feature "Trays", type: :feature do
       expect(current_path).to eq(show_tray_item_path(id: tray.id))
       expect(page).to have_content item.barcode
       click_button "Done"
-      expect(current_path).to eq(trays_items_path)
+      expect(current_path).to eq(count_tray_item_path(id: tray.id))
     end
 
     it "allows the user to finish with the current tray when processing items via scan" do
