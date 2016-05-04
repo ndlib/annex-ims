@@ -21,17 +21,20 @@
             %td= match.item.author
             %td= !match.item.shelf.blank? ? match.item.shelf.barcode : ''
             %td= !match.item.tray.blank? ? match.item.tray.barcode : ''
-            %td
-              = form_tag remove_batch_match_path do |f|
-                = hidden_field_tag :match_id, match.id
-                .actions
-                  = submit_tag 'Remove', class: 'btn btn-primary'
+            - if match.item.bin.nil?
+              %td
+                = form_tag remove_batch_match_path do |f|
+                  = hidden_field_tag :match_id, match.id
+                  .actions
+                    = submit_tag 'Remove', class: 'btn btn-primary'
+            - else
+              %td= match.item.bin.barcode
     :javascript
         $(document).ready(function() {
           window.table = $('#items').DataTable( {
             "dom": 'T<"clear">lfrtip',
             "tableTools": {
-              "aButtons": [ 
+              "aButtons": [
                   {
                     "sExtends": "print",
                     "sTitle": "",
