@@ -584,6 +584,37 @@ feature "Trays", type: :feature do
       expect(page).to have_content I18n.t("trays.items_count_not_match")
     end
 
+    it "allows the user to validate two times Manual and System counts of items in the tray" do
+      item_uri = api_item_url(item)
+      stub_request(:get, item_uri).
+        with(headers: { "User-Agent" => "Faraday v0.9.1" }).
+        to_return { { status: 200, body: response_body, headers: {} } }
+      stub_request(:post, api_stock_url).
+        with(body: { "barcode" => "#{item.barcode}", "item_id" => "#{item.id}", "tray_code" => "#{tray.barcode}" },
+          headers: { 'Content-Type' => 'application/x-www-form-urlencoded', 'User-Agent' => 'Faraday v0.9.1' }).
+        to_return{ |response| { status: 200, body: { results: { status: "OK", message: "Item stocked" } }.to_json, headers: {} } }
+      visit trays_items_path
+      fill_in "Tray", with: tray.barcode
+      click_button "Save"
+      expect(current_path).to eq(show_tray_item_path(id: tray.id))
+      fill_in "Item", with: item.barcode
+      fill_in "Thickness", with: Faker::Number.number(1)
+      click_button "Save"
+      expect(current_path).to eq(show_tray_item_path(id: tray.id))
+      expect(page).to have_content item.barcode
+      click_button "Done"
+      expect(current_path).to eq(count_tray_item_path(id: tray.id))
+      fill_in "Items in Tray", with: 2
+      click_button "Validate"
+      expect(current_path).to eq(count_tray_item_path(id: tray.id))
+      fill_in "Items in Tray", with: 4
+      click_button "Validate"
+      expect(current_path).to eq(count_tray_item_path(id: tray.id))
+      expect(page).to have_content I18n.t("trays.count_validation_not_pass")
+      click_button "OK"
+      expect(current_path).to eq(trays_items_path)
+    end
+
     it "allows the user to finish with the current tray when processing items via scan" do
       item_uri = api_item_url(item)
       stub_request(:get, item_uri).

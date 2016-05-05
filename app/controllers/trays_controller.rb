@@ -228,12 +228,22 @@ class TraysController < ApplicationController
 
   def count_item
     @tray = Tray.find(params[:id])
+    @validation_count = params[:validation_count]
     tray_count = params[:tray_count]
     items = Item.select { |item| item.tray_id == @tray.id }
 
     if !tray_count.nil?
       if tray_count.to_i != items.count
-        flash.now[:error] = I18n.t("trays.items_count_not_match")
+        if @validation_count.nil?
+          @validation_count = 0
+        else
+          @validation_count = @validation_count.to_i + 1
+          if @validation_count == 2
+            flash.now[:error] = I18n.t("trays.count_validation_not_pass")
+          else
+            flash.now[:error] = I18n.t("trays.items_count_not_match")
+          end
+        end
       else
         redirect_to trays_items_path
       end

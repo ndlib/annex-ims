@@ -25,6 +25,7 @@ en:
     barcode_not_valid: "Barcode \"%{barcode}\" is not valid, please re-scan."
   trays:
     items_count_not_match: "Manual and System Tray counts don't match! Try again."
+    count_validation_not_pass: "Put Tray to side for QC."
   batches:
     status:
       active: "You already have an active batch in process"
