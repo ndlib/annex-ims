@@ -549,7 +549,7 @@ feature "Trays", type: :feature do
     it "allows the user to validate same Manual and System counts of items in the tray" do
       item_uri = api_item_url(item)
       stub_request(:get, item_uri).
-        with(headers: { "User-Agent" => "Faraday v0.9.1" } ).
+        with(headers: { "User-Agent" => "Faraday v0.9.1" }).
         to_return{ { status: 200, body: response_body, headers: {} } }
       stub_request(:post, api_stock_url).
         with(body: { "barcode" => "#{item.barcode}", "item_id" => "#{item.id}", "tray_code" => "#{tray.barcode}" },
