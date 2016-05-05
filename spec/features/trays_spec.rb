@@ -567,7 +567,7 @@ feature "Trays", type: :feature do
       click_button "Done"
       expect(current_path).to eq(count_tray_item_path(id: tray.id))
       fill_in "Items in Tray", with: 1
-      click_button "Validate"
+      click_button "Enter"
       expect(current_path).to eq(trays_items_path)
     end
 
@@ -579,7 +579,7 @@ feature "Trays", type: :feature do
       click_button "Done"
       expect(current_path).to eq(count_tray_item_path(id: tray.id))
       fill_in "Items in Tray", with: 1
-      click_button "Validate"
+      click_button "Enter"
       expect(current_path).to eq(count_tray_item_path(id: tray.id))
       expect(page).to have_content I18n.t("trays.items_count_not_match")
     end
