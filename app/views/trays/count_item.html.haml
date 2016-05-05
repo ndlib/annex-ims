@@ -7,7 +7,7 @@
           - @tray.errors.full_messages.each do |msg|
             %li= msg
     .field
-      = label_tag :items_in_tray
+      = label_tag :tray_count, "Items in Tray"
       = text_field_tag :tray_count, @tray_count,
         required: true, autofocus: true, placeholder: 'Enter a number of items'
     .actions

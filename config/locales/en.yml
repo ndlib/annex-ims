@@ -23,6 +23,8 @@ en:
   errors:
     barcode_not_found: "Barcode %{barcode} not found. Put item with barcode %{barcode} on problem shelf."
     barcode_not_valid: "Barcode \"%{barcode}\" is not valid, please re-scan."
+  trays:
+    items_count_not_match: "Manual and System Tray counts don't match! Try again."
   batches:
     status:
       active: "You already have an active batch in process"

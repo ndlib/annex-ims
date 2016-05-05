@@ -233,7 +233,7 @@ class TraysController < ApplicationController
 
     if !tray_count.nil?
       if tray_count.to_i != items.count
-        flash.now[:error] = "Manual and System Tray counts don't match! Try again."
+        flash.now[:error] = I18n.t("trays.items_count_not_match")
       else
         redirect_to trays_items_path
       end
