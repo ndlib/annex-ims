@@ -7,9 +7,9 @@
           - @tray.errors.full_messages.each do |msg|
             %li= msg
     .field
-      = label_tag :tray_count, "Items in Tray"
-      = text_field_tag :tray_count, @tray_count,
+      = f.label :tray_count, "Items in Tray"
+      = f.text_field :tray_count, @tray_count,
         required: true, autofocus: true, placeholder: 'Enter a number of items'
     .actions
-      = submit_tag 'Validate', class: 'btn btn-primary'
+      = f.submit 'Validate', class: 'btn btn-primary'
 %br
