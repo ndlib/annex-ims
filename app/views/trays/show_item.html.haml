@@ -23,7 +23,8 @@
     .actions
       = submit_tag 'Save', class: 'btn btn-primary'
 %br
-= button_to "Done", trays_items_path, method: :get, class: 'btn pull-right btn-primary'
+= button_to "Done", count_tray_item_path, method: :get,
+  class: 'btn pull-right btn-primary'
 %table.table.table-striped.condensed{"data-toggle" => "table"}
   %thead
     %tr

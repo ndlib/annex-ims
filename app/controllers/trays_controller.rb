@@ -225,4 +225,18 @@ class TraysController < ApplicationController
       redirect_to show_tray_item_path(id: tray.id)
     end
   end
+
+  def count_item
+    @tray = Tray.find(params[:id])
+    tray_count = params[:tray_count]
+    items = Item.select { |item| item.tray_id == @tray.id }
+
+    if !tray_count.nil?
+      if tray_count.to_i != items.count
+        flash.now[:error] = I18n.t("trays.items_count_not_match")
+      else
+        redirect_to trays_items_path
+      end
+    end
+  end
 end
