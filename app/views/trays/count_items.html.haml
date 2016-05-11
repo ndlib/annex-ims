@@ -6,14 +6,16 @@
     = form_tag count_tray_item_path(@tray) do |f|
       - if @tray.errors.any?
         #error_explanation
-          %h2= "#{pluralize(@tray.errors.count, "error")} prohibited this tray from being saved:"
+          %h2= "#{pluralize(@tray.errors.count, |
+           "error")} prohibited this tray from being saved:" |
           %ul
             - @tray.errors.full_messages.each do |msg|
               %li= msg
       .field
         = label_tag :tray_count, "Items in Tray"
         = text_field_tag :tray_count, nil,
-          required: true, autofocus: true, placeholder: 'Enter a number of items'
+          required: true, autofocus: true,
+            placeholder: 'Enter a number of items'
       = hidden_field_tag :validation_count, @validation_count
       .actions
         = submit_tag 'Enter', class: 'btn btn-primary'

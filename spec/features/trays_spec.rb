@@ -592,7 +592,7 @@ feature "Trays", type: :feature do
       stub_request(:post, api_stock_url).
         with(body: { "barcode" => "#{item.barcode}", "item_id" => "#{item.id}", "tray_code" => "#{tray.barcode}" },
           headers: { 'Content-Type' => 'application/x-www-form-urlencoded', 'User-Agent' => 'Faraday v0.9.1' }).
-        to_return{ |response| { status: 200, body: { results: { status: "OK", message: "Item stocked" } }.to_json, headers: {} } }
+        to_return { |response| { status: 200, body: { results: { status: "OK", message: "Item stocked" } }.to_json, headers: {} } }
       visit trays_items_path
       fill_in "Tray", with: tray.barcode
       click_button "Save"
