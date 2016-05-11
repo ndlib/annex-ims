@@ -226,7 +226,7 @@ class TraysController < ApplicationController
     end
   end
 
-  def count_item
+  def count_items
     @tray = Tray.find(params[:id])
     @validation_count = params[:validation_count]
     tray_count = params[:tray_count]

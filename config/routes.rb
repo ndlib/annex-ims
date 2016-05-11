@@ -25,8 +25,8 @@ Rails.application.routes.draw do
   get "trays/items/:id/missing", to: "trays#missing", as: "missing_tray_item"
   get "trays/items/:id/invalid", to: "trays#invalid", as: "invalid_tray_item"
   post "trays/items/:id/create", to: "trays#create_item", as: "create_tray_item"
-  get "trays/items/:id/count_item", to: "trays#count_item", as: "count_tray_item"
-  post "trays/items/:id/count_item", to: "trays#count_item", as: "validate_count_tray"
+  get "trays/items/:id/count_item", to: "trays#count_items", as: "count_tray_item"
+  post "trays/items/:id/count_item", to: "trays#count_items", as: "validate_count_tray"
 
   post "trays/:id/withdraw", to: "trays#withdraw", as: "withdraw_tray"
 
