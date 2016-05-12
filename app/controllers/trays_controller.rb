@@ -225,4 +225,28 @@ class TraysController < ApplicationController
       redirect_to show_tray_item_path(id: tray.id)
     end
   end
+
+  def count_items
+    @tray = Tray.find(params[:id])
+    @validation_count_items = params[:validation_count_items]
+    tray_count = params[:tray_count]
+    items = Item.select { |item| item.tray_id == @tray.id }
+
+    if !tray_count.nil?
+      if tray_count.to_i != items.count
+        if @validation_count_items.nil?
+          @validation_count_items = 0
+        else
+          @validation_count_items = @validation_count_items.to_i + 1
+          if @validation_count_items == 2
+            flash.now[:error] = I18n.t("trays.count_validation_not_pass")
+          else
+            flash.now[:error] = I18n.t("trays.count_items_not_match")
+          end
+        end
+      else
+        redirect_to trays_items_path
+      end
+    end
+  end
 end
