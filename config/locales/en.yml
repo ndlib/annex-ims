@@ -25,10 +25,7 @@ en:
     barcode_not_valid: "Barcode \"%{barcode}\" is not valid, please re-scan."
   trays:
     items_count_not_match: "The count you entered and the computer's count did not match.  Recount and enter again."
-<<<<<<< HEAD
-=======
     count_validation_not_pass: "Put Tray to side for QC."
->>>>>>> AIMS-355-NEW
   batches:
     status:
       active: "You already have an active batch in process"
