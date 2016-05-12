@@ -581,7 +581,7 @@ feature "Trays", type: :feature do
       fill_in "Items in Tray", with: 1
       click_button "Enter"
       expect(current_path).to eq(count_tray_item_path(id: tray.id))
-      expect(page).to have_content I18n.t("trays.items_count_not_match")
+      expect(page).to have_content I18n.t("trays.count_items_not_match")
     end
 
     it "allows the user to validate two times Manual and System counts of items in the tray" do
