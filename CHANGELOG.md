@@ -1,5 +1,28 @@
 # Change Log
 
+## [1.3.0](https://github.com/ndlib/annex-ims/tree/v1.3.0) (2016-05-16)
+[Full Changelog](https://github.com/ndlib/annex-ims/compare/v1.2.0...v1.3.0)
+
+**New features/enhancements:**
+- Users can now click an item from the list of all items in the tray to view detailed information. ([AIMS-129](https://jira.library.nd.edu/browse/AIMS-129),  [#149](https://github.com/ndlib/annex-ims/pull/149))
+- Admins can now get to the user permissions view from the main menu ([AIMS-278](https://jira.library.nd.edu/browse/AIMS-278),  [#148](https://github.com/ndlib/annex-ims/pull/148))
+- System will no longer allow invalid barcode patterns for items ([AIMS-345](https://jira.library.nd.edu/browse/AIMS-345),  [#147](https://github.com/ndlib/annex-ims/pull/147))
+
+**Bug fixes:**
+- Users are no longer able to remove processed requests from an active batch ([AIMS-344](https://jira.library.nd.edu/browse/AIMS-344),  [#150](https://github.com/ndlib/annex-ims/pull/150))
+
+## [1.2.0](https://github.com/ndlib/annex-ims/tree/v1.2.0) (2016-04-01)
+[Full Changelog](https://github.com/ndlib/annex-ims/compare/v1.1.0...v1.2.0)
+
+**New features/enhancements:**
+- Now allows defining three different types of permissions per user ([AIMS-335](https://jira.library.nd.edu/browse/AIMS-335),  [#145](https://github.com/ndlib/annex-ims/pull/145), [#146](https://github.com/ndlib/annex-ims/pull/146)): 
+  - Admin - access to everything
+  - Stocking - access only to those options in the Stocking, Items, and Reports menu
+  - Review - access only to those options in the Items and Reports menu
+
+**Bug fixes:**
+- When a batch is created, then retrieved, and finally processed, it is not finished properly in the system until the user goes back to their active branch and clicks "Done" ([AIMS-343](https://jira.library.nd.edu/browse/AIMS-343),  [#139](https://github.com/ndlib/annex-ims/pull/139))
+
 ## [1.1.0](https://github.com/ndlib/annex-ims/tree/v1.1.0) (2016-01-15)
 [Full Changelog](https://github.com/ndlib/annex-ims/compare/v1.0.0...v1.1.0)
 
