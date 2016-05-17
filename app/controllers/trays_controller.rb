@@ -230,10 +230,10 @@ class TraysController < ApplicationController
     @tray = Tray.find(params[:id])
     @validation_count_items = params[:validation_count_items]
     tray_count = params[:tray_count]
-    items = Item.select { |item| item.tray_id == @tray.id }
 
     if !tray_count.nil?
-      if tray_count.to_i != items.count
+      count_items_in_tray = @tray.items.count
+      if tray_count.to_i != count_items_in_tray
         if @validation_count_items.nil?
           @validation_count_items = 0
         else
