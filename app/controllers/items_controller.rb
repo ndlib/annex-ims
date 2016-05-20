@@ -51,7 +51,7 @@ class ItemsController < ApplicationController
   end
 
   def issues
-    @issues = UnresolvedIssueQuery.call(params)
+    @issues = UnresolvedIssueQuery.call_items(params)
   end
 
   def resolve

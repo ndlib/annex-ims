@@ -607,12 +607,14 @@ feature "Trays", type: :feature do
       fill_in "Items in Tray", with: 2
       click_button "Enter"
       expect(current_path).to eq(count_tray_item_path(id: tray.id))
+      expect(page).to have_content I18n.t("trays.count_items_not_match")
       fill_in "Items in Tray", with: 4
       click_button "Enter"
       expect(current_path).to eq(count_tray_item_path(id: tray.id))
       expect(page).to have_content I18n.t("trays.count_validation_not_pass")
-      click_button "OK"
+      click_link "OK"
       expect(current_path).to eq(trays_items_path)
+      expect(Issue.find_by_barcode(tray.barcode)).to_not be_nil
     end
 
     it "allows the user to finish with the current tray when processing items via scan" do

@@ -27,7 +27,9 @@ Rails.application.routes.draw do
   post "trays/items/:id/create", to: "trays#create_item", as: "create_tray_item"
   get "trays/items/:id/count_items", to: "trays#count_items", as: "count_tray_item"
   post "trays/items/:id/count_items", to: "trays#count_items", as: "validate_count_tray"
+  get "trays/items/:id/create_issue", to: "trays#create_issue", as: "create_issue"
 
+  get "trays/issues", to: "trays#issues", as: "trays_issues"
   post "trays/:id/withdraw", to: "trays#withdraw", as: "withdraw_tray"
 
   get "shelves/items", to: "shelves#index", as: "shelves"

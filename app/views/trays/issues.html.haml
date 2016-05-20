@@ -1,0 +1,41 @@
+- if @issues.blank?
+  %span
+    = "There are no current outstanding issues."
+- else
+  %table.table.table-striped.condensed.datatable{"id" => "issues"}
+    %thead
+      %tr
+        %th= 'Barcode'
+        %th= 'Message'
+        %th= 'Created'
+        %th= 'User'
+    %tbody
+      - @issues.each do |issue|
+        %tr
+          %td= link_to issue.barcode,
+            show_tray_item_path(Tray.find_by_barcode(issue.barcode).id)
+          %td= issue.message
+          %td= issue.created_at.strftime("%m-%d-%Y %I:%M%p")
+          %td= issue.user ? issue.user.username : "system"
+  :javascript
+      $(document).ready(function() {
+        var columns = {
+          barcode: 0,
+          system: 1,
+          manual: 2,
+          createdDisplay: 3,
+          user: 4,
+        }
+        window.table = $('#issues').DataTable({
+          stateSave: true,
+          stateDuration: 60 * 5,
+          columnDefs: [
+            {
+              targets: columns.createdDisplay,
+              orderData: [columns.createdTimestamp],
+            }
+          ],
+        });
+        $('#issues').width("100%");
+        $('div.dataTables_filter input').focus();
+      } );

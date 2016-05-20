@@ -50,6 +50,10 @@ class ActivityLogger
     call(action: "CreatedIssue", issue: issue, item: item, user: user)
   end
 
+  def self.create_tray_issue(issue:, tray:, user:)
+    call(action: "CreatedTrayIssue", issue: issue, tray: tray, user: user)
+  end
+
   def self.create_item(item:, user:)
     call(action: "CreatedItem", item: item, user: user)
   end

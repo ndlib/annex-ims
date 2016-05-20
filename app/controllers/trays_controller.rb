@@ -229,11 +229,11 @@ class TraysController < ApplicationController
   def count_items
     @tray = Tray.find(params[:id])
     @validation_count_items = params[:validation_count_items]
-    tray_count = params[:tray_count]
+    @tray_count = params[:tray_count]
 
-    if !tray_count.nil?
+    if !@tray_count.nil?
       count_items_in_tray = @tray.items.count
-      if tray_count.to_i != count_items_in_tray
+      if @tray_count.to_i != count_items_in_tray
         if @validation_count_items.nil?
           @validation_count_items = 0
         else
@@ -245,8 +245,21 @@ class TraysController < ApplicationController
           end
         end
       else
+        ResolveTrayIssue.call(@tray, current_user)
         redirect_to trays_items_path
       end
     end
+  end
+
+  def create_issue
+    @tray = Tray.find(params[:id])
+    @manual_count = params[:tray_count]
+
+    AddTrayIssue.call(@tray, @manual_count, current_user)
+    redirect_to trays_items_path
+  end
+
+  def issues
+    @issues = UnresolvedIssueQuery.call_trays(params)
   end
 end

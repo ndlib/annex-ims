@@ -14,7 +14,9 @@ class AddIssue
 
   def add
     if valid?
-      issue = Issue.find_or_initialize_by(barcode: barcode, issue_type: issue_type, message: message, resolved_at: nil)
+      issue = Issue.find_or_initialize_by(barcode: barcode,
+        issue_type: issue_type, message: message, resolved_at: nil,
+        barcode_type: "item")
       new_record = issue.new_record?
       issue.user = user
       issue.save!

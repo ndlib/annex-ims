@@ -19,6 +19,7 @@
     #items.collapse
       %a.list-group-item.barcode{ :href => search_path } Item Search
       %a.list-group-item{ :href => issues_path } Items with Issues
+      %a.list-group-item{ :href => trays_issues_path } Trays with Issues
     - if user_admin?
       %a.list-group-item.list-group-item-success{ "data-parent" => "#MainMenu",
         "data-toggle" => "collapse",
