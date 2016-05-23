@@ -612,7 +612,7 @@ feature "Trays", type: :feature do
       click_button "Enter"
       expect(current_path).to eq(count_tray_item_path(id: tray.id))
       expect(page).to have_content I18n.t("trays.count_validation_not_pass")
-      click_link "OK"
+      click_button "OK"
       expect(current_path).to eq(trays_items_path)
       expect(Issue.find_by_barcode(tray.barcode)).to_not be_nil
     end
