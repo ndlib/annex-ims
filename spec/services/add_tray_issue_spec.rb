@@ -25,7 +25,7 @@ RSpec.describe AddTrayIssue do
     expect(subject2.message).to eq(message2)
   end
 
-  it "logs the issue creation" do
+  it "logs the tray issue creation" do
     expect(ActivityLogger).to receive(:create_tray_issue).with( tray: tray,
       issue: kind_of(Issue), user: user)
     subject
