@@ -16,12 +16,12 @@ class AddTrayIssue
     manual_text = "Manual count = ".to_s + @manual_count.to_s
     message = system_text + '. ' + manual_text + '.'
 
-    issue = Issue.find_by_barcode(@tray.barcode)
-
+    issue = Issue.where('barcode = ? AND resolver_id is null',
+      @tray.barcode).first
     # If it is a new issue or an issue that hasn't been resolved.
     # In the second case, it may be an issue for a tray that already has a
     # record in the Issues list
-    if issue.nil? || !issue.resolver.nil?
+    if issue.nil?
       issue = Issue.new(barcode: @tray.barcode, issue_type: "counts_not_match",
         message: message, resolved_at: nil, barcode_type: "tray")
       new_record = issue.new_record?

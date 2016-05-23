@@ -1,5 +1,5 @@
 - if @validation_count_items == 2
-  = link_to "OK", create_issue_path(tray_count: @tray_count), method: :get,
+  = button_to "OK", trays_items_path, method: :get,
     class: 'btn pull-left btn-primary'
 - else
   .scan

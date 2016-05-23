@@ -11,7 +11,8 @@ class ResolveTrayIssue
   end
 
   def resolve!
-    issue = Issue.find_by_barcode(@tray.barcode)
+    issue = Issue.where('barcode = ? AND resolver_id is null',
+      @tray.barcode).first
 
     unless issue.nil?
       issue.resolver = user
