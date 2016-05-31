@@ -11,10 +11,11 @@
     .field
       = label_tag :thickness
       - if IsValidThickness.call(@thickness)
-        = number_field_tag :thickness, @thickness, required: true, max: 1000
+        = number_field_tag :thickness, @thickness, required: true,
+          max: 1000, min: 1
       - else
         = number_field_tag :thickness, nil, autofocus: "autofocus",
-          required: true, max: 1000
+          required: true, max: 1000, min: 1
     .field
       = label_tag :barcode, "Item"
       - if IsValidThickness.call(@thickness)
