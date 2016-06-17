@@ -18,9 +18,9 @@ class AddTrayIssue
       new_record = issue.new_record?
       issue.user = user
       issue.save!
-      # if new_record
-      #   ActivityLogger.create_issue(tray: tray, issue: issue, user: user)
-      # end
+      if new_record
+        ActivityLogger.create_tray_issue(tray: tray, issue: issue, user: user)
+      end
       issue
     end
   end

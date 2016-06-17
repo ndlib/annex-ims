@@ -14,11 +14,11 @@ RSpec.describe AddTrayIssue do
     expect(subject.barcode).to eq(tray.barcode)
     expect(subject.message).to eq(message)
   end
-  #
-  # it "logs the tray issue creation" do
-  #   expect(ActivityLogger).to receive(:create_tray_issue).with(tray: tray, issue: kind_of(TrayIssue), user: user)
-  #   subject
-  # end
+
+  it "logs the tray issue creation" do
+    expect(ActivityLogger).to receive(:create_tray_issue).with(tray: tray, issue: kind_of(TrayIssue), user: user)
+    subject
+  end
 
   it "does not create a second issue for the same type" do
     issue = described_class.call(tray: tray, user: user, type: issue_type, message: message)
