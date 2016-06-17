@@ -7,6 +7,7 @@ RSpec.describe ActivityLogger do
   let(:shelf) { FactoryGirl.create(:shelf) }
   let(:user) { FactoryGirl.create(:user) }
   let(:issue) { FactoryGirl.create(:issue) }
+  let(:tray_issue) { FactoryGirl.create(:tray_issue) }
   let(:request) { FactoryGirl.create(:request) }
   let(:transfer) { FactoryGirl.create(:transfer) }
   let(:api_response) { ApiResponse.new(status_code: 200, body: { status: "OK" }) }
@@ -133,6 +134,13 @@ RSpec.describe ActivityLogger do
     it_behaves_like "an activity log", "CreatedIssue"
   end
 
+  context "CreatedTrayIssue" do
+    let(:arguments) { { issue: issue, tray: tray, user: user } }
+    subject { described_class.create_tray_issue(**arguments) }
+
+    it_behaves_like "an activity log", "CreatedTrayIssue"
+  end
+
   context "CreatedItem" do
     let(:arguments) { { item: item, user: user } }
     subject { described_class.create_item(**arguments) }
@@ -222,6 +230,13 @@ RSpec.describe ActivityLogger do
     subject { described_class.resolve_issue(**arguments) }
 
     it_behaves_like "an activity log", "ResolvedIssue"
+  end
+
+  context "ResolvedTrayIssue" do
+    let(:arguments) { { issue: tray_issue, user: user } }
+    subject { described_class.resolve_tray_issue(**arguments) }
+
+    it_behaves_like "an activity log", "ResolvedTrayIssue"
   end
 
   context "ScannedItem" do
