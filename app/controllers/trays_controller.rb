@@ -239,6 +239,7 @@ class TraysController < ApplicationController
         else
           @validation_count_items = @validation_count_items.to_i + 1
           if @validation_count_items == 2
+            AddTrayIssue.call(user: current_user, tray: @tray, message: "Tray count invalid", type: "incorrect_count")
             flash.now[:error] = I18n.t("trays.count_validation_not_pass")
           else
             flash.now[:error] = I18n.t("trays.count_items_not_match")
