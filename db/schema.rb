@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160128174804) do
+ActiveRecord::Schema.define(version: 20160617192442) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -150,6 +150,20 @@ ActiveRecord::Schema.define(version: 20160128174804) do
 
   add_index "transfers", ["shelf_id"], name: "index_transfers_on_shelf_id", using: :btree
 
+  create_table "tray_issues", force: :cascade do |t|
+    t.integer  "user_id",     null: false
+    t.string   "barcode",     null: false
+    t.text     "message",     null: false
+    t.string   "issue_type",  null: false
+    t.integer  "resolver_id"
+    t.datetime "resolved_at"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "tray_issues", ["resolver_id"], name: "index_tray_issues_on_resolver_id", using: :btree
+  add_index "tray_issues", ["user_id"], name: "index_tray_issues_on_user_id", using: :btree
+
   create_table "trays", force: :cascade do |t|
     t.string   "barcode",                    null: false
     t.integer  "shelf_id"
@@ -186,5 +200,7 @@ ActiveRecord::Schema.define(version: 20160128174804) do
   add_foreign_key "requests", "batches"
   add_foreign_key "requests", "items"
   add_foreign_key "transfers", "shelves"
+  add_foreign_key "tray_issues", "users"
+  add_foreign_key "tray_issues", "users", column: "resolver_id"
   add_foreign_key "trays", "shelves"
 end
