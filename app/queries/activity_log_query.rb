@@ -26,6 +26,18 @@ module ActivityLogQuery
       order(action_timestamp: :desc)
   end
 
+  def tray_history(tray)
+    for_tray(tray).
+      where(action: [
+              "AssociatedTrayAndShelf",
+              "CreatedTrayIssue",
+              "DissociatedTrayAndShelf",
+              "ResolvedTrayIssue",
+              "ShelvedTray",
+              "UnshelvedTray"]).
+      order(action_timestamp: :desc)
+  end
+
   def item_usage(item)
     for_item(item).
       where(action: ["ScannedItem", "ShippedItem"]).
@@ -39,6 +51,11 @@ module ActivityLogQuery
   def for_item(item)
     relation.
       where("data -> 'item' -> 'barcode' ? :barcode", barcode: item.barcode)
+  end
+
+  def for_tray(tray)
+    relation.
+      where("data -> 'tray' -> 'barcode' ? :barcode", barcode: tray.barcode)
   end
 
   def for_shelf(shelf)

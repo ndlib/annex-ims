@@ -106,8 +106,8 @@ class ActivityLogger
     call(action: "ResolvedIssue", issue: issue, user: user)
   end
 
-  def self.resolve_tray_issue(issue:, user:)
-    call(action: "ResolvedTrayIssue", issue: issue, user: user)
+  def self.resolve_tray_issue(tray:, issue:, user:)
+    call(action: "ResolvedTrayIssue", tray: tray, issue: issue, user: user)
   end
 
   def self.scan_item(item:, request:, user:)

@@ -233,7 +233,7 @@ RSpec.describe ActivityLogger do
   end
 
   context "ResolvedTrayIssue" do
-    let(:arguments) { { issue: tray_issue, user: user } }
+    let(:arguments) { { tray: tray, issue: tray_issue, user: user } }
     subject { described_class.resolve_tray_issue(**arguments) }
 
     it_behaves_like "an activity log", "ResolvedTrayIssue"
