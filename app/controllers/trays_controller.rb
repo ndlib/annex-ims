@@ -246,8 +246,44 @@ class TraysController < ApplicationController
           end
         end
       else
+        if invalid_count_issues?
+          resolve_count_issues
+        end
         redirect_to trays_items_path
       end
+    end
+  end
+
+  def issues
+    @issues = UnresolvedTrayIssueQuery.call(params)
+  end
+
+  def resolve
+    tray = Tray.where(barcode: TrayIssue.find(params[:issue_id]).barcode).take!
+
+    redirect_to count_tray_item_path(id: tray.id)
+  end
+
+  def tray_detail
+    @tray = Tray.where(barcode: params[:barcode]).take
+    if @tray
+      @history = ActivityLogQuery.tray_history(@tray)
+    end
+  end
+
+  private
+
+  def invalid_count_issues?
+    if IssuesForTrayQuery.call(barcode: @tray.barcode).where(issue_type: "incorrect_count").count >= 1
+      true
+    else
+      false
+    end
+  end
+
+  def resolve_count_issues
+    IssuesForTrayQuery.call(barcode: @tray.barcode).where(issue_type: "incorrect_count").each do |issue|
+      ResolveTrayIssue.call(tray: @tray, issue: issue, user: current_user)
     end
   end
 end
