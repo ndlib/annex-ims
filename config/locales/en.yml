@@ -44,6 +44,7 @@ en:
       not_found: "Barcode not found."
       not_for_annex: "Item not marked for annex."
       not_valid_barcode: "Invalid Barcode."
+      counts_not_match: "Manual and system counts don't match."
   requests:
     synchronized: "Synchronized %{count} requests."
   activity_log:
@@ -58,6 +59,7 @@ en:
     items_item_detail: "Item Detail"
     items_show: " "
     items_issues: "Items with Issues"
+    trays_issues: "Trays with Issues"
     trays_items: "Items to Tray"
     trays_count_items: "Tray's Item Count"
     trays_show_item: "Add Item"
