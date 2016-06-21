@@ -1,5 +1,5 @@
 - if @validation_count_items == 2
-  = button_to "OK", trays_items_path(), method: :get,
+  = button_to "OK", trays_items_path, method: :get,
     class: 'btn pull-left btn-primary'
 - else
   .scan
@@ -13,9 +13,9 @@
               %li= msg
       .field
         = label_tag :tray_count, "Items in Tray"
-        = text_field_tag :tray_count, nil,
-          required: true, autofocus: true,
-            placeholder: 'Enter a number of items'
+        = number_field_tag :tray_count, nil,
+          required: true, autofocus: true, min: 0,
+          placeholder: 'Enter a number of items'
       = hidden_field_tag :validation_count_items, @validation_count_items
       .actions
         = submit_tag 'Enter', class: 'btn btn-primary'
