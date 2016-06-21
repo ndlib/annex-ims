@@ -2,8 +2,9 @@ require "rails_helper"
 
 RSpec.describe ResolveTrayIssue do
   let(:issue) { FactoryGirl.create(:tray_issue) }
+  let(:tray) { FactoryGirl.create(:tray) }
   let(:user) { FactoryGirl.create(:user) }
-  subject { described_class.call(issue: issue, user: user) }
+  subject { described_class.call(tray: tray, issue: issue, user: user) }
 
   it "resolves the tray issue" do
     expect(issue.resolved_at).to be_nil
@@ -14,7 +15,7 @@ RSpec.describe ResolveTrayIssue do
   end
 
   it "logs the tray issue resolution" do
-    expect(ActivityLogger).to receive(:resolve_tray_issue).with(issue: issue, user: user)
+    expect(ActivityLogger).to receive(:resolve_tray_issue).with(tray: tray, issue: issue, user: user)
     subject
   end
 end
