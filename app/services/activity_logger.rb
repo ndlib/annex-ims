@@ -1,5 +1,5 @@
 class ActivityLogger
-  DATA_OBJECTS = [:item, :tray, :shelf, :bin, :request, :issue, :tray_issue, :transfer, :api_response, :params]
+  DATA_OBJECTS = [:item, :tray, :shelf, :bin, :request, :issue, :tray_issue, :transfer, :api_response, :params].freeze
   attr_reader :action, :user, :data_objects
 
   def self.accept_item(item:, request:, user:)

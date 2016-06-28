@@ -11,39 +11,56 @@ RSpec.describe IssuesForTrayQuery do
   let!(:tray_issue4) { FactoryGirl.create(:tray_issue, issue_type: "not_valid_barcode", barcode: tray4.barcode) }
   let(:subject) { described_class }
 
-  context "no issues for tray" do
-    it "does not return any issues" do
-      expect(subject.call(barcode: tray2.barcode).count).to eq 0
+  context "issues not present for tray" do
+    describe "#all_issues" do
+      it "does not return any issues" do
+        expect(subject.new(barcode: tray2.barcode).all_issues.count).to eq 0
+      end
+    end
+
+    describe "#invalid_count_issues?" do
+      it "returns false" do
+        expect(subject.new(barcode: tray4.barcode).invalid_count_issues?).to be_falsey
+      end
+    end
+
+    describe "#issues_by_type" do
+      it "returns an empty array" do
+        expect(subject.new(barcode: tray2.barcode).issues_by_type(type: "incorrect_count").count).to eq 0
+      end
     end
   end
 
-  context "issues for tray" do
-    it "returns issue" do
-      expect(subject.call(barcode: tray.barcode).count).to eq 1
+  context "issues present for tray" do
+    describe "#all_issues" do
+      it "returns issue" do
+        expect(subject.new(barcode: tray.barcode).all_issues.count).to eq 1
+      end
+
+      it "returns all issues when multiple issues present" do
+        expect(subject.new(barcode: tray3.barcode).all_issues.count).to eq 2
+      end
     end
 
-    it "returns all issues when multiple issues present" do
-      expect(subject.call(barcode: tray3.barcode).count).to eq 2
-    end
-  end
+    describe "#invalid_count_issues?" do
+      it "returns true when invalid count issue present" do
+        expect(subject.new(barcode: tray3.barcode).invalid_count_issues?).to be_truthy
+      end
 
-  context "a comparison of tray issues" do
-    it "not for annex issue" do
-      expect(tray_issue1.barcode).to eq tray.barcode
-      expect(tray_issue1.issue_type).to eq "incorrect_count"
-      expect(tray_issue1.issue_type).to_not eq "not_valid_barcode"
+      it "returns false when invalid count issue not present" do
+        expect(subject.new(barcode: tray4.barcode).invalid_count_issues?).to be_falsey
+      end
     end
 
-    it "not found issue" do
-      expect(tray_issue3.barcode).to eq tray3.barcode
-      expect(tray_issue3.issue_type).to eq "not_valid_barcode"
-      expect(tray_issue3.issue_type).to_not eq "incorrect_count"
-    end
+    describe "#issues_by_type" do
+      it "returns the correct number of issues by type for tray" do
+        expect(subject.new(barcode: tray4.barcode).issues_by_type(type: "not_valid_barcode").count).to eq 1
+        expect(subject.new(barcode: tray4.barcode).issues_by_type(type: "incorrect_count").count).to eq 0
+      end
 
-    it "not valid barcode issue" do
-      expect(tray_issue4.barcode).to eq tray4.barcode
-      expect(tray_issue4.issue_type).to eq "not_valid_barcode"
-      expect(tray_issue4.issue_type).to_not eq "incorrect_count"
+      it "returns empty array if type is not supplied" do
+        expect(subject.new(barcode: tray4.barcode).issues_by_type(type: nil).count).to eq 0
+      end
     end
   end
 end

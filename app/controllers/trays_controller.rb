@@ -246,8 +246,11 @@ class TraysController < ApplicationController
           end
         end
       else
-        if invalid_count_issues?
-          resolve_count_issues
+        tray_issue_query = IssuesForTrayQuery.new(barcode: @tray.barcode)
+        if tray_issue_query.invalid_count_issues?
+          tray_issue_query.issues_by_type(type: "incorrect_count").each do |issue|
+            ResolveTrayIssue.call(tray: @tray, issue: issue, user: current_user)
+          end
         end
         redirect_to trays_items_path
       end
@@ -268,22 +271,6 @@ class TraysController < ApplicationController
     @tray = Tray.where(barcode: params[:barcode]).take
     if @tray
       @history = ActivityLogQuery.tray_history(@tray)
-    end
-  end
-
-  private
-
-  def invalid_count_issues?
-    if IssuesForTrayQuery.call(barcode: @tray.barcode).where(issue_type: "incorrect_count").count >= 1
-      true
-    else
-      false
-    end
-  end
-
-  def resolve_count_issues
-    IssuesForTrayQuery.call(barcode: @tray.barcode).where(issue_type: "incorrect_count").each do |issue|
-      ResolveTrayIssue.call(tray: @tray, issue: issue, user: current_user)
     end
   end
 end

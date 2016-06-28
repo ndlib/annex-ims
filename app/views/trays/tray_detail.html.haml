@@ -1,14 +1,14 @@
 - if @tray.blank?
-  %div.panel.panel-primary
-    %div.panel-heading
+  .panel.panel-primary
+    .panel-heading
       %h3.panel-title= "Tray Details"
-    %div.panel-body
+    .panel-body
       %span= "Tray Not Found"
 - else
-  %div.panel.panel-primary
-    %div.panel-heading
+  .panel.panel-primary
+    .panel-heading
       %h3.panel-title= "Tray Details"
-    %div.panel-body
+    .panel-body
       %table.table.table-striped
         %tbody
           %tr
@@ -26,11 +26,14 @@
           %tr
             %td
               %strong= "Shelf Location:"
-            %td= (@tray.shelf.nil? ? 'STAGING or Problem Shelf' : @tray.shelf.barcode)
-  %div.panel.panel-success
-    %div.panel-heading
+            %td
+              (@tray.shelf.nil?
+                ? 'STAGING or Problem Shelf'
+                : @tray.shelf.barcode)
+  .panel.panel-success
+    .panel-heading
       %h3.panel-title= "Tray History"
-    %div.panel-body
+    .panel-body
       %table.table.table-striped
         %thead
           %tr
@@ -42,6 +45,12 @@
           - @history.each do |record|
             %tr
               %td= t("activity_log." + record.action)
-              %td= record.action_timestamp.strftime("%m-%d-%Y %I:%M%p")
-              %td= record.data['shelf'].blank? ? 'STAGING' : record.data['shelf']['barcode']
+              %td
+                record.
+                  action_timestamp.
+                  strftime("%m-%d-%Y %I:%M%p")
+              %td
+                record.data['shelf'].blank?
+                  ? 'STAGING'
+                  : record.data['shelf']['barcode']
               %td= record.username
