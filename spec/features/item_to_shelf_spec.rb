@@ -233,8 +233,4 @@ feature "Shelves", :type => :feature do
     end
 
   end
-
-  describe "when not signed in" do
-    pending "add some scenarios (or delete) #{__FILE__}"
-  end
 end

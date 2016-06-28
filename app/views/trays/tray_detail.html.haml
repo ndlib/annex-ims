@@ -1,5 +1,56 @@
-%div.panel.panel-primary
-  %div.panel-heading
-    %h3.panel-title= "Tray Details"
-  %div.panel-body
-    %span= "Feature not yet developed"
+- if @tray.blank?
+  .panel.panel-primary
+    .panel-heading
+      %h3.panel-title= "Tray Details"
+    .panel-body
+      %span= "Tray Not Found"
+- else
+  .panel.panel-primary
+    .panel-heading
+      %h3.panel-title= "Tray Details"
+    .panel-body
+      %table.table.table-striped
+        %tbody
+          %tr
+            %td
+              %strong= "Barcode:"
+            %td= @tray.barcode
+          %tr
+            %td
+              %strong= "Shelved?"
+            %td= @tray.shelved.to_s.humanize
+          %tr
+            %td
+              %strong= "Number of associated items:"
+            %td= @tray.items.count
+          %tr
+            %td
+              %strong= "Shelf Location:"
+            %td
+              (@tray.shelf.nil?
+                ? 'STAGING or Problem Shelf'
+                : @tray.shelf.barcode)
+  .panel.panel-success
+    .panel-heading
+      %h3.panel-title= "Tray History"
+    .panel-body
+      %table.table.table-striped
+        %thead
+          %tr
+            %th= "Activity"
+            %th= "When"
+            %th= "Shelf"
+            %th= "Who"
+        %tbody
+          - @history.each do |record|
+            %tr
+              %td= t("activity_log." + record.action)
+              %td
+                record.
+                  action_timestamp.
+                  strftime("%m-%d-%Y %I:%M%p")
+              %td
+                record.data['shelf'].blank?
+                  ? 'STAGING'
+                  : record.data['shelf']['barcode']
+              %td= record.username

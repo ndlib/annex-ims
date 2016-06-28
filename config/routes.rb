@@ -43,6 +43,8 @@ Rails.application.routes.draw do
   get "items/scan", to: "items#scan", as: "scan_item"
   get "items/issues", to: "items#issues", as: "issues"
   post "items/resolve", to: "items#resolve", as: "resolve_issue"
+  get "trays/issues", to: "trays#issues", as: "trays_issues"
+  post "trays/resolve", to: "trays#resolve", as: "resolve_tray_issue"
   get "items/:id", to: "items#show", as: "show_item"
   get "items/detail/:barcode", to: "items#item_detail", as: "item_detail"
   post "items/:id/restock", to: "items#restock", as: "item_restock"

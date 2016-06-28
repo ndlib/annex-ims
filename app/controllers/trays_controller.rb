@@ -239,14 +239,38 @@ class TraysController < ApplicationController
         else
           @validation_count_items = @validation_count_items.to_i + 1
           if @validation_count_items == 2
+            AddTrayIssue.call(user: current_user, tray: @tray, message: "Tray count invalid", type: "incorrect_count")
             flash.now[:error] = I18n.t("trays.count_validation_not_pass")
           else
             flash.now[:error] = I18n.t("trays.count_items_not_match")
           end
         end
       else
+        tray_issue_query = IssuesForTrayQuery.new(barcode: @tray.barcode)
+        if tray_issue_query.invalid_count_issues?
+          tray_issue_query.issues_by_type(type: "incorrect_count").each do |issue|
+            ResolveTrayIssue.call(tray: @tray, issue: issue, user: current_user)
+          end
+        end
         redirect_to trays_items_path
       end
+    end
+  end
+
+  def issues
+    @issues = UnresolvedTrayIssueQuery.call(params)
+  end
+
+  def resolve
+    tray = Tray.where(barcode: TrayIssue.find(params[:issue_id]).barcode).take!
+
+    redirect_to count_tray_item_path(id: tray.id)
+  end
+
+  def tray_detail
+    @tray = Tray.where(barcode: params[:barcode]).take
+    if @tray
+      @history = ActivityLogQuery.tray_history(@tray)
     end
   end
 end

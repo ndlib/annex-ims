@@ -1,8 +1,8 @@
 - if @issues.blank?
   %span
-    = "There are no current outstanding issues."
+    = 'There are no current outstanding issues.'
 - else
-  %table.table.table-striped.condensed.datatable{"id" => "issues"}
+  %table.table.table-striped.condensed.datatable{ "id" => "issues" }
     %thead
       %tr
         %th= 'Barcode'
@@ -26,7 +26,9 @@
             = form_tag resolve_issue_path do |f|
               = hidden_field_tag :issue_id, issue.id
               .actions
-                = submit_tag 'Resolve', class: 'btn btn-primary', id: "issue-#{issue.id}"
+                = submit_tag 'Resolve',
+                  class: 'btn btn-primary',
+                  id: "issue-#{issue.id}"
           %td= issue.created_at.to_i
   :javascript
       $(document).ready(function() {

@@ -1,5 +1,5 @@
 class ActivityLogger
-  DATA_OBJECTS = [:item, :tray, :shelf, :bin, :request, :issue, :transfer, :api_response, :params]
+  DATA_OBJECTS = [:item, :tray, :shelf, :bin, :request, :issue, :tray_issue, :transfer, :api_response, :params].freeze
   attr_reader :action, :user, :data_objects
 
   def self.accept_item(item:, request:, user:)
@@ -48,6 +48,10 @@ class ActivityLogger
 
   def self.create_issue(issue:, item:, user:)
     call(action: "CreatedIssue", issue: issue, item: item, user: user)
+  end
+
+  def self.create_tray_issue(issue:, tray:, user:)
+    call(action: "CreatedTrayIssue", issue: issue, tray: tray, user: user)
   end
 
   def self.create_item(item:, user:)
@@ -100,6 +104,10 @@ class ActivityLogger
 
   def self.resolve_issue(issue:, user:)
     call(action: "ResolvedIssue", issue: issue, user: user)
+  end
+
+  def self.resolve_tray_issue(tray:, issue:, user:)
+    call(action: "ResolvedTrayIssue", tray: tray, issue: issue, user: user)
   end
 
   def self.scan_item(item:, request:, user:)
