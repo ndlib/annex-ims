@@ -120,14 +120,18 @@ class BatchesController < ApplicationController
 
   def scan_bin
     @batch = current_user.batches.where(active: true).first
-
     if @batch.blank?
       flash[:error] = "#{current_user.username} does not have an active batch, please create one."
       redirect_to batches_path
       return
     end
 
-    @match = @batch.current_match
+    @match = Match.find(params[:match_id])
+    if @match.blank?
+      flash[:error] = "Match #{params[:match_id]} is not a part of this batch."
+      redirect_to bin_batch_path
+      return
+    end
 
     if params[:commit] == "Skip"
       @match.processed = "skipped"
