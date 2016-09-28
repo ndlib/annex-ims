@@ -80,7 +80,7 @@ class BatchesController < ApplicationController
       return
     end
 
-    @match = @batch.current_match
+    @match = Match.find(params[:match_id])
 
     if params[:commit] == "Skip"
       @match.processed = "skipped"
@@ -127,11 +127,6 @@ class BatchesController < ApplicationController
     end
 
     @match = Match.find(params[:match_id])
-    if @match.blank?
-      flash[:error] = "Match #{params[:match_id]} is not a part of this batch."
-      redirect_to bin_batch_path
-      return
-    end
 
     if params[:commit] == "Skip"
       @match.processed = "skipped"

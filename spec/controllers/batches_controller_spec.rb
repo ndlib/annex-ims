@@ -12,8 +12,10 @@ RSpec.describe BatchesController, type: :controller do
   end
 
   describe "GET item" do
+    subject { get :item, match_id: match.id }
+
     context "skipping an item" do
-      subject { get :item, commit: "Skip" }
+      subject { get :item, commit: "Skip", match_id: match.id }
       it "logs a SkippedItem activity on Skip" do
         allow_any_instance_of(Batch).to receive(:current_match).and_return(match)
         expect(ActivityLogger).to receive(:skip_item)
@@ -22,7 +24,7 @@ RSpec.describe BatchesController, type: :controller do
     end
 
     context "saving an item" do
-      subject { get :item, commit: "Save", barcode: match.item.barcode }
+      subject { get :item, commit: "Save", barcode: match.item.barcode, match_id: match.id }
       it "logs an AcceptedItem activity on Save" do
         allow_any_instance_of(Batch).to receive(:current_match).and_return(match)
         expect(ActivityLogger).to receive(:accept_item)
@@ -32,7 +34,7 @@ RSpec.describe BatchesController, type: :controller do
 
     it "requires admin permissions" do
       expect_any_instance_of(described_class).to receive(:require_admin)
-      get :item
+      subject
     end
   end
 
