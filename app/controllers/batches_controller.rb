@@ -80,7 +80,7 @@ class BatchesController < ApplicationController
       return
     end
 
-    @match = @batch.current_match
+    @match = Match.find(params[:match_id])
 
     if params[:commit] == "Skip"
       @match.processed = "skipped"
@@ -120,14 +120,13 @@ class BatchesController < ApplicationController
 
   def scan_bin
     @batch = current_user.batches.where(active: true).first
-
     if @batch.blank?
       flash[:error] = "#{current_user.username} does not have an active batch, please create one."
       redirect_to batches_path
       return
     end
 
-    @match = @batch.current_match
+    @match = Match.find(params[:match_id])
 
     if params[:commit] == "Skip"
       @match.processed = "skipped"

@@ -3,6 +3,7 @@
     .field
       = label_tag :barcode, "Item"
       = text_field_tag :barcode, nil, autofocus: "autofocus"
+      = hidden_field_tag :match_id, @match.id
   .form-group
     .actions
       = submit_tag 'Save', class: 'btn pull-left btn-primary'
