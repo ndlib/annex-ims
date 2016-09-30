@@ -55,7 +55,8 @@ class SearchItems
       paginate page: page, per_page: per_page
 
       if search_fulltext?
-        fulltext(fetch(:criteria), fields: fulltext_fields)
+        criteria = exact_match? ? fetch(:criteria) : "*#{fetch(:criteria)}*"
+        fulltext(criteria, fields: fulltext_fields)
       end
 
       if search_conditions?
@@ -123,6 +124,10 @@ class SearchItems
 
   def search_conditions?
     has_filter?(:conditions) && has_filter?(:condition_bool)
+  end
+
+  def exact_match?
+    false || (has_filter?(:exact_match) && fetch(:exact_match))
   end
 
   def search_date?

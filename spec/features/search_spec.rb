@@ -135,6 +135,7 @@ feature "Search", :type => :feature, :search => true do
       visit search_path
       select("Title", :from => "criteria_type")
       fill_in "criteria", :with => item.title
+      find(:css, "#exact_match").set(true)
       click_button "Search"
       expect(current_path).to eq(search_path)
       expect(page).to have_content item.title
@@ -157,6 +158,7 @@ feature "Search", :type => :feature, :search => true do
       visit search_path
       select("Tray", :from => "criteria_type")
       fill_in "criteria", :with => tray.barcode
+      find(:css, "#exact_match").set(true)
       click_button "Search"
       expect(current_path).to eq(search_path)
       expect(page).to have_content item.title
@@ -168,6 +170,7 @@ feature "Search", :type => :feature, :search => true do
       visit search_path
       select("Shelf", :from => "criteria_type")
       fill_in "criteria", :with => shelf.barcode
+      find(:css, "#exact_match").set(true)
       click_button "Search"
       expect(current_path).to eq(search_path)
       expect(page).to have_content item.title
@@ -193,6 +196,7 @@ feature "Search", :type => :feature, :search => true do
       find(:css, "#condition_bool_all").set(true)
       find(:css, "#conditions_#{item.conditions[0]}").set(true)
       find(:css, "#conditions_#{item.conditions[1]}").set(true)
+      find(:css, "#exact_match").set(true)
       click_button "Search"
       expect(current_path).to eq(search_path)
       expect(page).to have_content item.title
@@ -213,6 +217,7 @@ feature "Search", :type => :feature, :search => true do
       fill_in "criteria", :with => "TRAY"
       find(:css, "#condition_bool_none").set(true)
       find(:css, "#conditions_PAGES-DET").set(true)
+      find(:css, "#exact_match").set(true)
       click_button "Search"
       expect(current_path).to eq(search_path)
       expect(page).to have_content item.title
@@ -279,6 +284,7 @@ feature "Search", :type => :feature, :search => true do
       visit search_path
       select("Tray", :from => "criteria_type")
       fill_in "criteria", :with => tray.barcode
+      find(:css, "#exact_match").set(true)
       click_button "Export"
       csv = CSV.parse(page.text)
       expect(csv.first).to eq [item.barcode, item.bib_number, item.isbn_issn, item.title, item.author, item.chron, item.tray.present? ? item.tray.barcode : '', item.shelf.present? ? item.shelf.barcode : '', item.conditions.join(", ")]

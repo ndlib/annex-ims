@@ -2,9 +2,14 @@
   .list-group.panel.search
     %a.list-group-item.list-group-item-success Criteria
     #criteria.input-group
-      = select_tag :criteria_type, options_for_select(SearchItems::CRITERIA_TYPES, @params[:criteria_type])
-      = text_field_tag :criteria, @params[:criteria], autofocus: "autofocus"
-      = label_tag :criteria, 'Use * for wildcard matches.'
+      %div
+        = select_tag :criteria_type,
+                     options_for_select(SearchItems::CRITERIA_TYPES,
+                                        @params[:criteria_type])
+        = text_field_tag :criteria, @params[:criteria], autofocus: "autofocus"
+      %div
+        = label_tag "Exact match?"
+        = check_box_tag :exact_match, 1, @params[:exact_match]
 
     %a.list-group-item.list-group-item-success{"data-toggle" => "collapse", :href => "#date-range"}
       %span.glyphicon.glyphicon-plus
@@ -67,4 +72,3 @@
           %td= item.conditions.present? ? item.conditions.join(", ") : ''
 - if !@results.blank?
   = paginate @results
-
