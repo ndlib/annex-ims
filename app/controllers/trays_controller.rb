@@ -227,6 +227,11 @@ class TraysController < ApplicationController
   end
 
   def count_items
+    if user_admin?
+      redirect_to trays_items_path
+      return
+    end
+
     @tray = Tray.find(params[:id])
     @validation_count_items = params[:validation_count_items]
     tray_count = params[:tray_count]
