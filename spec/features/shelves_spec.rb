@@ -9,7 +9,7 @@ feature "Shelves", type: :feature do
     let!(:user) { FactoryGirl.create(:user) }
 
     before(:each) do
-      login_user
+      login_admin
     end
 
     context "shelf details" do

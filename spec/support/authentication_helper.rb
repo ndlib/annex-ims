@@ -7,7 +7,7 @@ module AuthenticationHelper
     end
   end
 
-  def login_user
+  def login_admin
     @user = FactoryGirl.create(:user, admin: true)
     login_as @user, scope: :user
     @user

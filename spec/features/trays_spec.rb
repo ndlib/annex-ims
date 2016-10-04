@@ -11,7 +11,7 @@ feature "Trays", type: :feature do
 
   describe "when signed in" do
     before(:each) do
-      login_user
+      login_admin
 
       stub_request(:get, api_item_url(item)).
         with(headers: { "User-Agent" => "Faraday v0.9.1" }).
@@ -525,7 +525,7 @@ feature "Trays", type: :feature do
     end
 
     it "skips the tray counts when the user is an admin" do
-      login_user
+      login_admin
       item_uri = api_item_url(item)
       stub_request(:get, item_uri).
         with(headers: { "User-Agent" => "Faraday v0.9.1" }).
