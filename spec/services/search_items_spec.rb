@@ -12,7 +12,7 @@ RSpec.describe SearchItems do
   end
 
   let(:item) { FactoryGirl.create(:item, chron: "TEST CHRON") }
-  let(:filter) { { exact_match: true } }
+  let(:filter) { {} }
   subject { described_class.call(filter) }
   let(:results) { subject.results }
 
@@ -33,7 +33,7 @@ RSpec.describe SearchItems do
   end
 
   context "page" do
-    let(:filter) { { criteria_type: "any", criteria: item.title, page: 2, exact_match: true } }
+    let(:filter) { { criteria_type: "any", criteria: item.title, page: 2 } }
 
     it "returns the second page of results" do
       expect(subject.total).to eq(1)
@@ -43,7 +43,7 @@ RSpec.describe SearchItems do
 
   context "per_page" do
     let(:item) { FactoryGirl.create(:item, chron: "1") }
-    let(:filter) { { criteria_type: "any", criteria: item.title, exact_match: true } }
+    let(:filter) { { criteria_type: "any", criteria: item.title } }
 
     it "defaults to 50 per page" do
       50.times do
@@ -70,7 +70,7 @@ RSpec.describe SearchItems do
 
   describe "criteria_type" do
     describe "any" do
-      let(:filter) { { criteria_type: "any", exact_match: true } }
+      let(:filter) { { criteria_type: "any" } }
 
       [
         :barcode,
@@ -120,7 +120,7 @@ RSpec.describe SearchItems do
       :author,
     ].each do |criteria_type_field|
       describe "#{criteria_type_field}" do
-        let(:filter) { { criteria_type: criteria_type_field.to_s, exact_match: true } }
+        let(:filter) { { criteria_type: criteria_type_field.to_s } }
         it "can find an item by #{criteria_type_field}" do
           allow(item).to receive(criteria_type_field).and_return("#{criteria_type_field} value")
           Sunspot.index(item)
@@ -137,7 +137,7 @@ RSpec.describe SearchItems do
     end
 
     describe "tray" do
-      let(:filter) { { criteria_type: "tray", exact_match: true } }
+      let(:filter) { { criteria_type: "tray" } }
 
       it "searches the tray barcode" do
         item.tray = FactoryGirl.create(:tray)
@@ -154,7 +154,7 @@ RSpec.describe SearchItems do
     end
 
     describe "shelf" do
-      let(:filter) { { criteria_type: "shelf", exact_match: true } }
+      let(:filter) { { criteria_type: "shelf" } }
 
       it "searches the shelf barcode" do
         item.shelf = FactoryGirl.create(:shelf)
@@ -171,7 +171,7 @@ RSpec.describe SearchItems do
     end
 
     describe "ERROR" do
-      let(:filter) { { criteria_type: "ERROR", criteria: "ERROR", exact_match: true } }
+      let(:filter) { { criteria_type: "ERROR", criteria: "ERROR" } }
 
       it "returns an empty result set" do
         filter[:criteria] = "ERROR"
@@ -186,7 +186,7 @@ RSpec.describe SearchItems do
     let(:item) { FactoryGirl.create(:item, conditions: conditions) }
 
     context "all" do
-      let(:filter) { { condition_bool: "all", exact_match: true } }
+      let(:filter) { { condition_bool: "all" } }
 
       it "matches all conditions" do
         filter[:conditions] = {}.tap do |hash|
@@ -211,7 +211,7 @@ RSpec.describe SearchItems do
     end
 
     context "any" do
-      let(:filter) { { condition_bool: "any", exact_match: true } }
+      let(:filter) { { condition_bool: "any" } }
 
       it "matches all conditions" do
         filter[:conditions] = {}.tap do |hash|
@@ -243,7 +243,7 @@ RSpec.describe SearchItems do
     end
 
     context "any" do
-      let(:filter) { { condition_bool: "none", exact_match: true } }
+      let(:filter) { { condition_bool: "none" } }
 
       it "does not match all conditions" do
         filter[:conditions] = {}.tap do |hash|
