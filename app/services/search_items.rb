@@ -55,7 +55,9 @@ class SearchItems
       paginate page: page, per_page: per_page
 
       if search_fulltext?
-        criteria = exact_match? ? fetch(:criteria) : "*#{fetch(:criteria)}*"
+        # remove the special character '-' because they screw with isbn queries
+        # we may also want to consider removing other special chars eg. *,+,"
+        criteria = fetch(:criteria).gsub(/[\-]/, '').gsub(/\./, ' ')
         fulltext(criteria, fields: fulltext_fields)
       end
 
@@ -124,10 +126,6 @@ class SearchItems
 
   def search_conditions?
     has_filter?(:conditions) && has_filter?(:condition_bool)
-  end
-
-  def exact_match?
-    false || (has_filter?(:exact_match) && fetch(:exact_match))
   end
 
   def search_date?
