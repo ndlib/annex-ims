@@ -12,7 +12,7 @@ feature "View Active", type: :feature do
     let(:match) { FactoryGirl.create(:match, batch: batch, request: request, item: item) }
 
     before(:each) do
-      login_user
+      login_admin
       @match = match
     end
 

@@ -57,7 +57,7 @@ feature "Build", :type => :feature, :search => true do
 
     before(:each) do
       save_all
-      login_user
+      login_admin
     end
 
     after(:all) do

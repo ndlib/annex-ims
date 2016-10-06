@@ -14,7 +14,7 @@ feature "Shelves", :type => :feature do
       @tray2 = FactoryGirl.create(:tray, barcode: "TRAY-AH11", shelf: @shelf2)
       @item3 = FactoryGirl.create(:item, barcode: "1234567", tray: @tray2)
 
-      login_user
+      login_admin
 
       item_uri = api_item_url(@item)
       response_body = {

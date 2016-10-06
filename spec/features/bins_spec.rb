@@ -12,7 +12,7 @@ feature "Bins", :type => :feature do
 
 
     before(:each) do
-      login_user
+      login_admin
 
       @bin = bin
       @match = match

@@ -5,7 +5,7 @@ feature "Items", type: :feature do
 
   describe "when signed in" do
     before(:each) do
-      login_user
+      login_admin
 
       @tray = FactoryGirl.create(:tray)
       @shelf = FactoryGirl.create(:shelf)
