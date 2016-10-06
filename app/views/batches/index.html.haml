@@ -1,9 +1,9 @@
 .row.filter
   .col-md-8
-    = select_tag :source, options_for_select([["Aleph", "aleph"], ["ILLiad", "illiad"]]), onchange: "table.draw();"
-    = select_tag :req_type, options_for_select([["Loan", "loan"], ["Scan", "scan"]]), onchange: "table.draw();"
+    = select_tag :source, options_for_select([["Aleph", "aleph"], ["ILLiad", "illiad"]]), id: "source-select"
+    = select_tag :req_type, options_for_select([["Loan", "loan"], ["Scan", "scan"]]), id: "req-type-select"
     = label_tag :rapid, "ILLiad Rapid Requests"
-    = check_box_tag :rapid, 1, false, onchange: "table.draw();"
+    = check_box_tag :rapid, 1, false, id: "rapid-check-box"
   .col-md-4
     .pull-right
       = link_to sync_requests_path, method: :post, class: 'btn btn-primary' do
@@ -58,6 +58,26 @@
     return !settings.oInit.useRequestFilters;
   }
 
+  // Register a state load function
+  $.fn.dataTable.Api.register( 'state.load()', function () {
+    return this.iterator( 'table', function ( s ) {
+        // Force the state load.
+        s.oApi._fnLoadState(s, s.oInit);
+        // We need to check for which ones should be hidden in the loaded state...
+        var hidden_cols = [];
+        jQuery.each(s.oLoadedState.columns, function(i, column) {
+            if (!column.visible) {
+                hidden_cols.push(i);
+            }
+        });
+        // Set them all to be visible...
+        s.oInstance.DataTable().columns().visible(true);
+        // ...then hide the ones that should be hidden:
+        s.oInstance.DataTable().columns(hidden_cols).visible(false);
+    });
+  });
+
+
   // Add filter by source to all DataTables
   $.fn.dataTable.ext.search.push(
     function( settings, data, dataIndex ) {
@@ -65,7 +85,7 @@
         return true;
       }
 
-      var select_source = $('#source').val().toLowerCase();
+      var select_source = $('#source-select').val().toLowerCase();
       var data_source = data[2].toLowerCase();
       if (select_source == data_source) {
         return true;
@@ -81,7 +101,7 @@
         return true;
       }
 
-      var select_req = $('#req_type').val().toLowerCase();
+      var select_req = $('#req-type-select').val().toLowerCase();
       var data_req = data[3].toLowerCase();
       if (select_req == data_req) {
         return true;
@@ -97,7 +117,7 @@
         return true;
       }
 
-      var checkbox_rapid = $('#rapid').is(':checked');
+      var checkbox_rapid = $('#rapid-check-box').is(':checked');
       var data_rapid = data[1].toLowerCase();
       if (checkbox_rapid) {
         if (data_rapid == "yes") {
@@ -115,6 +135,20 @@
     window.table = $('#requests').DataTable( {
         "useRequestFilters": true,
         "dom": 'T<"clear">lfrtip',
+        "stateSave": true,
+        // pull in the saved custom params
+        "stateSaveParams": function (settings, data) {
+          data.columns[1].search.search = rapidValue();
+          data.columns[2].search.search = $('#source-select').val();
+          data.columns[3].search.search = $('#req-type-select').val();
+        },
+        // set the form elements according to the value of the saved
+        // custom params
+        "stateLoadParams": function (settings, data) {
+          $('#rapid-check-box').prop("checked", data.columns[1].search.search == "yes");
+          $('#source-select').val(data.columns[2].search.search ? data.columns[2].search.search : "aleph");
+          $('#req-type-select').val(data.columns[3].search.search ? data.columns[3].search.search : "loan");
+        },
         "tableTools": {
           "aButtons": [ {
                     "sExtends": "print",
@@ -138,12 +172,26 @@
       $(".item").prop("checked", $("#selectAll").prop("checked")).each(function() {
         checkboxChanged(this);
       });
-    } );
+    });
+
+    $("#source-select, #req-type-select, #rapid-check-box").change( function() {
+      table.state.save();
+      table.state.load();
+      table.draw();
+    });
 
     $("form").on("change", ".item", function() {
       checkboxChanged(this);
     });
-  } );
+  });
+
+  function rapidValue() {
+      if ($('#rapid-check-box').is(':checked')) {
+        return 'yes';
+      } else {
+        return 'no';
+      }
+  }
 
   function addHandler() {
     $(".details-control").unbind('click');
