@@ -11,6 +11,7 @@ before_script:
 - sh -e /etc/init.d/xvfb start
 - cp config/secrets.yml.travis config/secrets.yml
 - cp config/database.yml.travis config/database.yml
+- cp solr_conf/schema.xml solr/conf/schema.xml
 - psql -c 'create database travis_ci_test;' -U postgres
 script: bundle exec rspec spec
 notifications:
