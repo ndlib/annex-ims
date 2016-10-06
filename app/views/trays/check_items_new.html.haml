@@ -1,0 +1,14 @@
+.scan
+  = form_for @tray, url: check_items_path(@tray) do |f|
+    - if @tray.errors.any?
+      #error_explanation
+        %h2= "#{pluralize(@tray.errors.count, "error")} prohibited this tray from being saved:"
+        %ul
+          - @tray.errors.full_messages.each do |msg|
+            %li= msg
+
+    .field
+      = f.label :barcode, "Tray"
+      = f.text_field :barcode, autofocus: "autofocus"
+    .actions
+      = f.submit 'Save', class: 'btn btn-primary'
