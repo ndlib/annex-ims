@@ -57,8 +57,10 @@ class SearchItems
       if search_fulltext?
         # remove the special character '-' because they screw with isbn queries
         # we may also want to consider removing other special chars eg. *,+,"
-        criteria = fetch(:criteria).gsub(/[\-]/, '').gsub(/\./, ' ')
-        fulltext(criteria, fields: fulltext_fields)
+        criteria = fetch(:criteria).gsub(/[\-\.]/, '')
+        fulltext(criteria, fields: fulltext_fields) do
+          minimum_match "75%"
+        end
       end
 
       if search_conditions?

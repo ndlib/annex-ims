@@ -62,7 +62,7 @@
     <fieldType name="text" class="solr.TextField" omitNorms="false">
       <analyzer type="index">
         <charFilter class="solr.PatternReplaceCharFilterFactory"
-          pattern="(\-)" replacement="" replace="all"/>
+          pattern="([\-\.])" replacement="" replace="all"/>
         <tokenizer class="solr.StandardTokenizerFactory"/>
         <filter class="solr.StandardFilterFactory"/>
         <filter class="solr.LowerCaseFilterFactory"/>
