@@ -145,21 +145,9 @@
         // set the form elements according to the value of the saved
         // custom params
         "stateLoadParams": function (settings, data) {
-          if (data.columns[1].search.search == "yes") {
-           $('#rapid-check-box').prop("checked", true);
-          } else {
-           $('#rapid-check-box').prop("checked", false);
-          }
-          if (data.columns[2].search.search) {
-            $('#source-select').val(data.columns[2].search.search);
-          } else {
-            $('#source-select').val("aleph");
-          }
-          if (data.columns[3].search.search) {
-            $('#req-type-select').val(data.columns[3].search.search);
-          } else {
-            $('#req-type-select').val("loan");
-          }
+          $('#rapid-check-box').prop("checked", data.columns[1].search.search == "yes");
+          $('#source-select').val(data.columns[2].search.search ? data.columns[2].search.search : "aleph");
+          $('#req-type-select').val(data.columns[3].search.search ? data.columns[3].search.search : "loan");
         },
         "tableTools": {
           "aButtons": [ {
