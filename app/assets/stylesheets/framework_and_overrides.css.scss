@@ -156,6 +156,7 @@ a.list-group-item[aria-expanded="true"] {
 #stocking,
 #items,
 #batches,
+#qc,
 #reports,
 #settings {
   .list-group-item {
@@ -266,9 +267,13 @@ hr {
   > tbody {
     tr:nth-of-type(odd),
     tr:nth-of-type(even) {
+      &.check-items-fail,
       &.item-metadata-not-found,
       &.item-metadata-not-for-annex {
         background-color: $alert-danger-bg;
+      }
+      &.check-items-success {
+        background-color: $alert-success-bg;
       }
     }
   }

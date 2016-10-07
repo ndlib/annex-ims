@@ -1,0 +1,44 @@
+.scan
+  = form_tag check_items_validate_path(@tray) do
+    - if @tray.errors.any?
+      #error_explanation
+        %h2= "#{pluralize(@tray.errors.count, "error")} prohibited this tray from being saved:"
+        %ul
+          - @tray.errors.full_messages.each do |msg|
+            %li= msg
+    .field
+      = label_tag :barcode, "Item"
+      = text_field_tag :barcode, '', autofocus: true
+      - @scanned.each do |scan|
+        = hidden_field_tag "scanned[]", scan
+    .actions
+      = submit_tag 'Save', class: 'btn btn-primary'
+
+%table.table.table-striped.condensed{ "data-toggle" => "table" }
+  %thead
+    %tr
+      %th= 'Status'
+      %th= 'Barcode'
+      %th= 'Thickness'
+      %th= 'Title'
+      %th= 'Chron'
+  %tbody
+    - @tray.items.each do |item|
+      - class_name = ""
+      - if @scanned.include?(item.barcode)
+        - class_name = "check-items-success"
+
+      %tr{ class: class_name }
+        %td= item.status.titleize
+        %td= link_to item.barcode, item_detail_path(item.barcode)
+        %td= item.thickness
+        %td
+          - if item.metadata_status == "complete"
+            = item.title
+          - else
+            = t "item.metadata_status.#{item.metadata_status}"
+            - if item.title.present?
+              %br
+              = item.title
+        %td= item.chron
+= button_to "Done", check_items_new_path, method: :get, class: 'btn pull-right btn-primary'

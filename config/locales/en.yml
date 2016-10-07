@@ -22,6 +22,7 @@
 en:
   errors:
     barcode_not_found: "Barcode %{barcode} not found. Put item with barcode %{barcode} on problem shelf."
+    barcode_not_associated_to_tray: "Barcode %{barcode} is not associated to this tray. Put item with barcode %{barcode} on problem shelf."
     barcode_not_valid: "Barcode \"%{barcode}\" is not valid, please re-scan."
   trays:
     count_items_not_match: "The count you entered and the computer's count did not match.  Recount and enter again."
