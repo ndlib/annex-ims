@@ -6,6 +6,7 @@ module SolrSpecHelper
   def solr_setup
     unless $sunspot
       $sunspot = ::Sunspot::Rails::Server.new
+      $sunspot.solr_home = "solr_conf"
 
       pid = fork do
         STDERR.reopen("/dev/null")
