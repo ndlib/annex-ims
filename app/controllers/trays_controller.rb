@@ -238,19 +238,19 @@ class TraysController < ApplicationController
   def validate_items
     @tray = Tray.find(params[:id])
     item_barcode = params[:barcode]
-    @item = Item.where(barcode: item_barcode).take
+    item = Item.where(barcode: item_barcode).take
     @scanned = params[:scanned].present? ? params[:scanned] : []
 
-    if @item.nil?
+    if item.nil?
       if IsValidItem.call(item_barcode)
         flash[:error] = I18n.t("errors.barcode_not_found", barcode: item_barcode)
-        new_item = Item.create!(barcode: item_barcode, thickness: 0)
-        ActivityLogger.create_item(item: new_item, user: current_user)
-        AddIssue.call(item: new_item,
+        item = Item.create!(barcode: item_barcode, thickness: 0)
+        ActivityLogger.create_item(item: item, user: current_user)
+        AddIssue.call(item: item,
                       user: current_user,
                       type: "tray_mismatch",
                       message: "Item failed QC. Was physically in tray '#{@tray.barcode}', but the item did not exist.")
-        SyncItemMetadata.call(item: new_item, user_id: current_user.id)
+        SyncItemMetadata.call(item: item, user_id: current_user.id)
       else
         flash[:error] = I18n.t("errors.barcode_not_valid", barcode: item_barcode)
       end
@@ -258,11 +258,11 @@ class TraysController < ApplicationController
       return
     end
 
-    if @tray.items.include?(@item)
+    if @tray.items.include?(item)
       @scanned.push(item_barcode)
     else
-      but_message = @item.tray.present? ? "but is associated with tray '#{@item.tray.barcode}'" : "but is not associated with a tray."
-      AddIssue.call(item: @item,
+      but_message = item.tray.present? ? "but is associated with tray '#{item.tray.barcode}'" : "but is not associated with a tray."
+      AddIssue.call(item: item,
                     user: current_user,
                     type: "tray_mismatch",
                     message: "Item failed QC. Was physically in tray '#{@tray.barcode}', #{but_message}")
