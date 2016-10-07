@@ -1,13 +1,15 @@
 class SearchItems
-  CRITERIA_TYPES = [["Search All Fields", "any"],
-    ["Barcode", "barcode"],
-    ["Bib Number", "bib_number"],
-    ["Call Number", "call_number"],
-    ["ISBN/ISSN", "isbn_issn"],
-    ["Title", "title"],
-    ["Author", "author"],
-    ["Tray", "tray"],
-    ["Shelf", "shelf"]]
+  CRITERIA_TYPES = [
+    %w(Search All Fields any),
+    %w(Barcode barcode),
+    %w(Bib Number bib_number),
+    %w(Call Number call_number),
+    %w(ISBN/ISSN isbn_issn),
+    %w(Title title),
+    %w(Author author),
+    %w(Tray tray),
+    %w(Shelf shelf)
+  ].freeze
 
   DEFAULT_PER_PAGE = 50 # We could customize this, but let's stick with 50 for now.
 
@@ -22,12 +24,7 @@ class SearchItems
   end
 
   def page
-    requested_page = fetch(:page)
-    if requested_page.present?
-      requested_page
-    else
-      1
-    end
+    fetch(:page).present? ? fetch(:page) : 1
   end
 
   def per_page
@@ -35,29 +32,27 @@ class SearchItems
   end
 
   def conditions
-    if has_filter?(:conditions)
-      fetch(:conditions).keys
-    end
+    fetch(:conditions).keys if filter?(:conditions)
   end
 
   def search!
-    if search_fulltext? || search_conditions? || search_date?
-      search_results
-    else
-      empty_results
-    end
+    (search_fulltext? || search_conditions? || search_date?) ? search_results : empty_results
   end
 
   private
 
-  def search_results # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/PerceivedComplexity
+  def search_results
     Item.search do
       paginate page: page, per_page: per_page
 
       if search_fulltext?
         # remove the special character '-' because they screw with isbn queries
         # we may also want to consider removing other special chars eg. *,+,"
-        criteria = fetch(:criteria).gsub(/[\-\.]/, '')
+        criteria = fetch(:criteria).gsub(/[\-\.]/, "")
         fulltext(criteria, fields: fulltext_fields) do
           minimum_match "75%"
         end
@@ -101,11 +96,11 @@ class SearchItems
   end
 
   def date_start
-    @date_start ||= has_filter?(:start) ? Date.parse(fetch(:start)) : nil
+    @date_start ||= filter?(:start) ? Date.parse(fetch(:start)) : nil
   end
 
   def date_finish
-    @date_finish ||= has_filter?(:finish) ? Date.parse(fetch(:finish)) : nil
+    @date_finish ||= filter?(:finish) ? Date.parse(fetch(:finish)) : nil
   end
 
   def date_field
@@ -121,43 +116,32 @@ class SearchItems
 
   def search_fulltext?
     if @search_fulltext.nil?
-      @search_fulltext ||= has_filter?(:criteria_type) && has_filter?(:criteria) && fulltext_fields.present?
+      @search_fulltext ||= filter?(:criteria_type) && filter?(:criteria) && fulltext_fields.present?
     end
     @search_fulltext
   end
 
   def search_conditions?
-    has_filter?(:conditions) && has_filter?(:condition_bool)
+    filter?(:conditions) && filter?(:condition_bool)
   end
 
   def search_date?
-    has_filter?(:date_type) && (has_filter?(:start) || has_filter?(:finish)) && date_field.present?
+    filter?(:date_type) && (filter?(:start) || filter?(:finish)) && date_field.present?
   end
 
   def fulltext_fields
-    @fulltext_fields ||= get_fulltext_fields
+    @fulltext_fields ||= fulltext_field_to_symbol
   end
 
-  def get_fulltext_fields
-    case fetch(:criteria_type)
-    when "any"
+  def fulltext_field_to_symbol
+    if fetch(:criteria_type) == "any"
       [:barcode, :bib_number, :call_number, :isbn_issn, :title, :author, :tray_barcode, :shelf_barcode]
-    when "barcode"
-      :barcode
-    when "bib_number"
-      :bib_number
-    when "call_number"
-      :call_number
-    when "isbn_issn"
-      :isbn_issn
-    when "title"
-      :title
-    when "author"
-      :author
-    when "tray"
+    elsif fetch(:criteria_type) == "tray"
       :tray_barcode
-    when "shelf"
+    elsif fetch(:criteria_type) == "shelf"
       :shelf_barcode
+    else
+      fetch(:criteria_type).to_sym
     end
   end
 
@@ -165,7 +149,7 @@ class SearchItems
     EmptyResults.new
   end
 
-  def has_filter?(key)
+  def filter?(key)
     fetch(key).present?
   end
 
@@ -182,5 +166,4 @@ class SearchItems
       0
     end
   end
-
 end
