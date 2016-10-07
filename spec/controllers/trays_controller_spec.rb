@@ -198,7 +198,7 @@ RSpec.describe TraysController, :type => :controller do
 
     context "for a valid item that is associated to the tray" do
       let(:tray) { instance_double(Tray, items: [item], barcode: "tray barcode") }
-      let(:item) { instance_double(Item, tray: tray, barcode: "item barcode") }
+      let(:item) { instance_double(Item) }
       subject { post :validate_items, id: 1, barcode: "valid item barcode" }
 
       before(:each) do
@@ -207,7 +207,7 @@ RSpec.describe TraysController, :type => :controller do
 
       it "adds the item's barcode to the scanned list" do
         subject
-        expect(assigns(:scanned)).to eq([item.barcode])
+        expect(assigns(:scanned)).to eq(["valid item barcode"])
       end
     end
   end
