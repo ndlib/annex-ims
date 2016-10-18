@@ -1,88 +1,216 @@
 require 'rails_helper'
 
 RSpec.describe SearchItems do
-  before(:each) do
-    ::Sunspot.session = ::Sunspot::Rails::StubSessionProxy.new(::Sunspot.session)
-  end
-
-  after(:each) do
-    ::Sunspot.session = ::Sunspot.session.original_session
+  after :all do
+    Item.remove_all_from_index!
   end
 
   let(:item) { FactoryGirl.create(:item, chron: "TEST CHRON") }
-  let(:filter) { {} }
-  subject { described_class.new(filter) }
-  let(:results) { [item] }
+  let(:filter) { { } }
+  subject { described_class.call(filter) }
 
-  before do
-    Item.remove_all_from_index!
-    Sunspot.index(item)
-    Sunspot.commit
+  def cleanFulltext(text)
+    text.gsub(/[\-\.]/, "")
   end
 
-  describe "#page" do
-    context "when page param is present" do
-      let(:filter) { { criteria_type: "any", criteria: item.title, page: 2 } }
+  context "no filter" do
+    let(:filter) { {} }
 
-      it "returns the the page param" do
-        expect(subject.page).to eq(2)
-      end
-    end
-
-    context "when page param is absent" do
-      it "returns 1" do
-        expect(subject.page).to eq(1)
-      end
+    it "returns an empty result" do
+      expect(subject).to be_kind_of(described_class::EmptyResults)
+      expect(subject.results).to eq []
+      expect(subject.total).to eq(0)
     end
   end
 
-  describe "#per_page()" do
-    context "when per_page is set" do
-      it "returns the per_page param" do
+  context "page" do
+    let(:filter) { { criteria_type: "any", criteria: item.title, page: 2 } }
+
+    it "returns the second page of results" do
+      expect(subject.results).to eq([])
+      expect(Sunspot.session).to be_a_search_for(Item)
+      expect(Sunspot.session).to have_search_params(:paginate, page: 2, per_page: 50)
+    end
+  end
+
+  context "per_page" do
+    let(:item) { FactoryGirl.create(:item, chron: "1") }
+    let(:filter) { { criteria_type: "any", criteria: item.title } }
+
+    it "defaults to 50 per page" do
+      subject
+      expect(Sunspot.session).to have_search_params(:paginate, page: 1, per_page: 50)
+    end
+
+    context "1 per page" do
+      it "limits to 1 per page" do
         filter[:per_page] = 1
-        expect(subject.per_page).to eq(1)
-      end
-    end
-
-    context "when per_page is not set" do
-      it "returns 50" do
-        expect(subject.per_page).to eq(50)
+        subject
+        expect(Sunspot.session).to have_search_params(:paginate, page: 1, per_page: 1)
       end
     end
   end
 
-  describe "#conditions" do
-    context "when condition list is present" do
-      let(:conditions) { { "COVER-MISS" => true, "PAGES-BRITTLE" => true, "SPINE-DET" => true } }
-      let(:filter) { { criteria_type: "any", criteria: item.title, conditions: conditions } }
+  describe "criteria_type" do
+    describe "any" do
+      let(:filter) { { criteria_type: "any" } }
 
-      it "returns the condition list" do
-        expect(subject.conditions).to eq(["COVER-MISS", "PAGES-BRITTLE", "SPINE-DET"])
+      [
+        :barcode,
+        :bib_number,
+        :call_number,
+        :isbn_issn,
+        :title,
+        :author,
+      ].each do |field|
+        it "searches #{field}" do
+          value = "#{field} value"
+          allow(item).to receive(field).and_return(value)
+          filter[:criteria] = item.send(field)
+          subject
+          expect(Sunspot.session).to have_search_params(:fulltext, value)
+        end
+      end
+
+      it "searches the tray barcode" do
+        item.tray = FactoryGirl.create(:tray)
+        filter[:criteria] = item.tray.barcode
+        subject
+        expect(Sunspot.session).to have_search_params(:fulltext, cleanFulltext(item.tray.barcode))
+      end
+
+      it "searches the shelf barcode" do
+        item.shelf = FactoryGirl.create(:shelf)
+        filter[:criteria] = item.shelf.barcode
+        subject
+        expect(Sunspot.session).to have_search_params(:fulltext, cleanFulltext(item.shelf.barcode))
       end
     end
 
-    context "when condition list is empty" do
-      it "returns nil" do
-        expect(subject.conditions).to be_nil
+    [
+      :barcode,
+      :bib_number,
+      :call_number,
+      :isbn_issn,
+      :title,
+      :author,
+    ].each do |criteria_type_field|
+      describe "#{criteria_type_field}" do
+        let(:filter) { { criteria_type: criteria_type_field.to_s } }
+
+        it "can search by #{criteria_type_field}" do
+          value = "#{criteria_type_field} value"
+          allow(item).to receive(criteria_type_field).and_return(value)
+          filter[:criteria] = item.send(criteria_type_field)
+          subject
+          expect(Sunspot.session).to have_search_params(:fulltext, value, fields: [criteria_type_field])
+        end
+      end
+    end
+
+    describe "tray" do
+      let(:filter) { { criteria_type: "tray" } }
+
+      it "searches the tray barcode" do
+        item.tray = FactoryGirl.create(:tray)
+        filter[:criteria] = item.tray.barcode
+        subject
+        expect(Sunspot.session).to have_search_params(:fulltext, cleanFulltext(item.tray.barcode), fields: [:tray_barcode])
+      end
+    end
+
+    describe "shelf" do
+      let(:filter) { { criteria_type: "shelf" } }
+
+      it "searches the shelf barcode" do
+        item.shelf = FactoryGirl.create(:shelf)
+        filter[:criteria] = item.shelf.barcode
+        subject
+        expect(Sunspot.session).to have_search_params(:fulltext, cleanFulltext(item.shelf.barcode), fields: [:shelf_barcode])
       end
     end
   end
 
-  describe "#search!" do
-    context "when fulltext, conditions or date is present" do
-      let(:filter) { { criteria_type: "any", criteria: item.title } }
+  context "conditions" do
+    let(:conditions) { ["COVER-MISS", "PAGES-BRITTLE", "SPINE-DET"] }
+    let(:item) { FactoryGirl.create(:item, conditions: conditions) }
 
-      it "returns the result set" do
-        allow_any_instance_of(described_class).to receive(:search_results).and_return(results)
-        expect(subject.search!).to eq(results)
+    context "all" do
+      let(:filter) { { condition_bool: "all" } }
+
+      it "uses all given conditions" do
+        filter[:conditions] = {}.tap do |hash|
+          conditions.each { |c| hash[c] = true }
+        end
+        subject
+        for condition in conditions do
+          expect(Sunspot.session).to have_search_params(:with, :conditions, condition)
+        end
       end
     end
 
-    context "when conditions are not present" do
-      it "returns the empty result set" do
-        allow_any_instance_of(described_class).to receive(:search_results).and_return(results)
-        expect(subject.search!).to be_kind_of(described_class::EmptyResults)
+    context "any" do
+      let(:filter) { { condition_bool: "any" } }
+
+      it "uses any given conditions" do
+        filter[:conditions] = {}.tap do |hash|
+          conditions.each { |c| hash[c] = true }
+        end
+        subject
+        expect(Sunspot.session).to have_search_params(:with, :conditions, conditions)
       end
     end
+
+    context "any" do
+      let(:filter) { { condition_bool: "none" } }
+
+      it "uses without given conditions" do
+        filter[:conditions] = {}.tap do |hash|
+          conditions.each { |c| hash[c] = true }
+        end
+        subject
+        for condition in conditions do
+          expect(Sunspot.session).to have_search_params(:without, :conditions, condition)
+        end
+      end
+    end
+  end
+
+  context "date_type" do
+    let(:filter_date) { 1.week.ago }
+    let(:start) { filter_date.ago(1.week).to_s }
+    let(:finish) { filter_date.since(1.week).to_s }
+
+    {
+      request: :requested,
+      initial: :initial_ingest,
+      last: :last_ingest,
+    }.each do |date_type, search_field|
+      context "#{date_type}" do
+        let(:filter) { { date_type: date_type.to_s, start: start, finish: finish } }
+
+        it "searches the #{date_type} date" do
+          subject
+          expect(Sunspot.session).to have_search_params(:with, search_field.to_s, start..finish)
+        end
+
+        context "no end date" do
+          let(:filter) { { date_type: date_type.to_s, start: start } }
+          it "searches greater or equal" do
+            subject
+            expect(Sunspot.session).to_not have_search_params(:with, search_field.to_s, start..finish)
+          end
+        end
+
+        context "no start date" do
+          let(:filter) { { date_type: date_type.to_s, finish: finish } }
+          it "searches less or equal" do
+            subject
+            expect(Sunspot.session).to_not have_search_params(:with, search_field.to_s, start..finish)
+          end
+        end
+      end
+    end
+
   end
 end

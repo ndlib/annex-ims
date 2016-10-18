@@ -3,6 +3,10 @@ ENV["RAILS_ENV"] ||= 'test'
 require 'spec_helper'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
+
+require "sunspot_matchers"
+require "sunspot_matchers/matchers"
+require "sunspot_matchers/sunspot_session_spy"
 # Add additional requires below this line. Rails is not loaded until this point!
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -52,4 +56,10 @@ RSpec.configure do |config|
   config.include Devise::TestHelpers, type: :controller
 
   config.include ApiHelper
+
+  config.include SunspotMatchers
+
+  config.before(:each) do |example|
+    Sunspot.session = SunspotMatchers::SunspotSessionSpy.new(Sunspot.session)
+  end
 end

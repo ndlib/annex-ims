@@ -125,6 +125,9 @@ group :test do
   # For mocking up APIs
   gem "webmock"
   gem "shoulda-matchers"
+
+  # rspec matchers for sunspot
+  gem "sunspot_matchers"
 end
 
 group :development do

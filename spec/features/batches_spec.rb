@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 feature "Build", :type => :feature, :search => true do
-  include SolrSpecHelper
   include AuthenticationHelper
 
   describe "when signed in", js: true do
@@ -49,11 +48,6 @@ feature "Build", :type => :feature, :search => true do
                                         criteria: item2.barcode,
                                         barcode: item2.barcode,
                                         requested: 1.day.ago.strftime("%Y-%m-%d")) }
-
-
-    before(:all) do
-      solr_setup
-    end
 
     before(:each) do
       save_all
