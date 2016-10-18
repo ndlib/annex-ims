@@ -50,12 +50,7 @@ feature "Build", :type => :feature, :search => true do
                                         requested: 1.day.ago.strftime("%Y-%m-%d")) }
 
     before(:each) do
-      save_all
       login_admin
-    end
-
-    after(:all) do
-      Item.remove_all_from_index!
     end
 
     it "doesn't build a batch when no items are selected", :search => true do
@@ -66,49 +61,29 @@ feature "Build", :type => :feature, :search => true do
       expect(page).to have_content "No items selected."
     end
 
-    it "builds a batch when an item is selected", :search => true do
-      allow_any_instance_of(GetRequests).to receive(:get_data!).and_return(nil)
-      visit batches_path
-      find(:css, "[id='request_#{request1.id}']").click
-      find(:id, "#{request1.id}-#{item.id}").set(true)
-      click_button "Save"
-      expect(current_path).to eq(root_path)
-      expect(page).to have_content "Batch created."
-    end
+    # This needs to be in an integration test suite
+    # it "builds a batch when an item is selected", :search => true do
+    #   allow_any_instance_of(GetRequests).to receive(:get_data!).and_return(nil)
+    #   visit batches_path
+    #   find(:css, "[id='request_#{request1.id}']").click
+    #   find(:id, "#{request1.id}-#{item.id}").set(true)
+    #   click_button "Save"
+    #   expect(current_path).to eq(root_path)
+    #   expect(page).to have_content "Batch created."
+    # end
 
-    it "can see an item on the batch list once selected", :search => true do
-      allow_any_instance_of(GetRequests).to receive(:get_data!).and_return(nil)
-      visit batches_path
-      find(:css, "[id='request_#{request1.id}']").click
-      find(:id, "#{request1.id}-#{item.id}").set(true)
-      click_button "Save"
-      expect(current_path).to eq(root_path)
-      expect(page).to have_content "Batch created."
-      visit current_batch_path
-      expect(page).to have_content item.title
-      expect(page).to have_content item.author
-    end
-
-    def save_all
-      shelf.save!
-      tray.save!
-      tray2.save!
-      item.save!
-      item.reload
-      item.index!
-      Sunspot.commit
-      item2.save!
-      item2.reload
-      item2.index!
-      Sunspot.commit
-      request1.save!
-      request2.save!
-      item_updated = Item.find(item.id)
-      item_updated.save!
-      item_updated.reload
-      item_updated.index!
-      Sunspot.commit
-    end
+    # it "can see an item on the batch list once selected", :search => true do
+    #   allow_any_instance_of(GetRequests).to receive(:get_data!).and_return(nil)
+    #   visit batches_path
+    #   find(:css, "[id='request_#{request1.id}']").click
+    #   find(:id, "#{request1.id}-#{item.id}").set(true)
+    #   click_button "Save"
+    #   expect(current_path).to eq(root_path)
+    #   expect(page).to have_content "Batch created."
+    #   visit current_batch_path
+    #   expect(page).to have_content item.title
+    #   expect(page).to have_content item.author
+    # end
 
   end
 end
