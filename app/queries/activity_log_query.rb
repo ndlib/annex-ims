@@ -22,6 +22,7 @@ module ActivityLogQuery
         "DestroyedItem",
         "DissociatedItemAndTray",
         "DissociatedItemAndBin",
+        "ResolvedIssue",
         "ShippedItem"]).
       order(action_timestamp: :desc)
   end
@@ -50,7 +51,7 @@ module ActivityLogQuery
 
   def for_item(item)
     relation.
-      where("data -> 'item' -> 'barcode' ? :barcode", barcode: item.barcode)
+      where("data->'issue'->'barcode' ? :barcode OR data->'item'->'barcode' ? :barcode", barcode: item.barcode)
   end
 
   def for_tray(tray)

@@ -56,7 +56,8 @@ class ItemsController < ApplicationController
 
   def resolve
     issue = Issue.find(params[:issue_id])
-    ResolveIssue.call(user: current_user, issue: issue)
+    item = Item.where(barcode: issue.barcode).take!
+    ResolveIssue.call(item: item, user: current_user, issue: issue)
 
     redirect_to issues_path
   end
