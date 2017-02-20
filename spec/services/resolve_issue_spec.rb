@@ -1,9 +1,10 @@
 require "rails_helper"
 
 RSpec.describe ResolveIssue do
+  let(:item) { FactoryGirl.create(:item) }
   let(:issue) { FactoryGirl.create(:issue) }
   let(:user) { FactoryGirl.create(:user) }
-  subject { described_class.call(issue: issue, user: user) }
+  subject { described_class.call(item: item, issue: issue, user: user) }
 
   it "resolves the issue" do
     expect(issue.resolved_at).to be_nil
@@ -14,7 +15,7 @@ RSpec.describe ResolveIssue do
   end
 
   it "logs the issue resolution" do
-    expect(ActivityLogger).to receive(:resolve_issue).with(issue: issue, user: user)
+    expect(ActivityLogger).to receive(:resolve_issue).with(item: item, issue: issue, user: user)
     subject
   end
 end

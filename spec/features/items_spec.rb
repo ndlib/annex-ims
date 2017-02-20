@@ -94,7 +94,8 @@ feature "Items", type: :feature do
       it "can view a list of issues associated with retrieving item data and delete them" do
         @issues = []
         5.times do
-          @issue = FactoryGirl.create(:issue)
+          item = FactoryGirl.create(:item)
+          @issue = FactoryGirl.create(:issue, barcode: item.barcode)
           @issues << @issue
         end
         visit issues_path
