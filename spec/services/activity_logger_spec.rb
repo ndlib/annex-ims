@@ -226,7 +226,7 @@ RSpec.describe ActivityLogger do
   end
 
   context "ResolvedIssue" do
-    let(:arguments) { { issue: issue, user: user } }
+    let(:arguments) { { item: item, issue: issue, user: user } }
     subject { described_class.resolve_issue(**arguments) }
 
     it_behaves_like "an activity log", "ResolvedIssue"

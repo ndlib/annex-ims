@@ -102,8 +102,8 @@ class ActivityLogger
     call(action: "RemovedRequest", request: request, user: user)
   end
 
-  def self.resolve_issue(issue:, user:)
-    call(action: "ResolvedIssue", issue: issue, user: user)
+  def self.resolve_issue(item:, issue:, user:)
+    call(action: "ResolvedIssue", item: item, issue: issue, user: user)
   end
 
   def self.resolve_tray_issue(tray:, issue:, user:)
