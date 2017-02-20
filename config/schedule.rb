@@ -25,6 +25,6 @@ every 1.hour do
   rake "sneakers:ensure_running"
 end
 
-every 5.minutes do
+every '0,5,10,15,20,25,30,35,40,45,50,55 7-22 * * *' do
   rake "annex:get_active_requests"
 end
