@@ -1,6 +1,6 @@
 class ItemViewPresenter < Presenter
   def status
-    if IssuesForItemQuery.call(barcode: barcode).count >= 1
+    if IssuesForItemQuery.call(barcode: barcode).where(resolver_id: nil).count >= 1
       super + " (on issue list)"
     else
       super
