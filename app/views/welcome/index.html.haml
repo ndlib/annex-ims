@@ -17,6 +17,8 @@
       %span.glyphicon.glyphicon-plus
       Items
     #items.collapse
+      - if user_admin?
+        %a.list-group-item.barcode{ :href => deaccessioning_path } Deaccessioning
       %a.list-group-item.barcode{ :href => search_path } Item Search
     - if user_admin?
       %a.list-group-item.list-group-item-success{ "data-parent" => "#MainMenu",
