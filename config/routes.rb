@@ -108,6 +108,8 @@ Rails.application.routes.draw do
     end
   end
 
+  get "deaccessioning", to: "deaccessioning#index", as: "deaccessioning"
+
   # You can have the root of your site routed with "root"
   root "welcome#index"
 end
