@@ -4,6 +4,8 @@
 = "#{@total} results found"
 = form_tag '/test' do |f|
   .itemsearch
+  = label_tag :comment, "Comment"
+  = text_field_tag :comment
   %table.table.table-striped.condensed
     %thead
       %tr
