@@ -1,0 +1,21 @@
+%h1 Listing dispositions
+
+%table
+  %tr
+    %th Name
+    %th Description
+    %th Active
+    %th
+    %th
+
+  - @dispositions.each do |disposition|
+    %tr
+      %td= disposition.name
+      %td= disposition.description
+      %td= disposition.active
+      %td= link_to 'Show', disposition
+      %td= link_to 'Edit', edit_disposition_path(disposition)
+
+%br
+
+= link_to 'New Disposition', new_disposition_path
