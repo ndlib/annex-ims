@@ -1,0 +1,15 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @disposition.name
+%p
+  %b Description:
+  = @disposition.description
+%p
+  %b Active:
+  = @disposition.active
+
+= link_to 'Edit', edit_disposition_path(@disposition)
+\|
+= link_to 'Back', dispositions_path
