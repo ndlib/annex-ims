@@ -10,6 +10,6 @@
   %b Active:
   = @disposition.active
 
-= link_to 'Edit', edit_disposition_path(@disposition)
+= button_to 'Edit', edit_disposition_path(@disposition), method: :get, class: 'btn btn-primary'
 \|
-= link_to 'Back', dispositions_path
+= button_to 'Cancel', dispositions_path, method: :get, class: 'btn btn-danger'

@@ -2,6 +2,6 @@
 
 = render 'form'
 
-= link_to 'Show', @disposition
+= button_to 'Show', @disposition, method: :get, class: 'btn btn-primary'
 \|
-= link_to 'Back', dispositions_path
+= button_to 'Cancel', dispositions_path, method: :get, class: 'btn btn-danger'
