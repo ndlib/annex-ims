@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :disposition do
-    name "MyString"
+    code "MyString"
 description "MyString"
 active false
   end
