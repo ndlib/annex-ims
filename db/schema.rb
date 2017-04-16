@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170409212114) do
+ActiveRecord::Schema.define(version: 20170416171653) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,7 +49,7 @@ ActiveRecord::Schema.define(version: 20170409212114) do
   add_index "bins", ["barcode"], name: "index_bins_on_barcode", unique: true, using: :btree
 
   create_table "dispositions", force: :cascade do |t|
-    t.string   "name",                       null: false
+    t.string   "code",                       null: false
     t.string   "description"
     t.boolean  "active",      default: true, null: false
     t.datetime "created_at",                 null: false

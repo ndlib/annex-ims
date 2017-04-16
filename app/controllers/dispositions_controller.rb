@@ -43,6 +43,6 @@ class DispositionsController < ApplicationController
     end
 
     def disposition_params
-      params.require(:disposition).permit(:name, :description, :active)
+      params.require(:disposition).permit(:code, :description, :active)
     end
 end
