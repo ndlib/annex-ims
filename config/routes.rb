@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
 
-  resources :dispositions
+  resources :dispositions do
+    member do
+      get 'activation'
+    end
+  end
+
   devise_for :users, controllers: { cas_sessions: "simple_cas" }
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
