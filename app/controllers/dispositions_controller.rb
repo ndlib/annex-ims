@@ -1,11 +1,11 @@
 class DispositionsController < ApplicationController
-  before_action :set_disposition, only: [:show, :edit, :update, :destroy]
+  before_action :set_disposition, only: [:show, :edit, :update, :destroy, :activation]
   before_action :require_admin
 
   respond_to :html
 
   def index
-    @dispositions = Disposition.all
+    @dispositions = Disposition.all.order(active: :desc, code: :asc)
     respond_with(@dispositions)
   end
 
@@ -35,6 +35,12 @@ class DispositionsController < ApplicationController
   def destroy
     @disposition.destroy
     respond_with(@disposition)
+  end
+
+  def activation
+    @disposition.active = !@disposition.active
+    @disposition.save
+    redirect_to dispositions_path
   end
 
   private
