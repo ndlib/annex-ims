@@ -10,9 +10,9 @@ RSpec.describe "Request" do
       end
     end
 
-    context "when source is not aleph" do
+    context "when source is illiad" do
       before(:each) do
-        request.source = "ill"
+        request.source = "illiad"
       end
 
       context "when del_type is not loan" do
@@ -29,6 +29,16 @@ RSpec.describe "Request" do
         it "returns the correct bin type" do
           expect(request.bin_type).to eq "ILL-LOAN"
         end
+      end
+    end
+
+    context "when source is deaccessioning" do
+      before(:each) do
+        request.source = "deaccessioning"
+      end
+
+      it "returns the correct bin type" do
+        expect(request.bin_type). to eq "DEAC-STOCK"
       end
     end
   end

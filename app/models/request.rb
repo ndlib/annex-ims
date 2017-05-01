@@ -15,14 +15,17 @@ class Request < ActiveRecord::Base
   enum status: { received: 0, completed: 1 }
 
   def bin_type
-    if source == "aleph"
+    case source.downcase
+    when "aleph"
       bt = "ALEPH-LOAN"
-    else
+    when "illiad"
       if del_type != "loan"
         bt = "ILL-SCAN"
       else
         bt = "ILL-LOAN"
       end
+    else
+      bt = "DEAC-STOCK"
     end
 
     bt

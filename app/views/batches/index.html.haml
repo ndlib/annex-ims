@@ -1,7 +1,7 @@
 .row.filter
   .col-md-8
-    = select_tag :source, options_for_select([["Aleph", "aleph"], ["ILLiad", "illiad"],["Deaccessioning","deaccessioning"]]), id: "source-select"
-    = select_tag :req_type, options_for_select([["Loan", "loan"], ["Scan", "scan"],["Deaccessioning","deaccessioning"]]), id: "req-type-select"
+    = select_tag :source, options_for_select([["Aleph", "aleph"], ["ILLiad", "illiad"], ["Deaccessioning","deaccessioning"]], "aleph"), id: "source-select"
+    = select_tag :req_type, options_for_select([["Loan", "loan"], ["Scan", "scan"], ["Deaccessioning","deaccessioning"]], "loan"), id: "req-type-select"
     = label_tag :rapid, "ILLiad Rapid Requests"
     = check_box_tag :rapid, 1, false, id: "rapid-check-box"
   .col-md-4
