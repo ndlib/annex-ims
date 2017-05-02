@@ -1,0 +1,41 @@
+.list-group.panel.search
+  %a.list-group-item.list-group-item-success Criteria
+  #criteria.input-group
+    %div
+      = select_tag :criteria_type,
+                   options_for_select(SearchItems::CRITERIA_TYPES,
+                                      @params[:criteria_type])
+      = text_field_tag :criteria, @params[:criteria], autofocus: "autofocus"
+
+  %a.list-group-item.list-group-item-success{"data-toggle" => "collapse", :href => "#date-range"}
+    %span.glyphicon.glyphicon-plus
+    Date Range
+  #date-range.collapse
+    = select_tag :date_type, options_for_select([["Request Date", "request"],["Initial Ingest Date", "initial"],["Last Ingest Date", "last"]], @params[:date_type]), include_blank: true
+    %span.input-daterange{"data-provide" => "datepicker", "data-date-format" => "yyyy-mm-dd"}
+      = text_field_tag :start, @params[:start] ||= Time.now.strftime("%Y-%m-%d")
+      %span.add-on to
+      = text_field_tag :finish, @params[:finish] ||= Time.now.strftime("%Y-%m-%d")
+
+  %a.list-group-item.list-group-item-success{"data-toggle" => "collapse", :href => "#conditions"}
+    %span.glyphicon.glyphicon-plus
+    Conditions
+  #conditions.collapse
+    .input-group
+      = radio_button_tag :condition_bool, :any, @params[:condition_bool] == 'any'
+      = label_tag :condition_bool_any, "Any"
+      &nbsp;
+      = radio_button_tag :condition_bool, :all, @params[:condition_bool] == 'all'
+      = label_tag :condition_bool_all, "All"
+      &nbsp;
+      = radio_button_tag :condition_bool, :none, @params[:condition_bool] == 'none'
+      = label_tag :condition_bool_none, "None"
+    %ul.list-unstyled
+      - Item::CONDITIONS.each do |condition|
+        %li
+          = check_box_tag "conditions[#{condition}]", 1, !@params[:conditions].blank? ? @params[:conditions][condition] : false
+          = label_tag condition, condition
+
+.actions
+  = submit_tag 'Search', class: 'btn pull-left btn-primary'
+  = submit_tag 'Export', class: 'btn pull-right btn-primary'
