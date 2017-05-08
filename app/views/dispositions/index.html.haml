@@ -18,9 +18,9 @@
       %td= button_to 'Edit', edit_disposition_path(disposition), method: :get, class: 'btn'
       %td
         - if disposition.active?
-          = button_to 'Deactivate', activation_disposition_path(disposition), method: :get, class: 'btn btn-danger'
+          = button_to 'Deactivate', activation_disposition_path(disposition), method: :post, class: 'btn btn-danger'
         - else
-          = button_to 'Reactivate', activation_disposition_path(disposition), method: :get, class: 'btn btn-success'
+          = button_to 'Reactivate', activation_disposition_path(disposition), method: :post, class: 'btn btn-success'
 
 %br
 

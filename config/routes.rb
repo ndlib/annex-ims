@@ -2,7 +2,7 @@ Rails.application.routes.draw do
 
   resources :dispositions do
     member do
-      get 'activation'
+      post 'activation'
     end
   end
 
