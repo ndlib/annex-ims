@@ -3,10 +3,12 @@ require 'rails_helper'
 RSpec.describe ShelvesController, type: :controller do
   let(:user) { FactoryGirl.create(:user, admin: true) }
   let(:shelf) { FactoryGirl.create(:shelf) }
+  let(:tray) { FactoryGirl.create(:tray, shelf: shelf) }
   let(:bogus) { 'BOGUS' }
   let(:barcode) { "00000007819006" }
   let(:metadata_status) { "not_found" }    
   let(:item) { instance_double(Item, barcode: bogus, metadata_status: metadata_status, metadata_updated_at: 1.day.ago, attributes: {}, update!: true) }
+  let(:item2) { FactoryGirl.create(:item, tray: tray) }
 
   before(:each) do
     sign_in(user)
@@ -38,12 +40,57 @@ RSpec.describe ShelvesController, type: :controller do
       expect(response).to be_redirect
       expect(response.location).to match(/shelves\/items\/\d+/)
     end
+
+    it 'handles failure of AssociateShelfWithItemBarcode' do
+      item2.tray = nil
+      item2.shelf = nil
+      item2.save!
+      allow(GetItemFromBarcode).to receive(:call).and_return(item2)
+      allow(AssociateShelfWithItemBarcode).to receive(:call).and_raise(StandardError)
+      expect(controller).to receive(:notify_airbrake).with(kind_of(StandardError))
+      post :associate, id: shelf.id, barcode: item2.barcode
+      expect(response).to be_redirect
+      expect(response.location).to match(/shelves\/items\/\d+/)
+    end
   end
 
   describe 'GET missing' do
     it 'renders the missing template' do
       get :missing, id: shelf.id
       expect(response).to render_template(:missing)
+    end
+  end
+
+  describe 'POST dissociate' do
+    subject { post :dissociate, id: shelf.id, item_id: item2.id, commit: commit }
+    context 'Unstocking an item' do
+      let(:commit) { 'Unstock' }
+
+      it 'succeeds' do
+        subject
+        expect(response).to be_redirect
+        expect(response.location).to match(/shelves\/items\/\d+/)
+      end
+
+      it 'fails' do
+        allow(UnstockItem).to receive(:call).and_return(false)
+        expect{subject}.to raise_error(RuntimeError, 'unable to unstock item')
+      end
+    end
+
+    context 'Not unstocking an item' do
+      let(:commit) { 'Not' }
+
+      it 'succeeds' do
+        subject
+        expect(response).to be_redirect
+        expect(response.location).to match(/shelves\/items\/\d+/)
+      end
+
+      it 'fails' do
+        allow(DissociateShelfFromItem).to receive(:call).and_return(false)
+        expect{subject}.to raise_error(RuntimeError, 'unable to dissociate')
+      end
     end
   end
 end
