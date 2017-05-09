@@ -39,4 +39,11 @@ RSpec.describe ShelvesController, type: :controller do
       expect(response.location).to match(/shelves\/items\/\d+/)
     end
   end
+
+  describe 'GET missing' do
+    it 'renders the missing template' do
+      get :missing, id: shelf.id
+      expect(response).to render_template(:missing)
+    end
+  end
 end
