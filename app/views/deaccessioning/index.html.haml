@@ -2,10 +2,18 @@
   = render 'shared/search_form'
 %hr
 = "#{@total} results found"
-.itemsearch
+= form_tag deaccessioning_req_path do |f|
+  .itemsearch
+  = label_tag :comment, "Comment"
+  = text_field_tag :comment
+  = label_tag :disposition
+  = collection_select nil, :disposition_id, Disposition.where(active: true), :id, :code, prompt: true
   %table.table.table-striped.condensed
     %thead
       %tr
+        %th.add
+          Select All
+          = check_box_tag 'selectAll'
         %th= 'Barcode'
         %th= 'Bib Number'
         %th= 'ISBN/ISSN'
@@ -18,6 +26,7 @@
     %tbody
       - @results.each do |item|
         %tr
+          %td= check_box_tag "items[#{item.id}]", "items[#{item.id}]", false, class: "item"
           %td= link_to item.barcode, item_detail_path(item.barcode)
           %td= item.bib_number
           %td= item.isbn_issn
@@ -27,5 +36,20 @@
           %td= item.tray.present? ? item.tray.barcode : ''
           %td= item.shelf.present? ? item.shelf.barcode : ''
           %td= item.conditions.present? ? item.conditions.join(", ") : ''
-- if !@results.blank?
-  = paginate @results
+  - if !@results.blank?
+    = paginate @results
+  .actions
+    = submit_tag 'Create Request(s)', class: 'btn pull-left btn-primary'
+:javascript
+  $(document).ready(function() {
+    $("#selectAll").click(function(event) {
+      event.stopPropagation();
+      $(".item").prop("checked", $("#selectAll").prop("checked")).each(function() {
+        checkboxChanged(this);
+      });
+    });
+
+    $("form").on("change", ".item", function() {
+      checkboxChanged(this);
+    });
+  });

@@ -1,0 +1,27 @@
+%h1 Listing dispositions
+
+%table.table
+  %tr
+    %th Code
+    %th Description
+    %th Active
+    %th
+    %th
+    %th
+
+  - @dispositions.each do |disposition|
+    %tr
+      %td= disposition.code
+      %td= disposition.description
+      %td= disposition.active
+      %td= button_to 'Show', disposition, method: :get, class: 'btn btn-primary'
+      %td= button_to 'Edit', edit_disposition_path(disposition), method: :get, class: 'btn'
+      %td
+        - if disposition.active?
+          = button_to 'Deactivate', activation_disposition_path(disposition), method: :post, class: 'btn btn-danger'
+        - else
+          = button_to 'Reactivate', activation_disposition_path(disposition), method: :post, class: 'btn btn-success'
+
+%br
+
+= button_to 'Add New Disposition', new_disposition_path, method: :get, class: 'btn'

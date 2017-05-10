@@ -1,0 +1,7 @@
+%h1 Editing disposition
+
+= render 'form'
+
+= button_to 'Show', @disposition, method: :get, class: 'btn btn-primary'
+\|
+= button_to 'Cancel', dispositions_path, method: :get, class: 'btn btn-danger'

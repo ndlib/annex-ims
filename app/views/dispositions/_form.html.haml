@@ -1,0 +1,19 @@
+= form_for @disposition do |f|
+  - if @disposition.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@disposition.errors.count, "error")} prohibited this disposition from being saved:"
+      %ul
+        - @disposition.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :code
+    = f.text_field :code
+  .field
+    = f.label :description
+    = f.text_field :description
+  .field
+    = f.label :active
+    = f.check_box :active, {}, 'true', 'false'
+  .actions
+    = f.submit 'Save', class: 'btn btn-primary'
