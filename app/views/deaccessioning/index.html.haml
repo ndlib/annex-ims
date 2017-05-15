@@ -38,8 +38,6 @@
           %td= item.conditions.present? ? item.conditions.join(", ") : ''
   - if !@results.blank?
     = paginate @results
-  .actions
-    = submit_tag 'Create Request(s)', class: 'btn pull-left btn-primary'
 :javascript
   $(document).ready(function() {
     $("#selectAll").click(function(event) {
