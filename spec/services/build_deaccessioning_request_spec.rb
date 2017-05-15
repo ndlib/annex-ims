@@ -1,7 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe BuildDeaccessioningRequest do
-  subject { described_class.call(item.id) }
+  subject { described_class.call(item.id, disposition.id, comment) }
+  let!(:disposition) { FactoryGirl.create(:disposition) }
+  let!(:comment) { "Test comment" }
   let!(:item) { FactoryGirl.create(:item, barcode: '987654321') }
 
   it 'creates requests' do

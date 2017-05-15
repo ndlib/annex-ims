@@ -106,6 +106,8 @@ class GetRequests
       "patron_department" => request_data["patron_department"],
       "patron_status" => request_data["patron_status"],
       "pickup_location" => request_data["pickup_location"],
+      "disposition_id" => request_data["disposition_id"],
+      "comment" => request_data["comment"],
     }
   end
 

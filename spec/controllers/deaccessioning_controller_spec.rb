@@ -3,6 +3,8 @@ require 'rails_helper'
 RSpec.describe DeaccessioningController, type: :controller do
   let(:user) { FactoryGirl.create(:user, admin: true) }
   let(:item) { FactoryGirl.create(:item) }
+  let!(:disposition) { FactoryGirl.create(:disposition) }
+  let!(:comment) { "Test comment" }
 
   before(:each) do
     sign_in(user)
@@ -18,9 +20,14 @@ RSpec.describe DeaccessioningController, type: :controller do
   end
 
   describe "POST req" do
-    subject { post :req, items: {"#{item.id}" => "items[#{item.id}]"} }
+    subject do
+      post :req, items: {"#{item.id}" => "items[#{item.id}]"},
+	   disposition_id: disposition.id,
+           comment: comment
+    end
     it "builds a deaccessioning request" do
-      expect(BuildDeaccessioningRequest).to receive(:call).with(item.id.to_s)
+      expect(BuildDeaccessioningRequest).to receive(:call).
+	with(item.id.to_s, nil, nil)
       subject
     end
 

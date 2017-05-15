@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170416182126) do
+ActiveRecord::Schema.define(version: 20170515014300) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -135,9 +135,12 @@ ActiveRecord::Schema.define(version: 20170416182126) do
     t.string   "patron_department"
     t.string   "patron_status"
     t.string   "pickup_location"
+    t.integer  "disposition_id"
+    t.string   "comment"
   end
 
   add_index "requests", ["batch_id"], name: "index_requests_on_batch_id", using: :btree
+  add_index "requests", ["disposition_id"], name: "index_requests_on_disposition_id", using: :btree
   add_index "requests", ["item_id"], name: "index_requests_on_item_id", using: :btree
   add_index "requests", ["trans"], name: "index_requests_on_trans", unique: true, using: :btree
 
@@ -208,6 +211,7 @@ ActiveRecord::Schema.define(version: 20170416182126) do
   add_foreign_key "matches", "bins"
   add_foreign_key "matches", "requests"
   add_foreign_key "requests", "batches"
+  add_foreign_key "requests", "dispositions"
   add_foreign_key "requests", "items"
   add_foreign_key "transfers", "shelves"
   add_foreign_key "tray_issues", "users"
