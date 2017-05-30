@@ -79,6 +79,13 @@ RSpec.describe ActivityLogger do
     it_behaves_like "an activity log", "ApiStockItem"
   end
 
+  context "ApiDeaccessionItem" do
+    let(:arguments) { { item: item, params: { test: "test" }, api_response: api_response } }
+    subject { described_class.api_deaccession_item(**arguments) }
+
+    it_behaves_like "an activity log", "ApiDeaccessionItem"
+  end
+
   context "ApiRemoveRequest" do
     let(:arguments) { { request: request, params: { test: "test" }, api_response: api_response } }
     subject { described_class.api_remove_request(**arguments) }
@@ -280,6 +287,13 @@ RSpec.describe ActivityLogger do
     subject { described_class.stock_item(**arguments) }
 
     it_behaves_like "an activity log", "StockedItem"
+  end
+
+  context "DeaccessionedItem" do
+    let(:arguments) { { item: item, user: user } }
+    subject { described_class.deaccession_item(**arguments) }
+
+    it_behaves_like "an activity log", "DeaccessionedItem"
   end
 
   context "UnshelvedTray" do

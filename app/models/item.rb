@@ -21,7 +21,7 @@ class Item < ActiveRecord::Base
     "error",
   ]
 
-  enum status: { stocked: 0, unstocked: 1, shipped: 2 }
+  enum status: { stocked: 0, unstocked: 1, shipped: 2, deaccessioned: 9 }
 
   validates :thickness, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, presence: true, on: :update
   validates :barcode, uniqueness: true, presence: true

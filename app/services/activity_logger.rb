@@ -26,6 +26,10 @@ class ActivityLogger
     call(action: "ApiStockItem", item: item, params: params, api_response: api_response)
   end
 
+  def self.api_deaccession_item(item:, params:, api_response:)
+    call(action: "ApiDeaccessionItem", item: item, params: params, api_response: api_response)
+  end
+
   def self.api_remove_request(request:, params:, api_response:)
     call(action: "ApiRemoveRequest", request: request, params: params, api_response: api_response)
   end
@@ -132,6 +136,10 @@ class ActivityLogger
 
   def self.stock_item(item:, tray:, user:)
     call(action: "StockedItem", user: user, item: item, tray: tray)
+  end
+
+  def self.deaccession_item(item:, user:)
+    call(action: "DeaccessionedItem", user: user, item: item)
   end
 
   def self.unshelve_tray(tray:, shelf:, user:)
