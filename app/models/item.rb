@@ -57,6 +57,7 @@ class Item < ActiveRecord::Base
     date :requested, multiple: true do
       requests.map &:requested
     end
+    string :status
   end
 
   def has_correct_prefix?

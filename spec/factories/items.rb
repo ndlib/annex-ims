@@ -14,6 +14,7 @@ FactoryGirl.define do
     last_ingest Date::today.to_s
     metadata_status "complete"
     disposition nil
+    status 0
   end
 
 end

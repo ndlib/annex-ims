@@ -47,6 +47,8 @@ class SearchItems
   # rubocop:disable Metrics/PerceivedComplexity
   def search_results
     Item.search do
+      without(:status, "deaccessioned")
+
       paginate page: page, per_page: per_page
 
       if search_fulltext?
