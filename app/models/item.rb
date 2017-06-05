@@ -30,6 +30,7 @@ class Item < ActiveRecord::Base
 
   belongs_to :tray
   belongs_to :bin
+  belongs_to :disposition
   has_one :shelf, through: :tray
   has_many :matches
   has_many :requests, through: :matches

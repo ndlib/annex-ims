@@ -8,6 +8,7 @@ class BuildDeaccessioningRequest < GetRequests
 
   def build_request_data(item_id, disposition_id, comment)
     item = Item.where(id: item_id).take
+    SetItemDisposition.call(item_id, disposition_id)
     request_data = [{
       "transaction" => "DEACC-#{item_id}-#{Time.now.to_i}", # Need a bogus transaction
       "barcode" => item.barcode,
@@ -20,7 +21,6 @@ class BuildDeaccessioningRequest < GetRequests
       "author" => item.author,
       "isbn_issn" => item.isbn_issn,
       "bib_number" => item.bib_number,
-      "disposition_id" => disposition_id,
       "comment" => comment
     }]
 
