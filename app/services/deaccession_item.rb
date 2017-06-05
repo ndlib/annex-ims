@@ -19,7 +19,7 @@ class DeaccessionItem
     ApiDeaccessionItemJob.perform_later(item: item)
 
     if item.save!
-      ActivityLogger.deaccession_item(item: item, user: user)
+      ActivityLogger.deaccession_item(item: item, user: user, disposition: Disposition.first)
       result = item
     else
       result = false

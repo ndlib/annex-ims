@@ -138,8 +138,8 @@ class ActivityLogger
     call(action: "StockedItem", user: user, item: item, tray: tray)
   end
 
-  def self.deaccession_item(item:, user:)
-    call(action: "DeaccessionedItem", user: user, item: item)
+  def self.deaccession_item(item:, user:, disposition:)
+    call(action: "DeaccessionedItem", user: user, item: item, disposition: disposition)
   end
 
   def self.unshelve_tray(tray:, shelf:, user:)

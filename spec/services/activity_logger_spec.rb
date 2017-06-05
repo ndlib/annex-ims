@@ -290,7 +290,7 @@ RSpec.describe ActivityLogger do
   end
 
   context "DeaccessionedItem" do
-    let(:arguments) { { item: item, user: user } }
+    let(:arguments) { { item: item, user: user, disposition: disposition } }
     subject { described_class.deaccession_item(**arguments) }
 
     it_behaves_like "an activity log", "DeaccessionedItem"
