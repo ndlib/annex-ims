@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170416182126) do
+ActiveRecord::Schema.define(version: 20170604211603) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -91,10 +91,12 @@ ActiveRecord::Schema.define(version: 20170416182126) do
     t.integer  "status",                         default: 0,         null: false
     t.datetime "metadata_updated_at"
     t.string   "metadata_status",     limit: 20, default: "pending"
+    t.integer  "disposition_id"
   end
 
   add_index "items", ["barcode"], name: "index_items_on_barcode", unique: true, using: :btree
   add_index "items", ["bin_id"], name: "index_items_on_bin_id", using: :btree
+  add_index "items", ["disposition_id"], name: "index_items_on_disposition_id", using: :btree
   add_index "items", ["tray_id"], name: "index_items_on_tray_id", using: :btree
 
   create_table "matches", force: :cascade do |t|
@@ -135,6 +137,7 @@ ActiveRecord::Schema.define(version: 20170416182126) do
     t.string   "patron_department"
     t.string   "patron_status"
     t.string   "pickup_location"
+    t.string   "comment"
   end
 
   add_index "requests", ["batch_id"], name: "index_requests_on_batch_id", using: :btree
@@ -204,6 +207,7 @@ ActiveRecord::Schema.define(version: 20170416182126) do
   add_foreign_key "batches", "users"
   add_foreign_key "issues", "users", column: "resolver_id"
   add_foreign_key "items", "bins"
+  add_foreign_key "items", "dispositions"
   add_foreign_key "items", "trays"
   add_foreign_key "matches", "bins"
   add_foreign_key "matches", "requests"

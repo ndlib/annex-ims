@@ -10,7 +10,9 @@ class DeaccessioningController < ApplicationController
 
   def req
     params[:items].keys.each do |item_id|
-      BuildDeaccessioningRequest.call(item_id)
+      BuildDeaccessioningRequest.call(item_id,
+				      params[:disposition_id],
+				      params[:comment])
     end
     redirect_to batches_path
   end

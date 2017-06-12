@@ -11,6 +11,7 @@ RSpec.describe ActivityLogger do
   let(:request) { FactoryGirl.create(:request) }
   let(:transfer) { FactoryGirl.create(:transfer) }
   let(:api_response) { ApiResponse.new(status_code: 200, body: { status: "OK" }) }
+  let(:disposition) { FactoryGirl.create(:disposition) }
 
   shared_examples "an activity log" do |message|
     def compare_user(activity_log, user)
@@ -244,6 +245,13 @@ RSpec.describe ActivityLogger do
     subject { described_class.scan_item(**arguments) }
 
     it_behaves_like "an activity log", "ScannedItem"
+  end
+
+  context "SetItemDisposition" do
+    let(:arguments) { { item: item, disposition: disposition } }
+    subject { described_class.set_item_disposition(**arguments) }
+
+    it_behaves_like "an activity log", "SetItemDisposition"
   end
 
   context "ShelvedTray" do
