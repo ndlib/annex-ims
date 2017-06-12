@@ -21,13 +21,10 @@ RSpec.describe DeaccessioningController, type: :controller do
   end
 
   describe "POST req" do
-    subject do
+    it "associates an unstocked item with a special bin" do
       post :req, items: {"#{unstock.id}" => "items[#{unstock.id}]"},
 	   disposition_id: disposition.id,
            comment: comment
-    end
-    it "associates an unstocked item with a special bin" do
-      subject
       bin = GetBinFromBarcode.call("BIN-DEAC-HAND-01")
       i = Item.find(unstock.id)
       expect(i.bin).to eq(bin)
