@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.describe DeaccessioningController, type: :controller do
   let(:user) { FactoryGirl.create(:user, admin: true) }
-  let(:item) { FactoryGirl.create(:item) }
+  let(:item) { FactoryGirl.create(:item, status: 0) }
+  let(:unstock) { FactoryGirl.create(:item, status: 1) }
   let!(:disposition) { FactoryGirl.create(:disposition) }
   let!(:comment) { "Test comment" }
 
@@ -20,6 +21,20 @@ RSpec.describe DeaccessioningController, type: :controller do
   end
 
   describe "POST req" do
+    it "associates an unstocked item with a special bin" do
+      post :req, items: {"#{unstock.id}" => "items[#{unstock.id}]"},
+	   disposition_id: disposition.id,
+           comment: comment
+      bin = GetBinFromBarcode.call("BIN-DEAC-HAND-01")
+      i = Item.find(unstock.id)
+      expect(i.bin).to eq(bin)
+    end
+
+    it "redirects to batches path" do
+      subject
+      expect(response).to redirect_to(batches_path)
+    end
+
     subject do
       post :req, items: {"#{item.id}" => "items[#{item.id}]"},
 	   disposition_id: disposition.id,
