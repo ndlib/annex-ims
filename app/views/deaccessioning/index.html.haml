@@ -7,7 +7,7 @@
   = label_tag :comment, "Comment"
   = text_field_tag :comment
   = label_tag :disposition
-  = collection_select nil, :disposition_id, Disposition.where(active: true), :id, :code, prompt: true
+  = collection_select nil, :disposition_id, Disposition.where(active: true), :id, :code
   %table.table.table-striped.condensed
     %thead
       %tr
