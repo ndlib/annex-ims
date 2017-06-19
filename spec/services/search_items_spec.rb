@@ -44,8 +44,7 @@ RSpec.describe SearchItems, search: true do
 
     it "does not return deaccessioned items", search: true do
       subject
-      expect(subject.results[0]).to eq item
-      expect(subject.total).to eq(1)
+      expect(Sunspot.session).to have_search_params(:without, :status, "deaccessioned")
     end
   end
 

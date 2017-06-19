@@ -141,7 +141,6 @@ ActiveRecord::Schema.define(version: 20170604211603) do
   end
 
   add_index "requests", ["batch_id"], name: "index_requests_on_batch_id", using: :btree
-  add_index "requests", ["disposition_id"], name: "index_requests_on_disposition_id", using: :btree
   add_index "requests", ["item_id"], name: "index_requests_on_item_id", using: :btree
   add_index "requests", ["trans"], name: "index_requests_on_trans", unique: true, using: :btree
 
@@ -213,7 +212,6 @@ ActiveRecord::Schema.define(version: 20170604211603) do
   add_foreign_key "matches", "bins"
   add_foreign_key "matches", "requests"
   add_foreign_key "requests", "batches"
-  add_foreign_key "requests", "dispositions"
   add_foreign_key "requests", "items"
   add_foreign_key "transfers", "shelves"
   add_foreign_key "tray_issues", "users"
