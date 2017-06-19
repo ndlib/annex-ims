@@ -13,6 +13,7 @@ FactoryGirl.define do
     initial_ingest Faker::Date.between(2.days.ago, Date.today)
     last_ingest Date::today.to_s
     metadata_status "complete"
+    disposition nil
   end
 
 end
