@@ -23,6 +23,7 @@ module ActivityLogQuery
         "DissociatedItemAndTray",
         "DissociatedItemAndBin",
         "ResolvedIssue",
+	"DeaccessionedItem",
         "ShippedItem"]).
       order(action_timestamp: :desc)
   end
