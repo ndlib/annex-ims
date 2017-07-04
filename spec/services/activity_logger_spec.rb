@@ -12,6 +12,7 @@ RSpec.describe ActivityLogger do
   let(:transfer) { FactoryGirl.create(:transfer) }
   let(:api_response) { ApiResponse.new(status_code: 200, body: { status: "OK" }) }
   let(:disposition) { FactoryGirl.create(:disposition) }
+  let(:comment) { { comment: "A deaccessioning comment." } }
 
   shared_examples "an activity log" do |message|
     def compare_user(activity_log, user)
@@ -290,7 +291,7 @@ RSpec.describe ActivityLogger do
   end
 
   context "DeaccessionedItem" do
-    let(:arguments) { { item: item, user: user, disposition: disposition } }
+    let(:arguments) { { item: item, user: user, disposition: disposition, comment: comment } }
     subject { described_class.deaccession_item(**arguments) }
 
     it_behaves_like "an activity log", "DeaccessionedItem"

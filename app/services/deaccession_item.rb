@@ -19,7 +19,8 @@ class DeaccessionItem
     ApiDeaccessionItemJob.perform_later(item: item)
 
     if item.save!
-      ActivityLogger.deaccession_item(item: item, user: user, disposition: item.disposition)
+      comment = item.try(:requests).order(created_at: :desc).first.try(:comment)
+      ActivityLogger.deaccession_item(item: item, user: user, disposition: item.disposition, comment: { comment: comment } )
       result = item
     else
       result = false
