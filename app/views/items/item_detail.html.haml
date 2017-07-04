@@ -72,6 +72,8 @@
             %th= "When"
             %th= "Tray"
             %th= "Who"
+            %th= "Disposition"
+            %th= "Comment"
         %tbody
           - @history.each do |record|
             %tr
@@ -79,6 +81,8 @@
               %td= record.action_timestamp.strftime("%m-%d-%Y %I:%M%p")
               %td= record.data['tray'].blank? ? 'STAGING' : record.data['tray']['barcode']
               %td= record.username
+              %td= record.data['request'].blank? ? '' : record.data['request']['disposition']
+              %td= record.data['request'].blank? ? '' : record.data['request']['comment']
   %div.panel.panel-warning
     %div.panel-heading
       %h3.panel-title= "Item Usage"
