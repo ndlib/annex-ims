@@ -16,7 +16,9 @@ class ProcessMatch
       scan_send
       complete_match
     end
-    notify_api
+    if ["scan", "send"].include?(delivery_type)
+      notify_api
+    end
     true
   end
 
@@ -45,7 +47,7 @@ class ProcessMatch
   def scan_send
     if delivery_type == "send"
       ShipItem.call(item: item, request: request, user: user)
-    else
+    elsif delivery_type == "scan"
       ScanItem.call(item: item, request: request, user: user)
     end
   end
