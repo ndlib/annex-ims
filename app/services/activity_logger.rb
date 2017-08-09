@@ -1,5 +1,5 @@
 class ActivityLogger
-  DATA_OBJECTS = [:item, :tray, :shelf, :bin, :request, :issue, :tray_issue, :transfer, :api_response, :params, :disposition].freeze
+  DATA_OBJECTS = [:item, :tray, :shelf, :bin, :request, :issue, :tray_issue, :transfer, :api_response, :params, :disposition, :comment].freeze
   attr_reader :action, :user, :data_objects
 
   def self.accept_item(item:, request:, user:)
@@ -24,6 +24,10 @@ class ActivityLogger
 
   def self.api_stock_item(item:, params:, api_response:)
     call(action: "ApiStockItem", item: item, params: params, api_response: api_response)
+  end
+
+  def self.api_deaccession_item(item:, params:, api_response:)
+    call(action: "ApiDeaccessionItem", item: item, params: params, api_response: api_response)
   end
 
   def self.api_remove_request(request:, params:, api_response:)
@@ -132,6 +136,10 @@ class ActivityLogger
 
   def self.stock_item(item:, tray:, user:)
     call(action: "StockedItem", user: user, item: item, tray: tray)
+  end
+
+  def self.deaccession_item(item:, user:, disposition:, comment:)
+    call(action: "DeaccessionedItem", user: user, item: item, disposition: disposition, comment: comment)
   end
 
   def self.unshelve_tray(tray:, shelf:, user:)

@@ -12,6 +12,10 @@ module ApiHelper
     api_url(:stock)
   end
 
+  def api_deaccession_url
+    api_url(:deaccession)
+  end
+
   def api_scan_send_url(match)
     if match.request.del_type == "scan"
       api_scan_url
@@ -57,6 +61,20 @@ module ApiHelper
       item_id: item.id.to_s,
       barcode: item.barcode,
       tray_code: item.tray.barcode
+    }
+  end
+
+  def stub_api_deaccession_item(item:, status_code: 200, body: nil)
+    body ||= api_fixture_data("deaccession_item.json")
+    stub_request(:post, api_deaccession_url).
+      with(body: api_deaccession_item_params(item),
+           headers: { "User-Agent" => "Faraday v0.9.1" }).
+      to_return(status: status_code, body: body, headers: {})
+  end
+
+  def api_deaccession_item_params(item)
+    {
+      barcode: item.barcode
     }
   end
 
