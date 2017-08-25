@@ -9,7 +9,7 @@ class DeaccessioningController < ApplicationController
   end
 
   def req
-    if Disposition.pluck(:id).include?(params[:disposition_id])
+    if Disposition.pluck(:id).include?(params[:disposition_id].to_i)
       params[:items].keys.each do |item_id|
         item = Item.find(item_id)
         request = BuildDeaccessioningRequest.call(item_id,
@@ -19,10 +19,10 @@ class DeaccessioningController < ApplicationController
           DeaccessionNotStockedItem.call(request.id, item_id, params[:disposition_id], current_user)
         end
       end
-      redirect_to batches_path
+      redirect_to batches_path and return
     else
       flash[:error] = "Select a Disposition"
-      redirect_to deaccessioning_path
+      redirect_to deaccessioning_path and return
     end
   end
 end
