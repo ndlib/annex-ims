@@ -1,8 +1,9 @@
 = form_tag deaccessioning_path, method: :get do |f|
   = render 'shared/search_form'
-%hr
-= "#{@total} results found"
 = form_tag deaccessioning_req_path do |f|
+  = submit_tag 'Create Request(s)', class: 'btn pull-right btn-primary'
+  %hr
+  = "#{@total} results found"
   .itemsearch
   = label_tag :comment, "Comment"
   = text_field_tag :comment
