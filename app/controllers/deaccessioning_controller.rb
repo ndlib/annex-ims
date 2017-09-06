@@ -11,7 +11,7 @@ class DeaccessioningController < ApplicationController
   def req
     params[:items].keys.each do |item_id|
       item = Item.find(item_id)
-      if item.unstocked?
+      if !item.stocked?
         bin = GetBinFromBarcode.call("BIN-DEAC-HAND-01")
 	SetItemDisposition.call(item_id, params[:disposition_id])
 	item.bin = bin
