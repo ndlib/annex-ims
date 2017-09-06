@@ -1,11 +1,8 @@
 require 'rails_helper'
 
-RSpec.describe SearchItems do
-  after :all do
-    Item.remove_all_from_index!
-  end
-
+RSpec.describe SearchItems, search: true do
   let(:item) { FactoryGirl.create(:item, chron: "TEST CHRON") }
+  let(:deac_item) { FactoryGirl.create(:item, status: 9, title: item.title) }
   let(:filter) { { } }
   subject { described_class.call(filter) }
 
@@ -20,6 +17,34 @@ RSpec.describe SearchItems do
       expect(subject).to be_kind_of(described_class::EmptyResults)
       expect(subject.results).to eq []
       expect(subject.total).to eq(0)
+    end
+  end
+
+  context "search" do
+    before :each do
+      save_all
+    end
+
+    after :all do
+      Item.remove_all_from_index!
+    end
+
+    def save_all
+      item.save!
+      item.reload
+      item.index!
+      Sunspot.commit
+      deac_item.save!
+      deac_item.reload
+      deac_item.index!
+      Sunspot.commit
+    end
+
+    let(:filter) { { criteria_type: "any", criteria: deac_item.title } }
+
+    it "does not return deaccessioned items", search: true do
+      subject
+      expect(Sunspot.session).to have_search_params(:without, :status, "deaccessioned")
     end
   end
 
