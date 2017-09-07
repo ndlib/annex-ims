@@ -3,7 +3,7 @@ language: ruby
 cache:
   bundler: true
 rvm:
-- 2.1.4
+- 2.1
 addons:
   postgresql: '9.4'
 before_script:
