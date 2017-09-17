@@ -24,7 +24,7 @@ class DispositionsController < ApplicationController
   def create
     @disposition = Disposition.new(disposition_params)
     @disposition.save
-    respond_with(@disposition)
+    redirect_to dispositions_path
   end
 
   def update
