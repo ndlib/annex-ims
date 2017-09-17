@@ -55,7 +55,7 @@ RSpec.describe DeaccessioningController, type: :controller do
 
   describe "POST req (empty)" do
     subject do
-      post :req, items: {}
+      post :req
     end
 
     it "redirects to deaccessioning path" do

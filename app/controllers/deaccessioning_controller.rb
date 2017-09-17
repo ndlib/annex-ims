@@ -14,6 +14,8 @@ class DeaccessioningController < ApplicationController
     if Disposition.pluck(:id).include?(params[:disposition_id].to_i)
       if params[:items].blank?
         flash[:error] = "No items were selected to create a deaccessioning request."
+	params.delete(:action)
+	params.delete(:controller)
         redirect_to deaccessioning_path(params) and return
       else
         params[:items].keys.each do |item_id|
