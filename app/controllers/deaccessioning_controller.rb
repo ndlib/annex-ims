@@ -24,6 +24,8 @@ class DeaccessioningController < ApplicationController
       redirect_to batches_path and return
     else
       flash[:error] = "Select a Disposition"
+      params.delete(:action)
+      params.delete(:controller)
       redirect_to deaccessioning_path(params) and return
     end
   end
