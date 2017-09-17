@@ -6,15 +6,17 @@
   = "#{@total} results found"
   .itemsearch
   = label_tag :comment, "Comment"
-  = text_field_tag :comment
+  = text_field_tag :comment, params[:comment]
   = label_tag :disposition
+  = hidden_field_tag :criteria, @criteria
+  = hidden_field_tag :criteria_type, @criteria_type
   = collection_select nil, :disposition_id, Disposition.where(active: true), :id, :code, {:prompt => 'Select a Disposition'}
   %table.table.table-striped.condensed
     %thead
       %tr
         %th.add
           Select All
-          = check_box_tag 'selectAll'
+          = check_box_tag 'selectAll', 'selectAll', !@params[:selectAll].blank? ? @params[:selectAll] : false
         %th= 'Barcode'
         %th= 'Bib Number'
         %th= 'ISBN/ISSN'
@@ -27,7 +29,7 @@
     %tbody
       - @results.each do |item|
         %tr
-          %td= check_box_tag "items[#{item.id}]", "items[#{item.id}]", false, class: "item"
+          %td= check_box_tag "items[#{item.id}]", "items[#{item.id}]", !@params[:items].blank? ? @params[:items]["#{item.id}"] : false, class: "item"
           %td= link_to item.barcode, item_detail_path(item.barcode)
           %td= item.bib_number
           %td= item.isbn_issn
