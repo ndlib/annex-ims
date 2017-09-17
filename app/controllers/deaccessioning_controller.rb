@@ -6,6 +6,8 @@ class DeaccessioningController < ApplicationController
     @results = @res.results
     @total = @res.total
     @params = params  # Because we need to fill in the form with previous values.
+    @criteria = params[:criteria]
+    @criteria_type = params[:criteria_type]
   end
 
   def req
@@ -27,7 +29,7 @@ class DeaccessioningController < ApplicationController
       end
     else
       flash[:error] = "Select a Disposition"
-      redirect_to deaccessioning_path and return
+      redirect_to deaccessioning_path(params) and return
     end
   end
 end
