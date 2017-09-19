@@ -52,4 +52,15 @@ RSpec.describe DeaccessioningController, type: :controller do
       expect(response).to redirect_to(batches_path)
     end
   end
+
+  describe "POST req (empty)" do
+    subject do
+      post :req
+    end
+
+    it "redirects to deaccessioning path" do
+      subject
+      expect(response).to redirect_to(deaccessioning_path)
+    end
+  end
 end
