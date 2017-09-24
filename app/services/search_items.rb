@@ -47,7 +47,9 @@ class SearchItems
   # rubocop:disable Metrics/PerceivedComplexity
   def search_results
     Item.search do
-      without(:status, "deaccessioned")
+      unless search?
+        without(:status, "deaccessioned")
+      end
 
       paginate page: page, per_page: per_page
 
@@ -129,6 +131,10 @@ class SearchItems
 
   def search_date?
     filter?(:date_type) && (filter?(:start) || filter?(:finish)) && date_field.present?
+  end
+
+  def search?
+    filter?(:type) && (fetch(:type) == "search")
   end
 
   def fulltext_fields
