@@ -37,6 +37,7 @@
           = label_tag condition, condition
 
 .actions
+  = hidden_field_tag :type, controller_name
   = submit_tag 'Search', class: 'btn pull-left btn-primary'
   - if controller_name == 'search'
     = submit_tag 'Export', class: 'btn pull-right btn-primary'
