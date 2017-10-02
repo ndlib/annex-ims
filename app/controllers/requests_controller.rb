@@ -1,11 +1,8 @@
 class RequestsController < ApplicationController
   def remove
     request = Request.find(params[:id])
-    disposition = request.disposition
     if DestroyRequest.call(request, current_user)
-      if disposition.nil?
-        ApiRemoveRequest.call(request: request)
-      end
+      ApiRemoveRequest.call(request: request)
       flash[:notice] = "Request removed"
     else
       flash[:error] = "Request NOT removed"

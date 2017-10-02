@@ -17,7 +17,10 @@ class UnstockItem
       return false
     end
 
-    item.unstocked!
+    if !item.deaccessioned?
+      item.unstocked!
+    end
+
     if item.save!
       unless item.tray.nil?
         ActivityLogger.unstock_item(item: item, tray: item.tray, user: user)
