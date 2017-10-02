@@ -15,6 +15,7 @@ class DissociateItemFromBin
     if no_remaining_matches?
       ActivityLogger.dissociate_item_and_bin(item: item, bin: item.bin, user: user)
       if IsDeacBinBarcode.call(item.bin.barcode)
+        item.update!(tray: nil)
         DeaccessionItem.call(item, user)
       end
       item.update!(bin: nil)
