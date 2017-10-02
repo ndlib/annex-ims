@@ -5,6 +5,7 @@ RSpec.describe UnstockItem do
   let(:tray) { double(Tray, barcode: "TRAY-AH1234") }
   let(:item) do
     instance_double(Item,
+		    deaccessioned?: false,
                     unstocked?: false,
                     save: true,
                     "unstocked!" => nil,
@@ -32,6 +33,7 @@ RSpec.describe UnstockItem do
   context "item already unstocked" do
     let(:item) do
       instance_double(Item,
+		      deaccessioned?: false,
                       unstocked?: true,
                       save: true,
                       "unstocked!" => nil,
