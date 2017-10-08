@@ -54,6 +54,9 @@ class Item < ActiveRecord::Base
     text :shelf_barcode do
       !shelf.blank? ? shelf.barcode : nil
     end
+    string :bin_barcode do
+      !bin.blank? ? bin.barcode : nil
+    end
     date :requested, multiple: true do
       requests.map &:requested
     end

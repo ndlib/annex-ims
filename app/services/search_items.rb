@@ -47,6 +47,8 @@ class SearchItems
   # rubocop:disable Metrics/PerceivedComplexity
   def search_results
     Item.search do
+      without(:bin_barcode, "BIN-DEAC-HAND-01")
+
       unless search?
         without(:status, "deaccessioned")
       end
