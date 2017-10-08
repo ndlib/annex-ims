@@ -1,10 +1,11 @@
 require "rails_helper"
 
 RSpec.describe StockItem do
-  let(:item) { FactoryGirl.create(:item, tray: tray, thickness: 1) }
+  let(:item) { FactoryGirl.create(:item, status: 9, disposition: disposition, tray: tray, thickness: 1) }
   let(:tray) { FactoryGirl.create(:tray) }
   let(:shelf) { FactoryGirl.create(:shelf) }
   let(:user) { FactoryGirl.create(:user) }
+  let(:disposition) { FactoryGirl.create(:disposition) }
   subject { described_class.call(item, user) }
 
   it "sets stocked" do
@@ -20,6 +21,12 @@ RSpec.describe StockItem do
   it "returns the item when it is successful" do
     allow(item).to receive(:save).and_return(true)
     expect(subject).to be(item)
+  end
+
+  it "returns the item when it is successful and sets disposition null" do
+    allow(item).to receive(:save).and_return(true)
+    expect(subject).to be(item)
+    expect(subject.disposition).to be(nil)
   end
 
   it "returns false when it is unsuccessful" do

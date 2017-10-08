@@ -13,6 +13,8 @@ class StockItem
   def stock!
     validate_input!
 
+    item.disposition = nil
+
     item.stocked!
     UpdateIngestDate.call(item)
     SyncItemMetadata.call(item: item, user_id: nil, background: true)
