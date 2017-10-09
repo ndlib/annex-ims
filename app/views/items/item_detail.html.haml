@@ -75,7 +75,7 @@
         %tbody
           - @history.each do |record|
             %tr
-              %td= t("activity_log." + record.action)
+              %td= t("activity_log." + record.action, disposition: !record.data['disposition'].nil? ? record.data['disposition']['code'] : '', comment: !record.data['comment'].nil? ? record.data['comment']['comment'] : '')
               %td= record.action_timestamp.strftime("%m-%d-%Y %I:%M%p")
               %td= record.data['tray'].blank? ? 'STAGING' : record.data['tray']['barcode']
               %td= record.username
@@ -95,7 +95,7 @@
         %tbody
           - @usage.each do |record|
             %tr
-              %td= t("activity_log." + record.action)
+              %td= t("activity_log." + record.action, disposition: !record.data['disposition'].nil? ? record.data['disposition']['code'] : '', comment: !record.data['comment'].nil? ? record.data['comment']['comment'] : '')
               %td= record.data['request']['source'].humanize
               %td= record.data['request']['del_type'].humanize
               %td= record.data['request']['trans']

@@ -53,6 +53,7 @@ en:
     UnstockedItem: "Unstocked"
     ShippedItem: "Shipped"
     ScanItem: "Scanned"
+    DeaccessionedItem: "Deaccessioned/%{disposition} - %{comment}"
   page_title:
     welcome_index: " "
     bins_bin_detail: "Bin Detail"
