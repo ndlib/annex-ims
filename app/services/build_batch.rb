@@ -1,23 +1,25 @@
 class BuildBatch
-  attr_reader :batch_data, :user
+  attr_reader :batch_data, :user, :batch_type
 
-  def self.call(batch_data, user)
-    new(batch_data, user).build!
+  def self.call(batch_data, user, batch_type = 0)
+    new(batch_data, user, batch_type).build!
   end
 
-  def initialize(batch_data, user)
+  def initialize(batch_data, user, batch_type)
     @batch_data = batch_data
     @user = user
+    @batch_type = batch_type
   end
 
   def build!
-    if user.batches.where(active: true).count == 0
+    if user.batches.where(active: true, batch_type: @batch_type).count == 0
       batch = Batch.new
       batch.user = user
+      batch.batch_type = @batch_type
       batch.active = true
       batch.save!
     else
-      batch = user.batches.where(active: true).first
+      batch = user.batches.where(active: true, batch_type: @batch_type).first
     end
 
     if batch_data.length > 0
