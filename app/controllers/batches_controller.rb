@@ -36,7 +36,7 @@ class BatchesController < ApplicationController
   end
 
   def current
-    @batch = current_user.batches.where(active: true).first
+    @batch = current_user.batches.where(active: true, batch_type: 0).first
 
     if @batch.blank?
       flash[:error] = "#{current_user.username} does not have an active batch, please create one."
