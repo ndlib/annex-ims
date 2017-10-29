@@ -55,7 +55,7 @@ class BatchesController < ApplicationController
   end
 
   def retrieve
-    @batch = current_user.batches.where(active: true).first
+    @batch = current_user.batches.where(active: true, batch_type: 0).first
 
     if @batch.blank?
       flash[:error] = "#{current_user.username} does not have an active batch, please create one."
@@ -72,7 +72,7 @@ class BatchesController < ApplicationController
   end
 
   def item
-    @batch = current_user.batches.where(active: true).first
+    @batch = current_user.batches.where(active: true, batch_type: 0).first
 
     if @batch.blank?
       flash[:error] = "#{current_user.username} does not have an active batch, please create one."
@@ -107,7 +107,7 @@ class BatchesController < ApplicationController
   end
 
   def bin
-    @batch = current_user.batches.where(active: true).first
+    @batch = current_user.batches.where(active: true, batch_type: 0).first
 
     if @batch.blank?
       flash[:error] = "#{current_user.username} does not have an active batch, please create one."
@@ -119,7 +119,7 @@ class BatchesController < ApplicationController
   end
 
   def scan_bin
-    @batch = current_user.batches.where(active: true).first
+    @batch = current_user.batches.where(active: true, batch_type: 0).first
     if @batch.blank?
       flash[:error] = "#{current_user.username} does not have an active batch, please create one."
       redirect_to batches_path
@@ -168,7 +168,7 @@ class BatchesController < ApplicationController
   end
 
   def finalize
-    @batch = current_user.batches.where(active: true).first
+    @batch = current_user.batches.where(active: true, batch_type: 0).first
 
     if @batch.blank?
       flash[:error] = "#{current_user.username} does not have an active batch, please create one."
@@ -180,7 +180,7 @@ class BatchesController < ApplicationController
   end
 
   def finish
-    @batch = current_user.batches.where(active: true).first
+    @batch = current_user.batches.where(active: true, batch_type: 0).first
 
     if @batch.blank?
       flash[:error] = "#{current_user.username} does not have an active batch, please create one."
@@ -202,7 +202,7 @@ class BatchesController < ApplicationController
   end
 
   def view_active
-    @batches = Batch.where(active: true)
+    @batches = Batch.where(active: true, batch_type: 0)
   end
 
   def view_single_active
@@ -241,7 +241,7 @@ class BatchesController < ApplicationController
   end
 
   def current_batch?
-    if current_user.batches.where(active: true).count >= 1
+    if current_user.batches.where(active: true, batch_type: 0).count >= 1
       true
     end
   end
