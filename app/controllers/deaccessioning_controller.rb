@@ -27,6 +27,8 @@ class DeaccessioningController < ApplicationController
             DeaccessionNotStockedItem.call(request.id, item_id, params[:disposition_id], current_user)
           end
         end
+	params.delete(:action)
+	params.delete(:controller)
         redirect_to deaccessioning_path(params) and return
       end
     else
