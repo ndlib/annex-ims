@@ -58,6 +58,15 @@ feature "Bins", :type => :feature do
       expect(page).to have_content "Bin #{@bin.barcode} is empty."
     end
 
+    it "persists the entries shown", js: true do
+      visit bins_path
+      expect(page).to have_content "Show"
+      select "100", from: "bins_length", visible: false
+      visit root_path
+      visit bins_path
+      expect(page).to have_select('bins_length', selected: '100')
+    end
+
   end
 
 end

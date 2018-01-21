@@ -17,5 +17,5 @@
           %td= button_to 'Process', show_bin_path(:id => bin.id), method: :get, class: 'btn btn-primary'
   :javascript
       $(document).ready(function() {
-        window.table = $('#bins').DataTable();
+        window.table = $('#bins').DataTable({ "stateSave": true });
       } );
