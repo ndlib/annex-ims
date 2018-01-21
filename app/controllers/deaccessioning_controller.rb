@@ -27,7 +27,7 @@ class DeaccessioningController < ApplicationController
             DeaccessionNotStockedItem.call(request.id, item_id, params[:disposition_id], current_user)
           end
         end
-        redirect_to batches_path and return
+        redirect_to deaccessioning_path(params) and return
       end
     else
       flash[:error] = "Select a Disposition"
