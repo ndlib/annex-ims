@@ -30,9 +30,12 @@ RSpec.describe DeaccessioningController, type: :controller do
       expect(i.bin).to eq(bin)
     end
 
-    it "redirects to batches path" do
+    it "redirects to deaccessioning path" do
       subject
-      expect(response).to redirect_to(batches_path)
+      expect(response).to redirect_to(deaccessioning_path(items: {
+        "#{item.id}" => "items[#{item.id}]"},
+        disposition_id: disposition.id,
+        comment: comment))
     end
 
     subject do
@@ -47,9 +50,12 @@ RSpec.describe DeaccessioningController, type: :controller do
       subject
     end
 
-    it "redirects to batches path" do
+    it "redirects to deaccessioning path" do
       subject
-      expect(response).to redirect_to(batches_path)
+      expect(response).to redirect_to(deaccessioning_path(items: {
+        "#{item.id}" => "items[#{item.id}]"},
+        disposition_id: disposition.id,
+        comment: comment))
     end
   end
 
