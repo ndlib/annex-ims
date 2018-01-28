@@ -32,10 +32,7 @@ RSpec.describe DeaccessioningController, type: :controller do
 
     it "redirects to deaccessioning path" do
       subject
-      expect(response).to redirect_to(deaccessioning_path(items: {
-        "#{item.id}" => "items[#{item.id}]"},
-        disposition_id: disposition.id,
-        comment: comment))
+      expect(response).to redirect_to(deaccessioning_path())
     end
 
     subject do
@@ -52,10 +49,7 @@ RSpec.describe DeaccessioningController, type: :controller do
 
     it "redirects to deaccessioning path" do
       subject
-      expect(response).to redirect_to(deaccessioning_path(items: {
-        "#{item.id}" => "items[#{item.id}]"},
-        disposition_id: disposition.id,
-        comment: comment))
+      expect(response).to redirect_to(deaccessioning_path())
     end
   end
 
