@@ -1,1 +1,16 @@
 %i= 'Barcodes must have been updated in catalog the previous day'
+.scan
+  = form_tag update_path, method: :get do |f|
+    - if @old_item.errors.any?
+      #error_explanation
+        %h2= "#{pluralize(@old_item.errors.count, "error")} prohibited this shelf from being saved:"
+        %ul
+          - @old_item.errors.full_messages.each do |msg|
+            %li= msg
+    .input-group
+      %span.field
+        = label_tag :barcode, "Old Barcode"
+        = text_field_tag :barcode, nil, autofocus: "autofocus"
+      %span.actions
+        = submit_tag 'Save', class: 'btn pull-right btn-primary'
+= render 'update_table'
