@@ -35,5 +35,5 @@
                 = submit_tag 'Skip', class: 'btn btn-warning'
   :javascript
     $(document).ready(function() {
-      window.table = $('#matches').DataTable();
+      window.table = $('#matches').DataTable({ "stateSave": true });
     } );
