@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe UpdateController, type: :controller do
   let(:user) { FactoryGirl.create(:user, admin: true) }
+  let(:item) { FactoryGirl.create(:item) }
 
   before(:each) do
     sign_in(user)
@@ -16,4 +17,14 @@ RSpec.describe UpdateController, type: :controller do
     end
   end
 
+
+  describe "GET old" do
+    context "admin" do
+      it "redirects to show old item" do
+        item
+        get :old, old_barcode: item.barcode  
+        expect(response).to redirect_to(show_old_update_path(id: item.id))
+      end
+    end
+  end
 end
