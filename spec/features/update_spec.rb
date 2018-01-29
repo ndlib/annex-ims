@@ -19,6 +19,12 @@ feature "Update", type: :feature do
       click_link "Update Barcode"
       expect(current_path).to eq(update_path)
     end
+
+    it "has the correct verbiage on the page" do
+      click_link "Items"
+      click_link "Update Barcode"
+      expect(page).to have_content "Barcodes must have been updated in catalog the previous day"
+    end
   end
 
   describe "as a worker" do
