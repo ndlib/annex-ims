@@ -8,21 +8,21 @@
     %tbody
       %tr
         %td= 'Bib Number'
-        %td
-        %td
+        %td= (@old_item.bib_number.nil? ? '' : @old_item.bib_number)
+        %td= (@new_item.bib_number.nil? ? '' : @new_item.bib_number)
       %tr
         %td= 'Title'
-        %td
-        %td
+        %td= (@old_item.title.nil? ? '' : @old_item.title)
+        %td= (@new_item.title.nil? ? '' : @new_item.title)
       %tr
         %td= 'Author'
-        %td
-        %td
+        %td= (@old_item.author.nil? ? '' : @old_item.author)
+        %td= (@new_item.author.nil? ? '' : @new_item.author)
+      %tr
+        %td= 'Chron'
+        %td= (@old_item.chron.nil? ? '' : @old_item.chron)
+        %td= (@new_item.chron.nil? ? '' : @new_item.chron)
       %tr
         %td= 'ISBN/ISSN'
-        %td
-        %td
-      %tr
-        %td= 'Bib Number'
-        %td
-        %td
+        %td= (@old_item.isbn_issn.nil? ? '' : @old_item.isbn_issn)
+        %td= (@new_item.isbn_issn.nil? ? '' : @new_item.isbn_issn)
