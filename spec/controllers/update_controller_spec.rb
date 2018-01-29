@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe DeaccessioningController, type: :controller do
+RSpec.describe UpdateController, type: :controller do
   let(:user) { FactoryGirl.create(:user, admin: true) }
 
   before(:each) do
