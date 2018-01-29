@@ -3,6 +3,8 @@ require 'rails_helper'
 feature "Update", type: :feature do
   include AuthenticationHelper
 
+  let(:item) { FactoryGirl.create(:item) }
+
   describe "as an admin" do
     before(:each) do
       login_admin
@@ -31,6 +33,19 @@ feature "Update", type: :feature do
       click_link "Update Barcode"
       expect(page).to have_content "Old Barcode"
     end
+
+    it "can find an item with the old barcode" do
+      item
+      click_link "Items"
+      click_link "Update Barcode"
+      fill_in "Old Barcode", with: item.barcode
+      click_button "Save"
+      expect(page).to have_content item.bib_number
+      expect(page).to have_content item.title
+      expect(page).to have_content item.author
+      expect(page).to have_content item.chron
+      expect(page).to have_content item.isbn_issn
+    end   
   end
 
   describe "as a worker" do
