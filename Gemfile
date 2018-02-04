@@ -62,6 +62,9 @@ gem "airbrake"
 # For cron tasks
 gem "whenever", require: false
 
+# Bug in rake
+gem 'rake', '< 11.0'
+
 group :deployment do
   # Use Capistrano for deployment
   gem "capistrano", "~> 3.4"
