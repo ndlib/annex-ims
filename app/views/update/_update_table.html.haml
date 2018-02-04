@@ -13,16 +13,16 @@
       %tr
         %td= 'Title'
         %td= (@old_item.title.nil? ? '' : @old_item.title)
-        %td= (@new_item.title.nil? ? '' : @new_item.title)
+        %td{:class => (@new_item.title != @old_item.title) ? 'text-danger' : nil }= (@new_item.title.nil? ? '' : @new_item.title)
       %tr
         %td= 'Author'
         %td= (@old_item.author.nil? ? '' : @old_item.author)
-        %td= (@new_item.author.nil? ? '' : @new_item.author)
+        %td{:class => (@new_item.author != @old_item.author) ? 'text-danger' : nil }= (@new_item.author.nil? ? '' : @new_item.author)
       %tr
         %td= 'Chron'
         %td= (@old_item.chron.nil? ? '' : @old_item.chron)
-        %td= (@new_item.chron.nil? ? '' : @new_item.chron)
+        %td{:class => (@new_item.chron != @old_item.chron) ? 'text-danger' : nil }= (@new_item.chron.nil? ? '' : @new_item.chron)
       %tr
         %td= 'ISBN/ISSN'
         %td= (@old_item.isbn_issn.nil? ? '' : @old_item.isbn_issn)
-        %td= (@new_item.isbn_issn.nil? ? '' : @new_item.isbn_issn)
+        %td{:class => (@new_item.isbn_issn != @old_item.isbn_issn) ? 'text-danger' : nil }= (@new_item.isbn_issn.nil? ? '' : @new_item.isbn_issn)

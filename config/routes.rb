@@ -120,6 +120,8 @@ Rails.application.routes.draw do
   get "update", to: "update#index", as: "update"
   get "old_update", to: "update#old", as: "old_update"
   get "show_old_update", to: "update#show_old", as: "show_old_update"
+  get "new_update", to: "update#new", as: "new_update"
+  get "show_new_update", to: "update#show_new", as: "show_new_update"
 
   # You can have the root of your site routed with "root"
   root "welcome#index"
