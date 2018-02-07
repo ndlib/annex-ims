@@ -9,7 +9,7 @@
       %tr
         %td= 'Bib Number'
         %td= (@old_item.bib_number.nil? ? '' : @old_item.bib_number)
-        %td= (@new_item.bib_number.nil? ? '' : @new_item.bib_number)
+        %td{:class => (@new_item.bib_number != @old_item.bib_number) ? 'text-danger' : nil }= (@new_item.bib_number.nil? ? '' : @new_item.bib_number)
       %tr
         %td= 'Title'
         %td= (@old_item.title.nil? ? '' : @old_item.title)

@@ -53,8 +53,8 @@ class UpdateController < ApplicationController
       return
     end
 
-    if @old_item.blank?
-      flash[:error] = "No item was found with barcode #{params[:old_barcode]}"
+    if @new_item.blank?
+      flash[:error] = "No item was found with barcode #{params[:new_barcode]}"
       redirect_to show_old_update_path(id: @old_item.id)
       return
     end
