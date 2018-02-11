@@ -45,10 +45,11 @@ class UpdateController < ApplicationController
       return
     end
 
-    if IsItemBarcode.call(params[:new_barcode])
-      @new_item = Item.where(barcode: params[:new_barcode]).take
-    else
-      flash[:error] = 'new barcode is not an item'
+    begin
+      @new_item = GetItemFromBarcode.call(barcode: params[:new_barcode], user_id: current_user.id)
+    rescue StandardError => e
+      notify_airbrake(e)
+      flash[:error] = e.message
       redirect_to show_old_update_path(id: @old_item.id)
       return
     end
