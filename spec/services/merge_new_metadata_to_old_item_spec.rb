@@ -26,7 +26,8 @@ RSpec.describe MergeNewMetadataToOldItem do
     end
 
     it "logs the merge" do
-      # "add log test"
+      expect(ActivityLogger).to receive(:update_barcode).with(item: kind_of(Item), user: user)
+      subject
     end
   end
 end

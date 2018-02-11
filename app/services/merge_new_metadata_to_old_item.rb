@@ -14,6 +14,7 @@ class MergeNewMetadataToOldItem
   def merge
     old_item = Item.find(@old_id)
     new_item = Item.find(@new_id)
+    user = User.find(@user_id)
 
     barcode = new_item.barcode
 
@@ -28,5 +29,7 @@ class MergeNewMetadataToOldItem
     old_item.isbn_issn = new_item.isbn_issn
 
     old_item.save!
+
+    ActivityLogger.update_barcode(item: old_item, user: user)
   end
 end
