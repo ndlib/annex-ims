@@ -311,6 +311,13 @@ RSpec.describe ActivityLogger do
     it_behaves_like "an activity log", "UnstockedItem"
   end
 
+  context "UpdatedBarcode" do
+    let(:arguments) { { item: item, user: user } }
+    subject { described_class.update_barcode(**arguments) }
+
+    it_behaves_like "an activity log", "UpdatedBarcode"
+  end
+
   context "UpdatedItemMetadata" do
     let(:arguments) { { item: item } }
     subject { described_class.update_item_metadata(**arguments) }
