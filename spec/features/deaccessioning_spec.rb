@@ -11,12 +11,12 @@ feature "Deaccessioning", type: :feature do
 
     it "can see Deaccessioning in the menu" do
       click_link "Items"
-      expect(page).to have_content "Deaccessioning"
+      expect(page).to have_content "Remove from Annex"
     end
 
     it "can access the Deaccessioning page" do
       click_link "Items"
-      click_link "Deaccessioning"
+      click_link "Remove from Annex"
       expect(current_path).to eq(deaccessioning_path)
     end
   end

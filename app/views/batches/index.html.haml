@@ -1,7 +1,7 @@
 .row.filter
   .col-md-8
-    = select_tag :source, options_for_select([["Aleph", "aleph"], ["ILLiad", "illiad"], ["Deaccessioning","deaccessioning"]], "aleph"), id: "source-select"
-    = select_tag :req_type, options_for_select([["Loan", "loan"], ["Scan", "scan"], ["Deaccessioning","deaccessioning"]], "loan"), id: "req-type-select"
+    = select_tag :source, options_for_select([["Aleph", "aleph"], ["ILLiad", "illiad"], [t("batches.source.deaccessioning"),t("batches.source.deaccessioning")]], "aleph"), id: "source-select"
+    = select_tag :req_type, options_for_select([["Loan", "loan"], ["Scan", "scan"], [t("batches.type.deaccessioning"),t("batches.type.deaccessioning")]], "loan"), id: "req-type-select"
     = label_tag :rapid, "ILLiad Rapid Requests"
     = check_box_tag :rapid, 1, false, id: "rapid-check-box"
   .col-md-4
@@ -33,8 +33,8 @@
           %td
             %div{class: "details-control btn btn-primary", "id" => 'request_' + row['id'].to_s}= 'Results'
           %td= row['rapid']
-          %td= row['source']
-          %td= row['del_type']
+          %td= t("batches.source." + row['source'])
+          %td= t("batches.type." + row['del_type'])
           %td= row['requested']
           %td= row['title']
           %td= row['author']

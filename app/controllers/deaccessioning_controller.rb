@@ -13,7 +13,7 @@ class DeaccessioningController < ApplicationController
   def req
     if Disposition.pluck(:id).include?(params[:disposition_id].to_i)
       if params[:items].blank?
-        flash[:error] = "No items were selected to create a deaccessioning request."
+        flash[:error] = I18n.t("deaccessioning.status.empty_items")
 	params.delete(:action)
 	params.delete(:controller)
         redirect_to deaccessioning_path(params) and return

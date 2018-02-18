@@ -519,7 +519,7 @@ feature "Trays", type: :feature do
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(id: tray.id))
       expect(page).to have_content item.barcode
-      click_button "Remove"
+      click_button "Unassign"
       expect(current_path).to eq(show_tray_item_path(id: tray.id))
       expect(page).to have_no_content item.barcode
     end

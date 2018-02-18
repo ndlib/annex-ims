@@ -18,7 +18,7 @@
       Items
     #items.collapse
       - if user_admin?
-        %a.list-group-item.barcode{ :href => deaccessioning_path } Deaccessioning
+        %a.list-group-item.barcode{ :href => deaccessioning_path }= t("main_menu.deaccessioning")
       %a.list-group-item.barcode{ :href => search_path } Item Search
       - if user_admin?
         %a.list-group-item.barcode{ :href => update_path } Update Barcode
