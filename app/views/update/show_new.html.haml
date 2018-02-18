@@ -13,8 +13,7 @@
         = text_field_tag :old_barcode, @old_item.barcode, readonly: true
       %span.field
         = label_tag :new_barcode, "New Barcode"
-        = text_field_tag :new_barcode, nil, autofocus: "autofocus"
-      %span.actions
-        = submit_tag 'Save', class: 'btn pull-right btn-primary'
+        = text_field_tag :new_barcode, @new_item.barcode, readonly: true
 = render 'update_table'
-= link_to 'CANCEL Barcode Update', update_path, method: :get, class: 'btn btn-warning'
+= link_to 'CANCEL Barcode Update', show_old_update_path(id: @old_item.id), method: :get, class: 'btn btn-warning'
+= link_to 'SAVE Barcode Update', show_new_update_path(old_id: @old_item.id, new_id: @new_item.id), method: :get, class: 'btn pull-right btn-primary'

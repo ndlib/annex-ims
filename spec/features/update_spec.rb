@@ -4,6 +4,7 @@ feature "Update", type: :feature do
   include AuthenticationHelper
 
   let(:item) { FactoryGirl.create(:item) }
+  let(:new_item) { FactoryGirl.create(:item) }
 
   describe "as an admin" do
     before(:each) do
@@ -45,6 +46,36 @@ feature "Update", type: :feature do
       expect(page).to have_content item.author
       expect(page).to have_content item.chron
       expect(page).to have_content item.isbn_issn
+    end   
+
+    it "can find an item with the new barcode" do
+      item
+      new_item
+      click_link "Items"
+      click_link "Update Barcode"
+      fill_in "Old Barcode", with: item.barcode
+      click_button "Save"
+      fill_in "New Barcode", with: new_item.barcode
+      click_button "Save"
+      expect(page).to have_content new_item.bib_number
+      expect(page).to have_content new_item.title
+      expect(page).to have_content new_item.author
+      expect(page).to have_content new_item.chron
+      expect(page).to have_content new_item.isbn_issn
+    end   
+
+    it "clears data if you reject the new barcode" do
+      item
+      new_item
+      click_link "Items"
+      click_link "Update Barcode"
+      fill_in "Old Barcode", with: item.barcode
+      click_button "Save"
+      fill_in "New Barcode", with: new_item.barcode
+      click_button "Save"
+      expect(page).to have_content new_item.bib_number
+      click_link "CANCEL Barcode Update"
+      expect(current_path).to eq(show_old_update_path)
     end   
   end
 
