@@ -85,3 +85,5 @@ en:
     bins_index: "Process Batch"
     reports_index: "Reporting"
     update_index: "Update Barcode"
+    update_show_old: "Update Barcode"
+    update_show_new: "Update Barcode"
