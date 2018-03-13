@@ -155,7 +155,7 @@ GEM
     domain_name (0.5.24)
       unf (>= 0.0.5, < 1.0.0)
     erubis (2.7.0)
-    eventmachine (1.0.7)
+    eventmachine (1.2.5)
     execjs (2.5.2)
     factory_girl (4.5.0)
       activesupport (>= 3.0.0)
@@ -470,4 +470,4 @@ DEPENDENCIES
   whenever
 
 BUNDLED WITH
-   1.13.0
+   1.14.6
