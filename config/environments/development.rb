@@ -39,6 +39,8 @@ Rails.application.configure do
   # Raises helpful error messages.
   config.assets.raise_runtime_errors = true
 
+  config.force_ssl = true
+
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
@@ -51,6 +53,5 @@ end
 
 Devise.setup do |config|
   # CAS auth
-  config.cas_base_url = "https://cas.library.nd.edu/cas"
-  config.cas_login_url = "https://cas.library.nd.edu/cas/login"
+  config.cas_base_url = "https://login-test.cc.nd.edu/cas"
 end
