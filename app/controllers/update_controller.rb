@@ -68,4 +68,11 @@ class UpdateController < ApplicationController
     @old_item = Item.find(params[:old_id])
     @new_item = Item.find(params[:new_id])
   end
+
+  def merge
+    MergeNewMetadataToOldItem.call(old_id: params[:old_id], new_id: params[:new_id], user_id: current_user.id)
+
+    redirect_to update_path
+    return
+  end
 end
