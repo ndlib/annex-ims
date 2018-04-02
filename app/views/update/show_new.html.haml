@@ -16,4 +16,4 @@
         = text_field_tag :new_barcode, @new_item.barcode, readonly: true
 = render 'update_table'
 = link_to 'CANCEL Barcode Update', show_old_update_path(id: @old_item.id), method: :get, class: 'btn btn-warning'
-= link_to 'SAVE Barcode Update', merge_update_path(old_id: @old_item.id, new_id: @new_item.id), method: :get, class: 'btn pull-right btn-primary'
+= link_to 'SAVE Barcode Update', merge_update_path(old_id: @old_item.id, new_barcode: @new_item.barcode), method: :get, class: 'btn pull-right btn-primary'

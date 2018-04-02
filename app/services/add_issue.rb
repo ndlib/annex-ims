@@ -2,6 +2,7 @@ class AddIssue
   attr_reader :user, :item, :issue_type, :message
 
   def self.call(user:, item:, type:, message: nil)
+#puts item.inspect
     new(user: user, item: item, type: type, message: message).add
   end
 

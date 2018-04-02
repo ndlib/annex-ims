@@ -46,7 +46,7 @@ class UpdateController < ApplicationController
     end
 
     begin
-      @new_item = GetItemFromBarcode.call(barcode: params[:new_barcode], user_id: current_user.id)
+      @new_item = GetItemFromMetadata.call(barcode: params[:new_barcode], user_id: current_user.id)
     rescue StandardError => e
       notify_airbrake(e)
       flash[:error] = e.message
@@ -60,17 +60,33 @@ class UpdateController < ApplicationController
       return
     end
 
-    redirect_to show_new_update_path(old_id: @old_item.id, new_id: @new_item.id)
+    redirect_to show_new_update_path(old_id: @old_item.id,
+      new_barcode: @new_item.barcode)
     return
   end
 
   def show_new
     @old_item = Item.find(params[:old_id])
-    @new_item = Item.find(params[:new_id])
+    begin
+      @new_item = GetItemFromMetadata.call(barcode: params[:new_barcode], user_id: current_user.id)
+    rescue StandardError => e
+      notify_airbrake(e)
+      flash[:error] = e.message
+      redirect_to show_old_update_path(id: @old_item.id)
+      return
+    end
   end
 
   def merge
-    MergeNewMetadataToOldItem.call(old_id: params[:old_id], new_id: params[:new_id], user_id: current_user.id)
+    begin
+      MergeNewMetadataToOldItem.call(old_id: params[:old_id],
+        new_barcode: params[:new_barcode], user_id: current_user.id)
+    rescue StandardError => e
+      notify_airbrake(e)
+      flash[:error] = e.message
+      redirect_to show_old_update_path(id: @old_item.id)
+      return
+    end
 
     redirect_to update_path
     return
