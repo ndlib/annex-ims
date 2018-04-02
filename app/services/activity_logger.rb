@@ -150,6 +150,10 @@ class ActivityLogger
     call(action: "UnstockedItem", user: user, item: item, tray: tray)
   end
 
+  def self.update_barcode(item:, user:)
+    call(action: "UpdatedBarcode", item: item, user: user)
+  end
+
   def self.update_item_metadata(item:)
     call(action: "UpdatedItemMetadata", item: item)
   end

@@ -2,7 +2,7 @@ source "https://rubygems.org"
 
 group :application do
   # Bundle edge Rails instead: gem "rails", github: "rails/rails"
-  gem "rails", "~> 4.2.0"
+  gem "rails", "~> 4.2.7.1"
   # Use postgresql as the database for Active Record
   gem "pg", "~> 0.18.2"
   # Use SCSS for stylesheets
@@ -61,6 +61,9 @@ gem "airbrake"
 
 # For cron tasks
 gem "whenever", require: false
+
+# Bug in rake
+gem 'rake', '< 11.0'
 
 group :deployment do
   # Use Capistrano for deployment
