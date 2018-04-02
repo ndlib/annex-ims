@@ -97,7 +97,7 @@ feature 'Update', type: :feature do
       expect(current_path).to eq(update_path)
       old_item = Item.find(item.id)
       expect(old_item.barcode).to eq(barcode)
-      #expect(old_item.bib_number).to eq(@new_item.bib_number)
+      expect(old_item.bib_number).to eq(@new_item.bib_number)
       expect(old_item.title).to eq(@new_item.title)
       expect(old_item.author).to eq(@new_item.author)
       expect(old_item.chron).to eq(@new_item.chron)
