@@ -27,10 +27,16 @@ en:
   trays:
     count_items_not_match: "The count you entered and the computer's count did not match.  Recount and enter again."
     count_validation_not_pass: "Put Tray to side for QC."
+    actions:
+      remove: "Unassign"
   batches:
     status:
       active: "You already have an active batch in process"
       empty_items: "No items selected."
+    source:
+      deaccessioning: "Remove"
+    type:
+      deaccessioning: "Remove"
   item:
     metadata_status:
       complete: "Metadata synchronized"
@@ -53,7 +59,7 @@ en:
     UnstockedItem: "Unstocked"
     ShippedItem: "Shipped"
     ScanItem: "Scanned"
-    DeaccessionedItem: "Deaccessioned/%{disposition} - %{comment}"
+    DeaccessionedItem: "Removed/%{disposition} - %{comment}"
   page_title:
     welcome_index: " "
     bins_bin_detail: "Bin Detail"
@@ -85,5 +91,11 @@ en:
     bins_index: "Process Batch"
     reports_index: "Reporting"
     update_index: "Update Barcode"
+    deaccessioning_index: "Remove from Annex"
     update_show_old: "Update Barcode"
     update_show_new: "Update Barcode"
+  main_menu:
+    deaccessioning: "Remove from Annex"
+  deaccessioning:
+    status:
+      empty_items: "No items are selected for removal from the Annex."

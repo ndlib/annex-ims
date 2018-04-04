@@ -43,7 +43,7 @@
           = form_tag dissociate_tray_item_path(@tray) do |f|
             = hidden_field_tag :item_id, item.id
             .actions{ style: "display: inline-block;" }
-              = submit_tag 'Remove', class: 'btn btn-primary'
+              = submit_tag t("trays.actions.remove"), class: 'btn btn-primary'
               - if(item.status == 'stocked')
                 = submit_tag 'Unstock', class: 'btn btn-secondary'
         %td= item.status.titleize
