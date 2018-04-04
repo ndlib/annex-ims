@@ -92,6 +92,8 @@ en:
     reports_index: "Reporting"
     update_index: "Update Barcode"
     deaccessioning_index: "Remove from Annex"
+    update_show_old: "Update Barcode"
+    update_show_new: "Update Barcode"
   main_menu:
     deaccessioning: "Remove from Annex"
   deaccessioning:

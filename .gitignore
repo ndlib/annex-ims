@@ -5,6 +5,7 @@ capybara-*.html
 !/log/.keep
 /tmp
 /db/*.sqlite3
+/db/ims.pgsql
 /public/system
 /coverage
 /spec/tmp
