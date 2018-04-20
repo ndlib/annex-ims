@@ -53,7 +53,7 @@ module ActivityLogQuery
 
   def for_item(item)
     relation.
-      where("data->'issue'->'barcode' ? :barcode OR data->'item'->'barcode' ? :barcode", barcode: item.barcode)
+      where("data->'issue'->'barcode' ? :barcode OR data->'item'->'barcode' ? :barcode OR data->'item'->'id' ? :id", barcode: item.barcode, id: item.id.to_s)
   end
 
   def for_tray(tray)
