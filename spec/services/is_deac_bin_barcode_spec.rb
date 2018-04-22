@@ -2,13 +2,13 @@ require 'rails_helper'
 
 RSpec.describe IsDeacBinBarcode do
 
-  it "recognizes 'BIN-DEAC-STOCK-01' as a valid barcode" do
-    barcode = 'BIN-DEAC-STOCK-01'
+  it "recognizes 'BIN-REM-STOCK-01' as a valid barcode" do
+    barcode = 'BIN-REM-STOCK-01'
     expect(IsDeacBinBarcode.call(barcode)).to eq(true)
   end
 
-  it "recognizes 'BIN-DEAC-HAND-01' as a valid barcode" do
-    barcode = 'BIN-DEAC-HAND-01'
+  it "recognizes 'BIN-REM-HAND-01' as a valid barcode" do
+    barcode = 'BIN-REM-HAND-01'
     expect(IsDeacBinBarcode.call(barcode)).to eq(true)
   end
 

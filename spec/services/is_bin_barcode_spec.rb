@@ -17,13 +17,13 @@ RSpec.describe IsBinBarcode do
     expect(IsBinBarcode.call(barcode)).to eq(true)
   end
 
-  it "recognizes 'BIN-DEAC-STOCK-01' as a valid barcode" do
-    barcode = 'BIN-DEAC-STOCK-01'
+  it "recognizes 'BIN-REM-STOCK-01' as a valid barcode" do
+    barcode = 'BIN-REM-STOCK-01'
     expect(IsBinBarcode.call(barcode)).to eq(true)
   end
 
-  it "recognizes 'BIN-DEAC-HAND-01' as a valid barcode" do
-    barcode = 'BIN-DEAC-HAND-01'
+  it "recognizes 'BIN-REM-HAND-01' as a valid barcode" do
+    barcode = 'BIN-REM-HAND-01'
     expect(IsBinBarcode.call(barcode)).to eq(true)
   end
 

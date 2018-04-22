@@ -38,7 +38,7 @@ RSpec.describe "Request" do
       end
 
       it "returns the correct bin type" do
-        expect(request.bin_type). to eq "DEAC-STOCK"
+        expect(request.bin_type). to eq "REM-STOCK"
       end
     end
   end

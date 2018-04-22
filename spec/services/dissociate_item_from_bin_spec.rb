@@ -50,7 +50,7 @@ RSpec.describe DissociateItemFromBin do
     end
 
     it "deaccessions items that are in a deaccessioning bin when processed" do
-      item.bin.barcode = "BIN-DEAC-STOCK-01"
+      item.bin.barcode = "BIN-REM-STOCK-01"
       item.bin.save!
       expect(DeaccessionItem).to receive(:call).with(item, user)
       subject

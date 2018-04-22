@@ -5,7 +5,7 @@ class DeaccessionNotStockedItem
 
   def deaccession(request_id, item_id, disposition_id, user)
     batch = BuildBatch.call(["#{request_id}-#{item_id}"], user, 1)
-    bin = GetBinFromBarcode.call("BIN-DEAC-HAND-01")
+    bin = GetBinFromBarcode.call("BIN-REM-HAND-01")
     SetItemDisposition.call(item_id, disposition_id)
     item = Item.where(id: item_id).take
     item.bin = bin
