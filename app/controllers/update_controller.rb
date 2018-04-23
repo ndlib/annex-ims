@@ -78,6 +78,7 @@ class UpdateController < ApplicationController
   end
 
   def merge
+    old_item = Item.find(params[:old_id])
     begin
       MergeNewMetadataToOldItem.call(old_id: params[:old_id],
         new_barcode: params[:new_barcode], user_id: current_user.id)
@@ -87,6 +88,8 @@ class UpdateController < ApplicationController
       redirect_to show_old_update_path(id: @old_item.id)
       return
     end
+
+    flash[:notice] = %Q[Barcode #{old_item.barcode} was successfully updated to #{view_context.link_to "Barcode #{params[:new_barcode]}", item_detail_path(params[:new_barcode])}]
 
     redirect_to update_path
     return
