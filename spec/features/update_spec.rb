@@ -6,6 +6,7 @@ feature 'Update', type: :feature do
   include ActionView::Helpers::UrlHelper
 
   let(:item) { FactoryGirl.create(:item) }
+  let(:existing_item) { FactoryGirl.create(:item, barcode: barcode) }
   let(:barcode) { '00000007819006' }
 
   describe 'as an admin' do
@@ -105,6 +106,23 @@ feature 'Update', type: :feature do
       expect(old_item.author).to eq(@new_item.author)
       expect(old_item.chron).to eq(@new_item.chron)
       expect(old_item.isbn_issn).to eq(@new_item.isbn_issn)
+    end
+
+    it 'can rejects a new barcode if an item with it exists' do
+      item
+      existing_item
+      click_link 'Items'
+      click_link 'Update Barcode'
+      fill_in 'Old Barcode', with: item.barcode
+      click_button 'Save'
+      fill_in 'New Barcode', with: @new_item.barcode
+      click_button 'Save'
+      expect(page).to have_content existing_item.bib_number
+      expect(page).to have_content existing_item.title
+      expect(page).to have_content existing_item.author
+      expect(page).to have_content existing_item.chron
+      expect(page).to have_content existing_item.isbn_issn
+      expect(page).to_not have_content 'SAVE Barcode Update'
     end
   end
 
