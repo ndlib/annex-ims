@@ -94,6 +94,7 @@ en:
     deaccessioning_index: "Remove from Annex"
     update_show_old: "Update Barcode"
     update_show_new: "Update Barcode"
+    update_show_existing: "Update Barcode"
   main_menu:
     deaccessioning: "Remove from Annex"
   deaccessioning:
