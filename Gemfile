@@ -58,12 +58,13 @@ group :application do
   # For Errbit
   gem "airbrake"
 
-  # For cron tasks
-  gem "whenever", require: false
 
   # Bug in rake
   gem 'rake', '< 11.0'
 end
+
+# For cron tasks
+gem "whenever", require: false
 
 
 
