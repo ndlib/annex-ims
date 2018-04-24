@@ -55,10 +55,6 @@ group :application do
   # New Relic
   gem "newrelic_rpm"
 
-  # For Errbit
-  gem "airbrake"
-
-
   # Bug in rake
   gem 'rake', '< 11.0'
 end
@@ -66,7 +62,8 @@ end
 # For cron tasks
 gem "whenever", require: false
 
-
+# For Errbit
+gem "airbrake"
 
 group :deployment do
   # Use Capistrano for deployment
