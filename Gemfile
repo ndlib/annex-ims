@@ -51,23 +51,22 @@ group :application do
   gem "kaminari"
 
   gem "sneakers"
-end
+  
+  # Bug in rake
+gem 'rake', '< 11.0'
 
-# New Relic
+# Security updates
+gem 'loofah', '~> 2.2.1'
+  
+  # New Relic
 gem "newrelic_rpm"
+end
 
 # For Errbit
 gem "airbrake"
 
 # For cron tasks
 gem "whenever", require: false
-
-# Bug in rake
-gem 'rake', '< 11.0'
-
-# Security updates
-gem 'loofah', '~> 2.2.1'
-
 
 group :deployment do
   # Use Capistrano for deployment
