@@ -53,13 +53,13 @@ group :application do
   gem "sneakers"
   
   # Bug in rake
-gem 'rake', '< 11.0'
+  gem 'rake', '< 11.0'
 
-# Security updates
-gem 'loofah', '~> 2.2.1'
+  # Security updates
+  gem 'loofah', '~> 2.2.1'
   
   # New Relic
-gem "newrelic_rpm"
+  gem "newrelic_rpm"
 end
 
 # For Errbit
