@@ -53,7 +53,8 @@ module ActivityLogQuery
 
   def for_item(item)
     relation.
-      where("data->'issue'->'barcode' ? :barcode OR data->'item'->'barcode' ? :barcode", barcode: item.barcode)
+      # where("data->'issue'->'barcode' ? :barcode OR data->'item'->'barcode' ? :barcode", barcode: item.barcode)
+      where("data->'issue'->>'barcode' = ? OR data->'item'->>'barcode' = ? OR data->'item'->>'id' = ?", item.barcode, item.barcode, item.id.to_s)
   end
 
   def for_tray(tray)
@@ -64,6 +65,12 @@ module ActivityLogQuery
   def for_shelf(shelf)
     relation.
       where("data -> 'shelf' -> 'barcode' ? :barcode", barcode: shelf.barcode)
+  end
+
+  def tray_barcode(record)
+    return record.data['tray']['barcode'] unless record.data['tray'].blank?
+    return Tray.find(record.data['item']['tray_id']).barcode unless record.data['item']['tray_id'].blank?
+    'STAGING'
   end
 
   private_class_method :relation
