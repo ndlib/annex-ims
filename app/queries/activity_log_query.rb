@@ -66,6 +66,12 @@ module ActivityLogQuery
       where("data -> 'shelf' -> 'barcode' ? :barcode", barcode: shelf.barcode)
   end
 
+  def tray_barcode(record)
+    return record.data['tray']['barcode'] unless record.data['tray'].blank?
+    return Tray.find(record.data['item']['tray_id']).barcode unless record.data['item']['tray_id'].blank?
+    'STAGING'
+  end
+
   private_class_method :relation
   private_class_method :for_item
   private_class_method :for_shelf

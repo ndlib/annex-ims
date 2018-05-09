@@ -77,7 +77,7 @@
             %tr
               %td= t("activity_log." + record.action, disposition: !record.data['disposition'].nil? ? record.data['disposition']['code'] : '', comment: !record.data['comment'].nil? ? record.data['comment']['comment'] : '')
               %td= record.action_timestamp.strftime("%m-%d-%Y %I:%M%p")
-              %td= record.data['tray'].blank? ? 'STAGING' : record.data['tray']['barcode']
+              %td= ActivityLogQuery.tray_barcode(record)
               %td= record.username
   %div.panel.panel-warning
     %div.panel-heading

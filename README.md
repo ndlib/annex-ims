@@ -20,8 +20,12 @@ $ bundle install
 $ bundle exec rake db:create db:migrate db:seed
 ```
 
-Start guard; This will fire up the application and also start Solr.
+Start thin; This will fire up the application. Solr, sneakers and Postgres should also be running.
 
 ```console
-$ bundle exec guard
+$ brew services restart postgresql
+$ thin start -C config/thin.yml
+$ rake sunspot:solr:start
+$ brew services start rabbitmq
+$ rake sneakers:start
 ```
