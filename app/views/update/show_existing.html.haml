@@ -1,0 +1,18 @@
+%i= 'Barcodes must have been updated in catalog the previous day'
+.scan
+  = form_tag new_update_path, method: :get do |f|
+    - if @old_item.errors.any?
+      #error_explanation
+        %h2= "#{pluralize(@old_item.errors.count, "error")} prohibited this shelf from being saved:"
+        %ul
+          - @old_item.errors.full_messages.each do |msg|
+            %li= msg
+    .input-group
+      %span.field
+        = label_tag :old_barcode, "Old Barcode"
+        = text_field_tag :old_barcode, @old_item.barcode, readonly: true
+      %span.field
+        = label_tag :new_barcode, "New Barcode"
+        = text_field_tag :new_barcode, @new_item.barcode, readonly: true
+= render 'update_table'
+= link_to 'CANCEL Barcode Update', show_old_update_path(id: @old_item.id), method: :get, class: 'btn btn-warning'

@@ -25,7 +25,7 @@ class Request < ActiveRecord::Base
         bt = "ILL-LOAN"
       end
     else
-      bt = "DEAC-STOCK"
+      bt = "REM-STOCK"
     end
 
     bt

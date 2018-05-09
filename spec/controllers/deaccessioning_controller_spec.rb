@@ -25,7 +25,7 @@ RSpec.describe DeaccessioningController, type: :controller do
       post :req, items: {"#{unstock.id}" => "items[#{unstock.id}]"},
 	   disposition_id: disposition.id,
            comment: comment
-      bin = GetBinFromBarcode.call("BIN-DEAC-HAND-01")
+      bin = GetBinFromBarcode.call("BIN-REM-HAND-01")
       i = Item.find(unstock.id)
       expect(i.bin).to eq(bin)
     end

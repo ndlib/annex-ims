@@ -46,6 +46,13 @@ class UpdateController < ApplicationController
     end
 
     begin
+      @test_item = Item.where(barcode: params[:new_barcode]).take
+      unless @test_item.blank?
+        flash[:error] =  "Barcode #{@test_item.barcode} alreadys exists as a different item in the Annex."
+        redirect_to show_existing_update_path(old_id: @old_item.id, exist_id: @test_item.id)
+        return
+      end
+
       @new_item = GetItemFromMetadata.call(barcode: params[:new_barcode], user_id: current_user.id)
     rescue StandardError => e
       notify_airbrake(e)
@@ -77,7 +84,13 @@ class UpdateController < ApplicationController
     end
   end
 
+  def show_existing
+    @old_item = Item.find(params[:old_id])
+    @new_item = Item.find(params[:exist_id])
+  end
+
   def merge
+    old_item = Item.find(params[:old_id])
     begin
       MergeNewMetadataToOldItem.call(old_id: params[:old_id],
         new_barcode: params[:new_barcode], user_id: current_user.id)
@@ -87,6 +100,8 @@ class UpdateController < ApplicationController
       redirect_to show_old_update_path(id: @old_item.id)
       return
     end
+
+    flash[:notice] = %Q[Barcode #{old_item.barcode} was successfully updated to #{view_context.link_to "Barcode #{params[:new_barcode]}", item_detail_path(params[:new_barcode])}]
 
     redirect_to update_path
     return

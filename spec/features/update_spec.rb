@@ -3,8 +3,10 @@ require 'rails_helper'
 feature 'Update', type: :feature do
   include AuthenticationHelper
   include ItemMetadata
+  include ActionView::Helpers::UrlHelper
 
   let(:item) { FactoryGirl.create(:item) }
+  let(:existing_item) { FactoryGirl.create(:item, barcode: barcode) }
   let(:barcode) { '00000007819006' }
 
   describe 'as an admin' do
@@ -96,12 +98,31 @@ feature 'Update', type: :feature do
       click_link 'SAVE Barcode Update'
       expect(current_path).to eq(update_path)
       old_item = Item.find(item.id)
+      detail_link = link_to "Barcode #{@new_item.barcode}", item_detail_path(@new_item.barcode)
+      expect(page).to have_content "Barcode #{item.barcode} was successfully updated to #{detail_link}"
       expect(old_item.barcode).to eq(barcode)
       expect(old_item.bib_number).to eq(@new_item.bib_number)
       expect(old_item.title).to eq(@new_item.title)
       expect(old_item.author).to eq(@new_item.author)
       expect(old_item.chron).to eq(@new_item.chron)
       expect(old_item.isbn_issn).to eq(@new_item.isbn_issn)
+    end
+
+    it 'can rejects a new barcode if an item with it exists' do
+      item
+      existing_item
+      click_link 'Items'
+      click_link 'Update Barcode'
+      fill_in 'Old Barcode', with: item.barcode
+      click_button 'Save'
+      fill_in 'New Barcode', with: @new_item.barcode
+      click_button 'Save'
+      expect(page).to have_content existing_item.bib_number
+      expect(page).to have_content existing_item.title
+      expect(page).to have_content existing_item.author
+      expect(page).to have_content existing_item.chron
+      expect(page).to have_content existing_item.isbn_issn
+      expect(page).to_not have_content 'SAVE Barcode Update'
     end
   end
 

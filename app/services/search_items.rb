@@ -49,6 +49,8 @@ class SearchItems
     Item.search do
       without(:bin_barcode, "BIN-DEAC-HAND-01")
 
+      without(:bin_barcode, "BIN-REM-HAND-01")
+
       unless search?
         without(:status, "deaccessioned")
       end
