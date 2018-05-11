@@ -32,7 +32,7 @@ group :application do
   gem "bootstrap-datepicker-rails"
 
   # Someone else Rails-ified Datatables
-  gem "jquery-datatables-rails", "~> 3.1.1"
+  gem "jquery-datatables-rails", "~> 3.4.0"
 
   # Devise for authentication, CAS for use in ND
   gem "devise"
