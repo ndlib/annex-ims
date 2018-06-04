@@ -10,7 +10,7 @@ RSpec.describe BuildDeaccessioningRequest do
     expect { subject }.to change { Request.count }.by(1)
     expect(subject).to be_a_kind_of(Array)
     expect(subject.count).to eq(1)
-    expect(subject.first.trans).to start_with('DEACC_')
+    expect(subject.first.trans).to start_with('REMOVE_')
   end
 
   it 'logs requests' do
