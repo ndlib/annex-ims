@@ -10,7 +10,7 @@ class BuildDeaccessioningRequest < GetRequests
     item = Item.where(id: item_id).take
     SetItemDisposition.call(item_id, disposition_id)
     request_data = [{
-      "transaction" => "DEACC-#{item_id}-#{Time.now.to_i}", # Need a bogus transaction
+      "transaction" => "REMOVE-#{item_id}-#{Time.now.to_i}", # Need a bogus transaction
       "barcode" => item.barcode,
       "delivery_type" => "deaccessioning",
       "source" => "deaccessioning",
