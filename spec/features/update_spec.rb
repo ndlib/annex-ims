@@ -49,7 +49,7 @@ feature 'Update', type: :feature do
       click_link 'Items'
       click_link 'Update Barcode'
       fill_in 'Old Barcode', with: item.barcode
-      click_button 'Save'
+      click_button 'Go'
       expect(page).to have_content item.bib_number
       expect(page).to have_content item.title
       expect(page).to have_content item.author
@@ -62,9 +62,9 @@ feature 'Update', type: :feature do
       click_link 'Items'
       click_link 'Update Barcode'
       fill_in 'Old Barcode', with: item.barcode
-      click_button 'Save'
+      click_button 'Go'
       fill_in 'New Barcode', with: @new_item.barcode
-      click_button 'Save'
+      click_button 'Go'
       expect(page).to have_content @new_item.bib_number
       expect(page).to have_content @new_item.title
       expect(page).to have_content @new_item.author
@@ -77,9 +77,9 @@ feature 'Update', type: :feature do
       click_link 'Items'
       click_link 'Update Barcode'
       fill_in 'Old Barcode', with: item.barcode
-      click_button 'Save'
+      click_button 'Go'
       fill_in 'New Barcode', with: @new_item.barcode
-      click_button 'Save'
+      click_button 'Go'
       expect(page).to have_content @new_item.bib_number
       click_link 'CANCEL Barcode Update'
       expect(current_path).to eq(show_old_update_path)
@@ -91,9 +91,9 @@ feature 'Update', type: :feature do
       click_link 'Items'
       click_link 'Update Barcode'
       fill_in 'Old Barcode', with: item.barcode
-      click_button 'Save'
+      click_button 'Go'
       fill_in 'New Barcode', with: @new_item.barcode
-      click_button 'Save'
+      click_button 'Go'
       expect(page).to have_content @new_item.bib_number
       click_link 'SAVE Barcode Update'
       expect(current_path).to eq(update_path)
@@ -114,9 +114,9 @@ feature 'Update', type: :feature do
       click_link 'Items'
       click_link 'Update Barcode'
       fill_in 'Old Barcode', with: item.barcode
-      click_button 'Save'
+      click_button 'Go'
       fill_in 'New Barcode', with: @new_item.barcode
-      click_button 'Save'
+      click_button 'Go'
       expect(page).to have_content existing_item.bib_number
       expect(page).to have_content existing_item.title
       expect(page).to have_content existing_item.author
