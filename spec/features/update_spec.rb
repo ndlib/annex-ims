@@ -98,8 +98,7 @@ feature 'Update', type: :feature do
       click_link 'SAVE Barcode Update'
       expect(current_path).to eq(update_path)
       old_item = Item.find(item.id)
-      detail_link = link_to "Barcode #{@new_item.barcode}", item_detail_path(@new_item.barcode)
-      expect(page).to have_content "Barcode #{item.barcode} was successfully updated to #{detail_link}"
+      expect(page).to have_content "Barcode #{item.barcode} was successfully updated to Barcode #{@new_item.barcode}"
       expect(old_item.barcode).to eq(barcode)
       expect(old_item.bib_number).to eq(@new_item.bib_number)
       expect(old_item.title).to eq(@new_item.title)
