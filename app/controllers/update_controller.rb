@@ -101,7 +101,7 @@ class UpdateController < ApplicationController
       return
     end
 
-    flash[:notice] = %Q[Barcode #{old_item.barcode} was successfully updated to #{view_context.link_to "Barcode #{params[:new_barcode]}", item_detail_path(params[:new_barcode])}]
+    flash[:notice] = "Barcode #{old_item.barcode} was successfully updated to Barcode #{params[:new_barcode]}"
 
     redirect_to update_path
     return
