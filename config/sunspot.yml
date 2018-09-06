@@ -19,7 +19,8 @@ production:
 development:
   solr:
     hostname: localhost
-    port: 8210
+    port: 8983
+    path: /solr/development
     # path: /solr/annex-ims
     log_level: WARNING
     read_timeout: 2
