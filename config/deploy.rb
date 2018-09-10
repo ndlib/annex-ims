@@ -1,5 +1,5 @@
 # config valid only for current version of Capistrano
-lock "3.4.0"
+lock "3.11.0"
 
 require "airbrake/capistrano3"
 require "capistrano/maintenance"
@@ -98,4 +98,4 @@ after "deploy:reverted", "maintenance:disable"
 
 after "deploy:finished", "sneakers:restart"
 
-after "deploy:finished", "airbrake:deploy"
+#after "deploy:finished", "airbrake:deploy"
