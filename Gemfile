@@ -51,13 +51,13 @@ group :application do
   gem "kaminari"
 
   gem "sneakers"
-  
+
   # Bug in rake
   gem 'rake', '< 11.0'
 
   # Security updates
   gem 'loofah', '~> 2.2.1'
-  
+
   # New Relic
   gem "newrelic_rpm"
 end
@@ -70,7 +70,7 @@ gem "whenever", require: false
 
 group :deployment do
   # Use Capistrano for deployment
-  gem "capistrano", "~> 3.4"
+  gem "capistrano", "~> 3.11"
   gem "capistrano-rails", "~> 1.1"
   gem "capistrano-maintenance", "~> 1.0"
 end
