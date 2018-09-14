@@ -7,6 +7,7 @@ require "capistrano/maintenance"
 set :application, "annex-ims"
 set :repo_url, "git@github.com:ndlib/annex-ims.git"
 
+
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 if ENV["SCM_BRANCH"] && ENV["SCM_BRANCH"] != ""
@@ -22,7 +23,7 @@ end
 set :deploy_to, "/home/app/annex-ims"
 
 set :ssh_options, {
-  paranoid: false,
+  verify_host_key: :never,
 }
 
 # Default value for :scm is :git

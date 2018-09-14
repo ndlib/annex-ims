@@ -58,6 +58,9 @@ group :application do
   # Security updates
   gem 'loofah', '~> 2.2.1'
 
+  # Added during ruby 2.4 upgrade
+  gem 'bigdecimal'
+
   # New Relic
   gem "newrelic_rpm"
 end
