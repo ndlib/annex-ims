@@ -100,7 +100,7 @@ RSpec.describe ApiHandler do
       end
 
       it "handles a faraday timeout" do
-        stub_request(:get, api_url(action, params)).to_timeout
+        stub_request(:get, api_url(action, params)).to_raise(Faraday::TimeoutError)
         expect(ExternalRestConnection).to receive(:new).and_call_original
         error_arguments[:exception] = kind_of(Faraday::TimeoutError)
         expect(NotifyError).to receive(:call).with(error_arguments)

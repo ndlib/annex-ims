@@ -133,7 +133,7 @@ end
 
 group :test do
   # For mocking up APIs
-  gem "webmock"
+  gem "webmock", "~> 3.2.1"
   gem "shoulda-matchers"
 
   # rspec matchers for sunspot
