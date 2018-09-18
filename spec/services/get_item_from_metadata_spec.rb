@@ -31,7 +31,7 @@ RSpec.describe GetItemFromMetadata do
         end
 
         it "updates the metadata_updated_at" do
-          item = Item.new 
+          item = Item.new
           expect(item.metadata_updated_at).to be_nil
           item = subject
           expect(item.metadata_updated_at).to be_present
@@ -74,7 +74,7 @@ RSpec.describe GetItemFromMetadata do
 
       context "timeout" do
         before do
-          stub_request(:get, api_item_metadata_url(barcode)).to_timeout
+          stub_request(:get, api_item_metadata_url(barcode)).to_raise(Faraday::TimeoutError)
         end
 
         it "returns false and is a timeout response" do
