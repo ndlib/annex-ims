@@ -14,7 +14,7 @@
 # server list. The second argument is a, or duck-types, Hash and is
 # used to set extended properties on the server.
 
-server "annex.library.nd.edu", user: "app", roles: %w{web app db}
+server "annex-prod.lc.nd.edu", user: "app", roles: %w{web app db}
 
 set :rack_env, :production
 
