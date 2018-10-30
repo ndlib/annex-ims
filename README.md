@@ -15,6 +15,8 @@ Requirements:
 
 Installation:
 
+On Mac, install Qt@5.5 following directions here: https://github.com/thoughtbot/capybara-webkit/wiki/Installing-Qt-and-compiling-capybara-webkit#homebrew
+
 ```console
 $ bundle install
 $ bundle exec rake db:create db:migrate db:seed
