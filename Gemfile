@@ -2,7 +2,7 @@ source "https://rubygems.org"
 
 group :application do
   # Bundle edge Rails instead: gem "rails", github: "rails/rails"
-  gem "rails", "~> 4.2.7.1"
+  gem "rails", "~> 4.2.10"
   # Use postgresql as the database for Active Record
   gem "pg", "~> 0.18.2"
   # Use SCSS for stylesheets
@@ -13,6 +13,7 @@ group :application do
   gem "coffee-rails", "~> 4.1.0"
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   # gem "therubyracer", platforms: :ruby
+  gem 'therubyracer', '~> 0.12.2'
 
   # Use jquery as the JavaScript library
   gem "jquery-rails", "~> 4.0.4"
@@ -51,15 +52,18 @@ group :application do
   gem "kaminari"
 
   gem "sneakers"
-  
+
   # Bug in rake
   gem 'rake', '< 11.0'
 
   # Security updates
   gem 'loofah', '~> 2.2.1'
-  
+
+  # Added during ruby 2.4 upgrade
+  gem 'bigdecimal'
+
   # New Relic
-  gem "newrelic_rpm"
+  # gem "newrelic_rpm"
 end
 
 # For Errbit
@@ -70,7 +74,7 @@ gem "whenever", require: false
 
 group :deployment do
   # Use Capistrano for deployment
-  gem "capistrano", "~> 3.4"
+  gem "capistrano", "~> 3.11"
   gem "capistrano-rails", "~> 1.1"
   gem "capistrano-maintenance", "~> 1.0"
 end
@@ -129,7 +133,7 @@ end
 
 group :test do
   # For mocking up APIs
-  gem "webmock"
+  gem "webmock", "~> 3.2.1"
   gem "shoulda-matchers"
 
   # rspec matchers for sunspot

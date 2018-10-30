@@ -133,7 +133,7 @@ RSpec.describe SyncItemMetadata do
 
       context "timeout" do
         before do
-          stub_request(:get, api_item_metadata_url(barcode)).to_timeout
+          stub_request(:get, api_item_metadata_url(barcode)).to_raise(Faraday::TimeoutError)
         end
 
         it "returns false and is a timeout response" do
