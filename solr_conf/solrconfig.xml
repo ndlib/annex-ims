@@ -116,12 +116,17 @@
          The default since Lucene 2.3 was the LogByteSizeMergePolicy,
          Even older versions of Lucene used LogDocMergePolicy.
       -->
+    <mergePolicyFactory class="org.apache.solr.index.TieredMergePolicyFactory">
+      <int name="maxMergeAtOnce">4</int>
+      <int name="segmentsPerTier">4</int>
+    </mergePolicyFactory>
+   
+    <!-- 
     <mergePolicy class="org.apache.lucene.index.TieredMergePolicy">
       <int name="maxMergeAtOnce">4</int>
       <int name="segmentsPerTier">4</int>
     </mergePolicy>
-    
-    <unlockOnStartup>true</unlockOnStartup>
+    -->
     
   </indexConfig>
 
@@ -451,7 +456,20 @@
 
   <requestHandler name="/update" class="solr.UpdateRequestHandler">
   </requestHandler>
+ 
+ <requestHandler name="/update/json" class="solr.UpdateRequestHandler">
+        <lst name="defaults">
+         <str name="stream.contentType">application/json</str>
+       </lst>
+  </requestHandler>
 
+  <requestHandler name="/update/csv" class="solr.UpdateRequestHandler">
+        <lst name="defaults">
+         <str name="stream.contentType">application/csv</str>
+       </lst>
+  </requestHandler>
+  -
+  <!--
   <requestHandler name="/update/json" class="solr.JsonUpdateRequestHandler">
         <lst name="defaults">
          <str name="stream.contentType">application/json</str>
@@ -463,6 +481,7 @@
          <str name="stream.contentType">application/csv</str>
        </lst>
   </requestHandler>
+  -->
 
   <requestHandler name="/update/extract" 
                   startup="lazy"
@@ -663,5 +682,6 @@
   </requestHandler>
   
   <!-- Admin Handlers - This will register all the standard admin RequestHandlers. -->
-  <requestHandler name="/admin/" class="solr.admin.AdminHandlers" />
+  <!-- NOTE: solr.admin.AdminHandlers has been removed as of solr 6.x+ -->
+  <!-- <requestHandler name="/admin/" class="solr.admin.AdminHandlers" /> -->
 </config>

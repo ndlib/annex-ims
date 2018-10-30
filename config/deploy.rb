@@ -1,11 +1,12 @@
 # config valid only for current version of Capistrano
-lock "3.4.0"
+lock "3.11.0"
 
 require "airbrake/capistrano3"
 require "capistrano/maintenance"
 
 set :application, "annex-ims"
 set :repo_url, "git@github.com:ndlib/annex-ims.git"
+
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
@@ -22,7 +23,7 @@ end
 set :deploy_to, "/home/app/annex-ims"
 
 set :ssh_options, {
-  paranoid: false,
+  verify_host_key: :never,
 }
 
 # Default value for :scm is :git
@@ -39,8 +40,9 @@ set :ssh_options, {
 
 # Default value for :linked_files is []
 # set :linked_files, fetch(:linked_files, []).push("config/database.yml")
-set :linked_files, fetch(:linked_files, []).push("config/secrets.yml")
+# set :linked_files, fetch(:linked_files, []).push("config/secrets.yml")
 set :linked_files, fetch(:linked_files, []).push("config/database.yml")
+set :linked_files, fetch(:linked_files, []).push("config/secrets.yml")
 # set :linked_files, fetch(:linked_files, []).push("config/sunspot.yml")
 
 # Default value for linked_dirs is []
@@ -98,4 +100,4 @@ after "deploy:reverted", "maintenance:disable"
 
 after "deploy:finished", "sneakers:restart"
 
-after "deploy:finished", "airbrake:deploy"
+#after "deploy:finished", "airbrake:deploy"

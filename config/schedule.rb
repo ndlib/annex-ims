@@ -21,6 +21,8 @@
 
 set :output, File.join("log", "cron.log")
 
+env :PATH, '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin'
+
 every 1.hour do
   rake "sneakers:ensure_running"
 end

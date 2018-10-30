@@ -33,3 +33,18 @@ $ rake sunspot:solr:start
 $ brew services start rabbitmq
 $ rake sneakers:start
 ```
+
+## Chron tasks
+
+The system uses chron to schedule some tasks that are necessary for system operation (e.g. - ensuring that sneakers is running and retrieving open requests from the ILS). The tasks that are configured to run under chron are documented in <app-dir>/config/schedule.rb.
+
+## Indexing records
+
+The system uses Solr to index records. Given the potentially high volume of records handled by the IMS, this is necessary for performance reasons. In order to initiate a complete reindex of the records, use the following command:
+
+```console
+$ export RAILS_ENV=<environment>
+$ bundle exec rake sunspot:reindex
+```
+
+Please note: depending on the number of records, reindexing the entire database could take significant time and during reindexing certain application functions will not work or operate in a degraded fashion.
