@@ -17,6 +17,8 @@ Installation:
 
 On Mac, install Qt@5.5 following directions here: https://github.com/thoughtbot/capybara-webkit/wiki/Installing-Qt-and-compiling-capybara-webkit#homebrew
 
+Also on Mac, near the top of .bashrc (or similar), add `export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES` - see https://blog.phusion.nl/2017/10/13/why-ruby-app-servers-break-on-macos-high-sierra-and-what-can-be-done-about-it/
+
 ```console
 $ bundle install
 $ bundle exec rake db:create db:migrate db:seed
