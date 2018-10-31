@@ -48,6 +48,7 @@ The system uses chron to schedule some tasks that are necessary for system opera
 
 If your core directories are set up correctly, you should be all set. If not, create a core directory in the solr directory that has the following structure:
 
+```console
 /development
   /conf
     elevate.xml
@@ -58,6 +59,7 @@ If your core directories are set up correctly, you should be all set. If not, cr
     synonyms.txt
   /data
   core.properties
+  ```
 
   The core.properties file should look like this:
 
