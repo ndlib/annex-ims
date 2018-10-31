@@ -58,6 +58,7 @@ group :application do
 
   # Security updates
   gem 'loofah', '~> 2.2.1'
+  gem "ffi", ">= 1.9.24"
 
   # Added during ruby 2.4 upgrade
   gem 'bigdecimal'
