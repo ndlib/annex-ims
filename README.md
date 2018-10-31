@@ -12,6 +12,7 @@ Requirements:
 * Ruby (~> 2.1.4)
 * RabbitMQ (~> 3.5.0) - https://www.rabbitmq.com/download.html
 * Postgres - (~> 9.4) - http://www.postgresql.org/download/
+* Solr (~> 7.4) - http://archive.apache.org/dist/lucene/solr/
 
 Installation:
 
