@@ -45,7 +45,7 @@ group :application do
   gem "multi_xml"
 
   # For item search
-  gem "sunspot_rails", :git => "https://github.com/sunspot/sunspot.git"
+  gem "sunspot_rails" #, :git => "https://github.com/sunspot/sunspot.git"
   gem "progress_bar" # Because I want to see progress of reindexing
 
   # For paginating results
@@ -120,7 +120,7 @@ group :development, :test do
   gem "capybara-webkit"
 
   # So staging etc can use stand alone Solr
-  gem "sunspot_solr", :git => "https://github.com/sunspot/sunspot.git"
+  gem "sunspot_solr" #, :git => "https://github.com/sunspot/sunspot.git"
 
   # For serving up ssl
   gem "thin"

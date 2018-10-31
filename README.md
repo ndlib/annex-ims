@@ -38,6 +38,38 @@ $ rake sneakers:start
 
 The system uses chron to schedule some tasks that are necessary for system operation (e.g. - ensuring that sneakers is running and retrieving open requests from the ILS). The tasks that are configured to run under chron are documented in <app-dir>/config/schedule.rb.
 
+## Upgrading SOLR for the development environment
+* Download the version of solr you want - Solr 7.4 download link: http://archive.apache.org/dist/lucene/solr/7.4.0/
+* Choose the solr-7.4.0.zip file
+* Unzip the file into a staging directory
+* Run `cd $(bundle show sunspot_solr)` at the CLI
+* Rename the solr directory to solr-original
+* Run cp -Rp <path-to-solr-7.4.0-dir> ./solr
+
+If your core directories are set up correctly, you should be all set. If not, create a core directory in the solr directory that has the following structure:
+
+/development
+  /conf
+    elevate.xml
+    schema.xml
+    solrconfig.xml
+    spellings.txt
+    stopwords.txt
+    synonyms.txt
+  /data
+  core.properties
+
+  The core.properties file should look like this:
+
+  name=development
+  config=solrconfig.xml
+  schema=schema.xml
+  dataDir=<full-path-to-data-dir>
+
+  Then you can run the command `bundle exec rake sunspot:solr:start` - The solr instance is running on port 8981 so you should be able to go to http://localhost:8981/solr/#/ and inspect the dashboard and core configuration. You can also run queries against the index fron the admin console.
+
+  Finally, if the schema is upgraded or the Solr version is upgraded, you will need to do a full reindex. Run the command outlined below under "Indexing records"
+
 ## Indexing records
 
 The system uses Solr to index records. Given the potentially high volume of records handled by the IMS, this is necessary for performance reasons. In order to initiate a complete reindex of the records, use the following command:
