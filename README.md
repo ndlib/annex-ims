@@ -64,10 +64,12 @@ If your core directories are set up correctly, you should be all set. If not, cr
 
   The core.properties file should look like this:
 
+  ```console
   name=development
   config=solrconfig.xml
   schema=schema.xml
   dataDir=<full-path-to-data-dir>
+  ```
 
   Then you can run the command `bundle exec rake sunspot:solr:start` - The solr instance is running on port 8981 so you should be able to go to http://localhost:8981/solr/#/ and inspect the dashboard and core configuration. You can also run queries against the index fron the admin console.
 
