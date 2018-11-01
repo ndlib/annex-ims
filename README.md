@@ -34,6 +34,13 @@ $ rake sunspot:solr:start
 $ brew services start rabbitmq
 $ rake sneakers:start
 ```
+*NOTE*: On Mac OS systems running High Sierra and above, you may run into an issue running thin. Thin will fork processes internally, and Apple has implemented a safety feature that doesn't allow the type of forking that thin (or Puma or a host of other Rails containers) uses so you may need to issues this as an ENV to your shell before running thin:
+
+```console
+export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
+```
+
+*BUT...*: This is not, in general, recommended. Your mileage may vary.
 
 ## Chron tasks
 
