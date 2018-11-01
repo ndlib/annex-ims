@@ -63,6 +63,7 @@ class TransfersController < ApplicationController
   rescue StandardError => e
     AssociateTrayWithShelfBarcode.call(tray, old_shelf.barcode, current_user)
     UnshelveTray.call(tray, current_user)
+    Raven.capture_exception(e)
     @dissociate_error = e.message
     false
   end

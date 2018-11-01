@@ -63,12 +63,9 @@ group :application do
   # Added during ruby 2.4 upgrade
   gem 'bigdecimal'
 
-  # New Relic
-  # gem "newrelic_rpm"
+  # Sentry.io integration
+  gem "sentry-raven"
 end
-
-# For Errbit
-gem "airbrake"
 
 # For cron tasks
 gem "whenever", require: false
@@ -128,6 +125,8 @@ group :development, :test do
 
   gem "rails-erd"
 
+  # 
+
   # bundle exec rake doc:rails generates the API under doc/api.
   gem "sdoc", "~> 0.4.0"
 end
@@ -136,6 +135,8 @@ group :test do
   # For mocking up APIs
   gem "webmock", "~> 3.2.1"
   gem "shoulda-matchers"
+
+  gem "simplecov", "~> 0.12.0"
 
   # rspec matchers for sunspot
   gem "sunspot_matchers"

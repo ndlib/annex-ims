@@ -14,12 +14,12 @@ feature "Trays", type: :feature do
       login_admin
 
       stub_request(:get, api_item_url(item)).
-        with(headers: { "User-Agent" => "Faraday v0.9.1" }).
+        with(headers: { "User-Agent" => "Faraday v0.15.3" }).
         to_return{ { status: 200, body: response_body, headers: {} } }
 
       stub_request(:post, api_stock_url).
         with(body: {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{tray.barcode}"},
-          headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
+          headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.15.3'}).
         to_return{ |response| { status: 200, body: {results: {status: "OK", message: "Item stocked"}}.to_json, headers: {} } }
 
     end
@@ -310,7 +310,7 @@ feature "Trays", type: :feature do
       expect(GetItemFromBarcode).to receive(:call).with(barcode: item.barcode, user_id: @user.id).and_return(item).at_least :once
       stub_request(:post, api_stock_url).
       with(body: {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{tray.barcode}"},
-        headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
+        headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.15.3'}).
       to_return{ |response| { status: 200, body: {results: {status: "OK", message: "Item stocked"}}.to_json, headers: {} } }
       visit trays_items_path
       fill_in "Tray", with: tray.barcode
@@ -330,7 +330,7 @@ feature "Trays", type: :feature do
       expect(GetItemFromBarcode).to receive(:call).with(barcode: item.barcode, user_id: @user.id).and_return(item).at_least :once
       stub_request(:post, api_stock_url).
       with(body: {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{tray.barcode}"},
-        headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
+        headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.15.3'}).
       to_return{ |response| { status: 200, body: {results: {status: "OK", message: "Item stocked"}}.to_json, headers: {} } }
       visit trays_items_path
       fill_in "Tray", with: tray.barcode
@@ -351,11 +351,11 @@ feature "Trays", type: :feature do
       expect(GetItemFromBarcode).to receive(:call).with(barcode: item.barcode, user_id: @user.id).and_return(item).at_least :once
       item_uri = api_item_url(item)
       stub_request(:get, item_uri).
-        with(headers: { "User-Agent"=>"Faraday v0.9.1" }).
+        with(headers: { "User-Agent"=>"Faraday v0.15.3" }).
         to_return{ { status: 200, body: response_body, headers: {} } }
       stub_request(:post, api_stock_url).
         with(body: {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{tray.barcode}"},
-          headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
+          headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.15.3'}).
         to_return{ |response| { status: 200, body: {results: {status: "OK", message: "Item stocked"}}.to_json, headers: {} } }
       visit trays_items_path
       fill_in "Tray", with: tray.barcode
@@ -387,7 +387,7 @@ feature "Trays", type: :feature do
       expect(GetItemFromBarcode).to receive(:call).with(barcode: item.barcode, user_id: @user.id).and_return(item).at_least :once
       stub_request(:post, api_stock_url).
         with(body: {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{tray2.barcode}"},
-          headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
+          headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.15.3'}).
         to_return{ |response| { status: 200, body: {results: {status: "OK", message: "Item stocked"}}.to_json, headers: {} } }
       visit trays_items_path
       fill_in "Tray", with: tray.barcode
@@ -455,7 +455,7 @@ feature "Trays", type: :feature do
     it "displays a tray's barcode while processing an item" do
       item_uri = api_item_url(item)
       stub_request(:get, item_uri).
-        with(headers: { "User-Agent" => "Faraday v0.9.1" }).
+        with(headers: { "User-Agent" => "Faraday v0.15.3" }).
         to_return{ { status: 200, body: response_body, headers: {} } }
       visit trays_items_path
       fill_in "Tray", with: tray.barcode
@@ -483,11 +483,11 @@ feature "Trays", type: :feature do
         item_uri = api_item_url(item)
         stub_request(:post, item_uri).
           with(body: {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{tray.barcode}"},
-            headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
+            headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.15.3'}).
           to_return{ |response| { status: 200, body: {results: {status: "OK", message: "Item stocked"}}.to_json, headers: {} } }
         stub_request(:post, api_stock_url).
           with(body: {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{tray.barcode}"},
-            headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
+            headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0..15.3'}).
           to_return{ |response| { status: 200, body: {results: {status: "OK", message: "Item stocked"}}.to_json, headers: {} } }
         fill_in "Item", with: item.barcode
         fill_in "Thickness", with: Faker::Number.number(1)
@@ -504,11 +504,11 @@ feature "Trays", type: :feature do
     it "allows the user to remove an item from a tray" do
       item_uri = api_item_url(item)
       stub_request(:get, item_uri).
-        with(headers: { "User-Agent" => "Faraday v0.9.1" }).
+        with(headers: { "User-Agent" => "Faraday v0.15.3" }).
         to_return{ { status: 200, body: response_body, headers: {} } }
       stub_request(:post, api_stock_url).
         with(body: {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{tray.barcode}"},
-          headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
+          headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.15.3'}).
         to_return{ |response| { status: 200, body: {results: {status: "OK", message: "Item stocked"}}.to_json, headers: {} } }
       visit trays_items_path
       fill_in "Tray", with: tray.barcode
@@ -528,11 +528,11 @@ feature "Trays", type: :feature do
       login_admin
       item_uri = api_item_url(item)
       stub_request(:get, item_uri).
-        with(headers: { "User-Agent" => "Faraday v0.9.1" }).
+        with(headers: { "User-Agent" => "Faraday v0.15.3" }).
         to_return { { status: 200, body: response_body, headers: {} } }
       stub_request(:post, api_stock_url).
         with(body: { "barcode" => "#{item.barcode}", "item_id" => "#{item.id}", "tray_code" => "#{tray.barcode}" },
-          headers: { 'Content-Type' => 'application/x-www-form-urlencoded', 'User-Agent' => 'Faraday v0.9.1' }).
+          headers: { 'Content-Type' => 'application/x-www-form-urlencoded', 'User-Agent' => 'Faraday v0.15.3' }).
         to_return{ |response| { status: 200, body: { results: { status: "OK", message: "Item stocked" } }.to_json, headers: {} } }
       visit trays_items_path
       fill_in "Tray", with: tray.barcode
@@ -551,11 +551,11 @@ feature "Trays", type: :feature do
       login_worker
       item_uri = api_item_url(item)
       stub_request(:get, item_uri).
-        with(headers: { "User-Agent" => "Faraday v0.9.1" }).
+        with(headers: { "User-Agent" => "Faraday v0.15.3" }).
         to_return{ { status: 200, body: response_body, headers: {} } }
       stub_request(:post, api_stock_url).
         with(body: {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{tray.barcode}"},
-          headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
+          headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.15.3'}).
         to_return{ |response| { status: 200, body: {results: {status: "OK", message: "Item stocked"}}.to_json, headers: {} } }
       visit trays_items_path
       fill_in "Tray", with: tray.barcode
@@ -574,11 +574,11 @@ feature "Trays", type: :feature do
       login_worker
       item_uri = api_item_url(item)
       stub_request(:get, item_uri).
-        with(headers: { "User-Agent" => "Faraday v0.9.1" }).
+        with(headers: { "User-Agent" => "Faraday v0.15.3" }).
         to_return { { status: 200, body: response_body, headers: {} } }
       stub_request(:post, api_stock_url).
         with(body: { "barcode" => "#{item.barcode}", "item_id" => "#{item.id}", "tray_code" => "#{tray.barcode}" },
-          headers: { 'Content-Type' => 'application/x-www-form-urlencoded', 'User-Agent' => 'Faraday v0.9.1' }).
+          headers: { 'Content-Type' => 'application/x-www-form-urlencoded', 'User-Agent' => 'Faraday v0.15.3' }).
         to_return{ |response| { status: 200, body: { results: { status: "OK", message: "Item stocked" } }.to_json, headers: {} } }
       visit trays_items_path
       fill_in "Tray", with: tray.barcode
@@ -614,11 +614,11 @@ feature "Trays", type: :feature do
       login_worker
       item_uri = api_item_url(item)
       stub_request(:get, item_uri).
-        with(headers: { "User-Agent" => "Faraday v0.9.1" }).
+        with(headers: { "User-Agent" => "Faraday v0.15.3" }).
         to_return { { status: 200, body: response_body, headers: {} } }
       stub_request(:post, api_stock_url).
         with(body: { "barcode" => "#{item.barcode}", "item_id" => "#{item.id}", "tray_code" => "#{tray.barcode}" },
-          headers: { 'Content-Type' => 'application/x-www-form-urlencoded', 'User-Agent' => 'Faraday v0.9.1' }).
+          headers: { 'Content-Type' => 'application/x-www-form-urlencoded', 'User-Agent' => 'Faraday v0.15.3' }).
         to_return { |response| { status: 200, body: { results: { status: "OK", message: "Item stocked" } }.to_json, headers: {} } }
       visit trays_items_path
       fill_in "Tray", with: tray.barcode
@@ -645,11 +645,11 @@ feature "Trays", type: :feature do
     it "allows the user to finish with the current tray when processing items via scan" do
       item_uri = api_item_url(item)
       stub_request(:get, item_uri).
-        with(headers: { "User-Agent" => "Faraday v0.9.1" }).
+        with(headers: { "User-Agent" => "Faraday v0.15.3" }).
         to_return{ { status: 200, body: response_body, headers: {} } }
       stub_request(:post, api_stock_url).
         with(body: {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{tray.barcode}"},
-          headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
+          headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.15.3'}).
         to_return{ |response| { status: 200, body: {results: {status: "OK", message: "Item stocked"}}.to_json, headers: {} } }
       visit trays_items_path
       fill_in "Tray", with: tray.barcode
@@ -681,11 +681,11 @@ feature "Trays", type: :feature do
         item_uri = api_item_url(item)
         stub_request(:post, item_uri).
           with(body: {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{tray.barcode}"},
-            headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
+            headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.15.3'}).
           to_return{ |response| { status: 200, body: {results: {status: "OK", message: "Item stocked"}}.to_json, headers: {} } }
         stub_request(:post, api_stock_url).
           with(body: {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{tray.barcode}"},
-            headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
+            headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.15.3'}).
           to_return{ |response| { status: 200, body: {results: {status: "OK", message: "Item stocked"}}.to_json, headers: {} } }
         fill_in "Item", with: item.barcode
         fill_in "Thickness", with: 100

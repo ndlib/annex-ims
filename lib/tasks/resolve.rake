@@ -3,7 +3,6 @@ require 'csv'
 namespace :annex do
   desc "Resolves issues in given csv"
   task :resolve, [:csv] => :environment do |t, args|
-    Airbrake.configuration.rescue_rake_exceptions = true
     logger = Logger.new(STDOUT)
 
     if args.csv then

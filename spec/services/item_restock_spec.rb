@@ -18,17 +18,17 @@ RSpec.describe ItemRestock do
 
     stub_request(:post, api_stock_url).
       with(:body => {"barcode"=>"#{@item.barcode}", "item_id"=>"#{@item.id}", "tray_code"=>"#{@item.tray.barcode}"},
-        :headers => {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.9.1'}).
+        :headers => {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.15.3'}).
       to_return{ |response| { :status => 200, :body => {:results => {:status => "OK", :message => "Item stocked"}}.to_json, :headers => {} } }
 
     response_body = api_fixture_data("item_metadata.json")
 
     stub_request(:get, item_uri).
-      with(headers: { "User-Agent" => "Faraday v0.9.1" }).
+      with(headers: { "User-Agent" => "Faraday v0.15.3" }).
       to_return(status: 200, body: response_body, headers: {})
 
     stub_request(:get, item2_uri).
-      with(headers: { "User-Agent" => "Faraday v0.9.1" }).
+      with(headers: { "User-Agent" => "Faraday v0.15.3" }).
       to_return(status: 200, body: response_body, headers: {})
 
     @user_id = 1 # Just fake having a user here
