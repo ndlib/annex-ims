@@ -29,10 +29,10 @@ Start thin; This will fire up the application. Solr, sneakers and Postgres shoul
 
 ```console
 $ brew services restart postgresql
-$ thin start -C config/thin.yml
-$ rake sunspot:solr:start
+$ bundle exec thin start -C config/thin.yml
+$ bundle exec rake sunspot:solr:start
 $ brew services start rabbitmq
-$ rake sneakers:start
+$ bundle exec rake sneakers:start
 ```
 *NOTE*: On Mac OS systems running High Sierra and above, you may run into an issue running thin. Thin will fork processes internally, and Apple has implemented a safety feature that doesn't allow the type of forking that thin (or Puma or a host of other Rails containers) uses so you may need to issues this as an ENV to your shell before running thin:
 
