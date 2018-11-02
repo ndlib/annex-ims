@@ -1,7 +1,6 @@
 namespace :annex do
   desc "Retrieves active requests from the API and creates or updates local request records"
   task get_active_requests: :environment do
-    Airbrake.configuration.rescue_rake_exceptions = true
     logger = Logger.new(STDOUT)
     requests = GetRequests.call
     message = I18n.t("requests.synchronized", count: requests.count)
@@ -13,7 +12,6 @@ namespace :annex do
     require 'csv'
     require Rails.root.join("lib", "tasks", "services", "destroy_invalid_items.rb").to_s
 
-    Airbrake.configuration.rescue_rake_exceptions = true
     logger = Logger.new(STDOUT)
 
     system_user = OpenStruct.new({ user_id: nil, username: "system" })
@@ -64,7 +62,6 @@ namespace :annex do
   #
   desc "Dump matches associated with AIMS-331"
   task dump_aims331_matches: :environment do
-    Airbrake.configuration.rescue_rake_exceptions = true
 
     view_file = File.open("fixed_matches_view.csv", "w")
     match_file = File.open("fixed_matches.txt", "w")
@@ -91,7 +88,6 @@ namespace :annex do
   #
   desc "Fix matches associated with AIMS-331"
   task fix_aims331_matches: :environment do
-    Airbrake.configuration.rescue_rake_exceptions = true
 
     broken_matches.each do |match|
       data = { item: match.item.attributes, request: match.request.attributes, user: nil }

@@ -33,8 +33,8 @@ RSpec.describe TraysController, :type => :controller do
         expect(response.location).to match(/trays\/shelves\/\d+/)
       end
 
-      it "calls notify_airbrake on error and redirects to the trays path" do
-        expect(controller).to receive(:notify_airbrake).with(kind_of(RuntimeError))
+      it "calls capture_exception on error and redirects to the trays path" do
+        expect(Raven).to receive(:capture_exception).with(kind_of(RuntimeError))
         post :scan, tray: { barcode: "12345" }
         expect(response).to redirect_to(trays_path)
       end
@@ -49,8 +49,8 @@ RSpec.describe TraysController, :type => :controller do
         expect(response.location).to match(/trays\/shelves\/\d+/)
       end
 
-      it "calls notify_airbrake on error and redirects to the trays path" do
-        expect(controller).to receive(:notify_airbrake).with(kind_of(RuntimeError))
+      it "calls capture_exception on error and redirects to the trays path" do
+        expect(Raven).to receive(:capture_exception).with(kind_of(RuntimeError))
         post :scan, tray: { barcode: "12345" }
         expect(response).to redirect_to(trays_path)
       end

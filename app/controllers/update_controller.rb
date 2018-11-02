@@ -55,7 +55,7 @@ class UpdateController < ApplicationController
 
       @new_item = GetItemFromMetadata.call(barcode: params[:new_barcode], user_id: current_user.id)
     rescue StandardError => e
-      notify_airbrake(e)
+      Raven.capture_exception(e)
       flash[:error] = e.message
       redirect_to show_old_update_path(id: @old_item.id)
       return
@@ -77,7 +77,7 @@ class UpdateController < ApplicationController
     begin
       @new_item = GetItemFromMetadata.call(barcode: params[:new_barcode], user_id: current_user.id)
     rescue StandardError => e
-      notify_airbrake(e)
+      Raven.capture_exception(e)
       flash[:error] = e.message
       redirect_to show_old_update_path(id: @old_item.id)
       return
@@ -95,7 +95,7 @@ class UpdateController < ApplicationController
       MergeNewMetadataToOldItem.call(old_id: params[:old_id],
         new_barcode: params[:new_barcode], user_id: current_user.id)
     rescue StandardError => e
-      notify_airbrake(e)
+      Raven.capture_exception(e)
       flash[:error] = e.message
       redirect_to show_old_update_path(id: @old_item.id)
       return

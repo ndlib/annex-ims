@@ -16,7 +16,7 @@ RSpec.describe ShelvesController, type: :controller do
     allow_any_instance_of(GetItemFromBarcode).to receive(:item).and_return(item)
     @bogus_item_uri = api_item_metadata_url(bogus)
     stub_request(:get, @bogus_item_uri).
-      with(:headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'User-Agent'=>'Faraday v0.9.1'}).
+      with(:headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'User-Agent'=>'Faraday v0.15.3'}).
       to_return(:status => 404, :body => "Not Found", :headers => {})
   end
 
@@ -27,8 +27,8 @@ RSpec.describe ShelvesController, type: :controller do
       expect(response.location).to match(/shelves\/items\/\d+/)
     end
 
-    it 'calls notify_airbrake on error and redirects to the trays path' do
-      expect(controller).to receive(:notify_airbrake).with(kind_of(RuntimeError))
+    it 'calls capture_exception on error and redirects to the trays path' do
+      expect(Raven).to receive(:capture_exception).with(kind_of(RuntimeError))
       post :scan, shelf: { barcode: '12345' }
       expect(response).to redirect_to(shelves_path)
     end
@@ -47,7 +47,7 @@ RSpec.describe ShelvesController, type: :controller do
       item2.save!
       allow(GetItemFromBarcode).to receive(:call).and_return(item2)
       allow(AssociateShelfWithItemBarcode).to receive(:call).and_raise(StandardError)
-      expect(controller).to receive(:notify_airbrake).with(kind_of(StandardError))
+      expect(Raven).to receive(:capture_exception).with(kind_of(StandardError))
       post :associate, id: shelf.id, barcode: item2.barcode
       expect(response).to be_redirect
       expect(response.location).to match(/shelves\/items\/\d+/)
