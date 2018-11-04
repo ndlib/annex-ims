@@ -107,4 +107,16 @@ class ShelvesController < ApplicationController
   def check_trays_new
     @shelf = Shelf.new
   end
+
+  def check_trays
+    begin
+      @shelf = GetShelfFromBarcode.call(params[:shelf][:barcode])
+      @scanned = []
+    rescue StandardError => e
+      notify_airbrake(e)
+      flash[:error] = e.message
+      redirect_to check_trays_new_path
+      return
+    end
+  end
 end

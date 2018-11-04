@@ -3,6 +3,8 @@ require 'rails_helper'
 feature "Trays on Shelf", type: :feature do
   include AuthenticationHelper
 
+  let(:shelf) { FactoryGirl.create(:shelf) }
+
   describe "as an admin" do
     before(:each) do
       login_admin
@@ -19,6 +21,14 @@ feature "Trays on Shelf", type: :feature do
       click_link "Trays on Shelf"
       expect(current_path).to eq(check_trays_new_path)
       expect(page).to have_content "Shelf Check Trays"
+    end
+
+    it "can accept a shelf barcode" do
+      shelf
+      visit check_trays_new_path
+      fill_in "Shelf", with: shelf.barcode
+      click_button "Save"
+      expect(current_path).to eq(check_trays_path)
     end
   end
 end
