@@ -18,6 +18,7 @@ feature "Trays on Shelf", type: :feature do
       click_link "Quality Control"
       click_link "Trays on Shelf"
       expect(current_path).to eq(check_trays_new_path)
+      expect(page).to have_content "Shelf Check Trays"
     end
   end
 end
