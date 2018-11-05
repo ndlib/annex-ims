@@ -38,6 +38,11 @@ module AnnexIms
         :rspec, fixtures: false, view_specs: false, helper_specs: false, routing_specs: false, controller_specs: false, request_specs: false
       )
     end
+    
+    # Sentry.io configuration
+    Raven.configure do |config|
+      config.dsn = 'https://0cf4dda784b84606bb2b8b875bb43877:b1e0dae7029c47659aee3670c9eefd8f@sentry.io/1313872'
+    end
 
     # It appears that we are not using helpers, so don"t make it
     # easy to keep using them.

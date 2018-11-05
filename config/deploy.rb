@@ -1,7 +1,6 @@
 # config valid only for current version of Capistrano
 lock "3.11.0"
 
-require "airbrake/capistrano3"
 require "capistrano/maintenance"
 
 set :application, "annex-ims"
@@ -100,4 +99,4 @@ after "deploy:reverted", "maintenance:disable"
 
 after "deploy:finished", "sneakers:restart"
 
-#after "deploy:finished", "airbrake:deploy"
+#after "deploy:finished"

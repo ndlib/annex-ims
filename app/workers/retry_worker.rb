@@ -25,6 +25,7 @@ class RetryWorker < ActiveJob::QueueAdapters::SneakersAdapter::JobWrapper
   def work(*args)
     original_work(*args)
   rescue StandardError => e
+    Raven.capture_exception(e)
     NotifyError.call(exception: e, parameters: { args: args }, component: self.class.to_s, action: "work")
     logger.error e.message
     logger.error args

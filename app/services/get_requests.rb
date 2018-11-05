@@ -40,6 +40,7 @@ class GetRequests
     end
     request
     rescue StandardError => e
+      Raven.capture_exception(e)
       NotifyError.call(exception: e, parameters: { attributes: attributes, request: request }, component: self.class.to_s, action: "create_or_update_request")
       nil
     end
