@@ -103,4 +103,8 @@ class ShelvesController < ApplicationController
       end
     end
   end
+
+  def check_trays_new
+    @shelf = Shelf.new
+  end
 end
