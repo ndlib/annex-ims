@@ -49,6 +49,7 @@ class CreateItem
         return "Item #{barcode} stocked in #{tray.barcode}."
       end
     rescue StandardError => e
+      Raven.capture_exception(e)
       return e
     end
   end

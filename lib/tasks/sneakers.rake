@@ -69,7 +69,6 @@ namespace :sneakers do
 
   desc "Ensures that sneakers is running"
   task ensure_running: :environment do
-    Airbrake.configuration.rescue_rake_exceptions = true
     SneakersRakeHelper::info "Ensuring sneakers is running"
     running = false
     if SneakersRakeHelper::pid_file_exists?
@@ -92,7 +91,6 @@ namespace :sneakers do
 
   desc "Start sneakers workers as a background process"
   task start: :environment do
-    Airbrake.configuration.rescue_rake_exceptions = true
     SneakersRakeHelper::info "Starting sneakers in background"
     Process.fork do
       Rake::Task["sneakers:run"].invoke
@@ -102,7 +100,6 @@ namespace :sneakers do
 
   desc "Start the sneakers workers"
   task run: :environment do
-    Airbrake.configuration.rescue_rake_exceptions = true
     if SneakersRakeHelper::pid_file_exists?
       raise SneakersPidFileExists, "Sneakers pid file already exists: #{SneakersRakeHelper::pid_file}"
     end
@@ -130,7 +127,6 @@ namespace :sneakers do
 
   desc "Stop the sneakers background process"
   task stop: :environment do
-    Airbrake.configuration.rescue_rake_exceptions = true
     if pid = SneakersRakeHelper::current_pid
       stopped = false
       SneakersRakeHelper::info "Stopping sneakers... (pid: #{pid})"
@@ -159,7 +155,6 @@ namespace :sneakers do
 
   desc "Restart the sneakers background process"
   task restart: :environment do
-    Airbrake.configuration.rescue_rake_exceptions = true
     SneakersRakeHelper::info "Restarting sneakers"
     Rake::Task["sneakers:stop"].invoke
     Rake::Task["sneakers:start"].invoke

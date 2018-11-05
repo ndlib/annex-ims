@@ -55,7 +55,7 @@ class ExternalRestConnection
   end
 
   def establish_connection
-    Faraday.new(url: base_url) do |conn|
+    Faraday.new(:url => base_url) do |conn|
       setup_connection(conn)
     end
   end

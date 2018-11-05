@@ -19,10 +19,10 @@ require 'capybara/rspec'
 require "simplecov"
 require "coveralls"
 
-SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
   SimpleCov::Formatter::HTMLFormatter,
   Coveralls::SimpleCov::Formatter
-]
+])
 SimpleCov.start("rails")
 
 RSpec.configure do |config|
@@ -61,6 +61,12 @@ RSpec.configure do |config|
 
   # Allow localhost connections for testing
   WebMock.disable_net_connect!(:allow_localhost => true)
+
+  # Create mock connection to Sentry.io
+  config.before(:each) do
+    stub_request(:post, /sentry.io/).
+      to_return(status: 200, body: "stubbed response", headers: {})
+  end
 
   # Use webkit for javascript testing
   # Capybara.javascript_driver = :selenium
