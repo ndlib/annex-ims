@@ -113,7 +113,7 @@ class ShelvesController < ApplicationController
       @shelf = GetShelfFromBarcode.call(params[:shelf][:barcode])
       @scanned = []
     rescue StandardError => e
-      notify_airbrake(e)
+      Raven.capture_exception(e)
       flash[:error] = e.message
       redirect_to check_trays_new_path
       return
