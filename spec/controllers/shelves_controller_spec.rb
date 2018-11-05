@@ -93,4 +93,22 @@ RSpec.describe ShelvesController, type: :controller do
       end
     end
   end
+
+  describe "GET check_trays_new" do
+    subject { get :check_trays_new }
+
+    it "returns http success" do
+      subject
+      expect(response).to have_http_status(:success)
+    end
+
+    it "assigns shelf for the view" do
+      subject
+      expect(assigns(:shelf)).not_to eq(nil)
+    end
+  end
+
+  describe "GET check_trays" do
+
+  end
 end
