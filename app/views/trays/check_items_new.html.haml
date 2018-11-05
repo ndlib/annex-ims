@@ -2,7 +2,7 @@
   = form_for @tray, url: check_items_path(@tray) do |f|
     - if @tray.errors.any?
       #error_explanation
-        %h2= "#{pluralize(@tray.errors.count, "error")} prohibited this tray from being saved:"
+        %h2= "#{pluralize(@tray.errors.count, "error")} prohibited this operation:"
         %ul
           - @tray.errors.full_messages.each do |msg|
             %li= msg
