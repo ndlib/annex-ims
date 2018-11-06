@@ -41,7 +41,7 @@ module AnnexIms
     
     # Sentry.io configuration
     Raven.configure do |config|
-      config.dsn = 'https://0cf4dda784b84606bb2b8b875bb43877:b1e0dae7029c47659aee3670c9eefd8f@sentry.io/1313872'
+      config.dsn = Rails.application.secrets.sentrydn
     end
 
     # It appears that we are not using helpers, so don"t make it
