@@ -1,0 +1,31 @@
+.scan
+  = form_tag check_trays_validate_path(@shelf) do
+    - if @shelf.errors.any?
+      #error_explanation
+        %h2= "#{pluralize(@shelf.errors.count, "error")} prohibited this shelf from being saved:"
+        %ul
+          - @shelf.errors.full_messages.each do |msg|
+            %li= msg
+    .field
+      = label_tag :barcode, "Tray"
+      = text_field_tag :barcode, '', autofocus: true
+      - @scanned.each do |scan|
+        = hidden_field_tag "scanned[]", scan
+    .actions
+      = submit_tag 'Save', class: 'btn btn-primary'
+
+%table.table.table-striped.condensed{ "data-toggle" => "table" }
+  %thead
+    %tr
+      %th= 'Barcode'
+      %th= 'Item Count'
+  %tbody
+    - @shelf.trays.each do |tray|
+      - class_name = ""
+      - if @scanned.include?(tray.barcode)
+        - class_name = "check-trays-success"
+
+      %tr{ class: class_name }
+        %td= link_to tray.barcode, tray_detail_path(tray.barcode)
+        %td= tray.items.count
+= button_to "Done", check_trays_new_path, method: :get, class: 'btn pull-right btn-primary'
