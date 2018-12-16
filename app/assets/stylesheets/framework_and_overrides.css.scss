@@ -268,11 +268,15 @@ hr {
     tr:nth-of-type(odd),
     tr:nth-of-type(even) {
       &.check-items-fail,
+      &.check-trays-fail,
       &.item-metadata-not-found,
       &.item-metadata-not-for-annex {
         background-color: $alert-danger-bg;
       }
       &.check-items-success {
+        background-color: $alert-success-bg;
+      }
+      &.check-trays-success {
         background-color: $alert-success-bg;
       }
     }
