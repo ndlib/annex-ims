@@ -25,10 +25,11 @@ $ bundle install
 $ bundle exec rake db:create db:migrate db:seed
 ```
 
-Start thin; This will fire up the application. Solr, sneakers and Postgres should also be running.
+Start thin; This will fire up the application. Solr, sneakers and Postgres should also be running. The second line below is only necessary on certain Mac operating systems.
 
 ```console
 $ brew services restart postgresql
+$ export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
 $ bundle exec thin start -C config/thin.yml
 $ bundle exec rake sunspot:solr:start
 $ brew services start rabbitmq
