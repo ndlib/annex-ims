@@ -31,14 +31,14 @@ feature "Trays on Shelf", type: :feature do
       shelf
       visit check_trays_new_path
       fill_in "Shelf", with: shelf.barcode
-      click_button "Save"
+      click_button "Submit"
       expect(current_path).to eq(check_trays_path)
     end
 
     it "rejects a non-shelf barcode" do
       visit check_trays_new_path
       fill_in "Shelf", with: "non-shelf"
-      click_button "Save"
+      click_button "Submit"
       expect(current_path).to eq(check_trays_new_path)
       expect(page).to have_content "barcode is not a shelf"
     end
@@ -50,7 +50,7 @@ feature "Trays on Shelf", type: :feature do
       item2
       visit check_trays_new_path
       fill_in "Shelf", with: shelf.barcode
-      click_button "Save"
+      click_button "Submit"
       expect(page).to have_content tray.barcode
       expect(page).to have_content tray.items.count
     end
@@ -62,9 +62,9 @@ feature "Trays on Shelf", type: :feature do
       item2
       visit check_trays_new_path
       fill_in "Shelf", with: shelf.barcode
-      click_button "Save"
+      click_button "Submit"
       fill_in "Tray", with: shelf.barcode
-      click_button "Save"
+      click_button "Submit"
       expect(page).to have_content "Barcode \"#{shelf.barcode}\" is not valid, please re-scan."
     end
 
@@ -76,9 +76,9 @@ feature "Trays on Shelf", type: :feature do
       bad_barcode = tray.barcode + "1"
       visit check_trays_new_path
       fill_in "Shelf", with: shelf.barcode
-      click_button "Save"
+      click_button "Submit"
       fill_in "Tray", with: bad_barcode
-      click_button "Save"
+      click_button "Submit"
       expect(page).to have_content "Barcode #{bad_barcode} not found. Put item with barcode #{bad_barcode} on problem shelf."
     end
 
@@ -90,9 +90,9 @@ feature "Trays on Shelf", type: :feature do
       item2
       visit check_trays_new_path
       fill_in "Shelf", with: shelf.barcode
-      click_button "Save"
+      click_button "Submit"
       fill_in "Tray", with: bad_tray.barcode
-      click_button "Save"
+      click_button "Submit"
       expect(page).to have_content "Barcode #{bad_tray.barcode} is not associated to this shelf. Put tray with barcode #{bad_tray.barcode} on problem shelf."
     end
   end
