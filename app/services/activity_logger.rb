@@ -62,6 +62,10 @@ class ActivityLogger
     call(action: "CreatedItem", item: item, user: user)
   end
 
+  def self.create_tray(tray:, user:)
+    call(action: "CreatedTray", tray: tray, user: user)
+  end
+
   def self.create_transfer(shelf:, transfer:, user:)
     call(action: "CreatedTransfer", shelf: shelf, transfer: transfer, user: user)
   end

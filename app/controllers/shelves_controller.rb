@@ -119,4 +119,32 @@ class ShelvesController < ApplicationController
       return
     end
   end
+
+  def validate_trays
+    @shelf = Shelf.find(params[:id])
+    tray_barcode = params[:barcode]
+    tray = Tray.where(barcode: tray_barcode).take
+    @scanned = params[:scanned].present? ? params[:scanned] : []
+
+    if tray.nil?
+      if IsTrayBarcode.call(tray_barcode)
+        flash[:error] = I18n.t("errors.barcode_not_found", barcode: tray_barcode)
+        tray = Tray.create!(barcode: tray_barcode)
+        ActivityLogger.create_tray(tray: tray, user: current_user)
+      else
+        flash[:error] = I18n.t("errors.barcode_not_valid", barcode: tray_barcode)
+      end
+      render :check_trays
+      return
+    end
+
+    if @shelf.trays.include?(tray)
+      @scanned.push(tray_barcode)
+    else
+      but_message = tray.shelf.present? ? "but is associated with shelf '#{tray.shelf.barcode}'" : "but is not associated with a shelf."
+      flash[:error] = I18n.t("errors.barcode_not_associated_to_shelf", barcode: tray_barcode)
+    end
+
+    render :check_trays
+  end
 end
