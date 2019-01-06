@@ -26,6 +26,6 @@
         - class_name = "check-trays-success"
 
       %tr{ class: class_name }
-        %td= link_to tray.barcode, tray_detail_path(tray.barcode)
+        %td= link_to tray.barcode, check_items_path(tray.barcode)
         %td= tray.items.count
 = button_to "Done", check_trays_new_path, method: :get, class: 'btn pull-right btn-primary'
