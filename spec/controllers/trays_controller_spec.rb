@@ -72,7 +72,7 @@ RSpec.describe TraysController, :type => :controller do
   end
 
   describe "GET check_items" do
-    subject { get :check_items, tray: { barcode: "12345" } }
+    subject { get :check_items, barcode: "12345" }
 
     it "returns http success" do
       subject
@@ -92,9 +92,9 @@ RSpec.describe TraysController, :type => :controller do
   end
 
   describe "POST validate_items" do
-    let(:tray) { instance_double(Tray, items: [item], barcode: "tray barcode") }
-    let(:item) { instance_double(Item, save!: true) }
-    subject { post :validate_items, id: 1, barcode: "barcode" }
+    let(:tray) { FactoryGirl.create(:tray) }
+    let(:item) { FactoryGirl.create(:item, tray: tray) }
+    subject { get :validate_items, barcode: tray.barcode }
 
     before(:each) do
       allow(Tray).to receive(:find).and_return(tray)
@@ -121,13 +121,14 @@ RSpec.describe TraysController, :type => :controller do
 
     context "for an invalid barcode" do
       it "flashes an error" do
-        post :validate_items, id: 1, barcode: "invalid barcode"
+        post :validate_items, barcode: 1, item_barcode: "invalid barcode"
         expect(flash[:error]).to include("invalid barcode")
       end
     end
 
     context "for a valid barcode thats not found" do
-      subject { post :validate_items, id: 1, barcode: "valid barcode" }
+      let(:tray) { FactoryGirl.create(:tray) }
+      subject { post :validate_items, barcode: tray.barcode, item_barcode: "valid barcode" }
 
       before(:each) do
         allow(IsValidItem).to receive(:call).and_return(true)
@@ -169,9 +170,10 @@ RSpec.describe TraysController, :type => :controller do
       let(:tray) { instance_double(Tray, items: [], barcode: "tray barcode") }
       let(:other_tray) { instance_double(Tray, barcode: "other tray barcode") }
       let(:item) { instance_double(Item, tray: tray) }
-      subject { post :validate_items, id: 1, barcode: "valid item barcode" }
+      subject { post :validate_items, barcode: tray.barcode, item_barcode: "valid item barcode" }
 
       before(:each) do
+        allow(Tray).to receive(:where).and_return(double(Object, take: tray))
         allow(Item).to receive(:where).and_return(double(Object, take: item))
         allow(AddIssue).to receive(:call)
       end
@@ -197,17 +199,13 @@ RSpec.describe TraysController, :type => :controller do
     end
 
     context "for a valid item that is associated to the tray" do
-      let(:tray) { instance_double(Tray, items: [item], barcode: "tray barcode") }
-      let(:item) { instance_double(Item) }
-      subject { post :validate_items, id: 1, barcode: "valid item barcode" }
-
-      before(:each) do
-        allow(Item).to receive(:where).and_return(double(Object, take: item))
-      end
+      let(:tray) { FactoryGirl.create(:tray) }
+      let(:item) { FactoryGirl.create(:item, tray: tray) }
+      subject { post :validate_items, barcode: tray.barcode, item_barcode: item.barcode }
 
       it "adds the item's barcode to the scanned list" do
         subject
-        expect(assigns(:scanned)).to eq(["valid item barcode"])
+        expect(assigns(:scanned)).to eq([item.barcode])
       end
     end
   end

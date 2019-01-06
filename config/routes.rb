@@ -35,8 +35,9 @@ Rails.application.routes.draw do
   post "trays/items/:id/count_items", to: "trays#count_items", as: "validate_count_tray"
 
   get "trays/check_items", to: "trays#check_items_new", as: "check_items_new"
-  post "trays/check_items", to: "trays#check_items", as: "check_items"
-  post "trays/check_items/:id", to: "trays#validate_items", as: "check_items_validate"
+  post "trays/check_items", to: "trays#check_items_find", as: "check_items_find"
+  get "trays/check_items/:barcode", to: "trays#check_items", as: "check_items"
+  post "trays/check_items/:barcode", to: "trays#validate_items", as: "check_items_validate"
 
   post "trays/:id/withdraw", to: "trays#withdraw", as: "withdraw_tray"
 

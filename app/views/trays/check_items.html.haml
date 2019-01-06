@@ -1,14 +1,15 @@
 .scan
-  = form_tag check_items_validate_path(@tray) do
+  = form_tag check_items_validate_path(barcode: @tray.barcode) do
     - if @tray.errors.any?
       #error_explanation
         %h2= "#{pluralize(@tray.errors.count, "error")} prohibited this tray from being saved:"
         %ul
           - @tray.errors.full_messages.each do |msg|
             %li= msg
+    = hidden_field_tag :id, @tray.id
     .field
-      = label_tag :barcode, "Item"
-      = text_field_tag :barcode, '', autofocus: true
+      = label_tag :item_barcode, "Item"
+      = text_field_tag :item_barcode, '', autofocus: true
       - @scanned.each do |scan|
         = hidden_field_tag "scanned[]", scan
     .actions
