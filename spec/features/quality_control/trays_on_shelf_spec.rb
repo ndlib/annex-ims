@@ -55,6 +55,18 @@ feature "Trays on Shelf", type: :feature do
       expect(page).to have_content tray.items.count
     end
 
+    it "connects to a tray qc page" do
+      shelf
+      tray
+      item1
+      item2
+      visit check_trays_new_path
+      fill_in "Shelf", with: shelf.barcode
+      click_button "Submit"
+      click_link tray.barcode
+      expect(current_path).to eq(check_items_path(tray.barcode))
+    end
+
     it "rejects non-tray barcodes" do
       shelf
       tray

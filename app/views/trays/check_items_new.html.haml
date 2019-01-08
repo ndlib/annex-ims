@@ -1,5 +1,5 @@
 .scan
-  = form_for @tray, url: check_items_path(@tray) do |f|
+  = form_for(@tray, url: check_items_find_path) do |f|
     - if @tray.errors.any?
       #error_explanation
         %h2= "#{pluralize(@tray.errors.count, "error")} prohibited this operation:"

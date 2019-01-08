@@ -230,14 +230,26 @@ class TraysController < ApplicationController
     @tray = Tray.new
   end
 
+  def check_items_find
+    begin
+      @tray = Tray.where(barcode: params[:tray][:barcode]).take
+    rescue StandardError => e
+      Raven.capture_exception(e)
+      flash[:error] = e.message
+      redirect_to check_items_new_path
+      return
+    end
+    redirect_to check_items_path(barcode: @tray.barcode)
+  end
+
   def check_items
-    @tray = Tray.where(barcode: params[:tray][:barcode]).take
+    @tray = Tray.where(barcode: params[:barcode]).take
     @scanned = []
   end
 
   def validate_items
-    @tray = Tray.find(params[:id])
-    item_barcode = params[:barcode]
+    @tray = Tray.where(barcode: params[:barcode]).take
+    item_barcode = params[:item_barcode]
     item = Item.where(barcode: item_barcode).take
     @scanned = params[:scanned].present? ? params[:scanned] : []
 
