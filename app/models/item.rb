@@ -49,13 +49,13 @@ class Item < ActiveRecord::Base
     date :initial_ingest
     date :last_ingest
     text :tray_barcode do
-      !tray.blank? ? tray.barcode : nil
+      !tray.blank? ? tray.barcode.sub(/-/,'') : nil
     end
     text :shelf_barcode do
-      !shelf.blank? ? shelf.barcode : nil
+      !shelf.blank? ? shelf.barcode.sub(/-/,'') : nil
     end
     string :bin_barcode do
-      !bin.blank? ? bin.barcode : nil
+      !bin.blank? ? bin.barcode(/-/,'') : nil
     end
     date :requested, multiple: true do
       requests.map &:requested
