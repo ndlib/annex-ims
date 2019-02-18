@@ -29,6 +29,9 @@ group :application do
   gem "bootstrap-sass", "~> 3.3.5"
   gem "autoprefixer-rails"
 
+  # for a progress bar
+  gem "bootstrap_progressbar"
+
   # Someone already Rails-ified a nice datepicker for Bootstrap
   gem "bootstrap-datepicker-rails"
 

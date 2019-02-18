@@ -25,6 +25,10 @@
     .actions
       = submit_tag 'Save', class: 'btn btn-primary'
 %br
+%span.pull-right= "#{@used} / #{@capacity}"
+%br
+= progress_bar @progress, alternative: @style
+%br
 = button_to "Done", count_tray_item_path, method: :get,
   class: 'btn pull-right btn-primary'
 %table.table.table-striped.condensed{"data-toggle" => "table"}

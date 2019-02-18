@@ -129,6 +129,10 @@ class TraysController < ApplicationController
 
   def show_item
     @tray = Tray.find(params[:id])
+    @used = @tray.used
+    @capacity = @tray.capacity
+    @progress = @used.to_f / @capacity.to_f
+    @style = @tray.style
     @size = TraySize.call(@tray.barcode)
     @barcode = params[:barcode]
     @thickness = params[:thickness]
