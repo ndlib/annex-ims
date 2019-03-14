@@ -55,7 +55,7 @@ class Item < ActiveRecord::Base
       !shelf.blank? ? shelf.barcode.sub(/-/,'') : nil
     end
     string :bin_barcode do
-      !bin.blank? ? bin.barcode(/-/,'') : nil
+      !bin.blank? ? bin.barcode.sub(/-/,'') : nil
     end
     date :requested, multiple: true do
       requests.map &:requested
