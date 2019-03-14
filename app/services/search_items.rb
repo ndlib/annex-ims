@@ -60,9 +60,15 @@ class SearchItems
       if search_fulltext?
         # remove the special character '-' because they screw with isbn queries
         # we may also want to consider removing other special chars eg. *,+,"
-        criteria = fetch(:criteria).gsub(/[\-\.]/, "")
-        fulltext(criteria, fields: fulltext_fields) do
-          minimum_match "75%"
+        isbn_criteria = fetch(:criteria).gsub(/[\-\.]/, "")
+        criteria = fetch(:criteria)
+        any do
+          fulltext(isbn_criteria, fields: fulltext_fields) do
+            minimum_match "75%"
+          end
+          fulltext(criteria, fields: fulltext_fields) do
+            minimum_match "75%"
+          end
         end
       end
 
@@ -148,6 +154,7 @@ class SearchItems
   def fulltext_field_to_symbol
     if fetch(:criteria_type) == "any"
       [:barcode, :bib_number, :call_number, :isbn_issn, :title, :author, :tray_barcode, :shelf_barcode]
+      # [:barcode, :bib_number, :call_number, :isbn_issn, :title, :author]
     elsif fetch(:criteria_type) == "tray"
       :tray_barcode
     elsif fetch(:criteria_type) == "shelf"
