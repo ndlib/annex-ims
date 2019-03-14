@@ -22,13 +22,12 @@
         = text_field_tag :barcode, nil, autofocus: "autofocus", required: true
       - else
         = text_field_tag :barcode, nil, required: true
+      %span.pull-right{id: 'used'}= "#{@used} / #{@capacity}"
     .actions
       = submit_tag 'Save', class: 'btn btn-primary'
-%br
-%span.pull-right= "#{@used} / #{@capacity}"
-%br
-= progress_bar @progress, alternative: @style
-%br
+      = progress_bar @progress, alternative: @style, style: 'min-width: 75%',
+      class: 'pull-right'
+%span{clear: 'both'}
 = button_to "Done", count_tray_item_path, method: :get,
   class: 'btn pull-right btn-primary'
 %table.table.table-striped.condensed{"data-toggle" => "table"}
