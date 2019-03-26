@@ -36,7 +36,7 @@ class SearchItems
   end
 
   def search!
-    (search_fulltext? || search_conditions? || search_date?) ? search_results : empty_results
+    (search_fulltext? || search_conditions? || search_tray? || search_date?) ? search_results : empty_results
   end
 
   private
@@ -57,18 +57,17 @@ class SearchItems
 
       paginate page: page, per_page: per_page
 
+      if search_tray?
+        criteria = fetch(:criteria)
+        with(:tray_barcode, criteria)
+      end
+
       if search_fulltext?
         # remove the special character '-' because they screw with isbn queries
         # we may also want to consider removing other special chars eg. *,+,"
-        isbn_criteria = fetch(:criteria).gsub(/[\-\.]/, "")
-        criteria = fetch(:criteria)
-        any do
-          fulltext(isbn_criteria, fields: fulltext_fields) do
-            minimum_match "75%"
-          end
-          fulltext(criteria, fields: fulltext_fields) do
-            minimum_match "75%"
-          end
+        criteria = fetch(:criteria).gsub(/[\-\.]/, "")
+        fulltext(criteria, fields: fulltext_fields) do
+          minimum_match "75%"
         end
       end
 
@@ -139,6 +138,10 @@ class SearchItems
     filter?(:conditions) && filter?(:condition_bool)
   end
 
+  def search_tray?
+    filter?(:criteria_type) && (fetch(:criteria_type) == 'tray') && filter?(:criteria)
+  end
+
   def search_date?
     filter?(:date_type) && (filter?(:start) || filter?(:finish)) && date_field.present?
   end
@@ -153,10 +156,11 @@ class SearchItems
 
   def fulltext_field_to_symbol
     if fetch(:criteria_type) == "any"
-      [:barcode, :bib_number, :call_number, :isbn_issn, :title, :author, :tray_barcode, :shelf_barcode]
-      # [:barcode, :bib_number, :call_number, :isbn_issn, :title, :author]
+      [:barcode, :bib_number, :call_number, :isbn_issn, :title, :author, :shelf_barcode]
+      # [:barcode, :bib_number, :call_number, :isbn_issn, :title, :author, :tray_barcode, :shelf_barcode]
     elsif fetch(:criteria_type) == "tray"
-      :tray_barcode
+      nil
+    #   :tray_barcode
     elsif fetch(:criteria_type) == "shelf"
       :shelf_barcode
     else
