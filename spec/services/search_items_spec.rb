@@ -168,12 +168,7 @@ RSpec.describe SearchItems, search: true do
         item.shelf = FactoryGirl.create(:shelf)
         filter[:criteria] = item.shelf.barcode
         subject
-        expect(Sunspot.session).to have_search_params(:fulltext) {
-          fulltext(cleanFulltext(item.shelf.barcode),
-                   fields:  [:shelf_barcode]) do
-            minimum_match "75%"
-          end
-        }
+        expect(Sunspot.session).to have_search_params(:with, :shelf_barcode, item.shelf.barcode)
       end
     end
   end
