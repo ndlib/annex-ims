@@ -13,4 +13,28 @@ class Tray < ActiveRecord::Base
       errors.add(:barcode, "must begin with #{IsTrayBarcode::PREFIX}")
     end
   end
+
+  # This is a hack until AIMS-472 is done
+  def capacity
+    size = TraySize.call(barcode)
+    capacity = TrayFull::TRAY_LIMIT[size] + buffer
+  end
+
+  def buffer
+    (items.count < 10) ? items.count : 10
+  end
+
+  def used
+    items.sum(:thickness)
+  end
+
+  # Not entirely sure this is where this should go
+  def style
+    result = case used
+      when 0..capacity then 'success'
+      when capacity..(capacity + buffer - 1) then 'warning'
+      else 'danger'
+    end
+    result
+  end
 end

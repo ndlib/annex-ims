@@ -2,7 +2,7 @@ source "https://rubygems.org"
 
 group :application do
   # Bundle edge Rails instead: gem "rails", github: "rails/rails"
-  gem "rails", "~> 4.2.11"
+  gem "rails", "~> 4.2.11.1"
   # Use postgresql as the database for Active Record
   gem "pg", "~> 0.18.2"
   # Use SCSS for stylesheets
@@ -28,6 +28,9 @@ group :application do
   # Use Bootstrap because I"m not a designer
   gem "bootstrap-sass", "~> 3.3.5"
   gem "autoprefixer-rails"
+
+  # for a progress bar
+  gem "bootstrap_progressbar"
 
   # Someone already Rails-ified a nice datepicker for Bootstrap
   gem "bootstrap-datepicker-rails"

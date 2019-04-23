@@ -659,6 +659,8 @@ feature "Trays", type: :feature do
       fill_in "Thickness", with: Faker::Number.number(1)
       click_button "Save"
       expect(current_path).to eq(show_tray_item_path(id: tray.id))
+      expect(page.find(".progress-bar")[:class].include?("progress-bar-success")).to eq true
+      expect(page).to have_content "#{tray.used} / #{tray.capacity}"
       expect(page).to have_content item.barcode
       fill_in "Item", with: tray.barcode
       click_button "Save"
@@ -692,6 +694,8 @@ feature "Trays", type: :feature do
         click_button "Save"
       end
       expect(page).to have_content 'warning - tray may be full'
+      expect(page.find(".progress-bar")[:class].include?("progress-bar-danger")).to eq true
+      expect(page).to have_content "#{tray.used} / #{tray.capacity}"
     end
   end
 end
