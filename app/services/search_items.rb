@@ -36,7 +36,13 @@ class SearchItems
   end
 
   def search!
-    (search_fulltext? || search_conditions? || search_date?) ? search_results : empty_results
+    (
+      search_fulltext? ||
+      search_conditions? ||
+      search_tray? ||
+      search_shelf? ||
+      search_date?
+    ) ? search_results : empty_results
   end
 
   private
@@ -56,6 +62,16 @@ class SearchItems
       end
 
       paginate page: page, per_page: per_page
+
+      if search_tray?
+        criteria = fetch(:criteria)
+        with(:tray_barcode, criteria)
+      end
+
+      if search_shelf?
+        criteria = fetch(:criteria)
+        with(:shelf_barcode, criteria)
+      end
 
       if search_fulltext?
         # remove the special character '-' because they screw with isbn queries
@@ -133,6 +149,14 @@ class SearchItems
     filter?(:conditions) && filter?(:condition_bool)
   end
 
+  def search_tray?
+    filter?(:criteria_type) && (fetch(:criteria_type) == 'tray') && filter?(:criteria)
+  end
+
+  def search_shelf?
+    filter?(:criteria_type) && (fetch(:criteria_type) == 'shelf') && filter?(:criteria)
+  end
+
   def search_date?
     filter?(:date_type) && (filter?(:start) || filter?(:finish)) && date_field.present?
   end
@@ -147,11 +171,11 @@ class SearchItems
 
   def fulltext_field_to_symbol
     if fetch(:criteria_type) == "any"
-      [:barcode, :bib_number, :call_number, :isbn_issn, :title, :author, :tray_barcode, :shelf_barcode]
+      [:barcode, :bib_number, :call_number, :isbn_issn, :title, :author]
     elsif fetch(:criteria_type) == "tray"
-      :tray_barcode
+      nil
     elsif fetch(:criteria_type) == "shelf"
-      :shelf_barcode
+      nil
     else
       fetch(:criteria_type).to_sym
     end

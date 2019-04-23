@@ -48,10 +48,10 @@ class Item < ActiveRecord::Base
     string :conditions, multiple: true
     date :initial_ingest
     date :last_ingest
-    text :tray_barcode do
+    string :tray_barcode do
       !tray.blank? ? tray.barcode : nil
     end
-    text :shelf_barcode do
+    string :shelf_barcode do
       !shelf.blank? ? shelf.barcode : nil
     end
     string :bin_barcode do

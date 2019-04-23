@@ -93,7 +93,11 @@ RSpec.describe SearchItems, search: true do
           allow(item).to receive(field).and_return(value)
           filter[:criteria] = item.send(field)
           subject
-          expect(Sunspot.session).to have_search_params(:fulltext, value)
+          expect(Sunspot.session).to have_search_params(:fulltext) {
+            fulltext(cleanFulltext(value)) do
+              minimum_match "75%"
+            end
+          }
         end
       end
 
@@ -101,14 +105,22 @@ RSpec.describe SearchItems, search: true do
         item.tray = FactoryGirl.create(:tray)
         filter[:criteria] = item.tray.barcode
         subject
-        expect(Sunspot.session).to have_search_params(:fulltext, cleanFulltext(item.tray.barcode))
+        expect(Sunspot.session).to have_search_params(:fulltext) {
+          fulltext(cleanFulltext(item.tray.barcode)) do
+            minimum_match "75%"
+          end
+        }
       end
 
       it "searches the shelf barcode" do
         item.shelf = FactoryGirl.create(:shelf)
         filter[:criteria] = item.shelf.barcode
         subject
-        expect(Sunspot.session).to have_search_params(:fulltext, cleanFulltext(item.shelf.barcode))
+        expect(Sunspot.session).to have_search_params(:fulltext) {
+          fulltext(cleanFulltext(item.shelf.barcode)) do
+            minimum_match "75%"
+          end
+        }
       end
     end
 
@@ -128,7 +140,12 @@ RSpec.describe SearchItems, search: true do
           allow(item).to receive(criteria_type_field).and_return(value)
           filter[:criteria] = item.send(criteria_type_field)
           subject
-          expect(Sunspot.session).to have_search_params(:fulltext, value, fields: [criteria_type_field])
+          expect(Sunspot.session).to have_search_params(:fulltext) {
+            fulltext(cleanFulltext(value),
+                     fields:  [criteria_type_field]) do
+              minimum_match "75%"
+            end
+          }
         end
       end
     end
@@ -140,7 +157,7 @@ RSpec.describe SearchItems, search: true do
         item.tray = FactoryGirl.create(:tray)
         filter[:criteria] = item.tray.barcode
         subject
-        expect(Sunspot.session).to have_search_params(:fulltext, cleanFulltext(item.tray.barcode), fields: [:tray_barcode])
+        expect(Sunspot.session).to have_search_params(:with, :tray_barcode, item.tray.barcode)
       end
     end
 
@@ -151,7 +168,7 @@ RSpec.describe SearchItems, search: true do
         item.shelf = FactoryGirl.create(:shelf)
         filter[:criteria] = item.shelf.barcode
         subject
-        expect(Sunspot.session).to have_search_params(:fulltext, cleanFulltext(item.shelf.barcode), fields: [:shelf_barcode])
+        expect(Sunspot.session).to have_search_params(:with, :shelf_barcode, item.shelf.barcode)
       end
     end
   end
