@@ -77,6 +77,7 @@ en:
     trays_missing: "Item Missing"
     trays_invalid: "Item Invalid"
     trays_tray_detail: "Tray Detail"
+    tray_types_index: "Manage Tray Types"
     shelves_index: "Item Direct to Shelf"
     shelves_show: "Add Items to Shelf"
     shelves_shelf_detail: "Shelf Detail"

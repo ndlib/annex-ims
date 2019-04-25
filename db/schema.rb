@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171016015953) do
+ActiveRecord::Schema.define(version: 20190407173650) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -178,16 +178,29 @@ ActiveRecord::Schema.define(version: 20171016015953) do
   add_index "tray_issues", ["resolver_id"], name: "index_tray_issues_on_resolver_id", using: :btree
   add_index "tray_issues", ["user_id"], name: "index_tray_issues_on_user_id", using: :btree
 
+  create_table "tray_types", force: :cascade do |t|
+    t.string   "code",                            null: false
+    t.integer  "trays_per_shelf",                 null: false
+    t.boolean  "unlimited",       default: false, null: false
+    t.integer  "height",                          null: false
+    t.integer  "capacity",                        null: false
+    t.boolean  "active",          default: true,  null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+  end
+
   create_table "trays", force: :cascade do |t|
-    t.string   "barcode",                    null: false
+    t.string   "barcode",                      null: false
     t.integer  "shelf_id"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
-    t.boolean  "shelved",    default: false, null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+    t.boolean  "shelved",      default: false, null: false
+    t.integer  "tray_type_id"
   end
 
   add_index "trays", ["barcode"], name: "index_trays_on_barcode", unique: true, using: :btree
   add_index "trays", ["shelf_id"], name: "index_trays_on_shelf_id", using: :btree
+  add_index "trays", ["tray_type_id"], name: "index_trays_on_tray_type_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "username",                           null: false
@@ -218,4 +231,5 @@ ActiveRecord::Schema.define(version: 20171016015953) do
   add_foreign_key "tray_issues", "users"
   add_foreign_key "tray_issues", "users", column: "resolver_id"
   add_foreign_key "trays", "shelves"
+  add_foreign_key "trays", "tray_types"
 end

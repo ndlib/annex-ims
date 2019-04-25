@@ -1,0 +1,33 @@
+%h1 Listing tray types
+
+%table.table
+  %tr
+    %th Code
+    %th Trays per shelf
+    %th Unlimited
+    %th Height
+    %th Capacity
+    %th Active
+    %th
+    %th
+    %th
+
+  - @tray_types.each do |tray_type|
+    %tr
+      %td= tray_type.code
+      %td= tray_type.trays_per_shelf
+      %td= tray_type.unlimited
+      %td= tray_type.height
+      %td= tray_type.capacity
+      %td= tray_type.active
+      %td= link_to 'Show', tray_type, method: :get, class: 'btn btn-primary'
+      %td= link_to 'Edit', edit_tray_type_path(tray_type), method: :get, class: 'btn'
+      %td
+        - if tray_type.active?
+          = button_to 'Deactivate', activation_tray_type_path(tray_type), method: :post, class: 'btn btn-danger'
+        - else
+          = button_to 'Reactivate', activation_tray_type_path(tray_type), method: :post, class: 'btn btn-success'
+
+%br
+
+= link_to 'New Tray type', new_tray_type_path

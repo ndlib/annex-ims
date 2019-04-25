@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
 
+  resources :tray_types do
+    member do
+      post 'activation'
+    end
+  end
+
   resources :dispositions do
     member do
       post 'activation'
