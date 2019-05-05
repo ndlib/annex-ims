@@ -3,6 +3,7 @@ require 'rails_helper'
 feature "Trays", type: :feature do
   include AuthenticationHelper
 
+  let(:tray_type) { FactoryGirl.create(:tray_type) }
   let(:tray_barcode) { "TRAY-AL1234" }
   let(:tray) { FactoryGirl.create(:tray, barcode: tray_barcode) }
   let(:item) { FactoryGirl.create(:item, barcode: rand.to_s[2..15]) }
@@ -11,6 +12,7 @@ feature "Trays", type: :feature do
 
   describe "when signed in" do
     before(:each) do
+      tray_type
       login_admin
 
       stub_request(:get, api_item_url(item)).
