@@ -10,6 +10,7 @@ class TrayFull
   end
 
   def full?
+    return false if @tray.tray_type.unlimited
     size = TraySize.call(@tray.barcode)
     buffer = (@tray.items.count < 10) ? @tray.items.count : 10
     capacity = @tray.tray_type.capacity + buffer
