@@ -101,3 +101,4 @@
               %td= record.data['request']['trans']
               %td= record.action_timestamp.strftime("%m-%d-%Y %I:%M%p")
               %td= record.username
+  = button_to "Get Updated Record", item_refresh_path(:barcode => @item.barcode), method: :post, class: 'btn pull-left btn-primary'

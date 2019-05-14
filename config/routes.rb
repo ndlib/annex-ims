@@ -64,6 +64,7 @@ Rails.application.routes.draw do
   get "items/detail/:barcode", to: "items#item_detail", as: "item_detail"
   post "items/:id/restock", to: "items#restock", as: "item_restock"
   get "items/:id/wrong_restock", to: "items#wrong_restock", as: "wrong_restock"
+  post "items/:barcode/refresh", to: "items#refresh", as: "item_refresh"
 
   get "search", to: "search#index", as: "search"
 
