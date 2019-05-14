@@ -78,6 +78,8 @@ en:
     trays_invalid: "Item Invalid"
     trays_tray_detail: "Tray Detail"
     tray_types_index: "Manage Tray Types"
+    tray_types_edit: "Edit Tray Type"
+    tray_types_show: "Show Tray Type"
     shelves_index: "Item Direct to Shelf"
     shelves_show: "Add Items to Shelf"
     shelves_shelf_detail: "Shelf Detail"

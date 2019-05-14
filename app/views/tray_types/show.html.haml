@@ -19,6 +19,5 @@
   %b Active:
   = @tray_type.active
 
-= button_to 'Edit', edit_tray_type_path(@tray_type), method: :get, class: 'btn btn-primary'
-\|
-= button_to 'Back', tray_types_path, method: :get, class: 'btn btn-danger'
+= button_to 'Edit', edit_tray_type_path(@tray_type), method: :get, class: 'btn pull-left btn-primary'
+= button_to 'Back', tray_types_path, method: :get, class: 'btn pull-right btn-danger'
