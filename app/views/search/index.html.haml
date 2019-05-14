@@ -3,7 +3,7 @@
 %hr
 = "#{@total} results found"
 .itemsearch
-  %table.table.table-striped.condensed
+  %table.table.table-striped.condensed.datatable{"id" => "items"}
     %thead
       %tr
         %th= 'Barcode'
@@ -29,3 +29,7 @@
           %td= item.conditions.present? ? item.conditions.join(", ") : ''
 - if !@results.blank?
   = paginate @results
+:javascript
+    $(document).ready(function() {
+      window.table = $('#items').DataTable({ "stateSave": true });
+    } );
