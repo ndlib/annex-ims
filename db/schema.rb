@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190407173650) do
+ActiveRecord::Schema.define(version: 20190517155503) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -183,11 +183,13 @@ ActiveRecord::Schema.define(version: 20190407173650) do
     t.integer  "trays_per_shelf",                 null: false
     t.boolean  "unlimited",       default: false, null: false
     t.integer  "height",                          null: false
-    t.integer  "capacity",                        null: false
+    t.integer  "capacity"
     t.boolean  "active",          default: true,  null: false
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
   end
+
+  add_index "tray_types", ["code"], name: "index_tray_types_on_code", unique: true, using: :btree
 
   create_table "trays", force: :cascade do |t|
     t.string   "barcode",                      null: false

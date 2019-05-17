@@ -112,7 +112,7 @@ namespace :annex do
     dl = { trays_per_shelf: 10, height: 12, capacity: 136 }
     eh = { trays_per_shelf: 12, height: 16, capacity: 104 }
     el = { trays_per_shelf: 12, height: 14, capacity: 104 }
-    s = { trays_per_shelf: 1, height: 1, capacity: 100000, unlimited: true }
+    s = { trays_per_shelf: 1, height: 1, capacity: nil, unlimited: true }
     TrayType.create_with(ah).find_or_create_by(code: "AH")
     TrayType.create_with(al).find_or_create_by(code: "AL")
     TrayType.create_with(bh).find_or_create_by(code: "BH")
