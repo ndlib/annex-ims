@@ -14,7 +14,7 @@
     = f.check_box :unlimited, {}, 'true', 'false'
   .field
     = f.label :capacity
-    = f.number_field :capacity
+    = f.number_field :capacity, disabled: @tray_type.unlimited?
   .field
     = f.label :trays_per_shelf
     = f.number_field :trays_per_shelf
@@ -23,3 +23,15 @@
     = f.number_field :height
   .actions
     = f.submit 'Save', class: 'btn btn-primary'
+  :javascript
+      $(document).ready(function() {
+        $("#tray_type_unlimited").click(function() {
+          var unlimited = $("#tray_type_unlimited").prop('checked');
+          if(unlimited) {
+            $("#tray_type_capacity").prop('value', '');
+            $("#tray_type_capacity").prop('disabled', true);
+          } else {
+            $("#tray_type_capacity").removeAttr("disabled");
+          }
+        } );
+      } );
