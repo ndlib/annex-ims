@@ -10,16 +10,16 @@
     = f.label :code
     = f.text_field :code
   .field
-    = f.label :trays_per_shelf
-    = f.number_field :trays_per_shelf
-  .field
     = f.label :unlimited
     = f.check_box :unlimited, {}, 'true', 'false'
   .field
-    = f.label :height
-    = f.number_field :height
-  .field
     = f.label :capacity
     = f.number_field :capacity
+  .field
+    = f.label :trays_per_shelf
+    = f.number_field :trays_per_shelf
+  .field
+    = f.label :height
+    = f.number_field :height
   .actions
     = f.submit 'Save', class: 'btn btn-primary'
