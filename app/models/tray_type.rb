@@ -20,6 +20,11 @@ class TrayType < ActiveRecord::Base
             },
             length: { maximum: 2 }
   validates_presence_of :capacity, if: -> { !unlimited }
+  before_save :null_unlimited_capacity
 
   has_many :trays
+
+  def null_unlimited_capacity
+    self.capacity = nil if self.unlimited
+  end
 end
