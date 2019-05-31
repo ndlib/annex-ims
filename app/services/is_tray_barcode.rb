@@ -1,5 +1,7 @@
 module IsTrayBarcode
-  PREFIX = "(TRAY-)(([A-E][H,L])|(#{IsShelfBarcode::PREFIX}))".freeze
+  codes = TrayType.pluck(:code)
+  codes_str = codes.join(")|(")
+  PREFIX = "(TRAY-)((#{codes_str}))"
   def self.call(barcode)
     (barcode =~ /^#{PREFIX}(.*)/ ) ? true : false
   end

@@ -39,8 +39,7 @@ class Tray < ActiveRecord::Base
   end
 
   def type_code
-    matches = barcode.match(/(?:TRAY-)((?:[A-E][H,L])|(?:SHELF))(?:.*)/)
-    matches[1]
+    TraySize.call(barcode)
   end
 
   def attach_tray_type

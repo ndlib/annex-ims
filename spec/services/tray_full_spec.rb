@@ -4,7 +4,6 @@ RSpec.describe TrayFull do
 
   # These first tests are written on the assumption that size A trays have a capacity of 136. If that changes, these must change.
   it "indicates that a tray that is definitely not full shows as not full" do
-    @tray_type = FactoryGirl.create(:tray_type)
     @tray = FactoryGirl.create(:tray)
     @item = FactoryGirl.create(:item, tray: @tray, thickness: 1)
     results = TrayFull.call(@tray)
@@ -12,7 +11,6 @@ RSpec.describe TrayFull do
   end
 
   it "indicates that a tray that is definitely full shows as full" do
-    @tray_type = FactoryGirl.create(:tray_type)
     @tray = FactoryGirl.create(:tray)
     @items = []
     15.times do
@@ -24,7 +22,6 @@ RSpec.describe TrayFull do
   end
 
   it "indicates that a tray that is barely full shows as full" do
-    @tray_type = FactoryGirl.create(:tray_type)
     @tray = FactoryGirl.create(:tray)
     @items = []
     14.times do
@@ -38,7 +35,6 @@ RSpec.describe TrayFull do
 
   # 11 items should have a capacity of 146, not 147 - add up to 147, it should be full
   it "verifies that the buffer is being used properly" do
-    @tray_type = FactoryGirl.create(:tray_type)
     @tray = FactoryGirl.create(:tray)
     @items = []
     14.times do
@@ -52,7 +48,6 @@ RSpec.describe TrayFull do
 
   # Size E trays are going to be have a different capacity from A-D, 104..
   it "treats different size trays differently, barely full scenario" do
-    @tray_type = FactoryGirl.create(:tray_type, code: "EH", capacity: 104)
     @tray = FactoryGirl.create(:tray, barcode: "TRAY-EH12345")
     @items = []
     11.times do
@@ -65,7 +60,6 @@ RSpec.describe TrayFull do
   end
 
   it "treats different size trays differently, almost full scenario" do
-    @tray_type = FactoryGirl.create(:tray_type, code: "EH", capacity: 104)
     @tray = FactoryGirl.create(:tray, barcode: "TRAY-EH12346")
     @items = []
     11.times do
