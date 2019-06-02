@@ -1,6 +1,11 @@
 require "rails_helper"
 
 RSpec.describe BuildBatch, search: true do
+  before(:all) do
+    FactoryGirl.create(:tray_type, code: "AH")
+    FactoryGirl.create(:tray_type, code: "BL")
+  end
+
   describe "when signed in" do
 
     let(:shelf) { FactoryGirl.create(:shelf) }

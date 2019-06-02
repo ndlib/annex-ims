@@ -65,7 +65,7 @@ class Item < ActiveRecord::Base
 
   def has_correct_prefix?
     if !IsItemBarcode.call(barcode)
-      errors.add(:barcode, "must not begin with #{IsShelfBarcode::PREFIX}, #{IsTrayBarcode::PREFIX}, or #{IsBinBarcode::PREFIX}")
+      errors.add(:barcode, "must not begin with #{IsShelfBarcode::PREFIX}, #{IsTrayBarcode.prefix}, or #{IsBinBarcode::PREFIX}")
     end
   end
 end

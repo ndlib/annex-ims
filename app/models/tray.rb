@@ -12,7 +12,7 @@ class Tray < ActiveRecord::Base
 
   def has_correct_prefix
     if !IsTrayBarcode.call(barcode)
-      errors.add(:barcode, "must begin with #{IsTrayBarcode::PREFIX}")
+      errors.add(:barcode, "must begin with #{IsTrayBarcode.prefix}")
     end
   end
 

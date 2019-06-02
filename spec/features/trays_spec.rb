@@ -3,6 +3,11 @@ require 'rails_helper'
 feature "Trays", type: :feature do
   include AuthenticationHelper
 
+  before(:all) do
+    FactoryGirl.create(:tray_type)
+    FactoryGirl.create(:tray_type, code: "AH")
+  end
+
   let(:tray_barcode) { "TRAY-AL1234" }
   let(:tray) { FactoryGirl.create(:tray, barcode: tray_barcode) }
   let(:item) { FactoryGirl.create(:item, barcode: rand.to_s[2..15]) }

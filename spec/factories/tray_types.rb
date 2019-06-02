@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :tray_type do
-    code "IL"
+    code "AL"
     trays_per_shelf 16
     unlimited false
     height 7
