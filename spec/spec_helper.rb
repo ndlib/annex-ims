@@ -76,6 +76,10 @@ RSpec.configure do |config|
     DatabaseCleaner.clean_with(:truncation)
   end
 
+  config.before(:all) do
+    DatabaseCleaner.clean_with(:truncation)
+  end
+
   config.before(:each) do |example|
     # Feature specs that make use of Capybara's javascript driver can't easily be isolated
     #  within a transaction, so we use the truncation strategy here.
@@ -91,6 +95,10 @@ RSpec.configure do |config|
   end
 
   config.after(:each) do
+    DatabaseCleaner.clean
+  end
+
+  config.after(:all) do
     DatabaseCleaner.clean
   end
 
