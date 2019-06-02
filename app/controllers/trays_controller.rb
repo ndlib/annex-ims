@@ -49,6 +49,10 @@ class TraysController < ApplicationController
       return
     end
 
+    if ShelfFull.call(@tray.tray_type, @tray.shelf)
+      flash[:error] = "warning - shelf may be full"
+    end
+
     redirect_to trays_path
   end
 
