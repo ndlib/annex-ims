@@ -42,12 +42,12 @@ class TrayTypesController < ApplicationController
       if @tray_type.trays.count == 0
         @tray_type.active = false
       else
-        raise 'unable to deactivate tray type with associated trays'
+        flash[:error] = 'unable to deactivate tray type with associated trays'
       end
     else
       @tray_type.active = true
     end
-    @tray_type.save
+    @tray_type.save!
     redirect_to tray_types_path
   end
 

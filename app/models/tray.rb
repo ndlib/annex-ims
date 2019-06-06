@@ -43,6 +43,6 @@ class Tray < ActiveRecord::Base
   end
 
   def attach_tray_type
-    self.tray_type = TrayType.where(code: type_code).take
+    self.tray_type = TrayType.where(code: type_code, active: true).take
   end
 end

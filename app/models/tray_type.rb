@@ -2,7 +2,6 @@ class TrayType < ActiveRecord::Base
   validates :code,
             :trays_per_shelf,
             :height,
-            :active,
             presence: true
   validates :code, uniqueness: true
   validates_inclusion_of :active, :in => [true, false]
