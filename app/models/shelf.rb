@@ -8,6 +8,11 @@ class Shelf < ActiveRecord::Base
   has_many :items, through: :trays
   has_many :location_activity_logs, class_name: "ActivityLog", foreign_key: "location_shelf_id"
 
+  def tray_type
+    return nil if self.trays.count == 0
+    return self.trays.first.tray_type
+  end
+
   def has_correct_prefix
     if !IsShelfBarcode.call(barcode)
       errors.add(:barcode, "must begin with #{IsShelfBarcode::PREFIX}")

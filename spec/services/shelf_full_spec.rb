@@ -5,21 +5,17 @@ RSpec.describe ShelfFull do
     FactoryGirl.create(:tray_type)
   end
 
-  it "indicates that a shelf that is definitely not full shows as not full" do
-    @tray = FactoryGirl.create(:tray)
+  it "indicates that a shelf that is empty shows as empty" do
     @shelf = FactoryGirl.create(:shelf)
-    results = ShelfFull.call(@tray.tray_type, @shelf)
-    expect(results).to eq(false)
+    results = ShelfFull.call(@shelf)
+    expect(results).to eq(ShelfFull::EMPTY)
   end
 
-  it "indicates that a shelf that is definitely full shows as full" do
+  it "indicates that a shelf that is definitely not full shows as not full" do
     @tray = FactoryGirl.create(:tray)
-    @shelf = FactoryGirl.create(:shelf)
-    (@tray.tray_type.trays_per_shelf + 1).times do
-      FactoryGirl.create(:tray, shelf: @shelf)
-    end
-    results = ShelfFull.call(@tray.tray_type, @shelf)
-    expect(results).to eq(true)
+    @shelf = FactoryGirl.create(:shelf, trays: [@tray])
+    results = ShelfFull.call(@shelf)
+    expect(results).to eq(ShelfFull::PARTIAL)
   end
 
   it "indicates that a shelf that is exactly full shows as full" do
@@ -28,7 +24,17 @@ RSpec.describe ShelfFull do
     @tray.tray_type.trays_per_shelf.times do
       FactoryGirl.create(:tray, shelf: @shelf)
     end
-    results = ShelfFull.call(@tray.tray_type, @shelf)
-    expect(results).to eq(true)
+    results = ShelfFull.call(@shelf)
+    expect(results).to eq(ShelfFull::FULL)
+  end
+
+  it "indicates that a shelf that is over full shows as over" do
+    @tray = FactoryGirl.create(:tray)
+    @shelf = FactoryGirl.create(:shelf)
+    (@tray.tray_type.trays_per_shelf + 1).times do
+      FactoryGirl.create(:tray, shelf: @shelf)
+    end
+    results = ShelfFull.call(@shelf)
+    expect(results).to eq(ShelfFull::OVER)
   end
 end

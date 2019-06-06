@@ -1,16 +1,23 @@
 class ShelfFull
-  attr_reader :tray_type, :shelf
+  EMPTY = 0
+  PARTIAL = 1
+  FULL = 2
+  OVER = 3
 
-  def self.call(tray_type, shelf)
-    new(tray_type, shelf).full?
+  attr_reader :shelf
+
+  def self.call(shelf)
+    new(shelf).full?
   end
 
-  def initialize(tray_type, shelf)
-    @tray_type = tray_type
+  def initialize(shelf)
     @shelf = shelf
   end
 
   def full?
-    @shelf.trays.count >= @tray_type.trays_per_shelf
+    return EMPTY if @shelf.trays.count == 0
+    return FULL if @shelf.trays.count == @shelf.tray_type.trays_per_shelf
+    return OVER if @shelf.trays.count > @shelf.tray_type.trays_per_shelf
+    return PARTIAL
   end
 end

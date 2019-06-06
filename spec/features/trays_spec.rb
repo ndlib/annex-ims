@@ -152,7 +152,27 @@ feature "Trays", type: :feature do
         expect(current_path).to eq(trays_path)
       end
 
-      it "warns when a shelf is full" do
+      it "warns when a shelf is exactly full" do
+        @shelf = FactoryGirl.create(:shelf)
+        (tray.tray_type.trays_per_shelf - 1).times do
+          FactoryGirl.create(:tray, shelf: @shelf)
+        end
+        visit trays_path
+        fill_in "Tray", with: tray.barcode
+        click_button "Save"
+        expect(current_path).to eq(show_tray_path(id: tray.id))
+        expect(page).to have_content tray.barcode
+        expect(page).to have_content "STAGING"
+        expect{page.find_by_id("pull")}.to raise_error
+        expect{page.find_by_id("unassign")}.to raise_error
+        fill_in "Shelf", with: @shelf.barcode
+        click_button "Save"
+        expect(current_path).to eq(trays_path)
+
+        expect(page).to have_content 'shelf is full'
+      end
+
+      it "warns when a shelf is over capacity" do
         @shelf = FactoryGirl.create(:shelf)
         tray.tray_type.trays_per_shelf.times do
           FactoryGirl.create(:tray, shelf: @shelf)
@@ -169,7 +189,7 @@ feature "Trays", type: :feature do
         click_button "Save"
         expect(current_path).to eq(trays_path)
 
-        expect(page).to have_content 'warning - shelf may be full'
+        expect(page).to have_content 'shelf is over capacity'
       end
     end
 
