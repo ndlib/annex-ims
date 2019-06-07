@@ -13,6 +13,21 @@ class Shelf < ActiveRecord::Base
     return self.trays.first.tray_type
   end
 
+  # following the questionable pattern from tray.rb
+  def style
+    result = case self.trays.count
+      when 0 then 'black'
+      when 1..(self.tray_type.trays_per_shelf - 1) then 'black'
+      when self.tray_type.trays_per_shelf then 'red'
+      else 'red'
+    end
+    result
+  end
+
+  def capacity
+    tray_type.nil? ? 0 : tray_type.trays_per_shelf
+  end
+
   def has_correct_prefix
     if !IsShelfBarcode.call(barcode)
       errors.add(:barcode, "must begin with #{IsShelfBarcode::PREFIX}")
