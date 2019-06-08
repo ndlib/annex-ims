@@ -2,13 +2,14 @@
   %span
     = "There are no current users."
 - else
-  = form_tag create_users_path, method: "post" do |f|
+  = form_tag create_users_path, id: "create_user", method: "post" do |f|
     %div{ :style => "display: inline-block; width: 100%;" }
       %div{ :style => "float: left;" }
         %input{ name: "user_name", id: "user_name", type: "text",
         required: true }/
       .actions
         = submit_tag 'New User', class: 'btn btn-primary'
+  %br
   %div
   %table.table.table-striped.condensed.datatable{"id" => "users"}
     %thead
@@ -39,5 +40,17 @@
     :javascript
         $(document).ready(function() {
           window.table = $('#users').DataTable();
+          $('div.dataTables_length').parent().addClass('pull-right');
+          $('div.dataTables_length').addClass('pull-right');
+          $('div.dataTables_filter').parent().addClass('pull-left');
+          $('div.dataTables_filter').addClass('pull-left');
           $('div.dataTables_filter input').focus();
+        } );
+    :javascript
+        $('#create_user').submit(function () {
+          username = $("#user_name").val();
+          if (confirm("Create user " + username + "?"))
+            return true;
+          else
+            return false;
         } );
