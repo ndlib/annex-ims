@@ -28,4 +28,10 @@ RSpec.describe Item, type: :model do
       expect(subject.errors[:metadata_status].size).to eq(1)
     end
   end
+
+  it "does not accept barcodes with spaces" do
+    subject.barcode = "12 34567"
+    subject.valid?
+    expect(subject.errors[:barcode].size).to eq(1)
+  end
 end
