@@ -1,6 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe TrayFull do
+  before(:all) do
+    FactoryGirl.create(:tray_type)
+    FactoryGirl.create(:tray_type, code: "EH", capacity: 104)
+  end
 
   # These first tests are written on the assumption that size A trays have a capacity of 136. If that changes, these must change.
   it "indicates that a tray that is definitely not full shows as not full" do
@@ -46,7 +50,7 @@ RSpec.describe TrayFull do
     expect(results).to eq(true)
   end
 
-  # Size E trays are going to be have a different capacity from A-D. I am guessing that to be 30 for now. Adjust accordingly.
+  # Size E trays are going to be have a different capacity from A-D, 104..
   it "treats different size trays differently, barely full scenario" do
     @tray = FactoryGirl.create(:tray, barcode: "TRAY-EH12345")
     @items = []

@@ -49,6 +49,13 @@ class TraysController < ApplicationController
       return
     end
 
+    full = ShelfFull.call(@tray.shelf)
+    if full == ShelfFull::FULL
+      flash[:notice] = "shelf is full"
+    elsif full == ShelfFull::OVER
+      flash[:error] = "shelf is over capacity"
+    end
+
     redirect_to trays_path
   end
 

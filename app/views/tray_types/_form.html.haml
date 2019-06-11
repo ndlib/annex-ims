@@ -1,0 +1,37 @@
+= form_for @tray_type do |f|
+  - if @tray_type.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@tray_type.errors.count, "error")} prohibited this tray_type from being saved:"
+      %ul
+        - @tray_type.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :code
+    = f.text_field :code
+  .field
+    = f.label :unlimited
+    = f.check_box :unlimited, {}, 'true', 'false'
+  .field
+    = f.label :capacity
+    = f.number_field :capacity, disabled: @tray_type.unlimited?
+  .field
+    = f.label :trays_per_shelf
+    = f.number_field :trays_per_shelf
+  .field
+    = f.label :height
+    = f.number_field :height
+  .actions
+    = f.submit 'Save', class: 'btn pull-left btn-primary'
+  :javascript
+      $(document).ready(function() {
+        $("#tray_type_unlimited").click(function() {
+          var unlimited = $("#tray_type_unlimited").prop('checked');
+          if(unlimited) {
+            $("#tray_type_capacity").prop('value', '');
+            $("#tray_type_capacity").prop('disabled', true);
+          } else {
+            $("#tray_type_capacity").removeAttr("disabled");
+          }
+        } );
+      } );

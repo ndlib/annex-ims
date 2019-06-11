@@ -3,6 +3,11 @@ require 'rails_helper'
 feature "Trays", type: :feature do
   include AuthenticationHelper
 
+  before(:all) do
+    FactoryGirl.create(:tray_type)
+    FactoryGirl.create(:tray_type, code: "AH")
+  end
+
   let(:tray_barcode) { "TRAY-AL1234" }
   let(:tray) { FactoryGirl.create(:tray, barcode: tray_barcode) }
   let(:item) { FactoryGirl.create(:item, barcode: rand.to_s[2..15]) }
@@ -145,6 +150,46 @@ feature "Trays", type: :feature do
         fill_in "Shelf", with: shelf.barcode
         click_button "Save"
         expect(current_path).to eq(trays_path)
+      end
+
+      it "warns when a shelf is exactly full" do
+        @shelf = FactoryGirl.create(:shelf)
+        (tray.tray_type.trays_per_shelf - 1).times do
+          FactoryGirl.create(:tray, shelf: @shelf)
+        end
+        visit trays_path
+        fill_in "Tray", with: tray.barcode
+        click_button "Save"
+        expect(current_path).to eq(show_tray_path(id: tray.id))
+        expect(page).to have_content tray.barcode
+        expect(page).to have_content "STAGING"
+        expect{page.find_by_id("pull")}.to raise_error
+        expect{page.find_by_id("unassign")}.to raise_error
+        fill_in "Shelf", with: @shelf.barcode
+        click_button "Save"
+        expect(current_path).to eq(trays_path)
+
+        expect(page).to have_content 'shelf is full'
+      end
+
+      it "warns when a shelf is over capacity" do
+        @shelf = FactoryGirl.create(:shelf)
+        tray.tray_type.trays_per_shelf.times do
+          FactoryGirl.create(:tray, shelf: @shelf)
+        end
+        visit trays_path
+        fill_in "Tray", with: tray.barcode
+        click_button "Save"
+        expect(current_path).to eq(show_tray_path(id: tray.id))
+        expect(page).to have_content tray.barcode
+        expect(page).to have_content "STAGING"
+        expect{page.find_by_id("pull")}.to raise_error
+        expect{page.find_by_id("unassign")}.to raise_error
+        fill_in "Shelf", with: @shelf.barcode
+        click_button "Save"
+        expect(current_path).to eq(trays_path)
+
+        expect(page).to have_content 'shelf is over capacity'
       end
     end
 
@@ -667,7 +712,7 @@ feature "Trays", type: :feature do
       expect(current_path).to eq(trays_items_path)
     end
 
-    it "warns when a try is probably full" do
+    it "warns when a tray is probably full" do
       login_worker
       items = []
       14.times do

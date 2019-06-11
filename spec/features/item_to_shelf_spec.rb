@@ -3,6 +3,11 @@ require 'rails_helper'
 feature "Shelves", :type => :feature do
   include AuthenticationHelper
 
+  before(:all) do
+    FactoryGirl.create(:tray_type, code: "AH")
+    FactoryGirl.create(:tray_type, code: "SHELF", unlimited: true)
+  end
+
   describe "when signed in" do
     before(:each) do
       @shelf = FactoryGirl.create(:shelf)

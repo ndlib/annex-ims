@@ -1,0 +1,23 @@
+%p#notice= notice
+
+%p
+  %b Code:
+  = @tray_type.code
+%p
+  %b Unlimited:
+  = @tray_type.unlimited
+%p
+  %b Capacity:
+  = @tray_type.capacity
+%p
+  %b Trays per shelf:
+  = @tray_type.trays_per_shelf
+%p
+  %b Height:
+  = @tray_type.height
+%p
+  %b Active:
+  = @tray_type.active
+
+= button_to 'Edit', edit_tray_type_path(@tray_type), method: :get, class: 'btn pull-left btn-primary'
+= button_to 'Back', tray_types_path, method: :get, class: 'btn pull-right btn-danger'

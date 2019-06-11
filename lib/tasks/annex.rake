@@ -98,4 +98,39 @@ namespace :annex do
       end
     end
   end
+
+  desc "Populate default tray types"
+  task populate_tray_types: :environment do
+
+    ah = { trays_per_shelf: 16, height: 8, capacity: 136 }
+    al = { trays_per_shelf: 16, height: 7, capacity: 136 }
+    bh = { trays_per_shelf: 14, height: 10, capacity: 136 }
+    bl = { trays_per_shelf: 14, height: 8, capacity: 136 }
+    ch = { trays_per_shelf: 12, height: 12, capacity: 136 }
+    cl = { trays_per_shelf: 12, height: 10, capacity: 136 }
+    dh = { trays_per_shelf: 10, height: 14, capacity: 136 }
+    dl = { trays_per_shelf: 10, height: 12, capacity: 136 }
+    eh = { trays_per_shelf: 12, height: 16, capacity: 104 }
+    el = { trays_per_shelf: 12, height: 14, capacity: 104 }
+    s = { trays_per_shelf: 1, height: 1, capacity: nil, unlimited: true }
+    TrayType.create_with(ah).find_or_create_by(code: "AH")
+    TrayType.create_with(al).find_or_create_by(code: "AL")
+    TrayType.create_with(bh).find_or_create_by(code: "BH")
+    TrayType.create_with(bl).find_or_create_by(code: "BL")
+    TrayType.create_with(ch).find_or_create_by(code: "CH")
+    TrayType.create_with(cl).find_or_create_by(code: "CL")
+    TrayType.create_with(dh).find_or_create_by(code: "DH")
+    TrayType.create_with(dl).find_or_create_by(code: "DL")
+    TrayType.create_with(eh).find_or_create_by(code: "EH")
+    TrayType.create_with(el).find_or_create_by(code: "EL")
+    TrayType.create_with(s).find_or_create_by(code: "SHELF")
+  end
+
+  desc "Assign tray types to trays"
+  task assign_tray_types: :environment do
+
+    Tray.all.each do |tray|
+      tray.save
+    end
+  end
 end

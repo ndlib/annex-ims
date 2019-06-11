@@ -3,6 +3,10 @@ require 'rails_helper'
 feature "Trays on Shelf", type: :feature do
   include AuthenticationHelper
 
+  before(:all) do
+    FactoryGirl.create(:tray_type)
+  end
+
   let!(:shelf) { FactoryGirl.create(:shelf) }
   let!(:tray) { FactoryGirl.create(:tray, shelf: shelf) }
   let!(:bad_tray) { FactoryGirl.create(:tray) }
@@ -53,6 +57,15 @@ feature "Trays on Shelf", type: :feature do
       click_button "Submit"
       expect(page).to have_content tray.barcode
       expect(page).to have_content tray.items.count
+    end
+
+    it "lists a count of trays associated with the shelf" do
+      shelf
+      tray
+      visit check_trays_new_path
+      fill_in "Shelf", with: shelf.barcode
+      click_button "Submit"
+      expect(page).to have_content "#{shelf.barcode}: 1 of #{shelf.capacity}"
     end
 
     it "connects to a tray qc page" do
