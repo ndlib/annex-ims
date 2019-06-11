@@ -61,4 +61,20 @@ class ItemsController < ApplicationController
 
     redirect_to issues_path
   end
+
+  def refresh
+    item_barcode = params[:barcode]
+    if IsValidItem.call(item_barcode)
+      item = Item.where(barcode: item_barcode).take
+      if item.nil?
+        item = Item.create!(barcode: item_barcode, thickness: 0)
+        ActivityLogger.create_item(item: item, user: current_user)
+      end
+      SyncItemMetadata.call(item: item, user_id: current_user.id)
+    else
+      flash[:error] = I18n.t("errors.barcode_not_valid", barcode: item_barcode)
+    end
+
+    redirect_to item_detail_path
+  end
 end
