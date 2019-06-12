@@ -75,6 +75,6 @@ class ItemsController < ApplicationController
       flash[:error] = I18n.t("errors.barcode_not_valid", barcode: item_barcode)
     end
 
-    redirect_to item_detail_path
+    redirect_to item_detail_path(barcode: item_barcode)
   end
 end
