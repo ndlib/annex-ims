@@ -2,15 +2,6 @@
   %span
     = "There are no current users."
 - else
-  = form_tag create_users_path, id: "create_user", method: "post" do |f|
-    %div{ :style => "display: inline-block; width: 100%;" }
-      %div{ :style => "float: left;" }
-        %input{ name: "user_name", id: "user_name", type: "text",
-        required: true }/
-      .actions
-        = submit_tag 'New User', class: 'btn btn-primary'
-  %br
-  %div
   %table.table.table-striped.condensed.datatable{"id" => "users"}
     %thead
       %tr
@@ -37,6 +28,15 @@
                 = hidden_field_tag :user_id, user.id
                 .actions
                   = submit_tag 'Update', class: 'btn btn-primary', id: "user-#{user.id}"
+  %br
+  %div
+  = form_tag create_users_path, id: "create_user", method: "post" do |f|
+    %div{ :style => "display: inline-block; width: 100%;" }
+      %div{ :style => "float: left;" }
+        %input{ name: "user_name", id: "user_name", type: "text",
+        required: true, class: "form_control input-sm" }/
+      .actions
+        = submit_tag 'New User', class: 'btn btn-primary'
     :javascript
         $(document).ready(function() {
           window.table = $('#users').DataTable();
