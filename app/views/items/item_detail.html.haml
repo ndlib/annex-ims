@@ -47,7 +47,7 @@
             %td
               %strong= "Catalog Record:"
             %td
-              %a{ href: Rails.configuration.settings.catalog_link + @item.barcode }
+              %a{ href: Rails.configuration.settings.catalog_link + @item.barcode, target: '_blank' }
                 View Catalog Record
           %tr
             %td
