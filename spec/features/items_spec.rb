@@ -7,8 +7,8 @@ feature "Items", type: :feature do
     before(:each) do
       login_admin
 
-      @tray = FactoryGirl.create(:tray)
       @shelf = FactoryGirl.create(:shelf)
+      @tray = FactoryGirl.create(:tray, shelf: @shelf)
       @tray2 = FactoryGirl.create(:tray)
       @item = FactoryGirl.create(:item, tray: @tray, thickness: 1, title: "The ubiquity of chaos / edited by Saul Krasner.", chron: "Chron")
       @item2 = FactoryGirl.create(:item, tray: @tray2, thickness: 2, title: "The ubiquity of chaos / edited by Saul Krasner.", chron: "Chron")
@@ -140,6 +140,19 @@ feature "Items", type: :feature do
         expect(page).to have_content "Scanned"
         visit item_detail_path(@item2.barcode)
         expect(page).to have_content "Shipped"
+      end
+
+      it "has a link to its shelf" do
+        visit item_detail_path(@item.barcode)
+        click_link "#{@item.tray.shelf.barcode}"
+        # expect(current_path).to eq(check_trays_path(shelf: {barcode: @item.tray.shelf.barcode }))
+        expect(current_path).to eq(check_trays_path)
+      end
+
+      it "has a link to its tray" do
+        visit item_detail_path(@item.barcode)
+        click_link "#{@item.tray.barcode}"
+        expect(current_path).to eq(check_items_path(barcode: @item.tray.barcode))
       end
     end
   end
