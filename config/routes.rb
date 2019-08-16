@@ -57,8 +57,9 @@ Rails.application.routes.draw do
   get "shelves/items/:id/missing", to: "shelves#missing", as: "missing_shelf_item"
 
   get "shelves/check_trays", to: "shelves#check_trays_new", as: "check_trays_new"
-  post "shelves/check_trays", to: "shelves#check_trays", as: "check_trays"
-  post "shelves/check_trays/:id", to: "shelves#validate_trays", as: "check_trays_validate"
+  post "shelves/check_trays", to: "shelves#check_trays_find", as: "check_trays_find"
+  get "shelves/check_trays/:barcode", to: "shelves#check_trays", as: "check_trays"
+  post "shelves/check_trays/:barcode", to: "shelves#validate_trays", as: "check_trays_validate"
 
   get "items", to: "items#index", as: "items"
   get "items/scan", to: "items#scan", as: "scan_item"

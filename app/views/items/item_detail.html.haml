@@ -58,7 +58,7 @@
               - elsif @item.tray.shelf.nil?
                 = 'STAGING'
               - else
-                = link_to @item.tray.shelf.barcode, check_trays_path(shelf: {barcode: @item.tray.shelf.barcode }), method: :post
+                = link_to @item.tray.shelf.barcode, check_trays_path({ barcode: @item.tray.shelf.barcode })
           %tr
             %td
               %strong= "Tray Number:"

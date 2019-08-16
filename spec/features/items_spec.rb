@@ -145,8 +145,7 @@ feature "Items", type: :feature do
       it "has a link to its shelf" do
         visit item_detail_path(@item.barcode)
         click_link "#{@item.tray.shelf.barcode}"
-        # expect(current_path).to eq(check_trays_path(shelf: {barcode: @item.tray.shelf.barcode }))
-        expect(current_path).to eq(check_trays_path)
+        expect(current_path).to eq(check_trays_path(barcode: @item.tray.shelf.barcode))
       end
 
       it "has a link to its tray" do

@@ -108,21 +108,26 @@ class ShelvesController < ApplicationController
     @shelf = Shelf.new
   end
 
-  def check_trays
+  def check_trays_find
     begin
       @shelf = GetShelfFromBarcode.call(params[:shelf][:barcode])
-      @scanned = []
     rescue StandardError => e
       Raven.capture_exception(e)
       flash[:error] = e.message
       redirect_to check_trays_new_path
       return
     end
+    redirect_to check_trays_path(barcode: @shelf.barcode)
+  end
+
+  def check_trays
+    @shelf = Shelf.where(barcode: params[:barcode]).take
+    @scanned = []
   end
 
   def validate_trays
-    @shelf = Shelf.find(params[:id])
-    tray_barcode = params[:barcode]
+    @shelf = Shelf.where(barcode: params[:barcode]).take
+    tray_barcode = params[:tray_barcode]
     tray = Tray.where(barcode: tray_barcode).take
     @scanned = params[:scanned].present? ? params[:scanned] : []
 

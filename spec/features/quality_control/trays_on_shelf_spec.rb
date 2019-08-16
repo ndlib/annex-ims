@@ -36,7 +36,7 @@ feature "Trays on Shelf", type: :feature do
       visit check_trays_new_path
       fill_in "Shelf", with: shelf.barcode
       click_button "Submit"
-      expect(current_path).to eq(check_trays_path)
+      expect(current_path).to eq(check_trays_path(barcode: shelf.barcode))
     end
 
     it "rejects a non-shelf barcode" do
