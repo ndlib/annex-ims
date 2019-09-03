@@ -52,11 +52,21 @@
           %tr
             %td
               %strong= "Shelf Location:"
-            %td= (@item.tray.nil? ? 'STAGING' : (@item.tray.shelf.nil? ? 'STAGING' : @item.tray.shelf.barcode))
+            %td
+              - if @item.tray.nil?
+                = 'STAGING'
+              - elsif @item.tray.shelf.nil?
+                = 'STAGING'
+              - else
+                = link_to @item.tray.shelf.barcode, check_trays_path({ barcode: @item.tray.shelf.barcode })
           %tr
             %td
               %strong= "Tray Number:"
-            %td= (@item.tray.nil? ? 'STAGING' : @item.tray.barcode)
+            %td
+              - if @item.tray.nil?
+                = 'STAGING'
+              - else
+                = link_to @item.tray.barcode, check_items_path(barcode: @item.tray.barcode)
           %tr
             %td
               %strong= "Bin:"

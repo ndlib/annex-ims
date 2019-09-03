@@ -1,5 +1,5 @@
 .scan
-  = form_tag check_trays_validate_path(@shelf) do
+  = form_tag check_trays_validate_path(barcode: @shelf.barcode) do
     - if @shelf.errors.any?
       #error_explanation
         %h2= "#{pluralize(@shelf.errors.count, "error")} prohibited this shelf from being saved:"
@@ -7,8 +7,8 @@
           - @shelf.errors.full_messages.each do |msg|
             %li= msg
     .field
-      = label_tag :barcode, "Tray"
-      = text_field_tag :barcode, '', autofocus: true
+      = label_tag :tray_barcode, "Tray"
+      = text_field_tag :tray_barcode, '', autofocus: true
       - @scanned.each do |scan|
         = hidden_field_tag "scanned[]", scan
     .actions
