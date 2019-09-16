@@ -2,7 +2,6 @@
 
 Rails.application.routes.draw do
   resources :reports
-
   resources :tray_types do
     member do
       post 'activation'

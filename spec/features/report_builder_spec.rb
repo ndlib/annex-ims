@@ -14,6 +14,11 @@ feature "Report Builder", type: :feature do
       expect(page).to have_content "Report Builder"
     end
 
-
+    it "can access the Report Builder page" do
+      click_link "Reports"
+      click_link "Report Builder"
+      expect(current_path).to eq(reports_path)
+      expect(page).to have_content "Report Builder"
+    end
   end
 end
