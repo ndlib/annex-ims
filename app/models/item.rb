@@ -27,6 +27,7 @@ class Item < ActiveRecord::Base
   validates :barcode, uniqueness: true, presence: true
   validates :metadata_status, inclusion: METADATA_STATUSES
   validate :has_correct_prefix?
+  validates_with BarcodeSpaceValidator
 
   belongs_to :tray
   belongs_to :bin
