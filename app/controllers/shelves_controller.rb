@@ -139,13 +139,13 @@ class ShelvesController < ApplicationController
       if IsTrayBarcode.call(tray_barcode)
         errors = build_extras_errors(@extras)
         errors.push(I18n.t("errors.barcode_not_found", barcode: tray_barcode))
-        flash[:error] = errors.join("<br>").html_safe
+        flash.now[:error] = errors.join("<br>").html_safe if errors.count > 0
         tray = Tray.create!(barcode: tray_barcode)
         ActivityLogger.create_tray(tray: tray, user: current_user)
       else
         errors = build_extras_errors(@extras)
         errors.push(I18n.t("errors.barcode_not_valid", barcode: tray_barcode))
-        flash[:error] = errors.join("<br>").html_safe
+        flash.now[:error] = errors.join("<br>").html_safe if errors.count > 0
       end
       render :check_trays
       return
@@ -155,13 +155,13 @@ class ShelvesController < ApplicationController
       @scanned.push(tray_barcode)
       @scanned = @scanned.uniq
       errors = build_extras_errors(@extras)
-      flash[:error] = errors.join("<br>").html_safe
+      flash.now[:error] = errors.join("<br>").html_safe if errors.count > 0
     else
       @extras.push(tray_barcode)
       @extras = @extras.uniq.sort!
       but_message = tray.shelf.present? ? "but is associated with shelf '#{tray.shelf.barcode}'" : "but is not associated with a shelf."
       errors = build_extras_errors(@extras)
-      flash[:error] = errors.join("<br>").html_safe
+      flash.now[:error] = errors.join("<br>").html_safe if errors.count > 0
     end
 
     render :check_trays

@@ -271,7 +271,7 @@ class TraysController < ApplicationController
       if IsValidItem.call(item_barcode)
         errors = build_extras_errors(@extras)
         errors.push(I18n.t("errors.barcode_not_found", barcode: item_barcode))
-        flash[:error] = errors.join("<br>").html_safe
+        flash.now[:error] = errors.join("<br>").html_safe if errors.count > 0
         item = Item.create!(barcode: item_barcode, thickness: 0)
         ActivityLogger.create_item(item: item, user: current_user)
         AddIssue.call(item: item,
@@ -282,7 +282,7 @@ class TraysController < ApplicationController
       else
         errors = build_extras_errors(@extras)
         errors.push(I18n.t("errors.barcode_not_found", barcode: item_barcode))
-        flash[:error] = errors.join("<br>").html_safe
+        flash.now[:error] = errors.join("<br>").html_safe if errors.count > 0
       end
       render :check_items
       return
@@ -292,7 +292,7 @@ class TraysController < ApplicationController
       @scanned.push(item_barcode)
       @scanned = @scanned.uniq
       errors = build_extras_errors(@extras)
-      flash[:error] = errors.join("<br>").html_safe
+      flash.now[:error] = errors.join("<br>").html_safe if errors.count > 0
     else
       @extras.push(item_barcode)
       @extras = @extras.uniq.sort!
@@ -302,7 +302,7 @@ class TraysController < ApplicationController
                     type: "tray_mismatch",
                     message: "Item failed QC. Was physically in tray '#{@tray.barcode}', #{but_message}")
       errors = build_extras_errors(@extras)
-      flash[:error] = errors.join("<br>").html_safe
+      flash.now[:error] = errors.join("<br>").html_safe if errors.count > 0
     end
 
     render :check_items
@@ -327,9 +327,9 @@ class TraysController < ApplicationController
           @validation_count_items = @validation_count_items.to_i + 1
           if @validation_count_items == 2
             AddTrayIssue.call(user: current_user, tray: @tray, message: "Tray count invalid", type: "incorrect_count")
-            flash.now[:error] = I18n.t("trays.count_validation_not_pass")
+            flash[:error] = I18n.t("trays.count_validation_not_pass")
           else
-            flash.now[:error] = I18n.t("trays.count_items_not_match")
+            flash[:error] = I18n.t("trays.count_items_not_match")
           end
         end
       else
