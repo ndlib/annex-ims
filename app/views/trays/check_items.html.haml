@@ -12,6 +12,8 @@
       = text_field_tag :item_barcode, '', autofocus: true
       - @scanned.each do |scan|
         = hidden_field_tag "scanned[]", scan
+      - @extras.each do |extra|
+        = hidden_field_tag "extras[]", extra
     .actions
       = submit_tag 'Save', class: 'btn btn-primary'
 

@@ -10,6 +10,7 @@ feature "Trays on Shelf", type: :feature do
   let!(:shelf) { FactoryGirl.create(:shelf) }
   let!(:tray) { FactoryGirl.create(:tray, shelf: shelf) }
   let!(:bad_tray) { FactoryGirl.create(:tray) }
+  let!(:bad_tray_2) { FactoryGirl.create(:tray) }
   let!(:item1) { FactoryGirl.create(:item, tray: tray) }
   let!(:item2) { FactoryGirl.create(:item, tray: tray) }
 
@@ -119,6 +120,28 @@ feature "Trays on Shelf", type: :feature do
       fill_in "Tray", with: bad_tray.barcode
       click_button "Submit"
       expect(page).to have_content "Barcode #{bad_tray.barcode} is not associated to this shelf. Put tray with barcode #{bad_tray.barcode} on problem shelf."
+    end
+
+    it "adds to errors when scanning a tray" do
+      shelf
+      tray
+      bad_tray
+      bad_tray_2
+      item1
+      item2
+      visit check_trays_new_path
+      fill_in "Shelf", with: shelf.barcode
+      click_button "Submit"
+      fill_in "Tray", with: bad_tray.barcode
+      click_button "Submit"
+      expect(page).to have_content "Barcode #{bad_tray.barcode} is not associated to this shelf. Put tray with barcode #{bad_tray.barcode} on problem shelf."
+      fill_in "Tray", with: tray.barcode
+      click_button "Submit"
+      expect(page).to have_content "Barcode #{bad_tray.barcode} is not associated to this shelf. Put tray with barcode #{bad_tray.barcode} on problem shelf."
+      fill_in "Tray", with: bad_tray_2.barcode
+      click_button "Submit"
+      expect(page).to have_content "Barcode #{bad_tray.barcode} is not associated to this shelf. Put tray with barcode #{bad_tray.barcode} on problem shelf."
+      expect(page).to have_content "Barcode #{bad_tray_2.barcode} is not associated to this shelf. Put tray with barcode #{bad_tray_2.barcode} on problem shelf."
     end
   end
 end
