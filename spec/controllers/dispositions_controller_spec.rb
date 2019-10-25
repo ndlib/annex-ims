@@ -1,9 +1,9 @@
 require "rails_helper"
 
 RSpec.describe DispositionsController, type: :controller do
-  let(:user) { FactoryGirl.create(:user, admin: true) }
-  let(:disposition) { FactoryGirl.create(:disposition, active: true) }
-  let(:item) { FactoryGirl.create(:item) }
+  let(:user) { FactoryBot.create(:user, admin: true) }
+  let(:disposition) { FactoryBot.create(:disposition, active: true) }
+  let(:item) { FactoryBot.create(:item) }
 
   before(:each) do
     sign_in(user)

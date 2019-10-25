@@ -4,7 +4,7 @@ RSpec.describe GetItemFromMetadata do
   include ItemMetadata
 
   let(:barcode) { "00000007819006" }
-  let(:user) { FactoryGirl.create(:user) }
+  let(:user) { FactoryBot.create(:user) }
   let(:user_id) { user.id }
   let(:response) { ApiResponse.new(status_code: 200, body: { sublibrary: "ANNEX" }) }
 

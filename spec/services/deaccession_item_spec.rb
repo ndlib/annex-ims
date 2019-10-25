@@ -1,11 +1,11 @@
 require "rails_helper"
 
 RSpec.describe DeaccessionItem do
-  let(:item) { FactoryGirl.create(:item, tray: tray, thickness: 1, disposition: disposition) }
-  let(:tray) { FactoryGirl.create(:tray) }
-  let(:shelf) { FactoryGirl.create(:shelf) }
-  let(:user) { FactoryGirl.create(:user) }
-  let(:disposition) { FactoryGirl.create(:disposition) }
+  let(:item) { FactoryBot.create(:item, tray: tray, thickness: 1, disposition: disposition) }
+  let(:tray) { FactoryBot.create(:tray) }
+  let(:shelf) { FactoryBot.create(:shelf) }
+  let(:user) { FactoryBot.create(:user) }
+  let(:disposition) { FactoryBot.create(:disposition) }
   subject { described_class.call(item, user) }
 
   it "sets deaccessioned" do

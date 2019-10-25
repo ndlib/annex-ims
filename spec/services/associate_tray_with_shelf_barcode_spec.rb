@@ -2,9 +2,9 @@ require 'rails_helper'
 
 RSpec.describe AssociateTrayWithShelfBarcode do
   subject { described_class.call(tray, barcode, user)}
-  let(:tray) { FactoryGirl.create(:tray, shelf: shelf) }
-  let(:shelf) { FactoryGirl.create(:shelf) }
-  let(:user) { FactoryGirl.create(:user) }
+  let(:tray) { FactoryBot.create(:tray, shelf: shelf) }
+  let(:shelf) { FactoryBot.create(:shelf) }
+  let(:user) { FactoryBot.create(:user) }
   let(:barcode) { "examplebarcode" }
 
   before(:each) do

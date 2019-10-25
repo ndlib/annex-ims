@@ -5,8 +5,8 @@ feature 'Update', type: :feature do
   include ItemMetadata
   include ActionView::Helpers::UrlHelper
 
-  let(:item) { FactoryGirl.create(:item) }
-  let(:existing_item) { FactoryGirl.create(:item, barcode: barcode) }
+  let(:item) { FactoryBot.create(:item) }
+  let(:existing_item) { FactoryBot.create(:item, barcode: barcode) }
   let(:barcode) { '00000007819006' }
 
   describe 'as an admin' do

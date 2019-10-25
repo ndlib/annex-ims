@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-RSpec.describe "FactoryGirl", type: :model do
+RSpec.describe "FactoryBot", type: :model do
   it "lints" do
-    FactoryGirl.lint
+    FactoryBot.lint
   end
 end

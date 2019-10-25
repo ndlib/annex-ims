@@ -2,17 +2,17 @@ require "rails_helper"
 
 RSpec.describe BuildBatch, search: true do
   before(:all) do
-    FactoryGirl.create(:tray_type, code: "AH")
-    FactoryGirl.create(:tray_type, code: "BL")
+    FactoryBot.create(:tray_type, code: "AH")
+    FactoryBot.create(:tray_type, code: "BL")
   end
 
   describe "when signed in" do
 
-    let(:shelf) { FactoryGirl.create(:shelf) }
-    let(:tray) { FactoryGirl.create(:tray, barcode: "TRAY-AH12346", shelf: shelf) }
-    let(:tray2) { FactoryGirl.create(:tray, barcode: "TRAY-BL6788", shelf: shelf) }
+    let(:shelf) { FactoryBot.create(:shelf) }
+    let(:tray) { FactoryBot.create(:tray, barcode: "TRAY-AH12346", shelf: shelf) }
+    let(:tray2) { FactoryBot.create(:tray, barcode: "TRAY-BL6788", shelf: shelf) }
 
-    let(:item) { FactoryGirl.create(:item,
+    let(:item) { FactoryBot.create(:item,
                                     author: "JOHN DOE",
                                     title: "SOME TITLE",
                                     chron: "TEST CHRN",
@@ -26,7 +26,7 @@ RSpec.describe BuildBatch, search: true do
                                     last_ingest: 3.days.ago.strftime("%Y-%m-%d"),
                                     conditions: ["COVER-TORN","COVER-DET"]) }
 
-    let(:item2) { FactoryGirl.create(:item,
+    let(:item2) { FactoryBot.create(:item,
                                     author: "BUBBA SMITH",
                                     title: "SOME OTHER TITLE",
                                     chron: "TEST CHRN 2",
@@ -40,17 +40,17 @@ RSpec.describe BuildBatch, search: true do
                                     last_ingest: 1.day.ago.strftime("%Y-%m-%d"),
                                     conditions: ["COVER-TORN","PAGES-DET"])}
 
-    let(:request1) { FactoryGirl.create(:request,
+    let(:request1) { FactoryBot.create(:request,
                                         criteria_type: "barcode",
                                         criteria: item.barcode,
                                         requested: 3.days.ago.strftime("%Y-%m-%d")) }
 
-    let(:request2) { FactoryGirl.create(:request,
+    let(:request2) { FactoryBot.create(:request,
                                         criteria_type: "barcode",
                                         criteria: item2.barcode,
                                         requested: 1.day.ago.strftime("%Y-%m-%d")) }
 
-    let(:current_user) { FactoryGirl.create(:user) }
+    let(:current_user) { FactoryBot.create(:user) }
 
     before(:each) do
       save_all

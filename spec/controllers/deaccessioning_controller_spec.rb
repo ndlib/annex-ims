@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe DeaccessioningController, type: :controller do
-  let(:user) { FactoryGirl.create(:user, admin: true) }
-  let(:item) { FactoryGirl.create(:item, status: 0) }
-  let(:unstock) { FactoryGirl.create(:item, status: 1) }
-  let!(:disposition) { FactoryGirl.create(:disposition) }
+  let(:user) { FactoryBot.create(:user, admin: true) }
+  let(:item) { FactoryBot.create(:item, status: 0) }
+  let(:unstock) { FactoryBot.create(:item, status: 1) }
+  let!(:disposition) { FactoryBot.create(:disposition) }
   let!(:comment) { "Test comment" }
 
   before(:each) do

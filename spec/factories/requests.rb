@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :request do
     criteria_type "barcode"
     sequence(:criteria) { |n| "#{n}" }

@@ -4,20 +4,20 @@ feature "Shelves", :type => :feature do
   include AuthenticationHelper
 
   before(:all) do
-    FactoryGirl.create(:tray_type, code: "AH")
-    FactoryGirl.create(:tray_type, code: "SHELF", unlimited: true)
+    FactoryBot.create(:tray_type, code: "AH")
+    FactoryBot.create(:tray_type, code: "SHELF", unlimited: true)
   end
 
   describe "when signed in" do
     before(:each) do
-      @shelf = FactoryGirl.create(:shelf)
-      @tray = FactoryGirl.create(:tray, shelf: @shelf, barcode: "TRAY-#{@shelf.barcode}")
-      @shelf2 = FactoryGirl.create(:shelf)
-      @tray2 = FactoryGirl.create(:tray, shelf: @shelf2, barcode: "TRAY-#{@shelf2.barcode}")
-      @item = FactoryGirl.create(:item, barcode: "123456", thickness:1, title: 'ITEM 1', tray: @tray)
-      @item2 = FactoryGirl.create(:item, title: 'ITEM 2')
-      @tray2 = FactoryGirl.create(:tray, barcode: "TRAY-AH11", shelf: @shelf2)
-      @item3 = FactoryGirl.create(:item, barcode: "1234567", tray: @tray2)
+      @shelf = FactoryBot.create(:shelf)
+      @tray = FactoryBot.create(:tray, shelf: @shelf, barcode: "TRAY-#{@shelf.barcode}")
+      @shelf2 = FactoryBot.create(:shelf)
+      @tray2 = FactoryBot.create(:tray, shelf: @shelf2, barcode: "TRAY-#{@shelf2.barcode}")
+      @item = FactoryBot.create(:item, barcode: "123456", thickness:1, title: 'ITEM 1', tray: @tray)
+      @item2 = FactoryBot.create(:item, title: 'ITEM 2')
+      @tray2 = FactoryBot.create(:tray, barcode: "TRAY-AH11", shelf: @shelf2)
+      @item3 = FactoryBot.create(:item, barcode: "1234567", tray: @tray2)
 
       login_admin
 
@@ -155,7 +155,7 @@ feature "Shelves", :type => :feature do
       click_button "Save"
       expect(current_path).to eq(show_shelf_path(:id => @shelf.id))
       5.times do |i|
-        item = FactoryGirl.create(:item, title: "Item #{i + 1}")
+        item = FactoryBot.create(:item, title: "Item #{i + 1}")
         @items << item
         item_uri = api_item_url(item)
         response_body = {

@@ -1,10 +1,10 @@
 require "rails_helper"
 
 RSpec.describe ScanItem do
-  let(:item) { FactoryGirl.create(:item, tray: tray) }
-  let(:tray) { FactoryGirl.create(:tray) }
-  let(:user) { FactoryGirl.create(:user) }
-  let(:request) { FactoryGirl.create(:request) }
+  let(:item) { FactoryBot.create(:item, tray: tray) }
+  let(:tray) { FactoryBot.create(:tray) }
+  let(:user) { FactoryBot.create(:user) }
+  let(:request) { FactoryBot.create(:request) }
 
   subject { described_class.call(item: item, request: request, user: user) }
 

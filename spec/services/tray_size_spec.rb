@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe TraySize do
   before(:all) do
-    FactoryGirl.create(:tray_type)
+    FactoryBot.create(:tray_type)
   end
 
   it "returns 'AL' for barcode 'TRAY-AL1234'" do

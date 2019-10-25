@@ -1,17 +1,17 @@
 require "rails_helper"
 
 RSpec.describe TransfersController, type: :controller do
-  let(:tray) { FactoryGirl.create(:tray, barcode: "TRAY-AL123") }
-  let(:tray2) { FactoryGirl.create(:tray, barcode: "TRAY-AL456") }
-  let(:tray3) { FactoryGirl.create(:tray, barcode: "TRAY-AL789") }
-  let(:shelf) { FactoryGirl.create(:shelf, trays: [tray, tray3], barcode: "SHELF-AL123") }
-  let(:shelf2) { FactoryGirl.create(:shelf, trays: [tray2], barcode: "SHELF-AL456") }
-  let(:shelf3) { FactoryGirl.create(:shelf, trays: [], barcode: "SHELF-AL789") }
-  let(:transfer) { FactoryGirl.create(:transfer, shelf: shelf, initiated_by: @user) }
-  let(:transfer2) { FactoryGirl.create(:transfer, shelf: shelf2, initiated_by: @user) }
+  let(:tray) { FactoryBot.create(:tray, barcode: "TRAY-AL123") }
+  let(:tray2) { FactoryBot.create(:tray, barcode: "TRAY-AL456") }
+  let(:tray3) { FactoryBot.create(:tray, barcode: "TRAY-AL789") }
+  let(:shelf) { FactoryBot.create(:shelf, trays: [tray, tray3], barcode: "SHELF-AL123") }
+  let(:shelf2) { FactoryBot.create(:shelf, trays: [tray2], barcode: "SHELF-AL456") }
+  let(:shelf3) { FactoryBot.create(:shelf, trays: [], barcode: "SHELF-AL789") }
+  let(:transfer) { FactoryBot.create(:transfer, shelf: shelf, initiated_by: @user) }
+  let(:transfer2) { FactoryBot.create(:transfer, shelf: shelf2, initiated_by: @user) }
 
   before(:each) do
-    @user = FactoryGirl.create(:user, admin: true)
+    @user = FactoryBot.create(:user, admin: true)
     sign_in(@user)
   end
 

@@ -1,14 +1,14 @@
 require "rails_helper"
 
 RSpec.describe ItemsController, type: :controller do
-  let(:user) { FactoryGirl.create(:user, admin: true) }
+  let(:user) { FactoryBot.create(:user, admin: true) }
 
   before(:each) do
     sign_in(user)
   end
 
   describe "POST refresh" do
-    let(:item) { FactoryGirl.create(:item) }
+    let(:item) { FactoryBot.create(:item) }
     subject { post :refresh, barcode: item.barcode }
 
     context "for an invalid barcode" do

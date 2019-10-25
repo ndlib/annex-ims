@@ -6,12 +6,12 @@ end
 
 RSpec.describe ItemRestockToTray do
   before(:each) do
-    @tray = FactoryGirl.create(:tray)
-    @shelf = FactoryGirl.create(:shelf)
-    @tray2 = FactoryGirl.create(:tray)
-    @item = FactoryGirl.create(:item, tray: @tray)
-    @item2 = FactoryGirl.create(:item)
-    @user = FactoryGirl.create(:user)
+    @tray = FactoryBot.create(:tray)
+    @shelf = FactoryBot.create(:shelf)
+    @tray2 = FactoryBot.create(:tray)
+    @item = FactoryBot.create(:item, tray: @tray)
+    @item2 = FactoryBot.create(:item)
+    @user = FactoryBot.create(:user)
 
     stub_request(:post, api_stock_url).
       with(:body => {"barcode"=>"#{@item.barcode}", "item_id"=>"#{@item.id}", "tray_code"=>"#{@item.tray.barcode}"},

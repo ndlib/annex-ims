@@ -5,12 +5,12 @@ feature "Retrieve", :type => :feature do
 
   describe "when signed in" do
 
-    let(:shelf) { FactoryGirl.create(:shelf) }
-    let(:tray) { FactoryGirl.create(:tray, shelf: shelf) }
-    let(:item) { FactoryGirl.create(:item, tray: tray, thickness: 1) }
-    let(:request) { FactoryGirl.create(:request) }
-    let(:batch) { FactoryGirl.create(:batch, user: @user) }
-    let(:match) { FactoryGirl.create(:match, batch: batch, request: request, item: item) }
+    let(:shelf) { FactoryBot.create(:shelf) }
+    let(:tray) { FactoryBot.create(:tray, shelf: shelf) }
+    let(:item) { FactoryBot.create(:item, tray: tray, thickness: 1) }
+    let(:request) { FactoryBot.create(:request) }
+    let(:batch) { FactoryBot.create(:batch, user: @user) }
+    let(:match) { FactoryBot.create(:match, batch: batch, request: request, item: item) }
 
     before(:each) do
       login_admin

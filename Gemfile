@@ -6,14 +6,13 @@ group :application do
   # Use postgresql as the database for Active Record
   gem "pg", "~> 0.18.2"
   # Use SCSS for stylesheets
-  gem "sass-rails", "~> 5.0"
+  gem "sassc-rails"
   # Use Uglifier as compressor for JavaScript assets
   gem "uglifier", ">= 1.3.0"
   # Use CoffeeScript for .coffee assets and views
   gem "coffee-rails", "~> 4.1.0"
-  # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-  # gem "therubyracer", platforms: :ruby
-  gem 'therubyracer', '~> 0.12.2'
+  # V8 javascript engine for ruby
+  gem 'mini_racer'
 
   # Use jquery as the JavaScript library
   gem "jquery-rails", "~> 4.0.4"
@@ -26,7 +25,7 @@ group :application do
   gem "haml-rails"
 
   # Use Bootstrap because I"m not a designer
-  gem "bootstrap-sass", "~> 3.3.5"
+  gem "bootstrap-sass", "~> 3.4.1"
   gem "autoprefixer-rails"
 
   # for a progress bar
@@ -111,7 +110,7 @@ group :development, :test do
   gem "rspec-rails", "~> 3.0"
 
   # For mocking up objects
-  gem "factory_girl_rails", "~> 4.5"
+  gem "factory_bot_rails", "~> 4.8.2"
 
   # For cleaning up the test database
   gem "database_cleaner", "~> 1.3"
@@ -127,8 +126,6 @@ group :development, :test do
   gem "thin"
 
   gem "rails-erd"
-
-  # 
 
   # bundle exec rake doc:rails generates the API under doc/api.
   gem "sdoc", "~> 0.4.0"

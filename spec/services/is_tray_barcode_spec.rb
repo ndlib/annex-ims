@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe IsTrayBarcode do
   before(:all) do
-    FactoryGirl.create(:tray_type)
-    FactoryGirl.create(:tray_type, code: "SHELF", unlimited: true)
+    FactoryBot.create(:tray_type)
+    FactoryBot.create(:tray_type, code: "SHELF", unlimited: true)
   end
 
   it "recognizes 'TRAY-AL1234' as a valid barcode" do

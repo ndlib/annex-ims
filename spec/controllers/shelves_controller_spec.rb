@@ -1,14 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe ShelvesController, type: :controller do
-  let(:user) { FactoryGirl.create(:user, admin: true) }
-  let(:shelf) { FactoryGirl.create(:shelf) }
-  let(:tray) { FactoryGirl.create(:tray, shelf: shelf) }
+  let(:user) { FactoryBot.create(:user, admin: true) }
+  let(:shelf) { FactoryBot.create(:shelf) }
+  let(:tray) { FactoryBot.create(:tray, shelf: shelf) }
   let(:bogus) { 'BOGUS' }
   let(:barcode) { "00000007819006" }
   let(:metadata_status) { "not_found" }    
   let(:item) { instance_double(Item, barcode: bogus, metadata_status: metadata_status, metadata_updated_at: 1.day.ago, attributes: {}, update!: true) }
-  let(:item2) { FactoryGirl.create(:item, tray: tray) }
+  let(:item2) { FactoryBot.create(:item, tray: tray) }
 
   before(:each) do
     sign_in(user)

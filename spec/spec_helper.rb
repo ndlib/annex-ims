@@ -118,7 +118,7 @@ RSpec.configure do |config|
       instance.send(field)
 
       # Reload all factories
-      FactoryGirl.reload
+      FactoryBot.reload
     end
   end
 

@@ -1,10 +1,10 @@
 require "rails_helper"
 
 RSpec.describe ApiPostDeliverItem do
-  let(:match) { FactoryGirl.create(:match, item: item, request: request) }
-  let(:tray) { FactoryGirl.create(:tray) }
-  let(:item) { FactoryGirl.create(:item, tray: tray) }
-  let(:request) { FactoryGirl.create(:request, del_type: "loan") }
+  let(:match) { FactoryBot.create(:match, item: item, request: request) }
+  let(:tray) { FactoryBot.create(:tray) }
+  let(:item) { FactoryBot.create(:item, tray: tray) }
+  let(:request) { FactoryBot.create(:request, del_type: "loan") }
   let(:response) { ApiResponse.new(status_code: 200, body: {}) }
 
   describe "#call" do
@@ -32,7 +32,7 @@ RSpec.describe ApiPostDeliverItem do
     end
 
     context "scan request" do
-      let(:request) { FactoryGirl.create(:request, del_type: "scan") }
+      let(:request) { FactoryBot.create(:request, del_type: "scan") }
 
       it "retrieves data" do
         stub_api_scan_send(match: match)

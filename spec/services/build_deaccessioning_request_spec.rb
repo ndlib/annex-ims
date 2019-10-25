@@ -2,9 +2,9 @@ require 'rails_helper'
 
 RSpec.describe BuildDeaccessioningRequest do
   subject { described_class.call(item.id, disposition.id, comment) }
-  let!(:disposition) { FactoryGirl.create(:disposition) }
+  let!(:disposition) { FactoryBot.create(:disposition) }
   let!(:comment) { "Test comment" }
-  let!(:item) { FactoryGirl.create(:item, barcode: '987654321') }
+  let!(:item) { FactoryBot.create(:item, barcode: '987654321') }
 
   it 'creates requests' do
     expect { subject }.to change { Request.count }.by(1)

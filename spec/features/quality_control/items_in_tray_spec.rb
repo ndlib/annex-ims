@@ -4,13 +4,13 @@ feature "Items in Tray", type: :feature do
   include AuthenticationHelper
 
   before(:all) do
-    FactoryGirl.create(:tray_type)
+    FactoryBot.create(:tray_type)
   end
 
-  let!(:tray) { FactoryGirl.create(:tray) }
-  let!(:item) { FactoryGirl.create(:item, tray: tray) }
-  let!(:bad_item) { FactoryGirl.create(:item) }
-  let!(:bad_item_2) { FactoryGirl.create(:item) }
+  let!(:tray) { FactoryBot.create(:tray) }
+  let!(:item) { FactoryBot.create(:item, tray: tray) }
+  let!(:bad_item) { FactoryBot.create(:item) }
+  let!(:bad_item_2) { FactoryBot.create(:item) }
 
   describe "as an admin" do
     before(:each) do

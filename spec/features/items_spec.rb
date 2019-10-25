@@ -7,13 +7,13 @@ feature "Items", type: :feature do
     before(:each) do
       login_admin
 
-      @shelf = FactoryGirl.create(:shelf)
-      @tray = FactoryGirl.create(:tray, shelf: @shelf)
-      @tray2 = FactoryGirl.create(:tray)
-      @item = FactoryGirl.create(:item, tray: @tray, thickness: 1, title: "The ubiquity of chaos / edited by Saul Krasner.", chron: "Chron")
-      @item2 = FactoryGirl.create(:item, tray: @tray2, thickness: 2, title: "The ubiquity of chaos / edited by Saul Krasner.", chron: "Chron")
-      @user = FactoryGirl.create(:user)
-      @request = FactoryGirl.create(:request)
+      @shelf = FactoryBot.create(:shelf)
+      @tray = FactoryBot.create(:tray, shelf: @shelf)
+      @tray2 = FactoryBot.create(:tray)
+      @item = FactoryBot.create(:item, tray: @tray, thickness: 1, title: "The ubiquity of chaos / edited by Saul Krasner.", chron: "Chron")
+      @item2 = FactoryBot.create(:item, tray: @tray2, thickness: 2, title: "The ubiquity of chaos / edited by Saul Krasner.", chron: "Chron")
+      @user = FactoryBot.create(:user)
+      @request = FactoryBot.create(:request)
 
       stub_request(:post, api_stock_url).
         with(body: { barcode: "#{@item.barcode}", item_id: "#{@item.id}", tray_code: "#{@item.tray.barcode}" },
@@ -79,7 +79,7 @@ feature "Items", type: :feature do
       it "can view a list of issues associated with retrieving item data" do
         @issues = []
         5.times do
-          @issue = FactoryGirl.create(:issue)
+          @issue = FactoryBot.create(:issue)
           @issues << @issue
         end
         visit issues_path
@@ -94,8 +94,8 @@ feature "Items", type: :feature do
       it "can view a list of issues associated with retrieving item data and delete them" do
         @issues = []
         5.times do
-          item = FactoryGirl.create(:item)
-          @issue = FactoryGirl.create(:issue, barcode: item.barcode)
+          item = FactoryBot.create(:item)
+          @issue = FactoryBot.create(:issue, barcode: item.barcode)
           @issues << @issue
         end
         visit issues_path

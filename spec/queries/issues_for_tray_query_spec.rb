@@ -1,14 +1,14 @@
 require "rails_helper"
 
 RSpec.describe IssuesForTrayQuery do
-  let(:tray) { FactoryGirl.build(:tray) }
-  let(:tray2) { FactoryGirl.build(:tray) }
-  let(:tray3) { FactoryGirl.build(:tray) }
-  let(:tray4) { FactoryGirl.build(:tray) }
-  let!(:tray_issue1) { FactoryGirl.create(:tray_issue, issue_type: "incorrect_count", barcode: tray.barcode) }
-  let!(:tray_issue2) { FactoryGirl.create(:tray_issue, issue_type: "incorrect_count", barcode: tray3.barcode) }
-  let!(:tray_issue3) { FactoryGirl.create(:tray_issue, issue_type: "not_valid_barcode", barcode: tray3.barcode) }
-  let!(:tray_issue4) { FactoryGirl.create(:tray_issue, issue_type: "not_valid_barcode", barcode: tray4.barcode) }
+  let(:tray) { FactoryBot.build(:tray) }
+  let(:tray2) { FactoryBot.build(:tray) }
+  let(:tray3) { FactoryBot.build(:tray) }
+  let(:tray4) { FactoryBot.build(:tray) }
+  let!(:tray_issue1) { FactoryBot.create(:tray_issue, issue_type: "incorrect_count", barcode: tray.barcode) }
+  let!(:tray_issue2) { FactoryBot.create(:tray_issue, issue_type: "incorrect_count", barcode: tray3.barcode) }
+  let!(:tray_issue3) { FactoryBot.create(:tray_issue, issue_type: "not_valid_barcode", barcode: tray3.barcode) }
+  let!(:tray_issue4) { FactoryBot.create(:tray_issue, issue_type: "not_valid_barcode", barcode: tray4.barcode) }
   let(:subject) { described_class }
 
   context "issues not present for tray" do

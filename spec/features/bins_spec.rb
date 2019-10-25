@@ -4,11 +4,11 @@ feature "Bins", :type => :feature do
   include AuthenticationHelper
 
   describe "when signed in" do
-    let(:shelf) { FactoryGirl.create(:shelf) }
-    let(:tray) { FactoryGirl.create(:tray, shelf: shelf) }
-    let(:item) { FactoryGirl.create(:item, tray: tray, thickness: 1) }
-    let(:bin) { FactoryGirl.create(:bin, items: [item]) }
-    let(:match) { FactoryGirl.create(:match, item: item, bin: bin) }
+    let(:shelf) { FactoryBot.create(:shelf) }
+    let(:tray) { FactoryBot.create(:tray, shelf: shelf) }
+    let(:item) { FactoryBot.create(:item, tray: tray, thickness: 1) }
+    let(:bin) { FactoryBot.create(:bin, items: [item]) }
+    let(:match) { FactoryBot.create(:match, item: item, bin: bin) }
 
 
     before(:each) do

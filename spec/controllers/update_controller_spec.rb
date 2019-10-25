@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe UpdateController, type: :controller do
-  let(:user) { FactoryGirl.create(:user, admin: true) }
-  let(:item) { FactoryGirl.create(:item) }
-  let(:new_item) { FactoryGirl.build(:item) }
+  let(:user) { FactoryBot.create(:user, admin: true) }
+  let(:item) { FactoryBot.create(:item) }
+  let(:new_item) { FactoryBot.build(:item) }
 
   before(:each) do
     sign_in(user)

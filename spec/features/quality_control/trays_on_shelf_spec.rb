@@ -4,15 +4,15 @@ feature "Trays on Shelf", type: :feature do
   include AuthenticationHelper
 
   before(:all) do
-    FactoryGirl.create(:tray_type)
+    FactoryBot.create(:tray_type)
   end
 
-  let!(:shelf) { FactoryGirl.create(:shelf) }
-  let!(:tray) { FactoryGirl.create(:tray, shelf: shelf) }
-  let!(:bad_tray) { FactoryGirl.create(:tray) }
-  let!(:bad_tray_2) { FactoryGirl.create(:tray) }
-  let!(:item1) { FactoryGirl.create(:item, tray: tray) }
-  let!(:item2) { FactoryGirl.create(:item, tray: tray) }
+  let!(:shelf) { FactoryBot.create(:shelf) }
+  let!(:tray) { FactoryBot.create(:tray, shelf: shelf) }
+  let!(:bad_tray) { FactoryBot.create(:tray) }
+  let!(:bad_tray_2) { FactoryBot.create(:tray) }
+  let!(:item1) { FactoryBot.create(:item, tray: tray) }
+  let!(:item2) { FactoryBot.create(:item, tray: tray) }
 
   describe "as an admin" do
     before(:each) do

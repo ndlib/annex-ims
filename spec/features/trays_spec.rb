@@ -4,14 +4,14 @@ feature "Trays", type: :feature do
   include AuthenticationHelper
 
   before(:all) do
-    FactoryGirl.create(:tray_type)
-    FactoryGirl.create(:tray_type, code: "AH")
+    FactoryBot.create(:tray_type)
+    FactoryBot.create(:tray_type, code: "AH")
   end
 
   let(:tray_barcode) { "TRAY-AL1234" }
-  let(:tray) { FactoryGirl.create(:tray, barcode: tray_barcode) }
-  let(:item) { FactoryGirl.create(:item, barcode: rand.to_s[2..15]) }
-  let(:shelf) { FactoryGirl.create(:shelf) }
+  let(:tray) { FactoryBot.create(:tray, barcode: tray_barcode) }
+  let(:item) { FactoryBot.create(:item, barcode: rand.to_s[2..15]) }
+  let(:shelf) { FactoryBot.create(:shelf) }
   let(:response_body) { api_fixture_data("item_metadata.json") }
 
   describe "when signed in" do
@@ -54,7 +54,7 @@ feature "Trays", type: :feature do
     end
 
     context "unassigned tray" do
-      let(:tray) { FactoryGirl.create(:tray, shelf: nil, shelved: false, barcode: tray_barcode) }
+      let(:tray) { FactoryBot.create(:tray, shelf: nil, shelved: false, barcode: tray_barcode) }
 
       it "runs through unassigned-unshelved-scan flow" do
         visit trays_path
@@ -71,7 +71,7 @@ feature "Trays", type: :feature do
       end
 
       it "runs through unassigned-unshelved-scan flow and check shelf size, allow same size" do
-        tray2 = FactoryGirl.create(:tray, shelf: nil, shelved: false)
+        tray2 = FactoryBot.create(:tray, shelf: nil, shelved: false)
         visit trays_path
         fill_in "Tray", with: tray.barcode
         click_button "Save"
@@ -96,7 +96,7 @@ feature "Trays", type: :feature do
       end
 
       it "runs through unassigned-unshelved-scan flow and check shelf size, reject different size" do
-        tray2 = FactoryGirl.create(:tray, shelf: nil, shelved: false, barcode: "TRAY-AH1234")
+        tray2 = FactoryBot.create(:tray, shelf: nil, shelved: false, barcode: "TRAY-AH1234")
         visit trays_path
         fill_in "Tray", with: tray.barcode
         click_button "Save"
@@ -122,7 +122,7 @@ feature "Trays", type: :feature do
       end
 
       it "runs through unassigned-unshelved-scan flow and check shelf size, accept different size after removing one" do
-        tray2 = FactoryGirl.create(:tray, shelf: nil, shelved: false, barcode: "TRAY-AH1236")
+        tray2 = FactoryBot.create(:tray, shelf: nil, shelved: false, barcode: "TRAY-AH1236")
         visit trays_path
         fill_in "Tray", with: tray.barcode
         click_button "Save"
@@ -153,9 +153,9 @@ feature "Trays", type: :feature do
       end
 
       it "warns when a shelf is exactly full" do
-        @shelf = FactoryGirl.create(:shelf)
+        @shelf = FactoryBot.create(:shelf)
         (tray.tray_type.trays_per_shelf - 1).times do
-          FactoryGirl.create(:tray, shelf: @shelf)
+          FactoryBot.create(:tray, shelf: @shelf)
         end
         visit trays_path
         fill_in "Tray", with: tray.barcode
@@ -173,9 +173,9 @@ feature "Trays", type: :feature do
       end
 
       it "warns when a shelf is over capacity" do
-        @shelf = FactoryGirl.create(:shelf)
+        @shelf = FactoryBot.create(:shelf)
         tray.tray_type.trays_per_shelf.times do
-          FactoryGirl.create(:tray, shelf: @shelf)
+          FactoryBot.create(:tray, shelf: @shelf)
         end
         visit trays_path
         fill_in "Tray", with: tray.barcode
@@ -194,7 +194,7 @@ feature "Trays", type: :feature do
     end
 
     context "assigned-unshelved tray" do
-      let(:tray) { FactoryGirl.create(:tray, shelf: shelf, shelved: false, barcode: tray_barcode) }
+      let(:tray) { FactoryBot.create(:tray, shelf: shelf, shelved: false, barcode: tray_barcode) }
 
       it "runs through assigned-unshelved-cancel flow" do
         visit trays_path
@@ -231,7 +231,7 @@ feature "Trays", type: :feature do
       end
 
       it "runs through assigned-unshelved-scan-different-shelve flow" do
-        shelf2 = FactoryGirl.create(:shelf, barcode: "SHELF-11111")
+        shelf2 = FactoryBot.create(:shelf, barcode: "SHELF-11111")
         visit trays_path
         fill_in "Tray", with: tray.barcode
         click_button "Save"
@@ -247,7 +247,7 @@ feature "Trays", type: :feature do
       end
 
       it "runs through assigned-unshelved-scan-different flow-cancel" do
-        shelf2 = FactoryGirl.create(:shelf, barcode: "SHELF-11112")
+        shelf2 = FactoryBot.create(:shelf, barcode: "SHELF-11112")
         visit trays_path
         fill_in "Tray", with: tray.barcode
         click_button "Save"
@@ -264,7 +264,7 @@ feature "Trays", type: :feature do
     end
 
     context "assigned-shelved tray" do
-      let(:tray) { FactoryGirl.create(:tray, shelf: shelf, shelved: true, barcode: tray_barcode) }
+      let(:tray) { FactoryBot.create(:tray, shelf: shelf, shelved: true, barcode: tray_barcode) }
 
       it "runs through assigned-shelved-cancel flow" do
         visit trays_path
@@ -427,7 +427,7 @@ feature "Trays", type: :feature do
     end
 
     it "rejects associating an item to the wrong tray" do
-      tray2 = FactoryGirl.create(:tray)
+      tray2 = FactoryBot.create(:tray)
       item.tray = tray2
       expect(GetItemFromBarcode).to receive(:call).with(barcode: item.barcode, user_id: @user.id).and_return(item).at_least :once
       stub_request(:post, api_stock_url).
@@ -452,7 +452,7 @@ feature "Trays", type: :feature do
     end
 
     it "redirects to invalid tray item path if an item has a invalid barcode" do
-      item = FactoryGirl.create(:item, barcode: rand(36**7).to_s(36))
+      item = FactoryBot.create(:item, barcode: rand(36**7).to_s(36))
       visit show_tray_item_path(id: tray.id)
       fill_in "Item", with: item.barcode
       fill_in "Thickness", with: Faker::Number.number(1)
@@ -461,7 +461,7 @@ feature "Trays", type: :feature do
     end
 
     it "show tray item path after clicking 'Rescan' link on the invalid tray item page" do
-      item = FactoryGirl.create(:item, barcode: rand(36**7).to_s(36))
+      item = FactoryBot.create(:item, barcode: rand(36**7).to_s(36))
       visit show_tray_item_path(id: tray.id)
       fill_in "Item", with: item.barcode
       fill_in "Thickness", with: Faker::Number.number(1)
@@ -472,7 +472,7 @@ feature "Trays", type: :feature do
     end
 
     it "redirects to invalid tray item path two times via clicking 'Rescan' link on the invalid tray item page" do
-      item = FactoryGirl.create(:item, barcode: rand(36**7).to_s(36))
+      item = FactoryBot.create(:item, barcode: rand(36**7).to_s(36))
       visit show_tray_item_path(id: tray.id)
       fill_in "Item", with: item.barcode
       fill_in "Thickness", with: Faker::Number.number(1)
@@ -487,7 +487,7 @@ feature "Trays", type: :feature do
     end
 
     it "redirects to create tray item path after clicking 'Set aside' link on the invalid tray item page" do
-      item2 = FactoryGirl.create(:item, barcode: rand(36**7).to_s(36))
+      item2 = FactoryBot.create(:item, barcode: rand(36**7).to_s(36))
       visit show_tray_item_path(id: tray.id)
       fill_in "Item", with: item2.barcode
       fill_in "Thickness", with: Faker::Number.number(1)
@@ -516,7 +516,7 @@ feature "Trays", type: :feature do
     it "displays items associated with a tray when processing items" do
       items = []
       5.times do |i|
-        item = FactoryGirl.create(:item, barcode: rand.to_s[2..15])
+        item = FactoryBot.create(:item, barcode: rand.to_s[2..15])
         items << item
       end
       visit trays_items_path
@@ -716,7 +716,7 @@ feature "Trays", type: :feature do
       login_worker
       items = []
       14.times do
-        item = FactoryGirl.create(:item, barcode: rand.to_s[2..15])
+        item = FactoryBot.create(:item, barcode: rand.to_s[2..15])
         items << item
       end
       visit trays_items_path
