@@ -59,7 +59,7 @@ group :application do
   gem 'rake', '< 11.0'
 
   # Security updates
-  gem 'loofah', '~> 2.2.1'
+  gem 'loofah', '~> 2.3.1'
   gem "ffi", ">= 1.9.24"
 
   # Added during ruby 2.4 upgrade
