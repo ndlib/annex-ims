@@ -1,4 +1,4 @@
-class Item < ActiveRecord::Base
+class Item < ApplicationRecord
   CONDITIONS = [
     "COVER-DET",
     "COVER-MISS",

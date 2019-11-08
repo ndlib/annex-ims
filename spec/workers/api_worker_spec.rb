@@ -23,7 +23,7 @@ RSpec.describe ApiWorker, type: :worker do
     end
 
     it "sets the correct queue options" do
-      expect(queue_options[:arguments]).to eq(:"x-dead-letter-exchange" => "annex_api-retry")
+      expect(queue_options[:queue_options][:arguments]).to eq(:"x-dead-letter-exchange" => "annex_api-retry")
       expect(queue_options[:handler]).to eq(Sneakers::Handlers::Maxretry)
       expect(queue_options[:routing_key]).to eq(["annex_api"])
       expect(queue_options[:threads]).to eq(1)

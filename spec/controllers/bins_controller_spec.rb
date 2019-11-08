@@ -14,7 +14,7 @@ RSpec.describe BinsController, type: :controller do
   end
 
   describe "remove" do
-    let(:subject) { post :remove_match, match_id: match.id }
+    let(:subject) { post :remove_match, params: { match_id: match.id } }
 
     context "admin" do
       it "uses DestroyMatch as admin" do
@@ -75,7 +75,7 @@ RSpec.describe BinsController, type: :controller do
   end
 
   describe "process" do
-    let(:subject) { post :process_match, match_id: match.id }
+    let(:subject) { post :process_match, params: { match_id: match.id } }
 
     context "admin" do
       it "uses ProcessMatch" do

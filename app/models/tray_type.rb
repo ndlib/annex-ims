@@ -1,4 +1,4 @@
-class TrayType < ActiveRecord::Base
+class TrayType < ApplicationRecord
   validates :code,
             :trays_per_shelf,
             :height,

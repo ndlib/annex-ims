@@ -17,7 +17,7 @@ RSpec.describe TransfersController, type: :controller do
 
   describe "GET #show" do
     it "returns http success" do
-      get :show, id: transfer.id
+      get :show, params: { id: transfer.id }
       expect(response).to have_http_status(:success)
     end
   end
@@ -45,13 +45,13 @@ RSpec.describe TransfersController, type: :controller do
   describe "POST #create" do
     it "initializes the correct shelf record" do
       shelf
-      get :create, transfer: { shelf: { barcode: "SHELF-AL123" } }
+      get :create, params: { transfer: { shelf: { barcode: "SHELF-AL123" } } }
       expect(assigns(:shelf)).to eq(shelf)
     end
 
     it "redirects to the transfer show page" do
       transfer
-      get :create, transfer: { shelf: { barcode: "SHELF-AL123" } }
+      get :create, params: { transfer: { shelf: { barcode: "SHELF-AL123" } } }
       expect(response).to redirect_to transfer_path(transfer.id)
     end
   end
@@ -59,14 +59,14 @@ RSpec.describe TransfersController, type: :controller do
   describe "PUT #scan_tray" do
     it "calls .check_for_blank_tray" do
       expect(controller).to receive(:check_for_blank_tray)
-      put :scan_tray, id: transfer.id, tray: { barcode: "TRAY-AL123" }
+      put :scan_tray, params: { id: transfer.id, tray: { barcode: "TRAY-AL123" } }
       expect(assigns(:shelf)).to be_a_new(Shelf)
       expect(response).to have_http_status(:success)
     end
 
     it "calls .check_for_tray_membership" do
       expect(controller).to receive(:check_for_tray_membership)
-      put :scan_tray, id: transfer.id, tray: { barcode: "TRAY-AL123" }
+      put :scan_tray, params: { id: transfer.id, tray: { barcode: "TRAY-AL123" } }
       expect(assigns(:shelf)).to be_a_new(Shelf)
       expect(response).to have_http_status(:success)
     end
@@ -75,21 +75,21 @@ RSpec.describe TransfersController, type: :controller do
   describe "PUT #transfer_tray" do
     it "calls .check_for_blank_shelf" do
       shelf2
-      put :transfer_tray, id: transfer.id, tray_id: tray.id, shelf: { barcode: "SHELF-AL456" }
+      put :transfer_tray, params: { id: transfer.id, tray_id: tray.id, shelf: { barcode: "SHELF-AL456" } }
       expect(response).to be_redirect
     end
 
     it "calls .dissociate_tray" do
       shelf2
       expect(controller).to receive(:dissociate_tray)
-      put :transfer_tray, id: transfer.id, tray_id: tray.id, shelf: { barcode: "SHELF-AL456" }
+      put :transfer_tray, params: { id: transfer.id, tray_id: tray.id, shelf: { barcode: "SHELF-AL456" } }
       expect(response).to be_redirect
     end
 
     context "when shelf has remaining trays" do
       it "calls .check_for_final_tray" do
         shelf2
-        put :transfer_tray, id: transfer.id, tray_id: tray.id, shelf: { barcode: "SHELF-AL456" }
+        put :transfer_tray, params: { id: transfer.id, tray_id: tray.id, shelf: { barcode: "SHELF-AL456" } }
         expect(response).to redirect_to transfer_path(transfer.id)
       end
     end
@@ -97,7 +97,7 @@ RSpec.describe TransfersController, type: :controller do
     context "when shelf is empty" do
       it "calls .check_for_final_tray" do
         shelf
-        put :transfer_tray, id: transfer2.id, tray_id: tray2.id, shelf: { barcode: "SHELF-AL123" }
+        put :transfer_tray, params: { id: transfer2.id, tray_id: tray2.id, shelf: { barcode: "SHELF-AL123" } }
         expect(response).to redirect_to new_transfer_path
       end
     end
@@ -108,26 +108,26 @@ RSpec.describe TransfersController, type: :controller do
       transfer
       transfer2
       expect(Transfer.all.count).to eq 2
-      delete :destroy, id: transfer2.id
+      delete :destroy, params: { id: transfer2.id }
       expect(Transfer.all.count).to eq 1
     end
 
     it "redirects to active transfer page" do
       transfer
       transfer2
-      delete :destroy, id: transfer2.id
+      delete :destroy, params: { id: transfer2.id }
       expect(response).to redirect_to view_active_transfers_path
     end
 
     it "displays error when transfer not deleted" do
       expect(DestroyTransfer).to receive(:call).and_return(false)
-      delete :destroy, id: transfer2.id
+      delete :destroy, params: { id: transfer2.id }
       expect(flash[:error]).to be_present
     end
 
     it "displays notice when transfer deleted" do
       expect(DestroyTransfer).to receive(:call).and_return("success")
-      delete :destroy, id: transfer2.id
+      delete :destroy, params: { id: transfer2.id }
       expect(flash[:notice]).to be_present
     end
   end
@@ -174,7 +174,7 @@ RSpec.describe TransfersController, type: :controller do
       it "redirects back to transfer path" do
         controller.instance_variable_set :@shelf, Shelf.where(barcode: "SHELF-999999").take
         controller.instance_variable_set :@transfer, transfer
-        controller.stub(:params).and_return(transfer: { shelf: { barcode: "SHELF-999999" } }, id: transfer.id)
+        allow(controller).to receive(:params).and_return(transfer: { shelf: { barcode: "SHELF-999999" } }, id: transfer.id)
         expect(controller).to receive(:redirect_to).with(transfer_path(id: transfer.id))
         controller.send(:check_for_blank_shelf, "existing")
       end
@@ -184,7 +184,7 @@ RSpec.describe TransfersController, type: :controller do
       it "redirects to new transfer path" do
         controller.instance_variable_set :@shelf, Shelf.where(barcode: "SHELF-999999").take
         controller.instance_variable_set :@transfer, transfer
-        controller.stub(:params).and_return(transfer: { shelf: { barcode: "SHELF-999999" } }, id: transfer.id)
+        allow(controller).to receive(:params).and_return(transfer: { shelf: { barcode: "SHELF-999999" } }, id: transfer.id)
         expect(controller).to receive(:redirect_to).with(new_transfer_path)
         controller.send(:check_for_blank_shelf, "new")
       end

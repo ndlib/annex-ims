@@ -9,17 +9,17 @@ RSpec.describe ItemsController, type: :controller do
 
   describe "POST refresh" do
     let(:item) { FactoryBot.create(:item) }
-    subject { post :refresh, barcode: item.barcode }
+    subject { post :refresh, params: { barcode: item.barcode } }
 
     context "for an invalid barcode" do
       it "flashes an error" do
-        post :refresh, barcode: "invalid barcode"
+        post :refresh, params: { barcode: "invalid barcode" }
         expect(flash[:error]).to include("invalid barcode")
       end
     end
 
     context "for a valid barcode thats not found" do
-      subject { post :refresh, barcode: "valid barcode" }
+      subject { post :refresh, params: { barcode: "valid barcode" } }
 
       before(:each) do
         allow(IsValidItem).to receive(:call).and_return(true)

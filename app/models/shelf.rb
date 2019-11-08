@@ -1,4 +1,4 @@
-class Shelf < ActiveRecord::Base
+class Shelf < ApplicationRecord
   validates_presence_of :barcode
   validates :barcode, uniqueness: true
   validate :has_correct_prefix
@@ -15,7 +15,7 @@ class Shelf < ActiveRecord::Base
 
   # following the questionable pattern from tray.rb
   def style
-    result = case self.trays.count
+    result = tray_type.nil? ? 'black' : case self.trays.count
       when 0 then 'black'
       when 1..(self.tray_type.trays_per_shelf - 1) then 'black'
       when self.tray_type.trays_per_shelf then 'red'

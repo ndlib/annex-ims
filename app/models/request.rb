@@ -1,4 +1,4 @@
-class Request < ActiveRecord::Base
+class Request < ApplicationRecord
   validates_presence_of :criteria_type
   validates_presence_of :criteria
   validates :rapid, inclusion: { in: [true, false] }

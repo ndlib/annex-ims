@@ -1,4 +1,4 @@
-class Match < ActiveRecord::Base
+class Match < ApplicationRecord
   belongs_to :batch
   belongs_to :request
   belongs_to :item

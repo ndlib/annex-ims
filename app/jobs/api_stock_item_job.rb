@@ -1,4 +1,4 @@
-class ApiStockItemJob < ActiveJob::Base
+class ApiStockItemJob < ApplicationJob
   queue_as ApiWorker::QUEUE_NAME
 
   def perform(item:)

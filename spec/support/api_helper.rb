@@ -52,7 +52,7 @@ module ApiHelper
     body ||= api_fixture_data("stock_item.json")
     stub_request(:post, api_stock_url).
       with(body: api_stock_item_params(item),
-           headers: { "User-Agent" => "Faraday v0.15.3" }).
+           headers: { "User-Agent" => "Faraday v0.17.0" }).
       to_return(status: status_code, body: body, headers: {})
   end
 
@@ -68,7 +68,7 @@ module ApiHelper
     body ||= api_fixture_data("deaccession_item.json")
     stub_request(:post, api_deaccession_url).
       with(body: api_deaccession_item_params(item),
-           headers: { "User-Agent" => "Faraday v0.15.3" }).
+           headers: { "User-Agent" => "Faraday v0.17.0" }).
       to_return(status: status_code, body: body, headers: {})
   end
 
@@ -82,14 +82,14 @@ module ApiHelper
     body ||= api_fixture_data("scan_send.json")
     stub_request(:post, api_scan_send_url(match)).
       with(body: api_scan_send_params(match),
-           headers: { "User-Agent" => "Faraday v0.15.3" }).
+           headers: { "User-Agent" => "Faraday v0.17.0" }).
       to_return(status: status_code, body: body, headers: {})
   end
 
-  def stub_api_remove_request(request: request, status_code: 200, body: nil)
+  def stub_api_remove_request(request:, status_code: 200, body: nil)
     stub_request(:post, api_remove_request_url).
       with(body: api_remove_request_params(request),
-           headers: { "User-Agent" => "Faraday v0.15.3" }).
+           headers: { "User-Agent" => "Faraday v0.17.0" }).
       to_return(status: status_code, body: body, headers: {})
   end
 
@@ -123,14 +123,14 @@ module ApiHelper
   def stub_api_active_requests(status_code: 200, body: nil)
     body ||= api_fixture_data("active_requests.json")
     stub_request(:get, api_requests_url).
-      with(headers: { "User-Agent" => "Faraday v0.15.3" }).
+      with(headers: { "User-Agent" => "Faraday v0.17.0" }).
       to_return(status: status_code, body: body, headers: {})
   end
 
   def stub_api_item_metadata(barcode:, status_code: 200, body: nil)
     body ||= api_item_metadata_json(barcode)
     stub_request(:get, api_item_metadata_url(barcode)).
-      with(headers: { "User-Agent" => "Faraday v0.15.3" }).
+      with(headers: { "User-Agent" => "Faraday v0.17.0" }).
       to_return(status: status_code, body: body, headers: {})
   end
 

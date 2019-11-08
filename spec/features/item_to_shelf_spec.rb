@@ -40,12 +40,12 @@ feature "Shelves", :type => :feature do
       }.to_json
 
       stub_request(:get, item_uri).
-        with(headers: { "User-Agent" => "Faraday v0.15.3" }).
+        with(headers: { "User-Agent" => "Faraday v0.17.0" }).
         to_return { { status: 200, body: response_body, headers: {} } }
 
       stub_request(:post, api_stock_url).
         with(:body => {"barcode"=>"#{@item.barcode}", "item_id"=>"#{@item.id}", "tray_code"=>"#{@item.tray.barcode}"},
-          :headers => {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.15.3'}).
+          :headers => {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.17.0'}).
         to_return{ |response| { :status => 200, :body => {:results => {:status => "OK", :message => "Item stocked"}}.to_json, :headers => {} } }
     end
 
@@ -175,11 +175,11 @@ feature "Shelves", :type => :feature do
           "sublibrary" => "ANNEX"
         }.to_json
         stub_request(:get, item_uri).
-          with(headers: { "User-Agent" => "Faraday v0.15.3" }).
+          with(headers: { "User-Agent" => "Faraday v0.17.0" }).
           to_return { { status: 200, body: response_body, headers: {} } }
         stub_request(:post, api_stock_url).
           with(:body => {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"TRAY-#{@shelf.barcode}"},
-            :headers => {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.15.3'}).
+            :headers => {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.17.0'}).
           to_return{ |response| { :status => 200, :body => {:results => {:status => "OK", :message => "Item stocked"}}.to_json, :headers => {} } }
         fill_in "Item", :with => item.barcode
         click_button "Save"

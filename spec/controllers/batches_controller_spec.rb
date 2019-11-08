@@ -38,7 +38,7 @@ RSpec.describe BatchesController, type: :controller do
   end
 
   describe "POST create" do
-    subject { post :create, "commit"=>"Save", "batch"=>["69-156", "70-196"] }
+    subject { post :create, params: { "commit"=>"Save", "batch"=>["69-156", "70-196"] } }
 
     context 'when the user has a batch' do
       let(:batch) { FactoryBot.create(:batch, user: user) }
@@ -63,7 +63,7 @@ RSpec.describe BatchesController, type: :controller do
     end
 
     context 'when batch is empty' do
-      subject { post :create, "commit"=>"Save" }
+      subject { post :create, params: { "commit"=>"Save" } }
 
       it 'redirects to batches' do
         expect(subject).to redirect_to(batches_path)
@@ -99,7 +99,7 @@ RSpec.describe BatchesController, type: :controller do
 
   describe "POST remove" do
     context 'when match id is given' do
-      subject { post :remove, match_id: match.id, commit: "Remove" }
+      subject { post :remove, params: { match_id: match.id, commit: "Remove" } }
 
       it 'calls DestroyMatch' do
         expect(DestroyMatch).to receive(:call).with(match: match, user: user)
@@ -122,7 +122,7 @@ RSpec.describe BatchesController, type: :controller do
     end
 
     context 'when match id is not given' do
-      subject { post :remove, commit: "Remove" }
+      subject { post :remove, params: { commit: "Remove" } }
 
       it 'does not call DestroyMatch' do
         expect(DestroyMatch).not_to receive(:call)
@@ -175,10 +175,10 @@ RSpec.describe BatchesController, type: :controller do
   end
 
   describe "GET item" do
-    subject { get :item, match_id: match.id }
+    subject { get :item, params: { match_id: match.id } }
 
     context "skipping an item" do
-      subject { get :item, commit: "Skip", match_id: match.id }
+      subject { get :item, params: { commit: "Skip", match_id: match.id } }
       it "logs a SkippedItem activity on Skip" do
         allow_any_instance_of(Batch).to receive(:current_match).and_return(match)
         expect(ActivityLogger).to receive(:skip_item)
@@ -187,7 +187,7 @@ RSpec.describe BatchesController, type: :controller do
     end
 
     context "saving an item" do
-      subject { get :item, commit: "Save", barcode: match.item.barcode, match_id: match.id }
+      subject { get :item, params: { commit: "Save", barcode: match.item.barcode, match_id: match.id } }
       it "logs an AcceptedItem activity on Save" do
         allow_any_instance_of(Batch).to receive(:current_match).and_return(match)
         expect(ActivityLogger).to receive(:accept_item)
@@ -233,7 +233,7 @@ RSpec.describe BatchesController, type: :controller do
   end
 
   describe "GET scan_bin" do
-    subject { get :scan_bin, match_id: match.id }
+    subject { get :scan_bin, params: { match_id: match.id } }
 
     context "when there is no batch for the user" do
       let(:batch) { FactoryBot.create(:batch) }
@@ -249,7 +249,7 @@ RSpec.describe BatchesController, type: :controller do
     end
 
     context "skipping scan_bin" do
-      subject { get :scan_bin, commit: "Skip", match_id: match.id }
+      subject { get :scan_bin, params: { commit: "Skip", match_id: match.id } }
 
       it "logs a SkippedItem activity on Skip" do
         expect(ActivityLogger).to receive(:skip_item)
@@ -264,7 +264,7 @@ RSpec.describe BatchesController, type: :controller do
   end
 
   describe "remove match" do
-    subject { post :remove, commit: "Remove", match_id: match.id }
+    subject { post :remove, params: { commit: "Remove", match_id: match.id } }
 
     context "destroying the match" do
       it "uses DestroyMatch" do

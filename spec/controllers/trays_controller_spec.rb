@@ -28,14 +28,14 @@ RSpec.describe TraysController, :type => :controller do
   describe "POST scan" do
     context "admin" do
       it "redirects" do
-        post :scan, tray: { barcode: "TRAY-AL123" }
+        post :scan, params: { tray: { barcode: "TRAY-AL123" } }
         expect(response).to be_redirect
         expect(response.location).to match(/trays\/shelves\/\d+/)
       end
 
       it "calls capture_exception on error and redirects to the trays path" do
         expect(Raven).to receive(:capture_exception).with(kind_of(RuntimeError))
-        post :scan, tray: { barcode: "12345" }
+        post :scan, params: { tray: { barcode: "12345" } }
         expect(response).to redirect_to(trays_path)
       end
     end
@@ -44,14 +44,14 @@ RSpec.describe TraysController, :type => :controller do
       let(:user) { FactoryBot.create(:user, worker: true) }
 
       it "redirects" do
-        post :scan, tray: { barcode: "TRAY-AL123" }
+        post :scan, params: { tray: { barcode: "TRAY-AL123" } }
         expect(response).to be_redirect
         expect(response.location).to match(/trays\/shelves\/\d+/)
       end
 
       it "calls capture_exception on error and redirects to the trays path" do
         expect(Raven).to receive(:capture_exception).with(kind_of(RuntimeError))
-        post :scan, tray: { barcode: "12345" }
+        post :scan, params: { tray: { barcode: "12345" } }
         expect(response).to redirect_to(trays_path)
       end
     end
@@ -72,7 +72,7 @@ RSpec.describe TraysController, :type => :controller do
   end
 
   describe "GET check_items" do
-    subject { get :check_items, barcode: "12345" }
+    subject { get :check_items, params: { barcode: "12345" } }
 
     it "returns http success" do
       subject
@@ -94,7 +94,7 @@ RSpec.describe TraysController, :type => :controller do
   describe "POST validate_items" do
     let(:tray) { FactoryBot.create(:tray) }
     let(:item) { FactoryBot.create(:item, tray: tray) }
-    subject { get :validate_items, barcode: tray.barcode }
+    subject { get :validate_items, params: { barcode: tray.barcode } }
 
     before(:each) do
       allow(Tray).to receive(:find).and_return(tray)
@@ -121,14 +121,14 @@ RSpec.describe TraysController, :type => :controller do
 
     context "for an invalid barcode" do
       it "flashes an error" do
-        post :validate_items, barcode: 1, item_barcode: "invalid barcode"
+        post :validate_items, params: { barcode: 1, item_barcode: "invalid barcode" }
         expect(flash[:error]).to include("invalid barcode")
       end
     end
 
     context "for a valid barcode thats not found" do
       let(:tray) { FactoryBot.create(:tray) }
-      subject { post :validate_items, barcode: tray.barcode, item_barcode: "valid barcode" }
+      subject { post :validate_items, params: { barcode: tray.barcode, item_barcode: "valid barcode" } }
 
       before(:each) do
         allow(IsValidItem).to receive(:call).and_return(true)
@@ -170,7 +170,7 @@ RSpec.describe TraysController, :type => :controller do
       let(:tray) { instance_double(Tray, items: [], barcode: "tray barcode") }
       let(:other_tray) { instance_double(Tray, barcode: "other tray barcode") }
       let(:item) { instance_double(Item, tray: tray) }
-      subject { post :validate_items, barcode: tray.barcode, item_barcode: "valid item barcode" }
+      subject { post :validate_items, params: { barcode: tray.barcode, item_barcode: "valid item barcode" } }
 
       before(:each) do
         allow(Tray).to receive(:where).and_return(double(Object, take: tray))
@@ -201,7 +201,7 @@ RSpec.describe TraysController, :type => :controller do
     context "for a valid item that is associated to the tray" do
       let(:tray) { FactoryBot.create(:tray) }
       let(:item) { FactoryBot.create(:item, tray: tray) }
-      subject { post :validate_items, barcode: tray.barcode, item_barcode: item.barcode }
+      subject { post :validate_items, params: { barcode: tray.barcode, item_barcode: item.barcode } }
 
       it "adds the item's barcode to the scanned list" do
         subject

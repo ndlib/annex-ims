@@ -1,4 +1,4 @@
-class CreateTrayIssues < ActiveRecord::Migration
+class CreateTrayIssues < ActiveRecord::Migration[4.2]
   def change
     create_table :tray_issues do |t|
       t.references :user, null: false, index: true, foreign_key: true

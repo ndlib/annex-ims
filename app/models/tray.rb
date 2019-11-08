@@ -1,4 +1,4 @@
-class Tray < ActiveRecord::Base
+class Tray < ApplicationRecord
   validates_presence_of :barcode
   validates :barcode, uniqueness: true
   validate :has_correct_prefix

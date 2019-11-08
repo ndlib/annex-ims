@@ -1,12 +1,12 @@
-class CreateMatches < ActiveRecord::Migration
-  class Item < ActiveRecord::Base
+class CreateMatches < ActiveRecord::Migration[4.2]
+  class Item < ApplicationRecord
   end
 
-  class Batch < ActiveRecord::Base
+  class Batch < ApplicationRecord
     has_and_belongs_to_many :items
   end
 
-  class Request < ActiveRecord::Base
+  class Request < ApplicationRecord
     belongs_to :batch
   end
 

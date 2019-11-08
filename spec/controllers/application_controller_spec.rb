@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe ApplicationController, type: :controller do
   controller do
     def index
-      render text: "index"
+      render plain: "index"
     end
   end
 

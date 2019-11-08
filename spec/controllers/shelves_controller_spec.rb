@@ -16,27 +16,27 @@ RSpec.describe ShelvesController, type: :controller do
     allow_any_instance_of(GetItemFromBarcode).to receive(:item).and_return(item)
     @bogus_item_uri = api_item_metadata_url(bogus)
     stub_request(:get, @bogus_item_uri).
-      with(:headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'User-Agent'=>'Faraday v0.15.3'}).
+      with(:headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'User-Agent'=>'Faraday v0.17.0'}).
       to_return(:status => 404, :body => "Not Found", :headers => {})
   end
 
   describe 'POST scan' do
     it 'redirects' do
-      post :scan, shelf: { barcode: 'SHELF-AL123' }
+      post :scan, params: { shelf: { barcode: 'SHELF-AL123' } }
       expect(response).to be_redirect
       expect(response.location).to match(/shelves\/items\/\d+/)
     end
 
     it 'calls capture_exception on error and redirects to the trays path' do
       expect(Raven).to receive(:capture_exception).with(kind_of(RuntimeError))
-      post :scan, shelf: { barcode: '12345' }
+      post :scan, params: { shelf: { barcode: '12345' } }
       expect(response).to redirect_to(shelves_path)
     end
   end
 
   describe 'POST associate' do
     it 'redirects if an item is not found' do
-      post :associate, id: shelf.id, barcode: 'BOGUS'
+      post :associate, params: { id: shelf.id, barcode: 'BOGUS' }
       expect(response).to be_redirect
       expect(response.location).to match(/shelves\/items\/\d+/)
     end
@@ -48,7 +48,7 @@ RSpec.describe ShelvesController, type: :controller do
       allow(GetItemFromBarcode).to receive(:call).and_return(item2)
       allow(AssociateShelfWithItemBarcode).to receive(:call).and_raise(StandardError)
       expect(Raven).to receive(:capture_exception).with(kind_of(StandardError))
-      post :associate, id: shelf.id, barcode: item2.barcode
+      post :associate, params: { id: shelf.id, barcode: item2.barcode }
       expect(response).to be_redirect
       expect(response.location).to match(/shelves\/items\/\d+/)
     end
@@ -56,13 +56,13 @@ RSpec.describe ShelvesController, type: :controller do
 
   describe 'GET missing' do
     it 'renders the missing template' do
-      get :missing, id: shelf.id
+      get :missing, params: { id: shelf.id }
       expect(response).to render_template(:missing)
     end
   end
 
   describe 'POST dissociate' do
-    subject { post :dissociate, id: shelf.id, item_id: item2.id, commit: commit }
+    subject { post :dissociate, params: { id: shelf.id, item_id: item2.id, commit: commit } }
     context 'Unstocking an item' do
       let(:commit) { 'Unstock' }
 

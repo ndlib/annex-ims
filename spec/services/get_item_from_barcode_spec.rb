@@ -15,7 +15,7 @@ RSpec.describe GetItemFromBarcode do
   context "invalid barcode" do
     it "raises an error" do
       allow(IsItemBarcode).to receive(:call).and_return(false)
-      expect { subject }.to raise_error
+      expect { subject }.to raise_error('barcode is not an item')
     end
   end
 

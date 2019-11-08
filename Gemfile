@@ -2,7 +2,7 @@ source "https://rubygems.org"
 
 group :application do
   # Bundle edge Rails instead: gem "rails", github: "rails/rails"
-  gem "rails", "~> 4.2.11.1"
+  gem "rails", "~> 5.0.7.2"
   # Use postgresql as the database for Active Record
   gem "pg", "~> 0.18.2"
   # Use SCSS for stylesheets
@@ -15,7 +15,7 @@ group :application do
   gem 'mini_racer'
 
   # Use jquery as the JavaScript library
-  gem "jquery-rails", "~> 4.0.4"
+  gem "jquery-rails", "~> 4.3.5"
   # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
   gem "turbolinks"
   # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
@@ -56,7 +56,7 @@ group :application do
   gem "sneakers"
 
   # Bug in rake
-  gem 'rake', '< 11.0'
+  gem 'rake', '~> 13.0'
 
   # Security updates
   gem 'loofah', '~> 2.3.1'
@@ -100,9 +100,6 @@ group :development, :test do
   # Call "byebug" anywhere in the code to stop execution and get a debugger console
   gem "byebug"
 
-  # Access an IRB console on exception pages or by using <%= console %> in views
-  gem "web-console", "~> 2.1.3"
-
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem "spring"
 
@@ -133,13 +130,15 @@ end
 
 group :test do
   # For mocking up APIs
-  gem "webmock", "~> 3.2.1"
+  gem "webmock", "~> 3.7.6"
   gem "shoulda-matchers"
 
-  gem "simplecov", "~> 0.12.0"
+  gem "simplecov", "~> 0.17.1"
 
   # rspec matchers for sunspot
   gem "sunspot_matchers"
+
+  gem 'rails-controller-testing'
 end
 
 group :development do
@@ -149,5 +148,7 @@ group :development do
   # Better error page
   gem "better_errors"
   gem "binding_of_caller"
-  gem 'quiet_assets'
+
+  # Access an IRB console on exception pages or by using <%= console %> in views
+  gem "web-console", "~> 3.0"
 end

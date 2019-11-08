@@ -1,4 +1,4 @@
-class ChangeTrayTypeCodeUniqueness < ActiveRecord::Migration
+class ChangeTrayTypeCodeUniqueness < ActiveRecord::Migration[4.2]
   def change
     reversible do |direction|
       direction.down do

@@ -1,4 +1,4 @@
-class ApiScanSendJob < ActiveJob::Base
+class ApiScanSendJob < ApplicationJob
   queue_as ApiWorker::QUEUE_NAME
 
   def perform(match:)

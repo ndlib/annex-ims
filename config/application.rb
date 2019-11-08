@@ -1,11 +1,11 @@
-require File.expand_path("../boot", __FILE__)
+require_relative 'boot'
 
 require "csv"
 
 require "rails/all"
 
 # Require the gems listed in Gemfile, including any gems
-# you"ve limited to :test, :development, or :production.
+# you've limited to :test, :development, or :production.
 Bundler.require(:application, *Rails.groups)
 
 module AnnexIms
@@ -24,9 +24,6 @@ module AnnexIms
     # config.i18n.load_path += Dir[Rails.root.join("my", "locales", "*.{rb,yml}").to_s]
     # config.i18n.default_locale = :de
 
-    # Do not swallow errors in after_commit/after_rollback callbacks.
-    config.active_record.raise_in_transactional_callbacks = true
-
     # ActiveJob needs a back end. In our case, it"s RabbitMQ, via sneakers.
     config.active_job.queue_adapter = :sneakers
 
@@ -38,7 +35,7 @@ module AnnexIms
         :rspec, fixtures: false, view_specs: false, helper_specs: false, routing_specs: false, controller_specs: false, request_specs: false
       )
     end
-    
+
     # Sentry.io configuration
     Raven.configure do |config|
       config.dsn = Rails.application.secrets.sentrydn
@@ -47,5 +44,7 @@ module AnnexIms
     # It appears that we are not using helpers, so don"t make it
     # easy to keep using them.
     config.action_controller.include_all_helpers = false
+
+    config.load_defaults = 5.0
   end
 end

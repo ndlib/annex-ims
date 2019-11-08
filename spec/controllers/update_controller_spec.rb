@@ -23,7 +23,7 @@ RSpec.describe UpdateController, type: :controller do
     context 'admin' do
       it 'redirects to show old item' do
         item
-        get :old, old_barcode: item.barcode
+        get :old, params: { old_barcode: item.barcode }
         expect(response).to redirect_to(show_old_update_path(id: item.id))
       end
     end
@@ -34,7 +34,7 @@ RSpec.describe UpdateController, type: :controller do
       it 'redirects to show new item' do
         item
         new_item
-        get :new, old_barcode: item.barcode, new_barcode: new_item.barcode
+        get :new, params: { old_barcode: item.barcode, new_barcode: new_item.barcode }
         expect(response).to redirect_to(show_new_update_path(old_id: item.id, new_barcode: new_item.barcode))
       end
     end
