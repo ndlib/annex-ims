@@ -70,11 +70,15 @@ class ItemsController < ApplicationController
         item = Item.create!(barcode: item_barcode, thickness: 0)
         ActivityLogger.create_item(item: item, user: current_user)
       end
-      SyncItemMetadata.call(item: item, user_id: current_user.id)
+      success = SyncItemMetadata.call(item: item, user_id: current_user.id)
+      unless success
+        SyncItemMetadata.call(item: item, user_id: current_user.id, background: true)
+        flash[:error] = I18n.t("item.metadata_status.error", barcode: item_barcode)
+      end
     else
       flash[:error] = I18n.t("errors.barcode_not_valid", barcode: item_barcode)
     end
 
-    redirect_to item_detail_path
+    redirect_to item_detail_path(barcode: item_barcode)
   end
 end

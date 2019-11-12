@@ -244,7 +244,7 @@ class TraysController < ApplicationController
 
   def check_items_find
     begin
-      @tray = Tray.where(barcode: params[:tray][:barcode]).take
+      @tray = GetTrayFromBarcode.call(params[:tray][:barcode])
     rescue StandardError => e
       Raven.capture_exception(e)
       flash[:error] = e.message
@@ -257,6 +257,7 @@ class TraysController < ApplicationController
   def check_items
     @tray = Tray.where(barcode: params[:barcode]).take
     @scanned = []
+    @extras = []
   end
 
   def validate_items
@@ -264,10 +265,13 @@ class TraysController < ApplicationController
     item_barcode = params[:item_barcode]
     item = Item.where(barcode: item_barcode).take
     @scanned = params[:scanned].present? ? params[:scanned] : []
+    @extras = params[:extras].present? ? params[:extras] : []
 
     if item.nil?
       if IsValidItem.call(item_barcode)
-        flash[:error] = I18n.t("errors.barcode_not_found", barcode: item_barcode)
+        errors = build_extras_errors(@extras)
+        errors.push(I18n.t("errors.barcode_not_found", barcode: item_barcode))
+        flash.now[:error] = errors.join("<br>").html_safe if errors.count > 0
         item = Item.create!(barcode: item_barcode, thickness: 0)
         ActivityLogger.create_item(item: item, user: current_user)
         AddIssue.call(item: item,
@@ -276,7 +280,9 @@ class TraysController < ApplicationController
                       message: "Item failed QC. Was physically in tray '#{@tray.barcode}', but the item did not exist.")
         SyncItemMetadata.call(item: item, user_id: current_user.id)
       else
-        flash[:error] = I18n.t("errors.barcode_not_valid", barcode: item_barcode)
+        errors = build_extras_errors(@extras)
+        errors.push(I18n.t("errors.barcode_not_found", barcode: item_barcode))
+        flash.now[:error] = errors.join("<br>").html_safe if errors.count > 0
       end
       render :check_items
       return
@@ -284,13 +290,19 @@ class TraysController < ApplicationController
 
     if @tray.items.include?(item)
       @scanned.push(item_barcode)
+      @scanned = @scanned.uniq
+      errors = build_extras_errors(@extras)
+      flash.now[:error] = errors.join("<br>").html_safe if errors.count > 0
     else
+      @extras.push(item_barcode)
+      @extras = @extras.uniq.sort!
       but_message = item.tray.present? ? "but is associated with tray '#{item.tray.barcode}'" : "but is not associated with a tray."
       AddIssue.call(item: item,
                     user: current_user,
                     type: "tray_mismatch",
                     message: "Item failed QC. Was physically in tray '#{@tray.barcode}', #{but_message}")
-      flash[:error] = I18n.t("errors.barcode_not_associated_to_tray", barcode: item_barcode)
+      errors = build_extras_errors(@extras)
+      flash.now[:error] = errors.join("<br>").html_safe if errors.count > 0
     end
 
     render :check_items
@@ -315,9 +327,9 @@ class TraysController < ApplicationController
           @validation_count_items = @validation_count_items.to_i + 1
           if @validation_count_items == 2
             AddTrayIssue.call(user: current_user, tray: @tray, message: "Tray count invalid", type: "incorrect_count")
-            flash.now[:error] = I18n.t("trays.count_validation_not_pass")
+            flash[:error] = I18n.t("trays.count_validation_not_pass")
           else
-            flash.now[:error] = I18n.t("trays.count_items_not_match")
+            flash[:error] = I18n.t("trays.count_items_not_match")
           end
         end
       else
@@ -347,5 +359,13 @@ class TraysController < ApplicationController
     if @tray
       @history = ActivityLogQuery.tray_history(@tray)
     end
+  end
+
+  def build_extras_errors(extras)
+    errors = []
+    if extras.count > 0
+      errors = extras.map { |extra| I18n.t("errors.barcode_not_associated_to_tray", barcode: extra) }
+    end
+    return errors
   end
 end

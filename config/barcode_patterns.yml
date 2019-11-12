@@ -4,6 +4,11 @@
 # The parameters need to be stored in such a way that a UI can be built later to manage them
 # It should be possible to "inactivate" a parameter without deleting it (some sort of flag)
 
+# This is a terrible way to do this. Validators belong in the model.
+# Also, if you want to use the UI to handle these, it should be stored in
+# the db, not in a config file.
+# I recommend throwing this away.
+
 common: &defaults
   # The initial barcode parameter should be: 14 digits with no additional
   # characters before or after. Flag (in/de)activates it without deleting it.
