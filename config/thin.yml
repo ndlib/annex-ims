@@ -1,7 +1,7 @@
 ---
 chdir: "./"
 environment: development
-address: localhost
+address: 127.0.0.1
 port: 3021
 timeout: 30
 log: log/thin.log

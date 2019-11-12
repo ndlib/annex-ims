@@ -53,5 +53,5 @@ end
 
 Devise.setup do |config|
   # CAS auth
-  config.cas_base_url = "https://login-test.cc.nd.edu/cas"
+  config.cas_base_url = "https://login.nd.edu/cas"
 end
