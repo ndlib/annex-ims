@@ -245,6 +245,8 @@ class TraysController < ApplicationController
   def check_items_find
     begin
       @tray = GetTrayFromBarcode.call(params[:tray][:barcode])
+      @scanned = []
+      @extras = []
     rescue StandardError => e
       Raven.capture_exception(e)
       flash[:error] = e.message

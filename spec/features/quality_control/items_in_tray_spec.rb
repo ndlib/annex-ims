@@ -25,15 +25,15 @@ feature "Items in Tray", type: :feature do
       bad_item_2
       visit check_items_new_path
       fill_in "Tray", with: tray.barcode
-      click_button "Save"
+      click_button "Submit"
       fill_in "Item", with: bad_item.barcode
-      click_button "Save"
+      click_button "Submit"
       expect(page).to have_content "Barcode #{bad_item.barcode} is not associated to this tray. Put item with barcode #{bad_item.barcode} on problem shelf."
       fill_in "Item", with: item.barcode
-      click_button "Save"
+      click_button "Submit"
       expect(page).to have_content "Barcode #{bad_item.barcode} is not associated to this tray. Put item with barcode #{bad_item.barcode} on problem shelf."
       fill_in "Item", with: bad_item_2.barcode
-      click_button "Save"
+      click_button "Submit"
       expect(page).to have_content "Barcode #{bad_item.barcode} is not associated to this tray. Put item with barcode #{bad_item.barcode} on problem shelf."
       expect(page).to have_content "Barcode #{bad_item_2.barcode} is not associated to this tray. Put item with barcode #{bad_item_2.barcode} on problem shelf."
     end
