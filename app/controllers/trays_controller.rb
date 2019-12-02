@@ -137,9 +137,15 @@ class TraysController < ApplicationController
   def show_item
     @tray = Tray.find(params[:id])
     @used = @tray.used
-    @capacity = @tray.capacity
-    @progress = @used.to_f / @capacity.to_f
-    @progress = @progress <= 1.0 ? @progress : 1.0
+    @unlimited = @tray.tray_type.unlimited
+    if @unlimited
+      @capacity = 'unlimited'
+      @progress = 0.0
+    else
+      @capacity = @tray.capacity
+      @progress = @used.to_f / @capacity.to_f
+      @progress = (@progress <= 1.0) ? @progress : 1.0
+    end
     @style = @tray.style
     @size = TraySize.call(@tray.barcode)
     @barcode = params[:barcode]
