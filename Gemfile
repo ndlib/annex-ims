@@ -2,7 +2,7 @@ source "https://rubygems.org"
 
 group :application do
   # Bundle edge Rails instead: gem "rails", github: "rails/rails"
-  gem "rails", "~> 5.1.7"
+  gem "rails", "~> 5.2.4"
   # Use postgresql as the database for Active Record
   gem "pg", "~> 0.18.2"
   # Use SCSS for stylesheets
@@ -67,6 +67,9 @@ group :application do
 
   # Sentry.io integration
   gem "sentry-raven"
+
+  # Added with Rails 5.2 upgrade
+  gem "bootsnap"
 end
 
 # For cron tasks
@@ -133,7 +136,7 @@ group :test do
   gem "webmock", "~> 3.7.6"
   gem "shoulda-matchers"
 
-  gem "simplecov", "~> 0.17.1"
+  gem "simplecov"
 
   # rspec matchers for sunspot
   gem "sunspot_matchers"
