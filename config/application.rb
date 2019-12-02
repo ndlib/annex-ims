@@ -45,6 +45,6 @@ module AnnexIms
     # easy to keep using them.
     config.action_controller.include_all_helpers = false
 
-    config.load_defaults = 5.0
+    config.load_defaults = 5.1
   end
 end
