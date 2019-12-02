@@ -12,7 +12,6 @@ class RetryWorker < ActiveJob::QueueAdapters::SneakersAdapter::JobWrapper
       routing_key: [queue_name],
     }
     options = options.merge(base_options)
-    puts "OPTIONS: " + options.inspect
 
     super(queue_name, options)
   end

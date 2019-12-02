@@ -40,7 +40,9 @@ RSpec.describe BinsController, type: :controller do
       end
 
       it "redirects back to show as admin" do
-        expect(subject).to redirect_to show_bin_path(id: bin.id)
+        subject
+        expected_path = @request.protocol + @request.host + show_bin_path(id: bin.id)
+        expect(response.body).to eq("<html><body>You are being <a href=\"#{expected_path}\">redirected</a>.</body></html>")
       end
     end
 
@@ -69,7 +71,9 @@ RSpec.describe BinsController, type: :controller do
       end
 
       it "redirects back to show as worker" do
-        expect(subject).to redirect_to show_bin_path(id: bin.id)
+        subject
+        expected_path = @request.protocol + @request.host + show_bin_path(id: bin.id)
+        expect(response.body).to eq("<html><body>You are being <a href=\"#{expected_path}\">redirected</a>.</body></html>")
       end
     end
   end
@@ -91,7 +95,9 @@ RSpec.describe BinsController, type: :controller do
       end
 
       it "redirects back to show" do
-        expect(subject).to redirect_to show_bin_path(id: bin.id)
+        subject
+        expected_path = @request.protocol + @request.host + show_bin_path(id: bin.id)
+        expect(response.body).to eq("<html><body>You are being <a href=\"#{expected_path}\">redirected</a>.</body></html>")
       end
     end
 
@@ -110,7 +116,9 @@ RSpec.describe BinsController, type: :controller do
       end
 
       it "redirects back to show" do
-        expect(subject).to redirect_to show_bin_path(id: bin.id)
+        subject
+        expected_path = @request.protocol + @request.host + show_bin_path(id: bin.id)
+        expect(response.body).to eq("<html><body>You are being <a href=\"#{expected_path}\">redirected</a>.</body></html>")
       end
     end
   end
