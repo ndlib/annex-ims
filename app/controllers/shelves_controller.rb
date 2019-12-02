@@ -61,18 +61,18 @@ class ShelvesController < ApplicationController
 
     begin
       AssociateShelfWithItemBarcode.call(current_user.id, @shelf, barcode, thickness)
-      if already
-        flash[:notice] = "Item #{barcode} already assigned to #{@shelf.barcode}. Record updated."
-      else
-        flash[:notice] = "Item #{barcode} stocked in #{@shelf.barcode}."
-      end
+      flash[:notice] = if already
+                         "Item #{barcode} already assigned to #{@shelf.barcode}. Record updated."
+                       else
+                         "Item #{barcode} stocked in #{@shelf.barcode}."
+                       end
       redirect_to show_shelf_path(id: @shelf.id)
-      return
+      nil
     rescue StandardError => e
       Raven.capture_exception(e)
       flash[:error] = e.message
       redirect_to show_shelf_path(id: @shelf.id)
-      return
+      nil
     end
   end
 
@@ -132,8 +132,8 @@ class ShelvesController < ApplicationController
     @shelf = Shelf.where(barcode: params[:barcode]).take
     tray_barcode = params[:tray_barcode]
     tray = Tray.where(barcode: tray_barcode).take
-    @scanned = params[:scanned].present? ? params[:scanned] : []
-    @extras = params[:extras].present? ? params[:extras] : []
+    @scanned = params[:scanned].presence || []
+    @extras = params[:extras].presence || []
 
     if tray.nil?
       if IsTrayBarcode.call(tray_barcode)
@@ -172,6 +172,6 @@ class ShelvesController < ApplicationController
     if extras.count > 0
       errors = extras.map { |extra| I18n.t("errors.barcode_not_associated_to_shelf", barcode: extra) }
     end
-    return errors
+    errors
   end
 end

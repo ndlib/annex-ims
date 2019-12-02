@@ -20,18 +20,18 @@ class BatchesController < ApplicationController
     if batch_blank?
       flash[:error] = flash_message("empty_batch")
       redirect_to batches_path
-      return
+      nil
     elsif current_batch?
       flash[:notice] = flash_message("active_batch")
       redirect_to current_batch_path
-      return
+      nil
     else
       @batch = BuildBatch.call(params[:batch], current_user)
 
       flash[:notice] = "Batch created."
 
       redirect_to root_path
-      return
+      nil
     end
   end
 
@@ -41,14 +41,14 @@ class BatchesController < ApplicationController
     if @batch.blank?
       flash[:error] = "#{current_user.username} does not have an active batch, please create one."
       redirect_to batches_path
-      return
+      nil
     end
   end
 
   def remove
-    if !params[:match_id].blank?
+    if params[:match_id].present?
       match = Match.find(params[:match_id])
-      remove_match(match: match) unless match.blank?
+      remove_match(match: match) if match.present?
     end
 
     redirect_to current_batch_path
@@ -67,7 +67,7 @@ class BatchesController < ApplicationController
 
     if @match.nil? # then we're done processing matches
       redirect_to finalize_batch_path
-      return
+      nil
     end
   end
 
@@ -89,18 +89,18 @@ class BatchesController < ApplicationController
       ActivityLogger.skip_item(item: @match.item, request: @match.request, user: current_user)
 
       redirect_to retrieve_batch_path
-      return
+      nil
     else
       if params[:barcode] != @match.item.barcode
         flash[:error] = "Wrong item scanned."
 
         redirect_to retrieve_batch_path
-        return
+        nil
       else
         flash[:notice] = "Item #{@match.item.barcode} scanned."
         ActivityLogger.accept_item(item: @match.item, request: @match.request, user: current_user)
         redirect_to bin_batch_path
-        return
+        nil
       end
 
     end
@@ -135,18 +135,18 @@ class BatchesController < ApplicationController
       ActivityLogger.skip_item(item: @match.item, request: @match.request, user: current_user)
 
       redirect_to retrieve_batch_path
-      return
+      nil
     else
       barcode = params[:barcode]
       if !IsBinBarcode.call(barcode)
         flash[:error] = "#{barcode} is not a bin, please try again."
         redirect_to bin_batch_path
-        return
+        nil
       else
         if BinType.call(barcode) != @match.request.bin_type
           flash[:error] = "#{barcode} is not the correct type, please try again."
           redirect_to bin_batch_path
-          return
+          nil
         else # success!
           @bin = GetBinFromBarcode.call(barcode)
           @match.item.bin = @bin
@@ -161,7 +161,7 @@ class BatchesController < ApplicationController
 
           flash[:notice] = "Item #{@match.item.barcode} is now in bin #{barcode}."
           redirect_to retrieve_batch_path # on to the next item in the batch
-          return
+          nil
         end
       end
     end

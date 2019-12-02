@@ -5,7 +5,7 @@ class DeaccessioningController < ApplicationController
     @res = SearchItems.call(params)
     @results = @res.results
     @total = @res.total
-    @params = params  # Because we need to fill in the form with previous values.
+    @params = params # Because we need to fill in the form with previous values.
     @criteria = params[:criteria]
     @criteria_type = params[:criteria_type]
   end
@@ -19,7 +19,7 @@ class DeaccessioningController < ApplicationController
     if Disposition.pluck(:id).include?(params[:disposition_id].to_i)
       if params[:items].blank?
         flash[:error] = I18n.t("deaccessioning.status.empty_items")
-        redirect_to deaccessioning_path(params_whitelist) and return
+        redirect_to(deaccessioning_path(params_whitelist)) && return
       else
         items = Item.where(id: params[:items].keys)
         items.each do |item|
@@ -30,11 +30,11 @@ class DeaccessioningController < ApplicationController
             DeaccessionNotStockedItem.call(request.id, item.id, params_whitelist[:disposition_id], current_user)
           end
         end
-        redirect_to deaccessioning_path() and return
+        redirect_to(deaccessioning_path) && return
       end
     else
       flash[:error] = "Select a Disposition"
-      redirect_to deaccessioning_path(params_whitelist) and return
+      redirect_to(deaccessioning_path(params_whitelist)) && return
     end
   end
 end

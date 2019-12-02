@@ -1,5 +1,5 @@
 class Tray < ApplicationRecord
-  validates_presence_of :barcode
+  validates :barcode, presence: true
   validates :barcode, uniqueness: true
   validate :has_correct_prefix
   before_save :attach_tray_type
@@ -21,7 +21,7 @@ class Tray < ApplicationRecord
   end
 
   def buffer
-    (items.count < 10) ? items.count : 10
+    items.count < 10 ? items.count : 10
   end
 
   def used
@@ -31,9 +31,9 @@ class Tray < ApplicationRecord
   # Not entirely sure this is where this should go
   def style
     result = case used
-      when 0..capacity then 'success'
-      when capacity..(capacity + buffer - 1) then 'warning'
-      else 'danger'
+             when 0..capacity then "success"
+             when capacity..(capacity + buffer - 1) then "warning"
+             else "danger"
     end
     result
   end
@@ -43,6 +43,6 @@ class Tray < ApplicationRecord
   end
 
   def attach_tray_type
-    self.tray_type = TrayType.where(code: type_code, active: true).take
+    self.tray_type = TrayType.find_by(code: type_code, active: true)
   end
 end

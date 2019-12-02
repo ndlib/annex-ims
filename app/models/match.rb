@@ -4,7 +4,7 @@ class Match < ApplicationRecord
   belongs_to :item
   belongs_to :bin
 
-  validates_presence_of :batch_id
-  validates_presence_of :request_id
-  validates_presence_of :item_id
+  validates :batch_id, presence: true
+  validates :request_id, presence: true
+  validates :item_id, presence: true
 end

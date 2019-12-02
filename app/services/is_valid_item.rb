@@ -2,7 +2,7 @@ module IsValidItem
   def self.call(barcode)
     # This is a terrible way to do this.
     parameter_file = File.join(Rails.root, "config", "barcode_patterns.yml")
-    settings = YAML.load(File.open(parameter_file))
+    settings = YAML.safe_load(File.open(parameter_file))
     parameters = settings["common"]["parameters"]
 
     #  If there is no regular expression set, the system will skip validation.
@@ -14,7 +14,7 @@ module IsValidItem
     # And what if you need to fulfill multiple requirements? Terrible.
     parameters.each do |parameter|
       if parameter["enabled"]
-        if barcode =~ /^#{parameter["regex"]}(.*)/
+        if /^#{parameter["regex"]}(.*)/.match?(barcode)
           return true
         end
       end

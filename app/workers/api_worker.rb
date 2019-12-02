@@ -1,6 +1,6 @@
 class ApiWorker < RetryWorker
   WORKERS = 1
-  QUEUE_NAME = "annex_api"
+  QUEUE_NAME = "annex_api".freeze
 
   from_queue QUEUE_NAME,
              threads: 1,

@@ -26,14 +26,13 @@ class ItemRestock
 
     else
       results[:error] = "scan either a new item or a tray to stock to"
-      results[:path] = h.show_item_path(:id => @item_id)
+      results[:path] = h.show_item_path(id: @item_id)
     end
 
-    return results
+    results
   end
 
   def h
     Rails.application.routes.url_helpers
   end
-
 end

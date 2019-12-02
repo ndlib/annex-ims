@@ -33,7 +33,7 @@ module ItemMetadata
   # If there is an error, get_data_error will return a json { type:, status:, issue:, enqueue: }
   # otherwise if there are no errors with the data, will return nil
   def get_data_error(response)
-    if !(response.body.has_key?(:sublibrary)) || response.body[:sublibrary] != "ANNEX"
+    if !response.body.has_key?(:sublibrary) || response.body[:sublibrary] != "ANNEX"
       { type: :not_for_annex, status: :not_for_annex, issue_type: "not_for_annex" }
     end
   end
@@ -45,8 +45,7 @@ module ItemMetadata
   def metadata_status_attributes(status)
     {
       metadata_status: status,
-      metadata_updated_at: Time.now,
+      metadata_updated_at: Time.zone.now,
     }
   end
-
 end

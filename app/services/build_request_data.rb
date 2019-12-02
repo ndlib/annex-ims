@@ -1,5 +1,4 @@
 class BuildRequestData
-
   attr_reader :requests
 
   def self.call(requests)
@@ -37,7 +36,7 @@ class BuildRequestData
         "item_data" => []
       }
 
-      if !items.blank?
+      if items.present?
         if items.total_pages > 1
           request_data["error"] = "Too many matches found. Not all items are being displayed."
         end
@@ -60,6 +59,6 @@ class BuildRequestData
       data << request_data
     end
 
-    return data
+    data
   end
 end

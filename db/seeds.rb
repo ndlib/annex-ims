@@ -16,7 +16,7 @@ def call_number
   "#{rand_letter}#{rand_letter}#{Faker::Number.number(4)}.#{rand_letter}#{Faker::Number.number(2)} #{(1900..2014).to_a.sample}"
 end
 
-100.times do |i|
+100.times do |_i|
   Item.create!(
     barcode: Faker::Number.number(14).to_s,
     title: Faker::Lorem.sentence,
@@ -26,13 +26,13 @@ end
     conditions: [Item::CONDITIONS.sample, Item::CONDITIONS.sample, Item::CONDITIONS.sample, Item::CONDITIONS.sample].uniq,
     call_number: call_number,
     initial_ingest: Faker::Date.between(30.days.ago, Date.today),
-    last_ingest: Time.now.strftime("%Y-%m-%d"),
+    last_ingest: Time.zone.now.strftime("%Y-%m-%d"),
     metadata_status: "complete",
     thickness: 1,
   )
 end
 
-50.times do |i|
+50.times do |_i|
   barcode = Item.order("RANDOM()").first.barcode
   Request.create!(
     criteria_type: "barcode",

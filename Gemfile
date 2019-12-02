@@ -12,7 +12,7 @@ group :application do
   # Use CoffeeScript for .coffee assets and views
   gem "coffee-rails"
   # V8 javascript engine for ruby
-  gem 'mini_racer'
+  gem "mini_racer"
 
   # Use jquery as the JavaScript library
   gem "jquery-rails", "~> 4.3.5"
@@ -25,8 +25,8 @@ group :application do
   gem "haml-rails"
 
   # Use Bootstrap because I"m not a designer
-  gem "bootstrap-sass", "~> 3.4.1"
   gem "autoprefixer-rails"
+  gem "bootstrap-sass", "~> 3.4.1"
 
   # for a progress bar
   gem "bootstrap_progressbar"
@@ -47,8 +47,8 @@ group :application do
   gem "multi_xml"
 
   # For item search
-  gem "sunspot_rails" #, :git => "https://github.com/sunspot/sunspot.git"
   gem "progress_bar" # Because I want to see progress of reindexing
+  gem "sunspot_rails" # , :git => "https://github.com/sunspot/sunspot.git"
 
   # For paginating results
   gem "kaminari"
@@ -56,14 +56,14 @@ group :application do
   gem "sneakers"
 
   # Bug in rake
-  gem 'rake', '~> 13.0'
+  gem "rake", "~> 13.0"
 
   # Security updates
-  gem 'loofah', '~> 2.3.1'
   gem "ffi", ">= 1.9.24"
+  gem "loofah", "~> 2.3.1"
 
   # Added during ruby 2.4 upgrade
-  gem 'bigdecimal'
+  gem "bigdecimal"
 
   # Sentry.io integration
   gem "sentry-raven"
@@ -78,8 +78,8 @@ gem "whenever", require: false
 group :deployment do
   # Use Capistrano for deployment
   gem "capistrano", "~> 3.11"
-  gem "capistrano-rails", "~> 1.1"
   gem "capistrano-maintenance", "~> 1.0"
+  gem "capistrano-rails", "~> 1.1"
 end
 
 group :development, :test, :staging do
@@ -88,8 +88,6 @@ group :development, :test, :staging do
 end
 
 group :development, :test do
-  gem "spring-commands-rspec"
-  gem "hesburgh_infrastructure", github: "ndlib/hesburgh_infrastructure"
   gem "guard", "2.6.1"
   gem "guard-bundler", "2.0.0"
   gem "guard-coffeescript", "1.4.0"
@@ -97,6 +95,8 @@ group :development, :test do
   gem "guard-rspec", "4.3.1"
   gem "guard-spring", "0.0.4"
   gem "guard-sunspot", github: "ndlib/guard-sunspot"
+  gem "hesburgh_infrastructure", github: "ndlib/hesburgh_infrastructure"
+  gem "spring-commands-rspec"
 
   gem "coveralls", require: false
 
@@ -120,7 +120,7 @@ group :development, :test do
   gem "capybara-webkit"
 
   # So staging etc can use stand alone Solr
-  gem "sunspot_solr" #, :git => "https://github.com/sunspot/sunspot.git"
+  gem "sunspot_solr" # , :git => "https://github.com/sunspot/sunspot.git"
 
   # For serving up ssl
   gem "thin"
@@ -133,15 +133,15 @@ end
 
 group :test do
   # For mocking up APIs
-  gem "webmock", "~> 3.7.6"
   gem "shoulda-matchers"
+  gem "webmock", "~> 3.7.6"
 
   gem "simplecov"
 
   # rspec matchers for sunspot
   gem "sunspot_matchers"
 
-  gem 'rails-controller-testing'
+  gem "rails-controller-testing"
 end
 
 group :development do

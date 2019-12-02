@@ -13,9 +13,8 @@ class ResolveIssue
 
   def resolve
     issue.resolver = user
-    issue.resolved_at = Time.now
+    issue.resolved_at = Time.zone.now
     issue.save!
     ActivityLogger.resolve_issue(item: item, issue: issue, user: user)
   end
-
 end

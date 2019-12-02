@@ -1,9 +1,9 @@
 class Request < ApplicationRecord
-  validates_presence_of :criteria_type
-  validates_presence_of :criteria
+  validates :criteria_type, presence: true
+  validates :criteria, presence: true
   validates :rapid, inclusion: { in: [true, false] }
-  validates_presence_of :source
-  validates_presence_of :req_type
+  validates :source, presence: true
+  validates :req_type, presence: true
 
   has_many :matches, dependent: :destroy
   has_many :items, through: :matches
@@ -15,18 +15,18 @@ class Request < ApplicationRecord
   enum status: { received: 0, completed: 1 }
 
   def bin_type
-    case source.downcase
-    when "aleph"
-      bt = "ALEPH-LOAN"
-    when "illiad"
-      if del_type != "loan"
-        bt = "ILL-SCAN"
-      else
-        bt = "ILL-LOAN"
-      end
-    else
-      bt = "REM-STOCK"
-    end
+    bt = case source.downcase
+         when "aleph"
+           "ALEPH-LOAN"
+         when "illiad"
+           if del_type != "loan"
+             "ILL-SCAN"
+           else
+             "ILL-LOAN"
+                end
+         else
+           "REM-STOCK"
+         end
 
     bt
   end

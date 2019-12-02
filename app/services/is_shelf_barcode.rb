@@ -1,6 +1,6 @@
 module IsShelfBarcode
   PREFIX = "SHELF-".freeze
   def self.call(barcode)
-    (barcode =~ /^#{PREFIX}(.*)/ ) ? true : false
+    /^#{PREFIX}(.*)/.match?(barcode) ? true : false
   end
 end

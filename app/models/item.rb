@@ -11,7 +11,8 @@ class Item < ApplicationRecord
     "REDROT",
     "SPINE-DET",
     "UNBOUND",
-    "OTHER"]
+    "OTHER"
+  ].freeze
 
   METADATA_STATUSES = [
     "pending",
@@ -19,7 +20,7 @@ class Item < ApplicationRecord
     "not_found",
     "not_for_annex",
     "error",
-  ]
+  ].freeze
 
   enum status: { stocked: 0, unstocked: 1, shipped: 2, deaccessioned: 9 }
 
@@ -50,13 +51,13 @@ class Item < ApplicationRecord
     date :initial_ingest
     date :last_ingest
     string :tray_barcode do
-      !tray.blank? ? tray.barcode : nil
+      tray.present? ? tray.barcode : nil
     end
     string :shelf_barcode do
-      !shelf.blank? ? shelf.barcode : nil
+      shelf.present? ? shelf.barcode : nil
     end
     string :bin_barcode do
-      !bin.blank? ? bin.barcode : nil
+      bin.present? ? bin.barcode : nil
     end
     date :requested, multiple: true do
       requests.map &:requested

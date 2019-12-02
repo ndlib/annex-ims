@@ -47,13 +47,13 @@ class CreateItem
     begin
       AssociateTrayWithItemBarcode.call(current_user_id, tray, barcode, thickness)
       if already
-        return "Item #{barcode} already assigned to #{tray.barcode}. Record updated."
+        "Item #{barcode} already assigned to #{tray.barcode}. Record updated."
       else
-        return "Item #{barcode} stocked in #{tray.barcode}."
+        "Item #{barcode} stocked in #{tray.barcode}."
       end
     rescue StandardError => e
       Raven.capture_exception(e)
-      return e
+      e
     end
   end
 end

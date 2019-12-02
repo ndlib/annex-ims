@@ -9,15 +9,15 @@ namespace :annex do
 
   desc "Destroys items created by inaccurate barcode scans or items that were not meant for annex."
   task destroy_invalid_items: :environment do
-    require 'csv'
+    require "csv"
     require Rails.root.join("lib", "tasks", "services", "destroy_invalid_items.rb").to_s
 
     logger = Logger.new(STDOUT)
 
-    system_user = OpenStruct.new({ user_id: nil, username: "system" })
+    system_user = OpenStruct.new(user_id: nil, username: "system")
     results = Lib::Tasks::Services::DestroyInvalidItems.call(user: system_user)
     timestamp = (DateTime.now.to_f * 1000).to_i
-    item_attrs = Item.new.attributes.map { |k, v| k }
+    item_attrs = Item.new.attributes.map { |k, _v| k }
 
     if results[:destroyed].present?
       destroyed_file = CSV.open("destroyed_items_#{timestamp}.csv", "w")
@@ -62,7 +62,6 @@ namespace :annex do
   #
   desc "Dump matches associated with AIMS-331"
   task dump_aims331_matches: :environment do
-
     view_file = File.open("fixed_matches_view.csv", "w")
     match_file = File.open("fixed_matches.txt", "w")
 
@@ -88,7 +87,6 @@ namespace :annex do
   #
   desc "Fix matches associated with AIMS-331"
   task fix_aims331_matches: :environment do
-
     broken_matches.each do |match|
       data = { item: match.item.attributes, request: match.request.attributes, user: nil }
       last_time_in_bin = ActivityLog.where(action: "DissociatedItemAndBin").where("data->'item'->>'id' = '#{match.item.id}'").where("data->'bin'->>'id' = '#{match.bin.id}'").maximum(:created_at)
@@ -101,7 +99,6 @@ namespace :annex do
 
   desc "Populate default tray types"
   task populate_tray_types: :environment do
-
     ah = { trays_per_shelf: 16, height: 8, capacity: 136 }
     al = { trays_per_shelf: 16, height: 7, capacity: 136 }
     bh = { trays_per_shelf: 14, height: 10, capacity: 136 }
@@ -128,9 +125,6 @@ namespace :annex do
 
   desc "Assign tray types to trays"
   task assign_tray_types: :environment do
-
-    Tray.all.each do |tray|
-      tray.save
-    end
+    Tray.all.each(&:save)
   end
 end

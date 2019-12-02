@@ -25,7 +25,6 @@ class AddIssue
     end
   end
 
-
   private
 
   def barcode

@@ -1,11 +1,11 @@
 module GetUserType
   def self.call(user)
     if user.admin == true && user.worker == false
-      return "admin"
+      "admin"
     elsif user.admin == false && user.worker == true
-      return "worker"
+      "worker"
     elsif user.admin == false && user.worker == false
-      return "disabled"
+      "disabled"
     end
   end
 end

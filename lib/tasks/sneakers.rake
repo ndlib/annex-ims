@@ -1,5 +1,5 @@
-require 'sneakers'
-require 'sneakers/runner'
+require "sneakers"
+require "sneakers/runner"
 
 namespace :sneakers do
   class SneakersPidFileExists < StandardError
@@ -19,7 +19,7 @@ namespace :sneakers do
       end
 
       def pid_file
-        Rails.root.join('tmp/pids/sneakers.pid')
+        Rails.root.join("tmp/pids/sneakers.pid")
       end
 
       def pid_file_exists?
@@ -36,17 +36,15 @@ namespace :sneakers do
       end
 
       def process_running?(pid)
-        begin
-          if pid
-            # Send a null signal to get the process status
-            Process.kill(0, pid)
-            true
-          else
-            false
-          end
-        rescue Errno::ESRCH
+        if pid
+          # Send a null signal to get the process status
+          Process.kill(0, pid)
+          true
+        else
           false
         end
+      rescue Errno::ESRCH
+        false
       end
 
       # Start and stop a worker to make sure it is functional
@@ -76,7 +74,7 @@ namespace :sneakers do
       if SneakersRakeHelper::process_running?(pid)
         running = true
       else
-        timestamp = Time.now.strftime("%Y%m%d%H%M%S")
+        timestamp = Time.zone.now.strftime("%Y%m%d%H%M%S")
         broken_name = "#{SneakersRakeHelper::pid_file}.#{timestamp}"
         File.rename(SneakersRakeHelper::pid_file, broken_name)
         SneakersRakeHelper::info "PID file exists, but sneakers is not running. Moving broken PID file: #{broken_name}"
@@ -103,7 +101,8 @@ namespace :sneakers do
     if SneakersRakeHelper::pid_file_exists?
       raise SneakersPidFileExists, "Sneakers pid file already exists: #{SneakersRakeHelper::pid_file}"
     end
-    File.open(SneakersRakeHelper::pid_file, 'w') { |f| f.puts Process.pid }
+
+    File.open(SneakersRakeHelper::pid_file, "w") { |f| f.puts Process.pid }
     begin
       workers = []
       worker_classes = [

@@ -19,7 +19,7 @@ class GetShelfFromBarcode
 
   private
 
-    def valid?
-      IsShelfBarcode.call(barcode)
-    end
+  def valid?
+    IsShelfBarcode.call(barcode)
+  end
 end

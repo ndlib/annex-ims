@@ -18,9 +18,7 @@ class CancelBatch
       request.save!
     end
 
-    batch.matches.each do |match|
-      match.destroy!
-    end
+    batch.matches.each(&:destroy!)
 
     batch.destroy!
   end

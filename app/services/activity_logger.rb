@@ -182,15 +182,11 @@ class ActivityLogger
   end
 
   def username
-    if user
-      user.username
-    end
+    user&.username
   end
 
   def user_id
-    if user
-      user.id
-    end
+    user&.id
   end
 
   def log!
@@ -199,7 +195,7 @@ class ActivityLogger
       data: data,
       username: username,
       user_id: user_id,
-      action_timestamp: Time.now,
+      action_timestamp: Time.zone.now,
     )
   end
 

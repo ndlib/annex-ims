@@ -1,4 +1,4 @@
-class  AssociateTrayWithShelfBarcode
+class AssociateTrayWithShelfBarcode
   attr_reader :tray, :barcode, :user
 
   def self.call(tray, barcode, user)
@@ -17,7 +17,7 @@ class  AssociateTrayWithShelfBarcode
     shelf = GetShelfFromBarcode.call(barcode)
     tray_size = TraySize.call(tray.barcode)
 
-    if (shelf.size.nil?) || (shelf.size == tray_size)
+    if shelf.size.nil? || (shelf.size == tray_size)
       tray.shelf = shelf
       shelf.size = tray_size
 
@@ -33,17 +33,16 @@ class  AssociateTrayWithShelfBarcode
       raise "tray sizes must match"
     end
 
-    return result
+    result
   end
 
-  private
+    private
 
-    def validate_input!
-      if IsObjectTray.call(tray)
-        true
-      else
-        raise "object is not a tray"
-      end
+  def validate_input!
+    if IsObjectTray.call(tray)
+      true
+    else
+      raise "object is not a tray"
     end
-
+  end
   end

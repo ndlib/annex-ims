@@ -1,5 +1,4 @@
 class Batch < ApplicationRecord
-
   enum batch_type: { regular: 0, deaccession_unstocked: 1 }
 
   has_many :matches
@@ -7,7 +6,7 @@ class Batch < ApplicationRecord
   has_many :items, through: :matches
   belongs_to :user
 
-  validates_presence_of :user_id
+  validates :user_id, presence: true
 
   def skipped_matches
     matches.where(processed: "skipped")

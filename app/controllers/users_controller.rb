@@ -32,7 +32,7 @@ class UsersController < ApplicationController
         user.worker = false
       end
       user.save!
-      flash[:notice] = "#{user.username}'s status is updated to #{params["user_type"]}."
+      flash[:notice] = "#{user.username}'s status is updated to #{params['user_type']}."
     end
     redirect_to users_path
   end

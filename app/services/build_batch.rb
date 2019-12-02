@@ -22,7 +22,7 @@ class BuildBatch
       batch = user.batches.where(active: true, batch_type: @batch_type).first
     end
 
-    if batch_data.length > 0
+    if !batch_data.empty?
       new_request_ids = []
       batch_data.each do |data|
         lexed_data = data.split("-")

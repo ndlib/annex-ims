@@ -1,4 +1,4 @@
-require 'item_metadata'
+require "item_metadata"
 
 class SyncItemMetadata
   include ItemMetadata
@@ -52,7 +52,7 @@ class SyncItemMetadata
   end
 
   def metadata_stale?
-    if !item.metadata_updated_at.blank?
+    if item.metadata_updated_at.present?
       item.metadata_updated_at < 24.hours.ago
     else
       false

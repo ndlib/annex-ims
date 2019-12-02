@@ -8,7 +8,6 @@
 # role :web, %w{deploy@example.com}
 # role :db,  %w{deploy@example.com}
 
-
 # Extended Server Syntax
 # ======================
 # This can be used to drop a more detailed server definition into the
@@ -17,7 +16,7 @@
 
 # server 'example.com', user: 'deploy', roles: %w{web app}, my_property: :my_value
 # server 'annex-staging.library.nd.edu', user: 'app', roles: %w{web app db}
-server 'annex-staging-esu-622.lc.nd.edu', user: 'app', roles: %w{web app db}
+server "annex-staging-esu-622.lc.nd.edu", user: "app", roles: %w{web app db}
 
 set :rack_env, :staging
 

@@ -13,5 +13,4 @@ class DissociateShelfFromItem
   def dissociate!
     DissociateTrayFromItem.call(item, user)
   end
-
 end

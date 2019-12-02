@@ -3,8 +3,7 @@ class BuildDeaccessioningRequest < GetRequests
     new.build_request_data(item_id, disposition_id, comment)
   end
 
-  def initialize
-  end
+  def initialize; end
 
   def build_request_data(item_id, disposition_id, comment)
     item = Item.where(id: item_id).take

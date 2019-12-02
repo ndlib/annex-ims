@@ -3,9 +3,9 @@ class TrayType < ApplicationRecord
             :trays_per_shelf,
             :height,
             presence: true
-  validates_uniqueness_of :code, conditions: -> { where(active: true) }
-  validates_inclusion_of :active, :in => [true, false]
-  validates_inclusion_of :unlimited, :in => [true, false]
+  validates :code, uniqueness: { conditions: -> { where(active: true) } }
+  validates :active, inclusion: { in: [true, false] }
+  validates :unlimited, inclusion: { in: [true, false] }
   validates :capacity,
             numericality: {
               only_integer: true,
@@ -18,12 +18,12 @@ class TrayType < ApplicationRecord
               greater_than_or_equal_to: 0
             },
             length: { maximum: 2 }
-  validates_presence_of :capacity, if: -> { !unlimited }
+  validates :capacity, presence: { if: -> { !unlimited } }
   before_save :null_unlimited_capacity
 
   has_many :trays
 
   def null_unlimited_capacity
-    self.capacity = nil if self.unlimited
+    self.capacity = nil if unlimited
   end
 end
