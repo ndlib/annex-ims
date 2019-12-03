@@ -33,7 +33,7 @@ RSpec.describe ApplicationController, type: :controller do
 
       it "renders" do
         get :index
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(response.body).to eq("index")
       end
 
@@ -48,7 +48,7 @@ RSpec.describe ApplicationController, type: :controller do
 
       it "renders" do
         get :index
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(response.body).to eq("index")
       end
 

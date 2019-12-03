@@ -46,8 +46,8 @@ feature "Trays", type: :feature do
       expect(current_path).to eq(show_tray_path(id: tray.id))
       expect(page).to have_content tray.barcode
       expect(page).to have_content "STAGING"
-      expect { page.find_by(id: "pull") }.to raise_error(Capybara::ElementNotFound)
-      expect { page.find_by(id: "unassign") }.to raise_error(Capybara::ElementNotFound)
+      expect { page.find_by_id("pull") }.to raise_error(Capybara::ElementNotFound)
+      expect { page.find_by_id("unassign") }.to raise_error(Capybara::ElementNotFound)
       click_button "Cancel"
       expect(current_path).to eq(trays_path)
     end
@@ -62,8 +62,8 @@ feature "Trays", type: :feature do
         expect(current_path).to eq(show_tray_path(id: tray.id))
         expect(page).to have_content tray.barcode
         expect(page).to have_content "STAGING"
-        expect { page.find_by(id: "pull") }.to raise_error(Capybara::ElementNotFound)
-        expect { page.find_by(id: "unassign") }.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by_id("pull") }.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by_id("unassign") }.to raise_error(Capybara::ElementNotFound)
         fill_in "Shelf", with: shelf.barcode
         click_button "Save"
         expect(current_path).to eq(trays_path)
@@ -77,8 +77,8 @@ feature "Trays", type: :feature do
         expect(current_path).to eq(show_tray_path(id: tray.id))
         expect(page).to have_content tray.barcode
         expect(page).to have_content "STAGING"
-        expect { page.find_by(id: "pull") }.to raise_error(Capybara::ElementNotFound)
-        expect { page.find_by(id: "unassign") }.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by_id("pull") }.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by_id("unassign") }.to raise_error(Capybara::ElementNotFound)
         fill_in "Shelf", with: shelf.barcode
         click_button "Save"
         expect(current_path).to eq(trays_path)
@@ -87,8 +87,8 @@ feature "Trays", type: :feature do
         expect(current_path).to eq(show_tray_path(id: tray2.id))
         expect(page).to have_content tray2.barcode
         expect(page).to have_content "STAGING"
-        expect { page.find_by(id: "pull") }.to raise_error(Capybara::ElementNotFound)
-        expect { page.find_by(id: "unassign") }.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by_id("pull") }.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by_id("unassign") }.to raise_error(Capybara::ElementNotFound)
         fill_in "Shelf", with: shelf.barcode
         click_button "Save"
         expect(current_path).to eq(trays_path)
@@ -102,8 +102,8 @@ feature "Trays", type: :feature do
         expect(current_path).to eq(show_tray_path(id: tray.id))
         expect(page).to have_content tray.barcode
         expect(page).to have_content "STAGING"
-        expect { page.find_by(id: "pull") }.to raise_error(Capybara::ElementNotFound)
-        expect { page.find_by(id: "unassign") }.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by_id("pull") }.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by_id("unassign") }.to raise_error(Capybara::ElementNotFound)
         fill_in "Shelf", with: shelf.barcode
         click_button "Save"
         expect(current_path).to eq(trays_path)
@@ -112,8 +112,8 @@ feature "Trays", type: :feature do
         expect(current_path).to eq(show_tray_path(id: tray2.id))
         expect(page).to have_content tray2.barcode
         expect(page).to have_content "STAGING"
-        expect { page.find_by(id: "pull") }.to raise_error(Capybara::ElementNotFound)
-        expect { page.find_by(id: "unassign") }.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by_id("pull") }.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by_id("unassign") }.to raise_error(Capybara::ElementNotFound)
         fill_in "Shelf", with: shelf.barcode
         click_button "Save"
         expect(page).to have_content "tray sizes must match"
@@ -128,8 +128,8 @@ feature "Trays", type: :feature do
         expect(current_path).to eq(show_tray_path(id: tray.id))
         expect(page).to have_content tray.barcode
         expect(page).to have_content "STAGING"
-        expect { page.find_by(id: "pull") }.to raise_error(Capybara::ElementNotFound)
-        expect { page.find_by(id: "unassign") }.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by_id("pull") }.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by_id("unassign") }.to raise_error(Capybara::ElementNotFound)
         fill_in "Shelf", with: shelf.barcode
         click_button "Save"
         expect(current_path).to eq(trays_path)
@@ -144,8 +144,8 @@ feature "Trays", type: :feature do
         expect(current_path).to eq(show_tray_path(id: tray2.id))
         expect(page).to have_content tray2.barcode
         expect(page).to have_content "STAGING"
-        expect { page.find_by(id: "pull") }.to raise_error(Capybara::ElementNotFound)
-        expect { page.find_by(id: "unassign") }.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by_id("pull") }.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by_id("unassign") }.to raise_error(Capybara::ElementNotFound)
         fill_in "Shelf", with: shelf.barcode
         click_button "Save"
         expect(current_path).to eq(trays_path)
@@ -162,8 +162,8 @@ feature "Trays", type: :feature do
         expect(current_path).to eq(show_tray_path(id: tray.id))
         expect(page).to have_content tray.barcode
         expect(page).to have_content "STAGING"
-        expect { page.find_by(id: "pull") }.to raise_error(Capybara::ElementNotFound)
-        expect { page.find_by(id: "unassign") }.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by_id("pull") }.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by_id("unassign") }.to raise_error(Capybara::ElementNotFound)
         fill_in "Shelf", with: @shelf.barcode
         click_button "Save"
         expect(current_path).to eq(trays_path)
@@ -182,8 +182,8 @@ feature "Trays", type: :feature do
         expect(current_path).to eq(show_tray_path(id: tray.id))
         expect(page).to have_content tray.barcode
         expect(page).to have_content "STAGING"
-        expect { page.find_by(id: "pull") }.to raise_error(Capybara::ElementNotFound)
-        expect { page.find_by(id: "unassign") }.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by_id("pull") }.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by_id("unassign") }.to raise_error(Capybara::ElementNotFound)
         fill_in "Shelf", with: @shelf.barcode
         click_button "Save"
         expect(current_path).to eq(trays_path)
@@ -201,7 +201,7 @@ feature "Trays", type: :feature do
         click_button "Save"
         expect(current_path).to eq(show_tray_path(id: tray.id))
         expect(page).to have_content tray.barcode
-        expect { page.find_by(id: "pull") }.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by_id("pull") }.to raise_error(Capybara::ElementNotFound)
         click_button "Cancel"
         expect(current_path).to eq(trays_path)
       end
@@ -212,7 +212,7 @@ feature "Trays", type: :feature do
         click_button "Save"
         expect(current_path).to eq(show_tray_path(id: tray.id))
         expect(page).to have_content tray.barcode
-        expect { page.find_by(id: "pull") }.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by_id("pull") }.to raise_error(Capybara::ElementNotFound)
         click_button "Unassign"
         expect(current_path).to eq(trays_path)
       end
@@ -223,7 +223,7 @@ feature "Trays", type: :feature do
         click_button "Save"
         expect(current_path).to eq(show_tray_path(id: tray.id))
         expect(page).to have_content tray.barcode
-        expect { page.find_by(id: "pull") }.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by_id("pull") }.to raise_error(Capybara::ElementNotFound)
         fill_in "Shelf", with: shelf.barcode
         click_button "Shelve"
         expect(current_path).to eq(trays_path)
@@ -236,7 +236,7 @@ feature "Trays", type: :feature do
         click_button "Save"
         expect(current_path).to eq(show_tray_path(id: tray.id))
         expect(page).to have_content tray.barcode
-        expect { page.find_by(id: "pull") }.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by_id("pull") }.to raise_error(Capybara::ElementNotFound)
         fill_in "Shelf", with: shelf2.barcode
         click_button "Shelve"
         expect(current_path).to eq(wrong_shelf_path(id: tray.id))
@@ -252,7 +252,7 @@ feature "Trays", type: :feature do
         click_button "Save"
         expect(current_path).to eq(show_tray_path(id: tray.id))
         expect(page).to have_content tray.barcode
-        expect { page.find_by(id: "pull") }.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by_id("pull") }.to raise_error(Capybara::ElementNotFound)
         fill_in "Shelf", with: shelf2.barcode
         click_button "Shelve"
         expect(current_path).to eq(wrong_shelf_path(id: tray.id))
@@ -271,7 +271,7 @@ feature "Trays", type: :feature do
         click_button "Save"
         expect(current_path).to eq(show_tray_path(id: tray.id))
         expect(page).to have_content tray.barcode
-        expect { page.find_by(id: "barcode") }.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by_id("barcode") }.to raise_error(Capybara::ElementNotFound)
         click_button "Cancel"
         expect(current_path).to eq(trays_path)
       end
@@ -282,7 +282,7 @@ feature "Trays", type: :feature do
         click_button "Save"
         expect(current_path).to eq(show_tray_path(id: tray.id))
         expect(page).to have_content tray.barcode
-        expect { page.find_by(id: "barcode") }.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by_id("barcode") }.to raise_error(Capybara::ElementNotFound)
         click_button "Unassign"
         expect(current_path).to eq(trays_path)
       end
@@ -293,7 +293,7 @@ feature "Trays", type: :feature do
         click_button "Save"
         expect(current_path).to eq(show_tray_path(id: tray.id))
         expect(page).to have_content tray.barcode
-        expect { page.find_by(id: "barcode") }.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by_id("barcode") }.to raise_error(Capybara::ElementNotFound)
         click_button "Pull"
         expect(current_path).to eq(trays_path)
       end

@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 # config valid only for current version of Capistrano
 lock "3.11.0"
 
@@ -21,8 +20,7 @@ end
 # set :deploy_to, "/var/www/my_app_name"
 set :deploy_to, "/home/app/annex-ims"
 
-set :ssh_options, 
-  verify_host_key: :never,
+set :ssh_options, verify_host_key: :never
 
 # Default value for :scm is :git
 # set :scm, :git

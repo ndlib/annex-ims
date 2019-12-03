@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 class SearchItems
   CRITERIA_TYPES = [
     %w(Search All Fields any),
@@ -37,16 +36,21 @@ class SearchItems
   end
 
   def search!
-    
+    (
       search_fulltext? ||
       search_conditions? ||
       search_tray? ||
       search_shelf? ||
       search_date?
-     ? search_results : empty_results
+    ) ? search_results : empty_results
   end
 
   private
+
+  # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/PerceivedComplexity
   def search_results
     Item.search do
       without(:bin_barcode, "BIN-DEAC-HAND-01")
