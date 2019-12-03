@@ -1,5 +1,8 @@
 ruby:
   config_file: config/style_guides/.ruby-style.yml
 
+rubocop:
+  version: 0.75.0
+
 javascript:
   config_file: config/style_guides/.javascript-style.json

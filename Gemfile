@@ -85,6 +85,9 @@ end
 group :development, :test, :staging do
   # For realistic fake data
   gem "faker", "~> 1.4"
+
+  gem "rubocop", "= 0.75.0" # this is the latest version hound supports
+  gem "rubocop-rails"
 end
 
 group :development, :test do
