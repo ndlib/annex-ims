@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe TrayFull do
   before(:all) do
@@ -74,5 +74,4 @@ RSpec.describe TrayFull do
     results = TrayFull.call(@tray)
     expect(results).to eq(false)
   end
-
 end

@@ -16,5 +16,4 @@ FactoryBot.define do
     disposition nil
     status 0
   end
-
 end

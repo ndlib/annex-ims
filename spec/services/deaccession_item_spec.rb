@@ -14,7 +14,7 @@ RSpec.describe DeaccessionItem do
   end
 
   it "logs the activity" do
-    expect(ActivityLogger).to receive(:deaccession_item).with(item: item, user: user, disposition: item.disposition, comment: { comment: nil } )
+    expect(ActivityLogger).to receive(:deaccession_item).with(item: item, user: user, disposition: item.disposition, comment: { comment: nil })
     subject
   end
 

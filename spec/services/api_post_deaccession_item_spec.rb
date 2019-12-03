@@ -25,9 +25,9 @@ RSpec.describe ApiPostDeaccessionItem do
       it "raises an exception on API failure" do
         stub_api_deaccession_item(
           item: item,
-	  status_code: 500,
-	  body: {}.to_json
-	)
+          status_code: 500,
+          body: {}.to_json
+        )
         expect { subject }.to raise_error(described_class::ApiDeaccessionItemError)
       end
 

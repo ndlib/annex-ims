@@ -10,14 +10,14 @@ RSpec.describe IsUserSessionExpired do
 
   describe "expired?" do
     it "returns true if last activity exceeds the time limit" do
-      allow(Rails.configuration).to receive(:user_timeout).and_return(1.days)
-      allow(user).to receive(:last_activity_at).and_return(Time.now - 2.days)
+      allow(Rails.configuration).to receive(:user_timeout).and_return(1.day)
+      allow(user).to receive(:last_activity_at).and_return(Time.zone.now - 2.days)
       expect(subject.expired?(user: user)).to eq(true)
     end
 
     it "returns false if last activity does not exceed the time limit" do
-      allow(Rails.configuration).to receive(:user_timeout).and_return(1.days)
-      allow(user).to receive(:last_activity_at).and_return(Time.now)
+      allow(Rails.configuration).to receive(:user_timeout).and_return(1.day)
+      allow(user).to receive(:last_activity_at).and_return(Time.zone.now)
       expect(subject.expired?(user: user)).to eq(false)
     end
 

@@ -25,7 +25,6 @@ AllCops:
   - "db/schema.rb"
   - "db/migrate/201*.rb" # ignore old migration scripts (before 2020). We can follow better standards going forward
   - "node_modules/**/*"
-  - "spec/**/*" # it would be nice to enable linting here, but the rules need to be a little different
   DisplayCopNames: false
   StyleGuideCopsOnly: false
 Layout/AccessModifierIndentation:
@@ -411,6 +410,12 @@ Metrics/AbcSize:
   Description: "A calculated magnitude based on number of assignments, branches, and conditions."
   Enabled: true
   Max: 15
+Metrics/BlockLength:
+  CountComments: false
+  Description: "This cop checks if the length of a block exceeds some maximum value."
+  Enabled: true
+  Exclude:
+    - spec/**/*
 Metrics/BlockNesting:
   Description: "Avoid excessive block nesting"
   Enabled: false
@@ -420,6 +425,8 @@ Metrics/ClassLength:
   CountComments: false
   Description: "Avoid classes longer than 100 lines of code."
   Enabled: false
+  Exclude:
+    - spec/**/*
   Max: 100
 Metrics/CyclomaticComplexity:
   Description: "A complexity metric that is strongly correlated to the number of test cases needed to validate a method."
@@ -429,6 +436,8 @@ Metrics/LineLength:
   AllowURI: true
   Description: "Limit lines to 80 characters."
   Enabled: true
+  Exclude:
+    - spec/**/*
   Max: 160
   StyleGuide: "https://github.com/bbatsov/ruby-style-guide#80-character-limits"
   URISchemes:
@@ -438,8 +447,16 @@ Metrics/MethodLength:
   CountComments: false
   Description: "Avoid methods longer than 10 lines of code."
   Enabled: false
+  Exclude:
+    - spec/**/*
   Max: 10
   StyleGuide: "https://github.com/bbatsov/ruby-style-guide#short-methods"
+Metrics/ModuleLength:
+  CountComments: false
+  Description: "This cop checks if the length a module exceeds some maximum value."
+  Enabled: true
+  Exclude:
+    - spec/**/*
 Metrics/ParameterLists:
   CountKeywordArgs: true
   Description: "Avoid parameter lists longer than three or four parameters."

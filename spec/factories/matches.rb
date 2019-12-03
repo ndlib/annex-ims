@@ -4,5 +4,4 @@ FactoryBot.define do
     request
     item
   end
-
 end

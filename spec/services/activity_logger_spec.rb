@@ -26,11 +26,11 @@ RSpec.describe ActivityLogger do
     end
 
     def data_object_value(object)
-      if object.is_a?(Hash)
-        data = object
-      else
-        data = object.attributes
-      end
+      data = if object.is_a?(Hash)
+               object
+             else
+               object.attributes
+             end
       JSON.parse(data.to_json)
     end
 

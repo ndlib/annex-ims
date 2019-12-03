@@ -10,10 +10,10 @@ RSpec.describe GetItemFromMetadata do
 
   context "self" do
     before(:each) do
-      data = api_fixture_data('item_metadata.json')
+      data = api_fixture_data("item_metadata.json")
       hash = JSON.parse(data)
       new_hash = map_item_attributes(hash.symbolize_keys)
-      new_hash['barcode'] = barcode
+      new_hash["barcode"] = barcode
       @new_item = Item.new(new_hash)
       @new_barcode = @new_item.barcode
       stub_api_item_metadata(barcode: @new_barcode)
@@ -35,7 +35,7 @@ RSpec.describe GetItemFromMetadata do
           expect(item.metadata_updated_at).to be_nil
           item = subject
           expect(item.metadata_updated_at).to be_present
-          expect(Time.now - item.metadata_updated_at).to be < 1
+          expect(Time.zone.now - item.metadata_updated_at).to be < 1
         end
       end
 

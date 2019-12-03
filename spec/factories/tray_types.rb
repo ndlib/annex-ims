@@ -7,5 +7,4 @@ FactoryBot.define do
     capacity 136
     active true
   end
-
 end

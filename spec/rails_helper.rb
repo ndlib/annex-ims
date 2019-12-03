@@ -1,8 +1,8 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
-ENV["RAILS_ENV"] ||= 'test'
-require 'spec_helper'
-require_relative '../config/environment'
-require 'rspec/rails'
+ENV["RAILS_ENV"] ||= "test"
+require "spec_helper"
+require_relative "../config/environment"
+require "rspec/rails"
 
 require "sunspot_matchers"
 require "sunspot_matchers/matchers"
@@ -64,7 +64,7 @@ RSpec.configure do |config|
 
   config.include SunspotMatchers
 
-  config.before(:each) do |example|
+  config.before(:each) do |_example|
     Sunspot.session = SunspotMatchers::SunspotSessionSpy.new(Sunspot.session)
   end
 

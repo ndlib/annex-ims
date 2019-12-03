@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe GetUserType do
   it "returns 'admin' for an user with admin type" do

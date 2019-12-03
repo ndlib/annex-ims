@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe TraysController, :type => :controller do
+RSpec.describe TraysController, type: :controller do
   let(:user) { FactoryBot.create(:user, admin: true) }
 
   before(:each) do

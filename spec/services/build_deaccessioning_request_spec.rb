@@ -1,24 +1,24 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe BuildDeaccessioningRequest do
   subject { described_class.call(item.id, disposition.id, comment) }
   let!(:disposition) { FactoryBot.create(:disposition) }
   let!(:comment) { "Test comment" }
-  let!(:item) { FactoryBot.create(:item, barcode: '987654321') }
+  let!(:item) { FactoryBot.create(:item, barcode: "987654321") }
 
-  it 'creates requests' do
+  it "creates requests" do
     expect { subject }.to change { Request.count }.by(1)
     expect(subject).to be_a_kind_of(Array)
     expect(subject.count).to eq(1)
-    expect(subject.first.trans).to start_with('REMOVE_')
+    expect(subject.first.trans).to start_with("REMOVE_")
   end
 
-  it 'logs requests' do
+  it "logs requests" do
     expect(ActivityLogger).to receive(:receive_request).with(request: kind_of(Request)).exactly(1).times
     subject
   end
 
-  describe 'request data' do
+  describe "request data" do
     let(:request) { subject.first }
     let(:data) do
       {
@@ -30,7 +30,7 @@ RSpec.describe BuildDeaccessioningRequest do
       }
     end
 
-    it 'sets expected values' do
+    it "sets expected values" do
       %i[
         title
         author
@@ -43,7 +43,7 @@ RSpec.describe BuildDeaccessioningRequest do
     end
 
     it "calls NotifyError on an error and doesn't return a request" do
-      expect_any_instance_of(Request).to receive(:save!).and_raise('error!')
+      expect_any_instance_of(Request).to receive(:save!).and_raise("error!")
       expect(NotifyError).to receive(:call).and_call_original
       expect(request).to be_nil
     end

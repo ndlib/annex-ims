@@ -19,12 +19,11 @@ module AuthenticationHelper
     @user
   end
 
-=begin - placeholder, because we will need this and I will forget otherwise
-  def login_admin
-    @user = XXX Do something special for admins
-    sign_in(@user)
-  end
-=end
+  # - placeholder, because we will need this and I will forget otherwise
+  #   def login_admin
+  #     @user = XXX Do something special for admins
+  #     sign_in(@user)
+  #   end
 
   def logout
     sign_out(@user)

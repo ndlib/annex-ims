@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 feature "Items in Tray", type: :feature do
   include AuthenticationHelper

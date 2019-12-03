@@ -1,7 +1,7 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe DissociateTrayFromShelf do
-  subject { described_class.call(tray, user)}
+  subject { described_class.call(tray, user) }
 
   let(:user) { FactoryBot.create(:user) }
   let(:shelf) { FactoryBot.create(:shelf) }

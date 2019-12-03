@@ -3,5 +3,4 @@ FactoryBot.define do
     sequence(:barcode) { |n| "TRAY-AL#{n}" }
     shelf nil
   end
-
 end

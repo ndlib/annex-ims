@@ -1,11 +1,11 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe UnstockItem do
-  subject { described_class.call(item, user)}
+  subject { described_class.call(item, user) }
   let(:tray) { double(Tray, barcode: "TRAY-AH1234") }
   let(:item) do
     instance_double(Item,
-		    deaccessioned?: false,
+                    deaccessioned?: false,
                     unstocked?: false,
                     save: true,
                     "unstocked!" => nil,
@@ -13,7 +13,7 @@ RSpec.describe UnstockItem do
                     barcode: "1234",
                     "save!" => true)
   end
-  let(:user) { double(User, username: "bob", id: 1)}
+  let(:user) { double(User, username: "bob", id: 1) }
 
   before(:each) do
     allow(ActivityLogger).to receive(:unstock_item)
@@ -33,7 +33,7 @@ RSpec.describe UnstockItem do
   context "item already unstocked" do
     let(:item) do
       instance_double(Item,
-		      deaccessioned?: false,
+                      deaccessioned?: false,
                       unstocked?: true,
                       save: true,
                       "unstocked!" => nil,

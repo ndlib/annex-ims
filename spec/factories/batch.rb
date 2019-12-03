@@ -3,5 +3,4 @@ FactoryBot.define do
     user
     batch_type 0
   end
-
 end

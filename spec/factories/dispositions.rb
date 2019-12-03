@@ -4,5 +4,4 @@ FactoryBot.define do
     description "MyString"
     active true
   end
-
 end

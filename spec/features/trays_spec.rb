@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 feature "Trays", type: :feature do
   include AuthenticationHelper
@@ -20,13 +20,12 @@ feature "Trays", type: :feature do
 
       stub_request(:get, api_item_url(item)).
         with(headers: { "User-Agent" => "Faraday v0.17.0" }).
-        to_return{ { status: 200, body: response_body, headers: {} } }
+        to_return { { status: 200, body: response_body, headers: {} } }
 
       stub_request(:post, api_stock_url).
-        with(body: {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{tray.barcode}"},
-          headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.17.0'}).
-        to_return{ |response| { status: 200, body: {results: {status: "OK", message: "Item stocked"}}.to_json, headers: {} } }
-
+        with(body: { "barcode" => item.barcode.to_s, "item_id" => item.id.to_s, "tray_code" => tray.barcode.to_s },
+             headers: { "Content-Type" => "application/x-www-form-urlencoded", "User-Agent" => "Faraday v0.17.0" }).
+        to_return { |_response| { status: 200, body: { results: { status: "OK", message: "Item stocked" } }.to_json, headers: {} } }
     end
 
     it "can scan a new tray" do
@@ -47,8 +46,8 @@ feature "Trays", type: :feature do
       expect(current_path).to eq(show_tray_path(id: tray.id))
       expect(page).to have_content tray.barcode
       expect(page).to have_content "STAGING"
-      expect{page.find_by_id("pull")}.to raise_error(Capybara::ElementNotFound)
-      expect{page.find_by_id("unassign")}.to raise_error(Capybara::ElementNotFound)
+      expect { page.find_by(id: "pull") }.to raise_error(Capybara::ElementNotFound)
+      expect { page.find_by(id: "unassign") }.to raise_error(Capybara::ElementNotFound)
       click_button "Cancel"
       expect(current_path).to eq(trays_path)
     end
@@ -63,8 +62,8 @@ feature "Trays", type: :feature do
         expect(current_path).to eq(show_tray_path(id: tray.id))
         expect(page).to have_content tray.barcode
         expect(page).to have_content "STAGING"
-        expect{page.find_by_id("pull")}.to raise_error(Capybara::ElementNotFound)
-        expect{page.find_by_id("unassign")}.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by(id: "pull") }.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by(id: "unassign") }.to raise_error(Capybara::ElementNotFound)
         fill_in "Shelf", with: shelf.barcode
         click_button "Save"
         expect(current_path).to eq(trays_path)
@@ -78,8 +77,8 @@ feature "Trays", type: :feature do
         expect(current_path).to eq(show_tray_path(id: tray.id))
         expect(page).to have_content tray.barcode
         expect(page).to have_content "STAGING"
-        expect{page.find_by_id("pull")}.to raise_error(Capybara::ElementNotFound)
-        expect{page.find_by_id("unassign")}.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by(id: "pull") }.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by(id: "unassign") }.to raise_error(Capybara::ElementNotFound)
         fill_in "Shelf", with: shelf.barcode
         click_button "Save"
         expect(current_path).to eq(trays_path)
@@ -88,8 +87,8 @@ feature "Trays", type: :feature do
         expect(current_path).to eq(show_tray_path(id: tray2.id))
         expect(page).to have_content tray2.barcode
         expect(page).to have_content "STAGING"
-        expect{page.find_by_id("pull")}.to raise_error(Capybara::ElementNotFound)
-        expect{page.find_by_id("unassign")}.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by(id: "pull") }.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by(id: "unassign") }.to raise_error(Capybara::ElementNotFound)
         fill_in "Shelf", with: shelf.barcode
         click_button "Save"
         expect(current_path).to eq(trays_path)
@@ -103,8 +102,8 @@ feature "Trays", type: :feature do
         expect(current_path).to eq(show_tray_path(id: tray.id))
         expect(page).to have_content tray.barcode
         expect(page).to have_content "STAGING"
-        expect{page.find_by_id("pull")}.to raise_error(Capybara::ElementNotFound)
-        expect{page.find_by_id("unassign")}.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by(id: "pull") }.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by(id: "unassign") }.to raise_error(Capybara::ElementNotFound)
         fill_in "Shelf", with: shelf.barcode
         click_button "Save"
         expect(current_path).to eq(trays_path)
@@ -113,8 +112,8 @@ feature "Trays", type: :feature do
         expect(current_path).to eq(show_tray_path(id: tray2.id))
         expect(page).to have_content tray2.barcode
         expect(page).to have_content "STAGING"
-        expect{page.find_by_id("pull")}.to raise_error(Capybara::ElementNotFound)
-        expect{page.find_by_id("unassign")}.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by(id: "pull") }.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by(id: "unassign") }.to raise_error(Capybara::ElementNotFound)
         fill_in "Shelf", with: shelf.barcode
         click_button "Save"
         expect(page).to have_content "tray sizes must match"
@@ -129,8 +128,8 @@ feature "Trays", type: :feature do
         expect(current_path).to eq(show_tray_path(id: tray.id))
         expect(page).to have_content tray.barcode
         expect(page).to have_content "STAGING"
-        expect{page.find_by_id("pull")}.to raise_error(Capybara::ElementNotFound)
-        expect{page.find_by_id("unassign")}.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by(id: "pull") }.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by(id: "unassign") }.to raise_error(Capybara::ElementNotFound)
         fill_in "Shelf", with: shelf.barcode
         click_button "Save"
         expect(current_path).to eq(trays_path)
@@ -145,8 +144,8 @@ feature "Trays", type: :feature do
         expect(current_path).to eq(show_tray_path(id: tray2.id))
         expect(page).to have_content tray2.barcode
         expect(page).to have_content "STAGING"
-        expect{page.find_by_id("pull")}.to raise_error(Capybara::ElementNotFound)
-        expect{page.find_by_id("unassign")}.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by(id: "pull") }.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by(id: "unassign") }.to raise_error(Capybara::ElementNotFound)
         fill_in "Shelf", with: shelf.barcode
         click_button "Save"
         expect(current_path).to eq(trays_path)
@@ -163,13 +162,13 @@ feature "Trays", type: :feature do
         expect(current_path).to eq(show_tray_path(id: tray.id))
         expect(page).to have_content tray.barcode
         expect(page).to have_content "STAGING"
-        expect{page.find_by_id("pull")}.to raise_error(Capybara::ElementNotFound)
-        expect{page.find_by_id("unassign")}.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by(id: "pull") }.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by(id: "unassign") }.to raise_error(Capybara::ElementNotFound)
         fill_in "Shelf", with: @shelf.barcode
         click_button "Save"
         expect(current_path).to eq(trays_path)
 
-        expect(page).to have_content 'shelf is full'
+        expect(page).to have_content "shelf is full"
       end
 
       it "warns when a shelf is over capacity" do
@@ -183,13 +182,13 @@ feature "Trays", type: :feature do
         expect(current_path).to eq(show_tray_path(id: tray.id))
         expect(page).to have_content tray.barcode
         expect(page).to have_content "STAGING"
-        expect{page.find_by_id("pull")}.to raise_error(Capybara::ElementNotFound)
-        expect{page.find_by_id("unassign")}.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by(id: "pull") }.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by(id: "unassign") }.to raise_error(Capybara::ElementNotFound)
         fill_in "Shelf", with: @shelf.barcode
         click_button "Save"
         expect(current_path).to eq(trays_path)
 
-        expect(page).to have_content 'shelf is over capacity'
+        expect(page).to have_content "shelf is over capacity"
       end
     end
 
@@ -202,7 +201,7 @@ feature "Trays", type: :feature do
         click_button "Save"
         expect(current_path).to eq(show_tray_path(id: tray.id))
         expect(page).to have_content tray.barcode
-        expect{page.find_by_id("pull")}.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by(id: "pull") }.to raise_error(Capybara::ElementNotFound)
         click_button "Cancel"
         expect(current_path).to eq(trays_path)
       end
@@ -213,7 +212,7 @@ feature "Trays", type: :feature do
         click_button "Save"
         expect(current_path).to eq(show_tray_path(id: tray.id))
         expect(page).to have_content tray.barcode
-        expect{page.find_by_id("pull")}.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by(id: "pull") }.to raise_error(Capybara::ElementNotFound)
         click_button "Unassign"
         expect(current_path).to eq(trays_path)
       end
@@ -224,7 +223,7 @@ feature "Trays", type: :feature do
         click_button "Save"
         expect(current_path).to eq(show_tray_path(id: tray.id))
         expect(page).to have_content tray.barcode
-        expect{page.find_by_id("pull")}.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by(id: "pull") }.to raise_error(Capybara::ElementNotFound)
         fill_in "Shelf", with: shelf.barcode
         click_button "Shelve"
         expect(current_path).to eq(trays_path)
@@ -237,7 +236,7 @@ feature "Trays", type: :feature do
         click_button "Save"
         expect(current_path).to eq(show_tray_path(id: tray.id))
         expect(page).to have_content tray.barcode
-        expect{page.find_by_id("pull")}.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by(id: "pull") }.to raise_error(Capybara::ElementNotFound)
         fill_in "Shelf", with: shelf2.barcode
         click_button "Shelve"
         expect(current_path).to eq(wrong_shelf_path(id: tray.id))
@@ -253,7 +252,7 @@ feature "Trays", type: :feature do
         click_button "Save"
         expect(current_path).to eq(show_tray_path(id: tray.id))
         expect(page).to have_content tray.barcode
-        expect{page.find_by_id("pull")}.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by(id: "pull") }.to raise_error(Capybara::ElementNotFound)
         fill_in "Shelf", with: shelf2.barcode
         click_button "Shelve"
         expect(current_path).to eq(wrong_shelf_path(id: tray.id))
@@ -272,7 +271,7 @@ feature "Trays", type: :feature do
         click_button "Save"
         expect(current_path).to eq(show_tray_path(id: tray.id))
         expect(page).to have_content tray.barcode
-        expect{page.find_by_id("barcode")}.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by(id: "barcode") }.to raise_error(Capybara::ElementNotFound)
         click_button "Cancel"
         expect(current_path).to eq(trays_path)
       end
@@ -283,7 +282,7 @@ feature "Trays", type: :feature do
         click_button "Save"
         expect(current_path).to eq(show_tray_path(id: tray.id))
         expect(page).to have_content tray.barcode
-        expect{page.find_by_id("barcode")}.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by(id: "barcode") }.to raise_error(Capybara::ElementNotFound)
         click_button "Unassign"
         expect(current_path).to eq(trays_path)
       end
@@ -294,7 +293,7 @@ feature "Trays", type: :feature do
         click_button "Save"
         expect(current_path).to eq(show_tray_path(id: tray.id))
         expect(page).to have_content tray.barcode
-        expect{page.find_by_id("barcode")}.to raise_error(Capybara::ElementNotFound)
+        expect { page.find_by(id: "barcode") }.to raise_error(Capybara::ElementNotFound)
         click_button "Pull"
         expect(current_path).to eq(trays_path)
       end
@@ -354,9 +353,9 @@ feature "Trays", type: :feature do
     it "displays an item after successfully adding it to a tray" do
       expect(GetItemFromBarcode).to receive(:call).with(barcode: item.barcode, user_id: @user.id).and_return(item).at_least :once
       stub_request(:post, api_stock_url).
-      with(body: {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{tray.barcode}"},
-        headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.17.0'}).
-      to_return{ |response| { status: 200, body: {results: {status: "OK", message: "Item stocked"}}.to_json, headers: {} } }
+        with(body: { "barcode" => item.barcode.to_s, "item_id" => item.id.to_s, "tray_code" => tray.barcode.to_s },
+             headers: { "Content-Type" => "application/x-www-form-urlencoded", "User-Agent" => "Faraday v0.17.0" }).
+        to_return { |_response| { status: 200, body: { results: { status: "OK", message: "Item stocked" } }.to_json, headers: {} } }
       visit trays_items_path
       fill_in "Tray", with: tray.barcode
       click_button "Save"
@@ -374,9 +373,9 @@ feature "Trays", type: :feature do
     it "displays information about a successful association made" do
       expect(GetItemFromBarcode).to receive(:call).with(barcode: item.barcode, user_id: @user.id).and_return(item).at_least :once
       stub_request(:post, api_stock_url).
-      with(body: {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{tray.barcode}"},
-        headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.17.0'}).
-      to_return{ |response| { status: 200, body: {results: {status: "OK", message: "Item stocked"}}.to_json, headers: {} } }
+        with(body: { "barcode" => item.barcode.to_s, "item_id" => item.id.to_s, "tray_code" => tray.barcode.to_s },
+             headers: { "Content-Type" => "application/x-www-form-urlencoded", "User-Agent" => "Faraday v0.17.0" }).
+        to_return { |_response| { status: 200, body: { results: { status: "OK", message: "Item stocked" } }.to_json, headers: {} } }
       visit trays_items_path
       fill_in "Tray", with: tray.barcode
       click_button "Save"
@@ -396,12 +395,12 @@ feature "Trays", type: :feature do
       expect(GetItemFromBarcode).to receive(:call).with(barcode: item.barcode, user_id: @user.id).and_return(item).at_least :once
       item_uri = api_item_url(item)
       stub_request(:get, item_uri).
-        with(headers: { "User-Agent"=>"Faraday v0.17.0" }).
-        to_return{ { status: 200, body: response_body, headers: {} } }
+        with(headers: { "User-Agent" => "Faraday v0.17.0" }).
+        to_return { { status: 200, body: response_body, headers: {} } }
       stub_request(:post, api_stock_url).
-        with(body: {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{tray.barcode}"},
-          headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.17.0'}).
-        to_return{ |response| { status: 200, body: {results: {status: "OK", message: "Item stocked"}}.to_json, headers: {} } }
+        with(body: { "barcode" => item.barcode.to_s, "item_id" => item.id.to_s, "tray_code" => tray.barcode.to_s },
+             headers: { "Content-Type" => "application/x-www-form-urlencoded", "User-Agent" => "Faraday v0.17.0" }).
+        to_return { |_response| { status: 200, body: { results: { status: "OK", message: "Item stocked" } }.to_json, headers: {} } }
       visit trays_items_path
       fill_in "Tray", with: tray.barcode
       click_button "Save"
@@ -431,9 +430,9 @@ feature "Trays", type: :feature do
       item.tray = tray2
       expect(GetItemFromBarcode).to receive(:call).with(barcode: item.barcode, user_id: @user.id).and_return(item).at_least :once
       stub_request(:post, api_stock_url).
-        with(body: {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{tray2.barcode}"},
-          headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.17.0'}).
-        to_return{ |response| { status: 200, body: {results: {status: "OK", message: "Item stocked"}}.to_json, headers: {} } }
+        with(body: { "barcode" => item.barcode.to_s, "item_id" => item.id.to_s, "tray_code" => tray2.barcode.to_s },
+             headers: { "Content-Type" => "application/x-www-form-urlencoded", "User-Agent" => "Faraday v0.17.0" }).
+        to_return { |_response| { status: 200, body: { results: { status: "OK", message: "Item stocked" } }.to_json, headers: {} } }
       visit trays_items_path
       fill_in "Tray", with: tray.barcode
       click_button "Save"
@@ -502,7 +501,7 @@ feature "Trays", type: :feature do
       item_uri = api_item_url(item)
       stub_request(:get, item_uri).
         with(headers: { "User-Agent" => "Faraday v0.17.0" }).
-        to_return{ { status: 200, body: response_body, headers: {} } }
+        to_return { { status: 200, body: response_body, headers: {} } }
       visit trays_items_path
       fill_in "Tray", with: tray.barcode
       click_button "Save"
@@ -516,7 +515,7 @@ feature "Trays", type: :feature do
 
     it "displays items associated with a tray when processing items" do
       items = []
-      5.times do |i|
+      5.times do |_i|
         item = FactoryBot.create(:item, barcode: rand.to_s[2..15])
         items << item
       end
@@ -528,13 +527,13 @@ feature "Trays", type: :feature do
         expect(GetItemFromBarcode).to receive(:call).with(barcode: item.barcode, user_id: @user.id).and_return(item).at_least :once
         item_uri = api_item_url(item)
         stub_request(:post, item_uri).
-          with(body: {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{tray.barcode}"},
-            headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.17.0'}).
-          to_return{ |response| { status: 200, body: {results: {status: "OK", message: "Item stocked"}}.to_json, headers: {} } }
+          with(body: { "barcode" => item.barcode.to_s, "item_id" => item.id.to_s, "tray_code" => tray.barcode.to_s },
+               headers: { "Content-Type" => "application/x-www-form-urlencoded", "User-Agent" => "Faraday v0.17.0" }).
+          to_return { |_response| { status: 200, body: { results: { status: "OK", message: "Item stocked" } }.to_json, headers: {} } }
         stub_request(:post, api_stock_url).
-          with(body: {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{tray.barcode}"},
-            headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0..15.3'}).
-          to_return{ |response| { status: 200, body: {results: {status: "OK", message: "Item stocked"}}.to_json, headers: {} } }
+          with(body: { "barcode" => item.barcode.to_s, "item_id" => item.id.to_s, "tray_code" => tray.barcode.to_s },
+               headers: { "Content-Type" => "application/x-www-form-urlencoded", "User-Agent" => "Faraday v0..15.3" }).
+          to_return { |_response| { status: 200, body: { results: { status: "OK", message: "Item stocked" } }.to_json, headers: {} } }
         fill_in "Item", with: item.barcode
         fill_in "Thickness", with: Faker::Number.number(1)
         click_button "Save"
@@ -551,11 +550,11 @@ feature "Trays", type: :feature do
       item_uri = api_item_url(item)
       stub_request(:get, item_uri).
         with(headers: { "User-Agent" => "Faraday v0.17.0" }).
-        to_return{ { status: 200, body: response_body, headers: {} } }
+        to_return { { status: 200, body: response_body, headers: {} } }
       stub_request(:post, api_stock_url).
-        with(body: {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{tray.barcode}"},
-          headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.17.0'}).
-        to_return{ |response| { status: 200, body: {results: {status: "OK", message: "Item stocked"}}.to_json, headers: {} } }
+        with(body: { "barcode" => item.barcode.to_s, "item_id" => item.id.to_s, "tray_code" => tray.barcode.to_s },
+             headers: { "Content-Type" => "application/x-www-form-urlencoded", "User-Agent" => "Faraday v0.17.0" }).
+        to_return { |_response| { status: 200, body: { results: { status: "OK", message: "Item stocked" } }.to_json, headers: {} } }
       visit trays_items_path
       fill_in "Tray", with: tray.barcode
       click_button "Save"
@@ -577,9 +576,9 @@ feature "Trays", type: :feature do
         with(headers: { "User-Agent" => "Faraday v0.17.0" }).
         to_return { { status: 200, body: response_body, headers: {} } }
       stub_request(:post, api_stock_url).
-        with(body: { "barcode" => "#{item.barcode}", "item_id" => "#{item.id}", "tray_code" => "#{tray.barcode}" },
-          headers: { 'Content-Type' => 'application/x-www-form-urlencoded', 'User-Agent' => 'Faraday v0.17.0' }).
-        to_return{ |response| { status: 200, body: { results: { status: "OK", message: "Item stocked" } }.to_json, headers: {} } }
+        with(body: { "barcode" => item.barcode.to_s, "item_id" => item.id.to_s, "tray_code" => tray.barcode.to_s },
+             headers: { "Content-Type" => "application/x-www-form-urlencoded", "User-Agent" => "Faraday v0.17.0" }).
+        to_return { |_response| { status: 200, body: { results: { status: "OK", message: "Item stocked" } }.to_json, headers: {} } }
       visit trays_items_path
       fill_in "Tray", with: tray.barcode
       click_button "Save"
@@ -598,11 +597,11 @@ feature "Trays", type: :feature do
       item_uri = api_item_url(item)
       stub_request(:get, item_uri).
         with(headers: { "User-Agent" => "Faraday v0.17.0" }).
-        to_return{ { status: 200, body: response_body, headers: {} } }
+        to_return { { status: 200, body: response_body, headers: {} } }
       stub_request(:post, api_stock_url).
-        with(body: {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{tray.barcode}"},
-          headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.17.0'}).
-        to_return{ |response| { status: 200, body: {results: {status: "OK", message: "Item stocked"}}.to_json, headers: {} } }
+        with(body: { "barcode" => item.barcode.to_s, "item_id" => item.id.to_s, "tray_code" => tray.barcode.to_s },
+             headers: { "Content-Type" => "application/x-www-form-urlencoded", "User-Agent" => "Faraday v0.17.0" }).
+        to_return { |_response| { status: 200, body: { results: { status: "OK", message: "Item stocked" } }.to_json, headers: {} } }
       visit trays_items_path
       fill_in "Tray", with: tray.barcode
       click_button "Save"
@@ -623,9 +622,9 @@ feature "Trays", type: :feature do
         with(headers: { "User-Agent" => "Faraday v0.17.0" }).
         to_return { { status: 200, body: response_body, headers: {} } }
       stub_request(:post, api_stock_url).
-        with(body: { "barcode" => "#{item.barcode}", "item_id" => "#{item.id}", "tray_code" => "#{tray.barcode}" },
-          headers: { 'Content-Type' => 'application/x-www-form-urlencoded', 'User-Agent' => 'Faraday v0.17.0' }).
-        to_return{ |response| { status: 200, body: { results: { status: "OK", message: "Item stocked" } }.to_json, headers: {} } }
+        with(body: { "barcode" => item.barcode.to_s, "item_id" => item.id.to_s, "tray_code" => tray.barcode.to_s },
+             headers: { "Content-Type" => "application/x-www-form-urlencoded", "User-Agent" => "Faraday v0.17.0" }).
+        to_return { |_response| { status: 200, body: { results: { status: "OK", message: "Item stocked" } }.to_json, headers: {} } }
       visit trays_items_path
       fill_in "Tray", with: tray.barcode
       click_button "Save"
@@ -663,9 +662,9 @@ feature "Trays", type: :feature do
         with(headers: { "User-Agent" => "Faraday v0.17.0" }).
         to_return { { status: 200, body: response_body, headers: {} } }
       stub_request(:post, api_stock_url).
-        with(body: { "barcode" => "#{item.barcode}", "item_id" => "#{item.id}", "tray_code" => "#{tray.barcode}" },
-          headers: { 'Content-Type' => 'application/x-www-form-urlencoded', 'User-Agent' => 'Faraday v0.17.0' }).
-        to_return { |response| { status: 200, body: { results: { status: "OK", message: "Item stocked" } }.to_json, headers: {} } }
+        with(body: { "barcode" => item.barcode.to_s, "item_id" => item.id.to_s, "tray_code" => tray.barcode.to_s },
+             headers: { "Content-Type" => "application/x-www-form-urlencoded", "User-Agent" => "Faraday v0.17.0" }).
+        to_return { |_response| { status: 200, body: { results: { status: "OK", message: "Item stocked" } }.to_json, headers: {} } }
       visit trays_items_path
       fill_in "Tray", with: tray.barcode
       click_button "Save"
@@ -692,11 +691,11 @@ feature "Trays", type: :feature do
       item_uri = api_item_url(item)
       stub_request(:get, item_uri).
         with(headers: { "User-Agent" => "Faraday v0.17.0" }).
-        to_return{ { status: 200, body: response_body, headers: {} } }
+        to_return { { status: 200, body: response_body, headers: {} } }
       stub_request(:post, api_stock_url).
-        with(body: {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{tray.barcode}"},
-          headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.17.0'}).
-        to_return{ |response| { status: 200, body: {results: {status: "OK", message: "Item stocked"}}.to_json, headers: {} } }
+        with(body: { "barcode" => item.barcode.to_s, "item_id" => item.id.to_s, "tray_code" => tray.barcode.to_s },
+             headers: { "Content-Type" => "application/x-www-form-urlencoded", "User-Agent" => "Faraday v0.17.0" }).
+        to_return { |_response| { status: 200, body: { results: { status: "OK", message: "Item stocked" } }.to_json, headers: {} } }
       visit trays_items_path
       fill_in "Tray", with: tray.barcode
       click_button "Save"
@@ -728,18 +727,18 @@ feature "Trays", type: :feature do
         expect(GetItemFromBarcode).to receive(:call).with(barcode: item.barcode, user_id: @user.id).and_return(item).at_least :once
         item_uri = api_item_url(item)
         stub_request(:post, item_uri).
-          with(body: {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{tray.barcode}"},
-            headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.17.0'}).
-          to_return{ |response| { status: 200, body: {results: {status: "OK", message: "Item stocked"}}.to_json, headers: {} } }
+          with(body: { "barcode" => item.barcode.to_s, "item_id" => item.id.to_s, "tray_code" => tray.barcode.to_s },
+               headers: { "Content-Type" => "application/x-www-form-urlencoded", "User-Agent" => "Faraday v0.17.0" }).
+          to_return { |_response| { status: 200, body: { results: { status: "OK", message: "Item stocked" } }.to_json, headers: {} } }
         stub_request(:post, api_stock_url).
-          with(body: {"barcode"=>"#{item.barcode}", "item_id"=>"#{item.id}", "tray_code"=>"#{tray.barcode}"},
-            headers: {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.17.0'}).
-          to_return{ |response| { status: 200, body: {results: {status: "OK", message: "Item stocked"}}.to_json, headers: {} } }
+          with(body: { "barcode" => item.barcode.to_s, "item_id" => item.id.to_s, "tray_code" => tray.barcode.to_s },
+               headers: { "Content-Type" => "application/x-www-form-urlencoded", "User-Agent" => "Faraday v0.17.0" }).
+          to_return { |_response| { status: 200, body: { results: { status: "OK", message: "Item stocked" } }.to_json, headers: {} } }
         fill_in "Item", with: item.barcode
         fill_in "Thickness", with: 100
         click_button "Save"
       end
-      expect(page).to have_content 'warning - tray may be full'
+      expect(page).to have_content "warning - tray may be full"
       expect(page.find(".progress-bar")[:class].include?("progress-bar-danger")).to eq true
       expect(page).to have_content "#{tray.used} / #{tray.capacity}"
     end

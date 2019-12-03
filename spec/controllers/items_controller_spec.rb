@@ -46,7 +46,6 @@ RSpec.describe ItemsController, type: :controller do
     end
 
     context "for a valid barcode that is not found" do
-
       before(:each) do
         allow(IsValidItem).to receive(:call).and_return(true)
         allow(ActivityLogger).to receive(:create_item)

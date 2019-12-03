@@ -1,7 +1,7 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe AssociateTrayWithShelfBarcode do
-  subject { described_class.call(tray, barcode, user)}
+  subject { described_class.call(tray, barcode, user) }
   let(:tray) { FactoryBot.create(:tray, shelf: shelf) }
   let(:shelf) { FactoryBot.create(:shelf) }
   let(:user) { FactoryBot.create(:user) }
@@ -12,7 +12,6 @@ RSpec.describe AssociateTrayWithShelfBarcode do
     allow(GetShelfFromBarcode).to receive(:call).with(barcode).and_return(shelf)
     allow(IsObjectTray).to receive(:call).with(tray).and_return(true)
   end
-
 
   it "gets a shelf from the barcode" do
     expect(GetShelfFromBarcode).to receive(:call).with(barcode).and_return(shelf)
@@ -34,10 +33,9 @@ RSpec.describe AssociateTrayWithShelfBarcode do
     expect(subject).to be(false)
   end
 
-
-# this is not implemented in the class..
+  # this is not implemented in the class..
   it "raises an error if the item is not a tray." do
-    #expect(IsTray).to recieve(:call).with(tray).and_return(false)
-    #expect { subject }.to raise_error
+    # expect(IsTray).to recieve(:call).with(tray).and_return(false)
+    # expect { subject }.to raise_error
   end
 end

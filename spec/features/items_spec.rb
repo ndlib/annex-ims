@@ -16,7 +16,7 @@ feature "Items", type: :feature do
       @request = FactoryBot.create(:request)
 
       stub_request(:post, api_stock_url).
-        with(body: { barcode: "#{@item.barcode}", item_id: "#{@item.id}", tray_code: "#{@item.tray.barcode}" },
+        with(body: { barcode: @item.barcode.to_s, item_id: @item.id.to_s, tray_code: @item.tray.barcode.to_s },
              headers: { "Content-Type" => "application/x-www-form-urlencoded", "User-Agent" => "Faraday v0.17.0" }).
         to_return(status: 200, body: { results: { status: "OK", message: "Item stocked" } }.to_json, headers: {})
 
@@ -144,13 +144,13 @@ feature "Items", type: :feature do
 
       it "has a link to its shelf" do
         visit item_detail_path(@item.barcode)
-        click_link "#{@item.tray.shelf.barcode}"
+        click_link @item.tray.shelf.barcode.to_s
         expect(current_path).to eq(check_trays_path(barcode: @item.tray.shelf.barcode))
       end
 
       it "has a link to its tray" do
         visit item_detail_path(@item.barcode)
-        click_link "#{@item.tray.barcode}"
+        click_link @item.tray.barcode.to_s
         expect(current_path).to eq(check_items_path(barcode: @item.tray.barcode))
       end
     end
