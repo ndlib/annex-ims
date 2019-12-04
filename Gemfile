@@ -39,7 +39,7 @@ group :application do
 
   # Devise for authentication, CAS for use in ND
   gem "devise"
-  gem "devise_cas_authenticatable"
+  gem "omniauth-oktaoauth"
 
   # For consuming the API for items
   gem "faraday"

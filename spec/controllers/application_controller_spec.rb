@@ -62,7 +62,7 @@ RSpec.describe ApplicationController, type: :controller do
   context "no user" do
     it "redirects the user to sign in" do
       get :index
-      expect(response).to redirect_to(new_user_session_path)
+      expect(response).to redirect_to(user_oktaoauth_omniauth_authorize_path)
     end
   end
 

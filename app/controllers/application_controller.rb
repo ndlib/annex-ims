@@ -31,7 +31,7 @@ class ApplicationController < ActionController::Base
   end
 
   def redirect_to_sign_in
-    redirect_to new_user_session_path
+    redirect_to user_oktaoauth_omniauth_authorize_path
   end
 
   def redirect_to_unauthorized
@@ -69,5 +69,10 @@ class ApplicationController < ActionController::Base
   def set_raven_context
     Raven.user_context(id: session[:current_user_id]) # or anything else in session
     Raven.extra_context(params: params.to_unsafe_h, url: request.url)
+  end
+
+  # Overwriting the sign_out redirect path method
+  def after_sign_out_path_for(resource_or_scope)
+    Rails.application.secrets.okta[:logout_url]
   end
 end
