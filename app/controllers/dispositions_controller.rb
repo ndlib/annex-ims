@@ -18,8 +18,6 @@ class DispositionsController < ApplicationController
     respond_with(@disposition)
   end
 
-  def edit; end
-
   def create
     @disposition = Disposition.new(disposition_params)
     @disposition.save

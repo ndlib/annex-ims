@@ -74,7 +74,7 @@ namespace :sneakers do
       if SneakersRakeHelper::process_running?(pid)
         running = true
       else
-        timestamp = Time.zone.now.strftime("%Y%m%d%H%M%S")
+        timestamp = Time.now.strftime("%Y%m%d%H%M%S")
         broken_name = "#{SneakersRakeHelper::pid_file}.#{timestamp}"
         File.rename(SneakersRakeHelper::pid_file, broken_name)
         SneakersRakeHelper::info "PID file exists, but sneakers is not running. Moving broken PID file: #{broken_name}"

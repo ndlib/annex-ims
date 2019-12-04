@@ -26,7 +26,7 @@ end
     conditions: [Item::CONDITIONS.sample, Item::CONDITIONS.sample, Item::CONDITIONS.sample, Item::CONDITIONS.sample].uniq,
     call_number: call_number,
     initial_ingest: Faker::Date.between(30.days.ago, Date.today),
-    last_ingest: Time.zone.now.strftime("%Y-%m-%d"),
+    last_ingest: Time.now.strftime("%Y-%m-%d"),
     metadata_status: "complete",
     thickness: 1,
   )

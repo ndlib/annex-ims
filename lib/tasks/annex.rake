@@ -14,7 +14,7 @@ namespace :annex do
 
     logger = Logger.new(STDOUT)
 
-    system_user = OpenStruct.new(user_id: nil, username: "system")
+    system_user = OpenStruct.new({ user_id: nil, username: "system" })
     results = Lib::Tasks::Services::DestroyInvalidItems.call(user: system_user)
     timestamp = (DateTime.now.to_f * 1000).to_i
     item_attrs = Item.new.attributes.map { |k, _v| k }
@@ -26,9 +26,9 @@ namespace :annex do
         destroyed_file << item_attrs.map { |k| item[k] }
       end
       destroyed_file.close
-      print "Wrote destroyed items to #{destroyed_file.path}\n"
+      logger.info("Wrote destroyed items to #{destroyed_file.path}")
     else
-      print "No items were destroyed.\n"
+      logger.info("No items were destroyed.")
     end
 
     if results[:failed].present?
@@ -38,7 +38,7 @@ namespace :annex do
         failed_file << item_attrs.map { |k| item[k] }
       end
       failed_file.close
-      print "Wrote failed items to #{failed_file.path}\n"
+      logger.info("Wrote failed items to #{failed_file.path}")
     end
   end
 

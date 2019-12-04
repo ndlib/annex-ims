@@ -14,7 +14,7 @@ RSpec.describe UnresolvedIssueQuery do
     issue2 = FactoryBot.create(:issue)
 
     # This one won't show up in the response object
-    FactoryBot.create(:issue, resolved_at: Time.zone.now)
+    FactoryBot.create(:issue, resolved_at: Time.now)
 
     # Overloading expectations so we don't need
     expect(subject.call(barcode: issue1.barcode)).to eq([issue1])

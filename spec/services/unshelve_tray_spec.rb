@@ -32,7 +32,7 @@ RSpec.describe UnshelveTray do
   end
 
   # this is not implemented in the class..
-  it "raises an error if the item is not a tray." do
+  xit "raises an error if the item is not a tray." do
     # expect(IsTray).to recieve(:call).with(tray).and_return(false)
     # expect { subject }.to raise_error
   end

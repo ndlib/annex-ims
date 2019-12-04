@@ -31,7 +31,7 @@ class UnstockItem
     end
   end
 
-    private
+  private
 
   def validate_input!
     if IsObjectItem.call(item)
@@ -40,4 +40,4 @@ class UnstockItem
       raise "object is not an item"
     end
   end
-  end
+end

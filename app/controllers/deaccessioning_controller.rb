@@ -11,7 +11,7 @@ class DeaccessioningController < ApplicationController
   end
 
   def params_whitelist
-    params.permit(:items => {})
+    params.permit(items: {})
     params.permit([:disposition_id, :comment])
   end
 

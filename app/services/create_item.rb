@@ -29,8 +29,10 @@ class CreateItem
         new_issue.user_id = current_user_id
         new_issue.issue_type = "not_valid_barcode"
       end
-      issue.issue_type = "not_valid_barcode"
-      issue.save!
+      if item.issue_type != "not_valid_barcode"
+        issue.issue_type = "not_valid_barcode"
+        issue.save!
+      end
       return
     end
 

@@ -22,7 +22,12 @@ RSpec.describe DeaccessioningController, type: :controller do
 
   describe "POST req" do
     it "associates an unstocked item with a special bin" do
-      post :req, params: { items: { unstock.id.to_s => "items[#{unstock.id}]" }, disposition_id: disposition.id, comment: comment }
+      post :req,
+           params: {
+             items: { unstock.id.to_s => "items[#{unstock.id}]" },
+             disposition_id: disposition.id,
+             comment: comment
+           }
       bin = GetBinFromBarcode.call("BIN-REM-HAND-01")
       i = Item.find(unstock.id)
       expect(i.bin).to eq(bin)
@@ -34,7 +39,12 @@ RSpec.describe DeaccessioningController, type: :controller do
     end
 
     subject do
-      post :req, params: { items: { item.id.to_s => "items[#{item.id}]" }, disposition_id: disposition.id, comment: comment }
+      post :req,
+           params: {
+             items: { item.id.to_s => "items[#{item.id}]" },
+             disposition_id: disposition.id,
+             comment: comment
+           }
     end
     it "builds a deaccessioning request" do
       expect(BuildDeaccessioningRequest).to receive(:call).

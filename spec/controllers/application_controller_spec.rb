@@ -13,7 +13,7 @@ RSpec.describe ApplicationController, type: :controller do
     end
 
     context "is not an admin" do
-      let(:user) { FactoryBot.create(:user, admin: false, last_activity_at: Time.zone.now) }
+      let(:user) { FactoryBot.create(:user, admin: false, last_activity_at: Time.now) }
 
       it "throws a routing error" do
         expect { get :index }.to raise_error(ActionController::RoutingError)
@@ -21,7 +21,7 @@ RSpec.describe ApplicationController, type: :controller do
     end
 
     context "is not a worker" do
-      let(:user) { FactoryBot.create(:user, worker: false, last_activity_at: Time.zone.now) }
+      let(:user) { FactoryBot.create(:user, worker: false, last_activity_at: Time.now) }
 
       it "throws a routing error" do
         expect { get :index }.to raise_error(ActionController::RoutingError)
@@ -29,7 +29,7 @@ RSpec.describe ApplicationController, type: :controller do
     end
 
     context "is an admin" do
-      let(:user) { FactoryBot.create(:user, admin: true, last_activity_at: Time.zone.now) }
+      let(:user) { FactoryBot.create(:user, admin: true, last_activity_at: Time.now) }
 
       it "renders" do
         get :index
@@ -44,7 +44,7 @@ RSpec.describe ApplicationController, type: :controller do
     end
 
     context "is a worker" do
-      let(:user) { FactoryBot.create(:user, worker: true, last_activity_at: Time.zone.now) }
+      let(:user) { FactoryBot.create(:user, worker: true, last_activity_at: Time.now) }
 
       it "renders" do
         get :index
@@ -67,7 +67,7 @@ RSpec.describe ApplicationController, type: :controller do
   end
 
   context "admin user session has not expired" do
-    let(:user) { FactoryBot.create(:user, admin: true, last_activity_at: Time.zone.now) }
+    let(:user) { FactoryBot.create(:user, admin: true, last_activity_at: Time.now) }
 
     before(:each) do
       sign_in(user)
@@ -85,7 +85,7 @@ RSpec.describe ApplicationController, type: :controller do
   end
 
   context "worker user session has not expired" do
-    let(:user) { FactoryBot.create(:user, worker: true, last_activity_at: Time.zone.now) }
+    let(:user) { FactoryBot.create(:user, worker: true, last_activity_at: Time.now) }
 
     before(:each) do
       sign_in(user)
@@ -103,7 +103,7 @@ RSpec.describe ApplicationController, type: :controller do
   end
 
   context "admin user session has expired" do
-    let(:user) { FactoryBot.create(:user, admin: true, last_activity_at: Time.zone.now - 2.days) }
+    let(:user) { FactoryBot.create(:user, admin: true, last_activity_at: Time.now - 2.days) }
 
     before(:each) do
       sign_in(user)
@@ -121,7 +121,7 @@ RSpec.describe ApplicationController, type: :controller do
   end
 
   context "worker user session has expired" do
-    let(:user) { FactoryBot.create(:user, worker: true, last_activity_at: Time.zone.now - 2.days) }
+    let(:user) { FactoryBot.create(:user, worker: true, last_activity_at: Time.now - 2.days) }
 
     before(:each) do
       sign_in(user)

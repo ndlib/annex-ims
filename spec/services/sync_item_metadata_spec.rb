@@ -24,7 +24,7 @@ RSpec.describe SyncItemMetadata do
           expect(item.metadata_updated_at).to be_nil
           subject
           expect(item.metadata_updated_at).to be_present
-          expect(Time.zone.now - item.metadata_updated_at).to be < 1
+          expect(Time.now - item.metadata_updated_at).to be < 1
         end
       end
 

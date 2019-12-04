@@ -10,7 +10,7 @@ RSpec.describe ResolveIssue do
     expect(issue.resolved_at).to be_nil
     expect(issue.resolver).to be_nil
     subject
-    expect(issue.resolved_at).to be >= Time.zone.now - 1.second
+    expect(issue.resolved_at).to be >= Time.now - 1.second
     expect(issue.resolver).to eq(user)
   end
 

@@ -28,7 +28,7 @@ class WithdrawTray
     end
   end
 
-    private
+  private
 
   def validate_input!
     if IsObjectTray.call(tray)
@@ -37,4 +37,4 @@ class WithdrawTray
       raise "object is not a tray"
     end
   end
-  end
+end

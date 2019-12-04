@@ -26,7 +26,7 @@ class ShipItem
     result
   end
 
-    private
+  private
 
   def validate_input!
     if IsObjectItem.call(item)
@@ -35,4 +35,4 @@ class ShipItem
       raise "object is not an item"
     end
   end
-  end
+end

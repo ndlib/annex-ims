@@ -45,7 +45,7 @@ module ItemMetadata
   def metadata_status_attributes(status)
     {
       metadata_status: status,
-      metadata_updated_at: Time.zone.now,
+      metadata_updated_at: Time.now,
     }
   end
 end

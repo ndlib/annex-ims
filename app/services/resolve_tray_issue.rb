@@ -13,7 +13,7 @@ class ResolveTrayIssue
 
   def resolve
     issue.resolver = user
-    issue.resolved_at = Time.zone.now
+    issue.resolved_at = Time.now
     issue.save!
     ActivityLogger.resolve_tray_issue(tray: @tray, issue: issue, user: user)
   end

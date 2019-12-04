@@ -23,7 +23,7 @@ class UnshelveTray
     end
   end
 
-    private
+  private
 
   def validate_input!
     if IsObjectTray.call(tray)
@@ -32,4 +32,4 @@ class UnshelveTray
       raise "object is not a tray"
     end
   end
-  end
+end

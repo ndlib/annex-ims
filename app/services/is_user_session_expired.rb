@@ -9,7 +9,7 @@ class IsUserSessionExpired
       if Rails.configuration.respond_to? :user_timeout
         timeout = Rails.configuration.user_timeout
       end
-      Time.zone.now - user.last_activity_at > timeout
+      Time.now - user.last_activity_at > timeout
     else
       true
     end
