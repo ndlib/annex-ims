@@ -20,18 +20,15 @@ class BatchesController < ApplicationController
     if batch_blank?
       flash[:error] = flash_message("empty_batch")
       redirect_to batches_path
-      nil
     elsif current_batch?
       flash[:notice] = flash_message("active_batch")
       redirect_to current_batch_path
-      nil
     else
       @batch = BuildBatch.call(params[:batch], current_user)
 
       flash[:notice] = "Batch created."
 
       redirect_to root_path
-      nil
     end
   end
 

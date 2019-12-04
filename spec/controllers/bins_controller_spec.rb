@@ -41,8 +41,8 @@ RSpec.describe BinsController, type: :controller do
 
       it "redirects back to show as admin" do
         subject
-        expected_path = @request.protocol + @request.host + show_bin_path(id: bin.id)
-        expect(response.body).to eq("<html><body>You are being <a href=\"#{expected_path}\">redirected</a>.</body></html>")
+        expect(response.status).to eq(302)
+        expect(response.location).to eq(@request.protocol + @request.host + show_bin_path(id: bin.id))
       end
     end
 
@@ -72,8 +72,8 @@ RSpec.describe BinsController, type: :controller do
 
       it "redirects back to show as worker" do
         subject
-        expected_path = @request.protocol + @request.host + show_bin_path(id: bin.id)
-        expect(response.body).to eq("<html><body>You are being <a href=\"#{expected_path}\">redirected</a>.</body></html>")
+        expect(response.status).to eq(302)
+        expect(response.location).to eq(@request.protocol + @request.host + show_bin_path(id: bin.id))
       end
     end
   end
@@ -96,8 +96,8 @@ RSpec.describe BinsController, type: :controller do
 
       it "redirects back to show" do
         subject
-        expected_path = @request.protocol + @request.host + show_bin_path(id: bin.id)
-        expect(response.body).to eq("<html><body>You are being <a href=\"#{expected_path}\">redirected</a>.</body></html>")
+        expect(response.status).to eq(302)
+        expect(response.location).to eq(@request.protocol + @request.host + show_bin_path(id: bin.id))
       end
     end
 
@@ -117,8 +117,8 @@ RSpec.describe BinsController, type: :controller do
 
       it "redirects back to show" do
         subject
-        expected_path = @request.protocol + @request.host + show_bin_path(id: bin.id)
-        expect(response.body).to eq("<html><body>You are being <a href=\"#{expected_path}\">redirected</a>.</body></html>")
+        expect(response.status).to eq(302)
+        expect(response.location).to eq(@request.protocol + @request.host + show_bin_path(id: bin.id))
       end
     end
   end

@@ -11,8 +11,8 @@ class DeaccessioningController < ApplicationController
   end
 
   def params_whitelist
-    # TODO: :items does not work. In Rails 5.1+, we can do :items => {} to permit a hash as a param.
-    params.permit([:items, :disposition_id, :comment])
+    params.permit(:items => {})
+    params.permit([:disposition_id, :comment])
   end
 
   def req

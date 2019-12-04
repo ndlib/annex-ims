@@ -18,7 +18,6 @@ class ApplicationController < ActionController::Base
     end
     unless user_admin? || user_worker?
       redirect_to_unauthorized
-      nil
     end
   end
 
