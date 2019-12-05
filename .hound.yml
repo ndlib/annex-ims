@@ -2,5 +2,8 @@ rubocop:
   config_file: config/style_guides/.ruby-style.yml
   version: 0.75.0
 
+haml:
+  config_file: config/style_guides/.haml-style.yml
+
 eslint:
   config_file: config/style_guides/.javascript-style.json

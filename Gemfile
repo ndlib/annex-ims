@@ -88,6 +88,7 @@ group :development, :test, :staging do
 
   gem "rubocop", "= 0.75.0" # this is the latest version hound supports
   gem "rubocop-rails"
+  gem "haml_lint", require: false
 end
 
 group :development, :test do
