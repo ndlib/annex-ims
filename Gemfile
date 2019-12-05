@@ -86,9 +86,9 @@ group :development, :test, :staging do
   # For realistic fake data
   gem "faker", "~> 1.4"
 
+  gem "haml_lint", require: false
   gem "rubocop", "= 0.75.0" # this is the latest version hound supports
   gem "rubocop-rails"
-  gem "haml_lint", require: false
 end
 
 group :development, :test do
