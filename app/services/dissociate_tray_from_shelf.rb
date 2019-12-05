@@ -30,14 +30,12 @@ class DissociateTrayFromShelf
       shelf.save
     end
 
-    return result
+    result
   end
-
 
   private
 
-    def transaction_log
-      # log transaction here
-    end
-
+  def transaction_log
+    # log transaction here
+  end
 end

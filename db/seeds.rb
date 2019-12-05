@@ -16,7 +16,7 @@ def call_number
   "#{rand_letter}#{rand_letter}#{Faker::Number.number(4)}.#{rand_letter}#{Faker::Number.number(2)} #{(1900..2014).to_a.sample}"
 end
 
-100.times do |i|
+100.times do |_i|
   Item.create!(
     barcode: Faker::Number.number(14).to_s,
     title: Faker::Lorem.sentence,
@@ -32,7 +32,7 @@ end
   )
 end
 
-50.times do |i|
+50.times do |_i|
   barcode = Item.order("RANDOM()").first.barcode
   Request.create!(
     criteria_type: "barcode",

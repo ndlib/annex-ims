@@ -1,4 +1,4 @@
-class CreateTrays < ActiveRecord::Migration
+class CreateTrays < ActiveRecord::Migration[4.2]
   def change
     create_table :trays do |t|
       t.string :barcode

@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 def h
   Rails.application.routes.url_helpers
@@ -6,17 +6,17 @@ end
 
 RSpec.describe ItemRestockToTray do
   before(:each) do
-    @tray = FactoryGirl.create(:tray)
-    @shelf = FactoryGirl.create(:shelf)
-    @tray2 = FactoryGirl.create(:tray)
-    @item = FactoryGirl.create(:item, tray: @tray)
-    @item2 = FactoryGirl.create(:item)
-    @user = FactoryGirl.create(:user)
+    @tray = FactoryBot.create(:tray)
+    @shelf = FactoryBot.create(:shelf)
+    @tray2 = FactoryBot.create(:tray)
+    @item = FactoryBot.create(:item, tray: @tray)
+    @item2 = FactoryBot.create(:item)
+    @user = FactoryBot.create(:user)
 
     stub_request(:post, api_stock_url).
-      with(:body => {"barcode"=>"#{@item.barcode}", "item_id"=>"#{@item.id}", "tray_code"=>"#{@item.tray.barcode}"},
-        :headers => {'Content-Type'=>'application/x-www-form-urlencoded', 'User-Agent'=>'Faraday v0.15.3'}).
-      to_return{ |response| { :status => 200, :body => {:results => {:status => "OK", :message => "Item stocked"}}.to_json, :headers => {} } }
+      with(body: { "barcode" => @item.barcode.to_s, "item_id" => @item.id.to_s, "tray_code" => @item.tray.barcode.to_s },
+           headers: { "Content-Type" => "application/x-www-form-urlencoded", "User-Agent" => "Faraday v0.17.0" }).
+      to_return { |_response| { status: 200, body: { results: { status: "OK", message: "Item stocked" } }.to_json, headers: {} } }
 
     @user_id = 1 # Just fake having a user here
   end
@@ -26,7 +26,7 @@ RSpec.describe ItemRestockToTray do
     results = ItemRestockToTray.call(@item2.id, barcode, @user)
     expect(results[:error]).to eq("This item has no tray to stock to.")
     expect(results[:notice]).to eq(nil)
-    expect(results[:path]).to eq(h.show_item_path(:id => @item2.id))
+    expect(results[:path]).to eq(h.show_item_path(id: @item2.id))
   end
 
   it "stocks an item to a tray" do
@@ -40,7 +40,6 @@ RSpec.describe ItemRestockToTray do
     results = ItemRestockToTray.call(@item.id, @tray2.barcode, @user)
     expect(results[:error]).to eq("Item #{@item.barcode} is already assigned to #{@tray.barcode}.")
     expect(results[:notice]).to eq(nil)
-    expect(results[:path]).to eq(h.wrong_restock_path(:id => @item.id))
+    expect(results[:path]).to eq(h.wrong_restock_path(id: @item.id))
   end
-
 end

@@ -1,9 +1,9 @@
 require "rails_helper"
 
 RSpec.describe ResolveIssue do
-  let(:item) { FactoryGirl.create(:item) }
-  let(:issue) { FactoryGirl.create(:issue) }
-  let(:user) { FactoryGirl.create(:user) }
+  let(:item) { FactoryBot.create(:item) }
+  let(:issue) { FactoryBot.create(:issue) }
+  let(:user) { FactoryBot.create(:user) }
   subject { described_class.call(item: item, issue: issue, user: user) }
 
   it "resolves the issue" do

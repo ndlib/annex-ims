@@ -1,4 +1,4 @@
-class AddItemTrayBarcodeIndex < ActiveRecord::Migration
+class AddItemTrayBarcodeIndex < ActiveRecord::Migration[4.2]
   def up
     execute("create index idxgin_data_item_barcode ON
              activity_logs USING

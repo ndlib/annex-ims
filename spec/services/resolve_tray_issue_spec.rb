@@ -1,9 +1,9 @@
 require "rails_helper"
 
 RSpec.describe ResolveTrayIssue do
-  let(:issue) { FactoryGirl.create(:tray_issue) }
-  let(:tray) { FactoryGirl.create(:tray) }
-  let(:user) { FactoryGirl.create(:user) }
+  let(:issue) { FactoryBot.create(:tray_issue) }
+  let(:tray) { FactoryBot.create(:tray) }
+  let(:user) { FactoryBot.create(:user) }
   subject { described_class.call(tray: tray, issue: issue, user: user) }
 
   it "resolves the tray issue" do

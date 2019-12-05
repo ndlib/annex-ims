@@ -2,9 +2,8 @@ require "rails_helper"
 
 RSpec.describe ApiRemoveRequest do
   let(:user_id) { 1 }
-  let(:request) { FactoryGirl.create(:request) }
+  let(:request) { FactoryBot.create(:request) }
   let(:expected_params) { { source: request.source, transaction_num: request.trans } }
-
 
   describe "#call" do
     subject { described_class.call(request: request) }
@@ -12,7 +11,8 @@ RSpec.describe ApiRemoveRequest do
     it "responds with success" do
       stub_api_remove_request(request: request, body: {
         "status" => "OK",
-        "message" => "Request removed" }.to_json)
+        "message" => "Request removed"
+      }.to_json)
       expect(ActivityLogger).to receive(:api_remove_request).with(request: request, params: expected_params, api_response: kind_of(ApiResponse))
       expect(subject).to be_a_kind_of(ApiResponse)
       expect(subject.success?).to eq(true)

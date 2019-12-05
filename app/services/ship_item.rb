@@ -23,17 +23,16 @@ class ShipItem
       result = false
     end
 
-    return result
+    result
   end
 
   private
 
-    def validate_input!
-      if IsObjectItem.call(item)
-        true
-      else
-        raise "object is not an item"
-      end
+  def validate_input!
+    if IsObjectItem.call(item)
+      true
+    else
+      raise "object is not an item"
     end
-
   end
+end

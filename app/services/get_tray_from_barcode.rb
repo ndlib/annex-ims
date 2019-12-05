@@ -19,7 +19,7 @@ class GetTrayFromBarcode
 
   private
 
-    def valid?
-      IsTrayBarcode.call(barcode)
-    end
+  def valid?
+    IsTrayBarcode.call(barcode)
+  end
 end

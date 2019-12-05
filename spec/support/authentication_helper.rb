@@ -8,23 +8,22 @@ module AuthenticationHelper
   end
 
   def login_admin
-    @user = FactoryGirl.create(:user, admin: true)
+    @user = FactoryBot.create(:user, admin: true)
     login_as @user, scope: :user
     @user
   end
 
   def login_worker
-    @user = FactoryGirl.create(:user, admin: false, worker: true)
+    @user = FactoryBot.create(:user, admin: false, worker: true)
     login_as @user, scope: :user
     @user
   end
 
-=begin - placeholder, because we will need this and I will forget otherwise
-  def login_admin
-    @user = XXX Do something special for admins
-    sign_in(@user)
-  end
-=end
+  # - placeholder, because we will need this and I will forget otherwise
+  #   def login_admin
+  #     @user = XXX Do something special for admins
+  #     sign_in(@user)
+  #   end
 
   def logout
     sign_out(@user)

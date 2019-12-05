@@ -1,4 +1,4 @@
-class CreateTrayTypes < ActiveRecord::Migration
+class CreateTrayTypes < ActiveRecord::Migration[4.2]
   def change
     create_table :tray_types do |t|
       t.string :code, null: false, unique: true

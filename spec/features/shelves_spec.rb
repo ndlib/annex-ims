@@ -4,9 +4,9 @@ feature "Shelves", type: :feature do
   include AuthenticationHelper
 
   describe "when signed in" do
-    let!(:tray) { FactoryGirl.create(:tray) }
-    let!(:shelf) { FactoryGirl.create(:shelf) }
-    let!(:user) { FactoryGirl.create(:user) }
+    let!(:tray) { FactoryBot.create(:tray) }
+    let!(:shelf) { FactoryBot.create(:shelf) }
+    let!(:user) { FactoryBot.create(:user) }
 
     before(:each) do
       login_admin

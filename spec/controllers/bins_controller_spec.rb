@@ -1,20 +1,20 @@
 require "rails_helper"
 
 RSpec.describe BinsController, type: :controller do
-  let(:shelf) { FactoryGirl.create(:shelf) }
-  let(:tray) { FactoryGirl.create(:tray, shelf: shelf) }
-  let(:item) { FactoryGirl.create(:item, tray: tray, thickness: 1) }
-  let(:bin) { FactoryGirl.create(:bin, items: [item]) }
-  let(:match) { FactoryGirl.create(:match, item: item, bin: bin, request: request) }
-  let(:user) { FactoryGirl.create(:user, admin: true) }
-  let(:request) { FactoryGirl.create(:request, del_type: "loan") }
+  let(:shelf) { FactoryBot.create(:shelf) }
+  let(:tray) { FactoryBot.create(:tray, shelf: shelf) }
+  let(:item) { FactoryBot.create(:item, tray: tray, thickness: 1) }
+  let(:bin) { FactoryBot.create(:bin, items: [item]) }
+  let(:match) { FactoryBot.create(:match, item: item, bin: bin, request: request) }
+  let(:user) { FactoryBot.create(:user, admin: true) }
+  let(:request) { FactoryBot.create(:request, del_type: "loan") }
 
   before(:each) do
     sign_in(user)
   end
 
   describe "remove" do
-    let(:subject) { post :remove_match, match_id: match.id }
+    let(:subject) { post :remove_match, params: { match_id: match.id } }
 
     context "admin" do
       it "uses DestroyMatch as admin" do
@@ -33,19 +33,21 @@ RSpec.describe BinsController, type: :controller do
       end
 
       it "flashes a message when there are remaining matches associated with the item as admin" do
-        request2 = FactoryGirl.create(:request, del_type: "loan")
-        FactoryGirl.create(:match, item: item, bin: bin, request: request2)
+        request2 = FactoryBot.create(:request, del_type: "loan")
+        FactoryBot.create(:match, item: item, bin: bin, request: request2)
         subject
         expect(flash[:warning]).to be_present
       end
 
       it "redirects back to show as admin" do
-        expect(subject).to redirect_to show_bin_path(id: bin.id)
+        subject
+        expect(response.status).to eq(302)
+        expect(response.location).to eq(@request.protocol + @request.host + show_bin_path(id: bin.id))
       end
     end
 
     context "worker" do
-      let(:user) { FactoryGirl.create(:user, worker: true) }
+      let(:user) { FactoryBot.create(:user, worker: true) }
       it "uses DestroyMatch as worker" do
         expect(DestroyMatch).to receive(:call).with(match: match, user: user)
         subject
@@ -62,20 +64,22 @@ RSpec.describe BinsController, type: :controller do
       end
 
       it "flashes a message when there are remaining matches associated with the item as worker" do
-        request2 = FactoryGirl.create(:request, del_type: "loan")
-        FactoryGirl.create(:match, item: item, bin: bin, request: request2)
+        request2 = FactoryBot.create(:request, del_type: "loan")
+        FactoryBot.create(:match, item: item, bin: bin, request: request2)
         subject
         expect(flash[:warning]).to be_present
       end
 
       it "redirects back to show as worker" do
-        expect(subject).to redirect_to show_bin_path(id: bin.id)
+        subject
+        expect(response.status).to eq(302)
+        expect(response.location).to eq(@request.protocol + @request.host + show_bin_path(id: bin.id))
       end
     end
   end
 
   describe "process" do
-    let(:subject) { post :process_match, match_id: match.id }
+    let(:subject) { post :process_match, params: { match_id: match.id } }
 
     context "admin" do
       it "uses ProcessMatch" do
@@ -84,33 +88,37 @@ RSpec.describe BinsController, type: :controller do
       end
 
       it "flashes a message when there are remaining matches associated with the item" do
-        request2 = FactoryGirl.create(:request, del_type: "loan")
-        FactoryGirl.create(:match, item: item, bin: bin, request: request2)
+        request2 = FactoryBot.create(:request, del_type: "loan")
+        FactoryBot.create(:match, item: item, bin: bin, request: request2)
         subject
         expect(flash[:warning]).to be_present
       end
 
       it "redirects back to show" do
-        expect(subject).to redirect_to show_bin_path(id: bin.id)
+        subject
+        expect(response.status).to eq(302)
+        expect(response.location).to eq(@request.protocol + @request.host + show_bin_path(id: bin.id))
       end
     end
 
     context "worker" do
-      let(:user) { FactoryGirl.create(:user, worker: true) }
+      let(:user) { FactoryBot.create(:user, worker: true) }
       it "uses ProcessMatch" do
         expect(ProcessMatch).to receive(:call).with(match: match, user: user)
         subject
       end
 
       it "flashes a message when there are remaining matches associated with the item" do
-        request2 = FactoryGirl.create(:request, del_type: "loan")
-        FactoryGirl.create(:match, item: item, bin: bin, request: request2)
+        request2 = FactoryBot.create(:request, del_type: "loan")
+        FactoryBot.create(:match, item: item, bin: bin, request: request2)
         subject
         expect(flash[:warning]).to be_present
       end
 
       it "redirects back to show" do
-        expect(subject).to redirect_to show_bin_path(id: bin.id)
+        subject
+        expect(response.status).to eq(302)
+        expect(response.location).to eq(@request.protocol + @request.host + show_bin_path(id: bin.id))
       end
     end
   end

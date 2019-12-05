@@ -1,8 +1,8 @@
 require "rails_helper"
 
 RSpec.describe ApiPostDeaccessionItem do
-  let(:tray) { FactoryGirl.create(:tray) }
-  let(:item) { FactoryGirl.create(:item, tray: tray) }
+  let(:tray) { FactoryBot.create(:tray) }
+  let(:item) { FactoryBot.create(:item, tray: tray) }
   let(:response) { ApiResponse.new(status_code: 200, body: { "status" => "OK", "message" => "Item has been updated successfully" }) }
 
   context "self" do
@@ -25,9 +25,9 @@ RSpec.describe ApiPostDeaccessionItem do
       it "raises an exception on API failure" do
         stub_api_deaccession_item(
           item: item,
-	  status_code: 500,
-	  body: {}.to_json
-	)
+          status_code: 500,
+          body: {}.to_json
+        )
         expect { subject }.to raise_error(described_class::ApiDeaccessionItemError)
       end
 

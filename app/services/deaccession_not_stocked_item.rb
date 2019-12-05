@@ -11,7 +11,7 @@ class DeaccessionNotStockedItem
     item.bin = bin
     item.save!
     ActivityLogger.associate_item_and_bin(item: item, bin: bin, user: user)
-    match = Match.includes(:item).where(items: {id: item.id}).first
+    match = Match.includes(:item).where(items: { id: item.id }).first
     match.bin = bin
     match.save!
   end

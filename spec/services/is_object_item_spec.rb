@@ -1,7 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe IsObjectItem do
-
   it "recognizes an item as an item" do
     item = Item.new
     expect(IsObjectItem.call(item)).to eq(true)

@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :item do
     sequence(:barcode) { |n| "000012345#{n}" }
     title Faker::Lorem.sentence
@@ -16,5 +16,4 @@ FactoryGirl.define do
     disposition nil
     status 0
   end
-
 end

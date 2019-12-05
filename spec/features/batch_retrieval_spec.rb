@@ -1,16 +1,15 @@
-require 'rails_helper'
+require "rails_helper"
 
-feature "Retrieve", :type => :feature do
+feature "Retrieve", type: :feature do
   include AuthenticationHelper
 
   describe "when signed in" do
-
-    let(:shelf) { FactoryGirl.create(:shelf) }
-    let(:tray) { FactoryGirl.create(:tray, shelf: shelf) }
-    let(:item) { FactoryGirl.create(:item, tray: tray, thickness: 1) }
-    let(:request) { FactoryGirl.create(:request) }
-    let(:batch) { FactoryGirl.create(:batch, user: @user) }
-    let(:match) { FactoryGirl.create(:match, batch: batch, request: request, item: item) }
+    let(:shelf) { FactoryBot.create(:shelf) }
+    let(:tray) { FactoryBot.create(:tray, shelf: shelf) }
+    let(:item) { FactoryBot.create(:item, tray: tray, thickness: 1) }
+    let(:request) { FactoryBot.create(:request) }
+    let(:batch) { FactoryBot.create(:batch, user: @user) }
+    let(:match) { FactoryBot.create(:match, batch: batch, request: request, item: item) }
 
     before(:each) do
       login_admin
@@ -18,15 +17,9 @@ feature "Retrieve", :type => :feature do
     end
 
     after(:each) do
-      ActivityLog.all.each do |log|
-        log.destroy!
-      end
-      Match.all.each do |match|
-        match.destroy!
-      end
-      Request.all.each do |request|
-        request.destroy!
-      end
+      ActivityLog.all.each(&:destroy!)
+      Match.all.each(&:destroy!)
+      Request.all.each(&:destroy!)
     end
 
     it "can see a match in the batch list" do
@@ -37,7 +30,7 @@ feature "Retrieve", :type => :feature do
     it "rejects the wrong barcode" do
       visit retrieve_batch_path
       expect(page).to have_content match.item.title
-      fill_in "Item", :with => "TRAY"
+      fill_in "Item", with: "TRAY"
       click_button "Save"
       expect(current_path).to eq(retrieve_batch_path)
       expect(page).to have_content "Wrong item scanned."
@@ -46,7 +39,7 @@ feature "Retrieve", :type => :feature do
     it "accepts the right barcode" do
       visit retrieve_batch_path
       expect(page).to have_content match.item.title
-      fill_in "Item", :with => match.item.barcode
+      fill_in "Item", with: match.item.barcode
       click_button "Save"
       expect(current_path).to eq(bin_batch_path)
       expect(page).to_not have_content "Wrong item scanned."
@@ -56,12 +49,12 @@ feature "Retrieve", :type => :feature do
     it "rejects a non-bin" do
       visit retrieve_batch_path
       expect(page).to have_content match.item.title
-      fill_in "Item", :with => match.item.barcode
+      fill_in "Item", with: match.item.barcode
       click_button "Save"
       expect(current_path).to eq(bin_batch_path)
       expect(page).to_not have_content "Wrong item scanned."
       expect(page).to have_content "Item #{match.item.barcode} scanned."
-      fill_in "Bin", :with => "TRAY"
+      fill_in "Bin", with: "TRAY"
       click_button "Save"
       expect(current_path).to eq(bin_batch_path)
       expect(page).to have_content "TRAY is not a bin, please try again."
@@ -70,12 +63,12 @@ feature "Retrieve", :type => :feature do
     it "rejects the wrong bin" do
       visit retrieve_batch_path
       expect(page).to have_content match.item.title
-      fill_in "Item", :with => match.item.barcode
+      fill_in "Item", with: match.item.barcode
       click_button "Save"
       expect(current_path).to eq(bin_batch_path)
       expect(page).to_not have_content "Wrong item scanned."
       expect(page).to have_content "Item #{match.item.barcode} scanned."
-      fill_in "Bin", :with => "BIN-ILL-SCAN-01"
+      fill_in "Bin", with: "BIN-ILL-SCAN-01"
       click_button "Save"
       expect(current_path).to eq(bin_batch_path)
       expect(page).to have_content "BIN-ILL-SCAN-01 is not the correct type, please try again."
@@ -84,12 +77,12 @@ feature "Retrieve", :type => :feature do
     it "accepts the right bin" do
       visit retrieve_batch_path
       expect(page).to have_content match.item.title
-      fill_in "Item", :with => match.item.barcode
+      fill_in "Item", with: match.item.barcode
       click_button "Save"
       expect(current_path).to eq(bin_batch_path)
       expect(page).to_not have_content "Wrong item scanned."
       expect(page).to have_content "Item #{match.item.barcode} scanned."
-      fill_in "Bin", :with => "BIN-#{match.request.bin_type}-01"
+      fill_in "Bin", with: "BIN-#{match.request.bin_type}-01"
       click_button "Save"
       expect(page).to_not have_content "TRAY is not a bin, please try again."
       expect(page).to_not have_content "BIN-ILL-SCAN-01 is not the correct type, please try again."
@@ -97,7 +90,5 @@ feature "Retrieve", :type => :feature do
       expect(page).to have_content "#{@user.username} has an active batch, but it has no skipped items."
       expect(current_path).to eq(finalize_batch_path)
     end
-
   end
-
 end

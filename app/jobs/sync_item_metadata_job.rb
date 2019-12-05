@@ -1,4 +1,4 @@
-class SyncItemMetadataJob < ActiveJob::Base
+class SyncItemMetadataJob < ApplicationJob
   queue_as ItemMetadataWorker::QUEUE_NAME
 
   def perform(item:, user_id:)

@@ -5,18 +5,18 @@ RSpec.describe MergeNewMetadataToOldItem do
 
   subject { described_class.call(old_id: old_id, new_barcode: @new_barcode, user_id: user_id) }
 
-  let(:user) { FactoryGirl.create(:user) }
+  let(:user) { FactoryBot.create(:user) }
   let(:user_id) { user.id }
-  let(:old_item) { FactoryGirl.create(:item) }
+  let(:old_item) { FactoryBot.create(:item) }
   let(:old_id) { old_item.id }
-  let(:barcode) { '00000007819006' }
+  let(:barcode) { "00000007819006" }
 
   context "merging items" do
     before(:each) do
-      data = api_fixture_data('item_metadata.json')
+      data = api_fixture_data("item_metadata.json")
       hash = JSON.parse(data)
       new_hash = map_item_attributes(hash.symbolize_keys)
-      new_hash['barcode'] = barcode
+      new_hash["barcode"] = barcode
       @new_item = Item.new(new_hash)
       @new_barcode = @new_item.barcode
       stub_api_item_metadata(barcode: @new_barcode)

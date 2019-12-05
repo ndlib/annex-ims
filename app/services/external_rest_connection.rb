@@ -55,7 +55,7 @@ class ExternalRestConnection
   end
 
   def establish_connection
-    Faraday.new(:url => base_url) do |conn|
+    Faraday.new(url: base_url) do |conn|
       setup_connection(conn)
     end
   end
@@ -79,7 +79,8 @@ class ExternalRestConnection
     @file_cache ||= ActiveSupport::Cache::FileStore.new(
       File.join(rails_root, "/tmp", "cache"),
       namespace: "api_rest_data",
-      expires_in: 240)
+      expires_in: 240
+    )
   end
 
   def rails_root
@@ -97,11 +98,11 @@ class ExternalRestConnection
 
   def process_response
     result = { status: response.status }
-    if [200, 422].include?(response.status)
-      result[:results] = JSON.parse(response.body)
-    else
-      result[:results] = {}
-    end
+    result[:results] = if [200, 422].include?(response.status)
+                         JSON.parse(response.body)
+                       else
+                         {}
+                       end
     result
   end
 end

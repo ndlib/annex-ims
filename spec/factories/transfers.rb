@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :transfer do
     transfer_type "ShelfTransfer"
     # sequence(:shelf_id) { |n| "#{n}" }

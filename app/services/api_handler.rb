@@ -1,5 +1,5 @@
 class ApiHandler
-  BASE_PATH = "/1.0/resources/items"
+  BASE_PATH = "/1.0/resources/items".freeze
 
   attr_reader :verb, :action, :params, :response, :connection_opts
 
@@ -84,5 +84,4 @@ class ApiHandler
   def path_with_params
     "#{path}&#{params.to_param}"
   end
-
 end

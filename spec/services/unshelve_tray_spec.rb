@@ -1,10 +1,10 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe UnshelveTray do
-  subject { described_class.call(tray, user)}
-  let(:shelf) { double(Shelf, barcode: "SHELF-1234")}
-  let(:tray) { double(Tray, "shelved=" => false, save: true, shelf: shelf, barcode: "TRAY-AH1234")} # insert used methods
-  let(:user) { double(User)}
+  subject { described_class.call(tray, user) }
+  let(:shelf) { double(Shelf, barcode: "SHELF-1234") }
+  let(:tray) { double(Tray, "shelved=" => false, save: true, shelf: shelf, barcode: "TRAY-AH1234") } # insert used methods
+  let(:user) { double(User) }
 
   before(:each) do
     allow(ActivityLogger).to receive(:unshelve_tray).with(tray: tray, shelf: shelf, user: user)
@@ -31,10 +31,9 @@ RSpec.describe UnshelveTray do
     expect(subject).to be(false)
   end
 
-
-# this is not implemented in the class..
-  it "raises an error if the item is not a tray." do
-    #expect(IsTray).to recieve(:call).with(tray).and_return(false)
-    #expect { subject }.to raise_error
+  # this is not implemented in the class..
+  xit "raises an error if the item is not a tray." do
+    # expect(IsTray).to recieve(:call).with(tray).and_return(false)
+    # expect { subject }.to raise_error
   end
 end

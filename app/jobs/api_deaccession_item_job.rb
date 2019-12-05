@@ -1,4 +1,4 @@
-class ApiDeaccessionItemJob < ActiveJob::Base
+class ApiDeaccessionItemJob < ApplicationJob
   queue_as ApiWorker::QUEUE_NAME
 
   def perform(item:)

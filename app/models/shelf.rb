@@ -1,5 +1,5 @@
-class Shelf < ActiveRecord::Base
-  validates_presence_of :barcode
+class Shelf < ApplicationRecord
+  validates :barcode, presence: true
   validates :barcode, uniqueness: true
   validate :has_correct_prefix
 
@@ -9,17 +9,18 @@ class Shelf < ActiveRecord::Base
   has_many :location_activity_logs, class_name: "ActivityLog", foreign_key: "location_shelf_id"
 
   def tray_type
-    return nil if self.trays.count == 0
-    return self.trays.first.tray_type
+    return nil if trays.count == 0
+
+    trays.first.tray_type
   end
 
   # following the questionable pattern from tray.rb
   def style
-    result = case self.trays.count
-      when 0 then 'black'
-      when 1..(self.tray_type.trays_per_shelf - 1) then 'black'
-      when self.tray_type.trays_per_shelf then 'red'
-      else 'red'
+    result = tray_type.nil? ? "black" : case trays.count
+                                        when 0 then "black"
+                                        when 1..(tray_type.trays_per_shelf - 1) then "black"
+                                        when tray_type.trays_per_shelf then "red"
+                                        else "red"
     end
     result
   end

@@ -1,4 +1,4 @@
-class DropIssueUserFkAddMessage < ActiveRecord::Migration
+class DropIssueUserFkAddMessage < ActiveRecord::Migration[4.2]
   def change
     remove_foreign_key :issues, column: :user_id
     add_column :issues, :message, :string

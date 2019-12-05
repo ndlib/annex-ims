@@ -1,5 +1,5 @@
-class Bin < ActiveRecord::Base
-  validates_presence_of :barcode
+class Bin < ApplicationRecord
+  validates :barcode, presence: true
   validates :barcode, uniqueness: true
   validate :has_correct_prefix
 

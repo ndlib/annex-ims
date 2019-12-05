@@ -25,9 +25,14 @@ class CreateItem
       return "errors.barcode_not_found"
     # When the item barcode wasn't found in the database and was set aside by the user
     elsif !set_aside_flag.nil?
-      issue = Issue.find_by(barcode: barcode)
-      issue.issue_type = "not_valid_barcode"
-      issue.save!
+      issue = Issue.where(barcode: barcode).first_or_create do |new_issue|
+        new_issue.user_id = current_user_id
+        new_issue.issue_type = "not_valid_barcode"
+      end
+      if issue.issue_type != "not_valid_barcode"
+        issue.issue_type = "not_valid_barcode"
+        issue.save!
+      end
       return
     end
 
@@ -44,13 +49,13 @@ class CreateItem
     begin
       AssociateTrayWithItemBarcode.call(current_user_id, tray, barcode, thickness)
       if already
-        return "Item #{barcode} already assigned to #{tray.barcode}. Record updated."
+        "Item #{barcode} already assigned to #{tray.barcode}. Record updated."
       else
-        return "Item #{barcode} stocked in #{tray.barcode}."
+        "Item #{barcode} stocked in #{tray.barcode}."
       end
     rescue StandardError => e
       Raven.capture_exception(e)
-      return e
+      e
     end
   end
 end

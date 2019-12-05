@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :tray_issue do
     user
     sequence(:barcode) { |n| "0000000#{n}" }

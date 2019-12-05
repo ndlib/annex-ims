@@ -1,4 +1,4 @@
-class TrayIssue < ActiveRecord::Base
+class TrayIssue < ApplicationRecord
   ISSUE_TYPES = ["incorrect_count", "not_valid_barcode"].freeze
 
   validates :barcode, presence: true

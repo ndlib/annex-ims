@@ -28,14 +28,13 @@ class AssociateShelfWithItemBarcode
     tray
   end
 
-  private
+    private
 
-    def validate_input!
-      if IsObjectShelf.call(shelf)
-        true
-      else
-        raise "object is not a shelf"
-      end
+  def validate_input!
+    if IsObjectShelf.call(shelf)
+      true
+    else
+      raise "object is not a shelf"
     end
-
+  end
   end

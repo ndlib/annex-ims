@@ -1,8 +1,8 @@
 require "rails_helper"
 
 RSpec.describe AddTrayIssue do
-  let(:tray) { FactoryGirl.create(:tray) }
-  let(:user) { FactoryGirl.create(:user) }
+  let(:tray) { FactoryBot.create(:tray) }
+  let(:user) { FactoryBot.create(:user) }
   let(:issue_type) { "incorrect_count" }
   let(:message) { "tray was not found" }
   subject { described_class.call(tray: tray, user: user, type: issue_type, message: message) }
@@ -31,7 +31,7 @@ RSpec.describe AddTrayIssue do
   end
 
   it "creates a second for a different tray" do
-    other_tray = FactoryGirl.create(:tray)
+    other_tray = FactoryBot.create(:tray)
     issue = described_class.call(tray: other_tray, user: user, type: issue_type, message: message)
     expect(subject).to_not eq(issue)
   end

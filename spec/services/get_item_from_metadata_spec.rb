@@ -4,16 +4,16 @@ RSpec.describe GetItemFromMetadata do
   include ItemMetadata
 
   let(:barcode) { "00000007819006" }
-  let(:user) { FactoryGirl.create(:user) }
+  let(:user) { FactoryBot.create(:user) }
   let(:user_id) { user.id }
   let(:response) { ApiResponse.new(status_code: 200, body: { sublibrary: "ANNEX" }) }
 
   context "self" do
     before(:each) do
-      data = api_fixture_data('item_metadata.json')
+      data = api_fixture_data("item_metadata.json")
       hash = JSON.parse(data)
       new_hash = map_item_attributes(hash.symbolize_keys)
-      new_hash['barcode'] = barcode
+      new_hash["barcode"] = barcode
       @new_item = Item.new(new_hash)
       @new_barcode = @new_item.barcode
       stub_api_item_metadata(barcode: @new_barcode)

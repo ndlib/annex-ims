@@ -17,5 +17,4 @@ class ResolveIssue
     issue.save!
     ActivityLogger.resolve_issue(item: item, issue: issue, user: user)
   end
-
 end

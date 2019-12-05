@@ -1,4 +1,4 @@
-require 'item_metadata'
+require "item_metadata"
 
 class GetItemFromMetadata
   include ItemMetadata
@@ -36,5 +36,4 @@ class GetItemFromMetadata
       AddIssue.call(item: item, user: user, type: error[:issue_type])
     end
   end
-
 end

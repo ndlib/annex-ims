@@ -1,7 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe IsObjectTray do
-
   it "recognizes a tray as a tray" do
     tray = Tray.new
     expect(IsObjectTray.call(tray)).to eq(true)

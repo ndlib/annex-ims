@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   helper_method :user_admin?
+
   protected
 
   def check_authentication
@@ -17,12 +18,11 @@ class ApplicationController < ActionController::Base
     end
     unless user_admin? || user_worker?
       redirect_to_unauthorized
-      return
     end
   end
 
   def check_activity
-    if !current_user.present? || IsUserSessionExpired.call(user: current_user)
+    if current_user.blank? || IsUserSessionExpired.call(user: current_user)
       sign_out
       render "users/timed_out"
       return
@@ -61,9 +61,7 @@ class ApplicationController < ActionController::Base
   end
 
   def update_activity
-    if current_user
-      current_user.touch(:last_activity_at)
-    end
+    current_user&.touch(:last_activity_at)
   end
 
   private

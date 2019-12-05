@@ -1,9 +1,9 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe SearchItems, search: true do
-  let(:item) { FactoryGirl.create(:item, chron: "TEST CHRON") }
-  let(:deac_item) { FactoryGirl.create(:item, status: 9, title: item.title) }
-  let(:filter) { { } }
+  let(:item) { FactoryBot.create(:item, chron: "TEST CHRON") }
+  let(:deac_item) { FactoryBot.create(:item, status: 9, title: item.title) }
+  let(:filter) { {} }
   subject { described_class.call(filter) }
 
   def cleanFulltext(text)
@@ -59,7 +59,7 @@ RSpec.describe SearchItems, search: true do
   end
 
   context "per_page" do
-    let(:item) { FactoryGirl.create(:item, chron: "1") }
+    let(:item) { FactoryBot.create(:item, chron: "1") }
     let(:filter) { { criteria_type: "any", criteria: item.title } }
 
     it "defaults to 50 per page" do
@@ -102,7 +102,7 @@ RSpec.describe SearchItems, search: true do
       end
 
       it "searches the tray barcode" do
-        item.tray = FactoryGirl.create(:tray)
+        item.tray = FactoryBot.create(:tray)
         filter[:criteria] = item.tray.barcode
         subject
         expect(Sunspot.session).to have_search_params(:fulltext) {
@@ -113,7 +113,7 @@ RSpec.describe SearchItems, search: true do
       end
 
       it "searches the shelf barcode" do
-        item.shelf = FactoryGirl.create(:shelf)
+        item.shelf = FactoryBot.create(:shelf)
         filter[:criteria] = item.shelf.barcode
         subject
         expect(Sunspot.session).to have_search_params(:fulltext) {
@@ -132,7 +132,7 @@ RSpec.describe SearchItems, search: true do
       :title,
       :author,
     ].each do |criteria_type_field|
-      describe "#{criteria_type_field}" do
+      describe criteria_type_field.to_s do
         let(:filter) { { criteria_type: criteria_type_field.to_s } }
 
         it "can search by #{criteria_type_field}" do
@@ -142,7 +142,7 @@ RSpec.describe SearchItems, search: true do
           subject
           expect(Sunspot.session).to have_search_params(:fulltext) {
             fulltext(cleanFulltext(value),
-                     fields:  [criteria_type_field]) do
+                     fields: [criteria_type_field]) do
               minimum_match "75%"
             end
           }
@@ -154,7 +154,7 @@ RSpec.describe SearchItems, search: true do
       let(:filter) { { criteria_type: "tray" } }
 
       it "searches the tray barcode" do
-        item.tray = FactoryGirl.create(:tray)
+        item.tray = FactoryBot.create(:tray)
         filter[:criteria] = item.tray.barcode
         subject
         expect(Sunspot.session).to have_search_params(:with, :tray_barcode, item.tray.barcode)
@@ -165,7 +165,7 @@ RSpec.describe SearchItems, search: true do
       let(:filter) { { criteria_type: "shelf" } }
 
       it "searches the shelf barcode" do
-        item.shelf = FactoryGirl.create(:shelf)
+        item.shelf = FactoryBot.create(:shelf)
         filter[:criteria] = item.shelf.barcode
         subject
         expect(Sunspot.session).to have_search_params(:with, :shelf_barcode, item.shelf.barcode)
@@ -175,7 +175,7 @@ RSpec.describe SearchItems, search: true do
 
   context "conditions" do
     let(:conditions) { ["COVER-MISS", "PAGES-BRITTLE", "SPINE-DET"] }
-    let(:item) { FactoryGirl.create(:item, conditions: conditions) }
+    let(:item) { FactoryBot.create(:item, conditions: conditions) }
 
     context "all" do
       let(:filter) { { condition_bool: "all" } }
@@ -185,7 +185,7 @@ RSpec.describe SearchItems, search: true do
           conditions.each { |c| hash[c] = true }
         end
         subject
-        for condition in conditions do
+        conditions.each do |condition|
           expect(Sunspot.session).to have_search_params(:with, :conditions, condition)
         end
       end
@@ -211,7 +211,7 @@ RSpec.describe SearchItems, search: true do
           conditions.each { |c| hash[c] = true }
         end
         subject
-        for condition in conditions do
+        conditions.each do |condition|
           expect(Sunspot.session).to have_search_params(:without, :conditions, condition)
         end
       end
@@ -228,7 +228,7 @@ RSpec.describe SearchItems, search: true do
       initial: :initial_ingest,
       last: :last_ingest,
     }.each do |date_type, search_field|
-      context "#{date_type}" do
+      context date_type.to_s do
         let(:filter) { { date_type: date_type.to_s, start: start, finish: finish } }
 
         it "searches the #{date_type} date" do
@@ -253,6 +253,5 @@ RSpec.describe SearchItems, search: true do
         end
       end
     end
-
   end
 end

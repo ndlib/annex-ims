@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :tray_type do
     code "AL"
     trays_per_shelf 16
@@ -7,5 +7,4 @@ FactoryGirl.define do
     capacity 136
     active true
   end
-
 end

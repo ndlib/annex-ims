@@ -1,7 +1,7 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe DissociateTrayFromItem do
-  subject { described_class.call(item, user)}
+  subject { described_class.call(item, user) }
 
   let(:tray) { instance_double(Tray) }
   let(:item) { instance_double(Item, save: true, "tray=" => nil, tray: tray, "save!" => true) }

@@ -1,8 +1,8 @@
 require "rails_helper"
 
 RSpec.describe AddIssue do
-  let(:item) { FactoryGirl.create(:item) }
-  let(:user) { FactoryGirl.create(:user) }
+  let(:item) { FactoryBot.create(:item) }
+  let(:user) { FactoryBot.create(:user) }
   let(:issue_type) { "not_found" }
   let(:message) { "item was not found" }
   subject { described_class.call(item: item, user: user, type: issue_type, message: message) }
@@ -36,7 +36,7 @@ RSpec.describe AddIssue do
   end
 
   it "creates a second for a different item" do
-    other_item = FactoryGirl.create(:item)
+    other_item = FactoryBot.create(:item)
     issue = described_class.call(item: other_item, user: user, type: issue_type)
     expect(subject).to_not eq(issue)
   end

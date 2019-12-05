@@ -182,15 +182,11 @@ class ActivityLogger
   end
 
   def username
-    if user
-      user.username
-    end
+    user&.username
   end
 
   def user_id
-    if user
-      user.id
-    end
+    user&.id
   end
 
   def log!

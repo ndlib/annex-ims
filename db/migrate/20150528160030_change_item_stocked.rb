@@ -1,5 +1,5 @@
-class ChangeItemStocked < ActiveRecord::Migration
-  class Item < ActiveRecord::Base  # stocked = 0, unstocked = 1, shipped = 2, which is not the same as the boolean we had
+class ChangeItemStocked < ActiveRecord::Migration[4.2]
+  class Item < ApplicationRecord  # stocked = 0, unstocked = 1, shipped = 2, which is not the same as the boolean we had
   end
 
   def up

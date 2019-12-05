@@ -32,7 +32,7 @@ class TraysController < ApplicationController
       return
     end
 
-    unless (params[:force] == "true")
+    unless params[:force] == "true"
       if !@tray.shelf.nil? && (@tray.shelf.barcode != barcode)
         flash[:error] = "#{@tray.barcode} belongs to #{@tray.shelf.barcode}, but #{barcode} was scanned."
         redirect_to wrong_shelf_path(id: @tray.id, barcode: barcode)
@@ -77,7 +77,7 @@ class TraysController < ApplicationController
 
     barcode = params[:barcode]
 
-    unless (params[:force] == "true")
+    unless params[:force] == "true"
       if !@tray.shelf.nil? && (@tray.shelf.barcode != barcode)
         flash[:error] = "#{@tray.barcode} belongs to #{@tray.shelf.barcode}, but #{barcode} was scanned."
         redirect_to wrong_shelf_path(id: @tray.id, barcode: barcode)
@@ -139,7 +139,7 @@ class TraysController < ApplicationController
     @used = @tray.used
     @capacity = @tray.capacity
     @progress = @used.to_f / @capacity.to_f
-    @progress = (@progress <= 1.0) ? @progress : 1.0
+    @progress = @progress <= 1.0 ? @progress : 1.0
     @style = @tray.style
     @size = TraySize.call(@tray.barcode)
     @barcode = params[:barcode]
@@ -264,8 +264,8 @@ class TraysController < ApplicationController
     @tray = Tray.where(barcode: params[:barcode]).take
     item_barcode = params[:item_barcode]
     item = Item.where(barcode: item_barcode).take
-    @scanned = params[:scanned].present? ? params[:scanned] : []
-    @extras = params[:extras].present? ? params[:extras] : []
+    @scanned = params[:scanned].presence || []
+    @extras = params[:extras].presence || []
 
     if item.nil?
       if IsValidItem.call(item_barcode)
@@ -366,6 +366,6 @@ class TraysController < ApplicationController
     if extras.count > 0
       errors = extras.map { |extra| I18n.t("errors.barcode_not_associated_to_tray", barcode: extra) }
     end
-    return errors
+    errors
   end
 end

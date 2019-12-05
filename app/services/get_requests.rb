@@ -3,8 +3,7 @@ class GetRequests
     new.get_data!
   end
 
-  def initialize
-  end
+  def initialize; end
 
   def get_data!
     response = ApiGetRequestList.call
@@ -30,15 +29,15 @@ class GetRequests
     request = Request.find_or_initialize_by(trans: attributes["trans"])
     new_record = request.new_record?
     begin
-    request.attributes = attributes
-    unless attributes["barcode"].blank?
-      update_item_metadata(attributes["barcode"])
-    end
-    request.save!
-    if new_record
-      ActivityLogger.receive_request(request: request)
-    end
-    request
+      request.attributes = attributes
+      if attributes["barcode"].present?
+        update_item_metadata(attributes["barcode"])
+      end
+      request.save!
+      if new_record
+        ActivityLogger.receive_request(request: request)
+      end
+      request
     rescue StandardError => e
       Raven.capture_exception(e)
       NotifyError.call(exception: e, parameters: { attributes: attributes, request: request }, component: self.class.to_s, action: "create_or_update_request")
@@ -57,16 +56,16 @@ class GetRequests
   end
 
   def build_request_attributes(request_data) # rubocop:disable Metrics/AbcSize
-    if !request_data["barcode"].blank?
+    if request_data["barcode"].present?
       criteria_type = "barcode"
       criteria = request_data["barcode"]
-    elsif !request_data["bib_number"].blank?
+    elsif request_data["bib_number"].present?
       criteria_type = "bib_number"
       criteria = request_data["bib_number"]
-    elsif !request_data["isbn_issn"].blank?
+    elsif request_data["isbn_issn"].present?
       criteria_type = "isbn_issn"
       criteria = request_data["isbn_issn"]
-    elsif !request_data["title"].blank?
+    elsif request_data["title"].present?
       criteria_type = "title"
       criteria = request_data["title"]
     else
@@ -77,15 +76,15 @@ class GetRequests
     del_type = request_data["delivery_type"].downcase
     source = request_data["source"].downcase
 
-    req_type = request_data["request_type"].downcase.gsub(" ", "_")
+    req_type = request_data["request_type"].downcase.tr(" ", "_")
 
-    if (request_data["rush"] == "No") || (request_data["rush"] == "Regular")
-      rapid = false
-    else
-      rapid = true
-    end
+    rapid = if (request_data["rush"] == "No") || (request_data["rush"] == "Regular")
+              false
+            else
+              true
+            end
 
-    trans = request_data["transaction"].gsub("doc-del", "aleph").gsub("-", "_")
+    trans = request_data["transaction"].gsub("doc-del", "aleph").tr("-", "_")
 
     {
       "trans" => trans,

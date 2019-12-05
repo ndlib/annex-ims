@@ -10,11 +10,11 @@ RSpec.describe UnresolvedTrayIssueQuery do
   end
 
   it "will allow filtering by barcode" do
-    tray_issue1 = FactoryGirl.create(:tray_issue)
-    tray_issue2 = FactoryGirl.create(:tray_issue)
+    tray_issue1 = FactoryBot.create(:tray_issue)
+    tray_issue2 = FactoryBot.create(:tray_issue)
 
     # This one won't show up in the response object
-    FactoryGirl.create(:tray_issue, resolved_at: Time.zone.now)
+    FactoryBot.create(:tray_issue, resolved_at: Time.now)
 
     # Overloading expectations so we don't need
     expect(subject.call(barcode: tray_issue1.barcode)).to eq([tray_issue1])

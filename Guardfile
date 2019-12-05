@@ -23,9 +23,9 @@ hesburgh_guard.rails do
   # Watch any custom paths
 end
 
-guard 'sunspot', :environment => 'development' do
-  watch('Gemfile.lock')
-  watch('config/sunspot.yml')
-  watch('solr/solr.xml')
+guard "sunspot", environment: "development" do
+  watch("Gemfile.lock")
+  watch("config/sunspot.yml")
+  watch("solr/solr.xml")
   watch(%r{^solr/conf/.*})
 end

@@ -62,5 +62,4 @@ class ApiPostDeliverItem
       "send"
     end
   end
-
 end

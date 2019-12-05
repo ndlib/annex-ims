@@ -1,16 +1,16 @@
 require "rails_helper"
 
 RSpec.describe MatchQuery do
-  let!(:item_1) { FactoryGirl.create(:item) }
-  let!(:item_2) { FactoryGirl.create(:item) }
-  let!(:item_3) { FactoryGirl.create(:item) }
-  let!(:batch) { FactoryGirl.create(:batch) }
-  let!(:request_1) { FactoryGirl.create(:request) }
-  let!(:request_2) { FactoryGirl.create(:request) }
-  let!(:match_1) { FactoryGirl.create(:match, batch: batch, request: request_1, item: item_1) }
-  let!(:match_2) { FactoryGirl.create(:match, batch: batch, request: request_1, item: item_2) }
-  let!(:match_3) { FactoryGirl.create(:match, batch: batch, request: request_1, item: item_3) }
-  let!(:match_4) { FactoryGirl.create(:match, batch: batch, request: request_2, item: item_1) }
+  let!(:item_1) { FactoryBot.create(:item) }
+  let!(:item_2) { FactoryBot.create(:item) }
+  let!(:item_3) { FactoryBot.create(:item) }
+  let!(:batch) { FactoryBot.create(:batch) }
+  let!(:request_1) { FactoryBot.create(:request) }
+  let!(:request_2) { FactoryBot.create(:request) }
+  let!(:match_1) { FactoryBot.create(:match, batch: batch, request: request_1, item: item_1) }
+  let!(:match_2) { FactoryBot.create(:match, batch: batch, request: request_1, item: item_2) }
+  let!(:match_3) { FactoryBot.create(:match, batch: batch, request: request_1, item: item_3) }
+  let!(:match_4) { FactoryBot.create(:match, batch: batch, request: request_2, item: item_1) }
   let(:relation) { Match.all }
   subject { MatchQuery.new(relation) }
 

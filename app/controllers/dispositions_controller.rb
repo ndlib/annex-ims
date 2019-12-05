@@ -18,9 +18,6 @@ class DispositionsController < ApplicationController
     respond_with(@disposition)
   end
 
-  def edit
-  end
-
   def create
     @disposition = Disposition.new(disposition_params)
     @disposition.save
@@ -44,11 +41,12 @@ class DispositionsController < ApplicationController
   end
 
   private
-    def set_disposition
-      @disposition = Disposition.find(params[:id])
-    end
 
-    def disposition_params
-      params.require(:disposition).permit(:code, :description, :active)
-    end
+  def set_disposition
+    @disposition = Disposition.find(params[:id])
+  end
+
+  def disposition_params
+    params.require(:disposition).permit(:code, :description, :active)
+  end
 end

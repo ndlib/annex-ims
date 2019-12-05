@@ -24,12 +24,11 @@ class UpdateIngestDate
 
   private
 
-    def validate_input!
-      if IsObjectItem.call(item)
-        true
-      else
-        raise "object is not an item"
-      end
+  def validate_input!
+    if IsObjectItem.call(item)
+      true
+    else
+      raise "object is not an item"
     end
-
   end
+end

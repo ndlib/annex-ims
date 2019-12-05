@@ -1,18 +1,18 @@
 require "rails_helper"
 
 RSpec.describe FinishBatch do
-  let(:shelf) { FactoryGirl.create(:shelf) }
-  let(:tray) { FactoryGirl.create(:tray, shelf: shelf) }
-  let(:batch) { FactoryGirl.create(:batch, user: user) }
-  let(:user) { FactoryGirl.create(:user) }
+  let(:shelf) { FactoryBot.create(:shelf) }
+  let(:tray) { FactoryBot.create(:tray, shelf: shelf) }
+  let(:batch) { FactoryBot.create(:batch, user: user) }
+  let(:user) { FactoryBot.create(:user) }
 
-  let(:item1) { FactoryGirl.create(:item, tray: tray, thickness: 1) }
-  let(:item2) { FactoryGirl.create(:item, tray: tray, thickness: 1) }
-  let(:item3) { FactoryGirl.create(:item, tray: tray, thickness: 1) }
+  let(:item1) { FactoryBot.create(:item, tray: tray, thickness: 1) }
+  let(:item2) { FactoryBot.create(:item, tray: tray, thickness: 1) }
+  let(:item3) { FactoryBot.create(:item, tray: tray, thickness: 1) }
 
-  let(:match1) { FactoryGirl.create(:match, batch: batch, item: item1) }
-  let(:match2) { FactoryGirl.create(:match, batch: batch, item: item2) }
-  let(:match3) { FactoryGirl.create(:match, batch: batch, item: item3) }
+  let(:match1) { FactoryBot.create(:match, batch: batch, item: item1) }
+  let(:match2) { FactoryBot.create(:match, batch: batch, item: item2) }
+  let(:match3) { FactoryBot.create(:match, batch: batch, item: item3) }
 
   let(:subject) { FinishBatch.call(match1.batch, user) }
 

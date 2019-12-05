@@ -1,4 +1,4 @@
-class CreateNewActivityLogs < ActiveRecord::Migration
+class CreateNewActivityLogs < ActiveRecord::Migration[4.2]
   def change
     create_table :activity_logs do |t|
       t.string :action, index: true, null: false

@@ -1,6 +1,6 @@
-class Disposition < ActiveRecord::Base
-  validates_presence_of :code
+class Disposition < ApplicationRecord
+  validates :code, presence: true
   validates :code, uniqueness: true
-  validates_inclusion_of :active, :in => [true, false]
+  validates :active, inclusion: { in: [true, false] }
   has_many :items
 end

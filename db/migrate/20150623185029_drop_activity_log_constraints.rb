@@ -1,4 +1,4 @@
-class DropActivityLogConstraints < ActiveRecord::Migration
+class DropActivityLogConstraints < ActiveRecord::Migration[4.2]
   def change
     remove_foreign_key :activity_logs, column: :object_item_id
     remove_foreign_key :activity_logs, column: :object_tray_id

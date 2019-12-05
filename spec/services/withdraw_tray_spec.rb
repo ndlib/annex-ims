@@ -1,10 +1,10 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe WithdrawTray do
-  subject { described_class.call(tray, user)}
+  subject { described_class.call(tray, user) }
 
-  let(:tray) { double(Tray, save: true, "shelf=" => nil, "shelved=" => false, items: [])}
-  let(:user) { double(User)}
+  let(:tray) { double(Tray, save: true, "shelf=" => nil, "shelved=" => false, items: []) }
+  let(:user) { double(User) }
 
   before(:each) do
     allow(IsObjectTray).to receive(:call).with(tray).and_return(true)
@@ -27,8 +27,8 @@ RSpec.describe WithdrawTray do
     expect(subject).to be(false)
   end
 
-  it "registers the call with the transaction log" do
-    #expect(TransactionLog).to recieve(:call).with("dissociate", "itemid")
-    #subject
+  xit "registers the call with the transaction log" do
+    # expect(TransactionLog).to recieve(:call).with("dissociate", "itemid")
+    # subject
   end
 end

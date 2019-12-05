@@ -19,7 +19,7 @@ class GetBinFromBarcode
 
   private
 
-    def valid?
-      IsBinBarcode.call(barcode)
-    end
+  def valid?
+    IsBinBarcode.call(barcode)
+  end
 end

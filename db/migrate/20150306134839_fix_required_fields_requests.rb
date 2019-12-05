@@ -1,4 +1,4 @@
-class FixRequiredFieldsRequests < ActiveRecord::Migration
+class FixRequiredFieldsRequests < ActiveRecord::Migration[4.2]
   def change
     change_column_null :requests, :criteria_type, false
     change_column_null :requests, :criteria, false

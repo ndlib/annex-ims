@@ -20,7 +20,7 @@ class DeaccessionItem
 
     if item.save!
       comment = item.try(:requests).order(created_at: :desc).first.try(:comment)
-      ActivityLogger.deaccession_item(item: item, user: user, disposition: item.disposition, comment: { comment: comment } )
+      ActivityLogger.deaccession_item(item: item, user: user, disposition: item.disposition, comment: { comment: comment })
       result = item
     else
       result = false

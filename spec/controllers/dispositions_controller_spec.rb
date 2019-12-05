@@ -1,9 +1,9 @@
 require "rails_helper"
 
 RSpec.describe DispositionsController, type: :controller do
-  let(:user) { FactoryGirl.create(:user, admin: true) }
-  let(:disposition) { FactoryGirl.create(:disposition, active: true) }
-  let(:item) { FactoryGirl.create(:item) }
+  let(:user) { FactoryBot.create(:user, admin: true) }
+  let(:disposition) { FactoryBot.create(:disposition, active: true) }
+  let(:item) { FactoryBot.create(:item) }
 
   before(:each) do
     sign_in(user)
@@ -18,7 +18,7 @@ RSpec.describe DispositionsController, type: :controller do
   end
 
   describe "POST activation" do
-    subject { post :activation, id: disposition.id }
+    subject { post :activation, params: { id: disposition.id } }
     it "updates a disposition" do
       disposition
       expect(Disposition.first.active).to eq true
@@ -28,15 +28,15 @@ RSpec.describe DispositionsController, type: :controller do
   end
 
   describe "POST create" do
-    subject { post :create, disposition: { code: "WDR-Damaged" } }
+    subject { post :create, params: { disposition: { code: "WDR-Damaged" } } }
     it "creates a disposition" do
-      expect(Disposition).to receive(:new).with(code: "WDR-Damaged").and_return(disposition)
+      expect(Disposition).to receive(:new).and_return(disposition)
       subject
     end
   end
 
   describe "GET show" do
-    subject { get :show, id: disposition.id }
+    subject { get :show, params: { id: disposition.id } }
     it "renders show view" do
       subject
       expect(response).to render_template(:show)
@@ -44,7 +44,7 @@ RSpec.describe DispositionsController, type: :controller do
   end
 
   describe "PUT update" do
-    subject { put :update, id: disposition.id,  disposition: { active: false } }
+    subject { put :update, params: { id: disposition.id, disposition: { active: false } } }
     it "updates a disposition" do
       disposition
       expect(Disposition.first.active).to eq true
@@ -54,7 +54,7 @@ RSpec.describe DispositionsController, type: :controller do
   end
 
   describe "DELETE destroy" do
-    subject { delete :destroy, id: disposition.id }
+    subject { delete :destroy, params: { id: disposition.id } }
     it "deletes one disposition" do
       disposition
       expect(Disposition.all.count).to eq 1

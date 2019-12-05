@@ -21,16 +21,15 @@ class ItemPath
 
     if item.blank?
       results[:error] = "No item was found with barcode #{barcode}"
-      results[:path] = h.show_item_path(:id => @item_id)
+      results[:path] = h.show_item_path(id: @item_id)
     else
-      results[:path] = h.show_item_path(:id => item.id)
+      results[:path] = h.show_item_path(id: item.id)
     end
 
-    return results
+    results
   end
 
   def h
     Rails.application.routes.url_helpers
   end
-
 end

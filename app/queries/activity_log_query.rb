@@ -4,28 +4,30 @@ module ActivityLogQuery
   def shelf_history(shelf)
     for_shelf(shelf).
       where(action: [
-        "AssociatedTrayAndShelf",
-        "DissociatedTrayAndShelf",
-        "ShelvedTray",
-        "UnshelvedTray"]).
+              "AssociatedTrayAndShelf",
+              "DissociatedTrayAndShelf",
+              "ShelvedTray",
+              "UnshelvedTray"
+            ]).
       order(action_timestamp: :desc)
   end
 
   def item_history(item)
     for_item(item).
       where(action: [
-        "AcceptedItem",
-        "StockedItem",
-        "UnstockedItem",
-        "CreatedItem",
-        "CreatedIssue",
-        "DestroyedItem",
-        "DissociatedItemAndTray",
-        "DissociatedItemAndBin",
-        "DeaccessionedItem",
-        "ResolvedIssue",
-        "UpdatedBarcode",
-        "ShippedItem"]).
+              "AcceptedItem",
+              "StockedItem",
+              "UnstockedItem",
+              "CreatedItem",
+              "CreatedIssue",
+              "DestroyedItem",
+              "DissociatedItemAndTray",
+              "DissociatedItemAndBin",
+              "DeaccessionedItem",
+              "ResolvedIssue",
+              "UpdatedBarcode",
+              "ShippedItem"
+            ]).
       order(action_timestamp: :desc)
   end
 
@@ -37,7 +39,8 @@ module ActivityLogQuery
               "DissociatedTrayAndShelf",
               "ResolvedTrayIssue",
               "ShelvedTray",
-              "UnshelvedTray"]).
+              "UnshelvedTray"
+            ]).
       order(action_timestamp: :desc)
   end
 
@@ -67,9 +70,10 @@ module ActivityLogQuery
   end
 
   def tray_barcode(record)
-    return record.data['tray']['barcode'] unless record.data['tray'].blank?
-    return Tray.find(record.data['item']['tray_id']).barcode unless record.data['item']['tray_id'].blank?
-    'STAGING'
+    return record.data["tray"]["barcode"] if record.data["tray"].present?
+    return Tray.find(record.data["item"]["tray_id"]).barcode if record.data["item"]["tray_id"].present?
+
+    "STAGING"
   end
 
   private_class_method :relation

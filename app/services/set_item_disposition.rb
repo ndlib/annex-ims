@@ -13,6 +13,6 @@ class SetItemDisposition
   def set
     @item.disposition = @disposition
     @item.save!
-    ActivityLogger.set_item_disposition(item: @item, disposition: @disposition) 
+    ActivityLogger.set_item_disposition(item: @item, disposition: @disposition)
   end
 end

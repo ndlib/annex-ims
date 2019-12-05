@@ -24,7 +24,7 @@ class SearchItems
   end
 
   def page
-    fetch(:page).present? ? fetch(:page) : 1
+    fetch(:page).presence || 1
   end
 
   def per_page
@@ -150,11 +150,11 @@ class SearchItems
   end
 
   def search_tray?
-    filter?(:criteria_type) && (fetch(:criteria_type) == 'tray') && filter?(:criteria)
+    filter?(:criteria_type) && (fetch(:criteria_type) == "tray") && filter?(:criteria)
   end
 
   def search_shelf?
-    filter?(:criteria_type) && (fetch(:criteria_type) == 'shelf') && filter?(:criteria)
+    filter?(:criteria_type) && (fetch(:criteria_type) == "shelf") && filter?(:criteria)
   end
 
   def search_date?

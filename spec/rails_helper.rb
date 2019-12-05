@@ -1,8 +1,8 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
-ENV["RAILS_ENV"] ||= 'test'
-require 'spec_helper'
-require File.expand_path("../../config/environment", __FILE__)
-require 'rspec/rails'
+ENV["RAILS_ENV"] ||= "test"
+require "spec_helper"
+require_relative "../config/environment"
+require "rspec/rails"
 
 require "sunspot_matchers"
 require "sunspot_matchers/matchers"
@@ -52,14 +52,22 @@ RSpec.configure do |config|
   # https://relishapp.com/rspec/rspec-rails/docs
   config.infer_spec_type_from_file_location!
 
+  # Filter lines from Rails gems in backtraces.
+  config.filter_rails_from_backtrace!
+  # arbitrary gems may also be filtered via:
+  # config.filter_gems_from_backtrace("gem name")
+
   # For Devise testing
-  config.include Devise::TestHelpers, type: :controller
+  config.include Devise::Test::ControllerHelpers, type: :controller
 
   config.include ApiHelper
 
   config.include SunspotMatchers
 
-  config.before(:each) do |example|
+  config.before(:each) do |_example|
     Sunspot.session = SunspotMatchers::SunspotSessionSpy.new(Sunspot.session)
   end
+
+  config.include(Shoulda::Matchers::ActiveModel, type: :model)
+  config.include(Shoulda::Matchers::ActiveRecord, type: :model)
 end

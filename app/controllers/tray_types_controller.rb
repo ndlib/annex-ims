@@ -18,8 +18,7 @@ class TrayTypesController < ApplicationController
     respond_with(@tray_type)
   end
 
-  def edit
-  end
+  def edit; end
 
   def create
     @tray_type = TrayType.new(tray_type_params)
@@ -42,7 +41,7 @@ class TrayTypesController < ApplicationController
       if @tray_type.trays.count == 0
         @tray_type.active = false
       else
-        flash[:error] = 'unable to deactivate tray type with associated trays'
+        flash[:error] = "unable to deactivate tray type with associated trays"
       end
     else
       @tray_type.active = true
@@ -52,11 +51,12 @@ class TrayTypesController < ApplicationController
   end
 
   private
-    def set_tray_type
-      @tray_type = TrayType.find(params[:id])
-    end
 
-    def tray_type_params
-      params.require(:tray_type).permit(:code, :trays_per_shelf, :unlimited, :height, :capacity, :active)
-    end
+  def set_tray_type
+    @tray_type = TrayType.find(params[:id])
+  end
+
+  def tray_type_params
+    params.require(:tray_type).permit(:code, :trays_per_shelf, :unlimited, :height, :capacity, :active)
+  end
 end

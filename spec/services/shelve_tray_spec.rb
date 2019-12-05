@@ -1,10 +1,10 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe ShelveTray do
-  subject { described_class.call(tray, user)}
+  subject { described_class.call(tray, user) }
   let(:shelf) { double(Shelf) }
-  let(:tray) { double(Tray, "shelved=" => true, save: true, shelf: shelf)} # insert used methods
-  let(:user) { double(User, username: "bob", id: 1)}
+  let(:tray) { double(Tray, "shelved=" => true, save: true, shelf: shelf) } # insert used methods
+  let(:user) { double(User, username: "bob", id: 1) }
 
   before(:each) do
     allow(ActivityLogger).to receive(:shelve_tray).with(tray: tray, shelf: shelf, user: user)

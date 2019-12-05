@@ -1,14 +1,14 @@
 require "rails_helper"
 
 RSpec.describe IssuesForItemQuery do
-  let(:item) { FactoryGirl.build(:item) }
-  let(:item2) { FactoryGirl.build(:item) }
-  let(:item3) { FactoryGirl.build(:item) }
-  let(:item4) { FactoryGirl.build(:item) }
-  let!(:issue1) { FactoryGirl.create(:issue, issue_type: "not_for_annex", barcode: item.barcode) }
-  let!(:issue2) { FactoryGirl.create(:issue, issue_type: "not_for_annex", barcode: item3.barcode) }
-  let!(:issue3) { FactoryGirl.create(:issue, issue_type: "not_found", barcode: item3.barcode) }
-  let!(:issue4) { FactoryGirl.create(:issue, issue_type: "not_valid_barcode", barcode: item4.barcode) }
+  let(:item) { FactoryBot.build(:item) }
+  let(:item2) { FactoryBot.build(:item) }
+  let(:item3) { FactoryBot.build(:item) }
+  let(:item4) { FactoryBot.build(:item) }
+  let!(:issue1) { FactoryBot.create(:issue, issue_type: "not_for_annex", barcode: item.barcode) }
+  let!(:issue2) { FactoryBot.create(:issue, issue_type: "not_for_annex", barcode: item3.barcode) }
+  let!(:issue3) { FactoryBot.create(:issue, issue_type: "not_found", barcode: item3.barcode) }
+  let!(:issue4) { FactoryBot.create(:issue, issue_type: "not_valid_barcode", barcode: item4.barcode) }
   let(:subject) { described_class }
 
   context "no issues for item" do

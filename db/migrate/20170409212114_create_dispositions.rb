@@ -1,4 +1,4 @@
-class CreateDispositions < ActiveRecord::Migration
+class CreateDispositions < ActiveRecord::Migration[4.2]
   def change
     create_table :dispositions do |t|
       t.string :name, null: false

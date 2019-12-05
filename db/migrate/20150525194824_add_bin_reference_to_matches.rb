@@ -1,15 +1,15 @@
-class AddBinReferenceToMatches < ActiveRecord::Migration
-  class Match < ActiveRecord::Base
+class AddBinReferenceToMatches < ActiveRecord::Migration[4.2]
+  class Match < ApplicationRecord
     belongs_to :item, class_name: 'AddBinReferenceToMatches::Item'
     belongs_to :bin, class_name: 'AddBinReferenceToMatches::Bin'
   end
 
-  class Item < ActiveRecord::Base
+  class Item < ApplicationRecord
     belongs_to :bin, class_name: 'AddBinReferenceToMatches::Bin'
     has_many :matches, -> { order('updated_at desc') }, class_name: 'AddBinReferenceToMatches::Match'
   end
 
-  class Bin < ActiveRecord::Base
+  class Bin < ApplicationRecord
     has_many :items, class_name: 'AddBinReferenceToMatches::Item'
     has_many :matches, class_name: 'AddBinReferenceToMatches::Match'
   end

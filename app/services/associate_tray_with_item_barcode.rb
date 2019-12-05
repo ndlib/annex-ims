@@ -23,23 +23,22 @@ class AssociateTrayWithItemBarcode
         user = User.find(user_id)
         ActivityLogger.associate_item_and_tray(item: item, tray: item.tray, user: user)
         StockItem.call(item, user)
-        return item
+        item
       else
-        return false
+        false
       end
     else
       raise "item #{barcode} not found"
     end
   end
 
-  private
+    private
 
-    def validate_input!
-      if IsObjectTray.call(tray)
-        true
-      else
-        raise "object is not a tray"
-      end
+  def validate_input!
+    if IsObjectTray.call(tray)
+      true
+    else
+      raise "object is not a tray"
     end
-
+  end
   end

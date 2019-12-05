@@ -1,8 +1,8 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe UpdateIngestDate do
-  subject { described_class.call(item)}
-  let(:item) { double(Item, "last_ingest=" => Date.today.to_s, initial_ingest: true, save: true)} # insert used methods
+  subject { described_class.call(item) }
+  let(:item) { double(Item, "last_ingest=" => Date.today.to_s, initial_ingest: true, save: true) } # insert used methods
 
   before(:each) do
     allow(IsObjectItem).to receive(:call).with(item).and_return(true)
@@ -17,5 +17,4 @@ RSpec.describe UpdateIngestDate do
     allow(item).to receive(:save).and_return(false)
     expect(subject).to be(false)
   end
-
 end

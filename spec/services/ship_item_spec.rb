@@ -1,9 +1,9 @@
 require "rails_helper"
 
 RSpec.describe ShipItem do
-  let(:item) { FactoryGirl.create(:item) }
-  let(:user) { FactoryGirl.create(:user) }
-  let(:request) { FactoryGirl.create(:request) }
+  let(:item) { FactoryBot.create(:item) }
+  let(:user) { FactoryBot.create(:user) }
+  let(:request) { FactoryBot.create(:request) }
 
   subject { described_class.call(item: item, request: request, user: user) }
 

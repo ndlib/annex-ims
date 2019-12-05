@@ -7,7 +7,7 @@ class RetryWorker < ActiveJob::QueueAdapters::SneakersAdapter::JobWrapper
     base_options = {
       handler: Sneakers::Handlers::Maxretry,
       arguments: {
-        :"x-dead-letter-exchange" => "#{queue_name}-retry",
+        "x-dead-letter-exchange": "#{queue_name}-retry",
       },
       routing_key: [queue_name],
     }

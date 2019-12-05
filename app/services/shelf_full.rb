@@ -18,6 +18,7 @@ class ShelfFull
     return EMPTY if @shelf.trays.count == 0
     return FULL if @shelf.trays.count == @shelf.tray_type.trays_per_shelf
     return OVER if @shelf.trays.count > @shelf.tray_type.trays_per_shelf
-    return PARTIAL
+
+    PARTIAL
   end
 end

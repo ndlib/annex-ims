@@ -1,4 +1,4 @@
-class UpdateCoreFields < ActiveRecord::Migration
+class UpdateCoreFields < ActiveRecord::Migration[4.2]
   def change
     change_column_null :trays, :barcode, false
     change_column_null :shelves, :barcode, false

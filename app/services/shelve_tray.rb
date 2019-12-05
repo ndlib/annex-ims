@@ -25,12 +25,11 @@ class ShelveTray
 
   private
 
-    def validate_input!
-      if IsObjectTray.call(tray)
-        true
-      else
-        raise "object is not a tray"
-      end
+  def validate_input!
+    if IsObjectTray.call(tray)
+      true
+    else
+      raise "object is not a tray"
     end
-
   end
+end

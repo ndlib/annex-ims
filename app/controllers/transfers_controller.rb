@@ -23,6 +23,7 @@ class TransfersController < ApplicationController
     @tray = Tray.find(params[:tray_id])
 
     return if !check_for_blank_shelf("existing")
+
     dissociate_tray
     return if !check_for_final_tray
   end

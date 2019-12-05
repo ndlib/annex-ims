@@ -5,8 +5,7 @@ class ApiGetRequestList
     new.get_data!
   end
 
-  def initialize
-  end
+  def initialize; end
 
   def get_data!
     response = ApiHandler.get(action: :active_requests)

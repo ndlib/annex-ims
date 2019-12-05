@@ -5,35 +5,36 @@ class DeaccessioningController < ApplicationController
     @res = SearchItems.call(params)
     @results = @res.results
     @total = @res.total
-    @params = params  # Because we need to fill in the form with previous values.
+    @params = params # Because we need to fill in the form with previous values.
     @criteria = params[:criteria]
     @criteria_type = params[:criteria_type]
+  end
+
+  def params_whitelist
+    params.permit(items: {})
+    params.permit([:disposition_id, :comment])
   end
 
   def req
     if Disposition.pluck(:id).include?(params[:disposition_id].to_i)
       if params[:items].blank?
         flash[:error] = I18n.t("deaccessioning.status.empty_items")
-	params.delete(:action)
-	params.delete(:controller)
-        redirect_to deaccessioning_path(params) and return
+        redirect_to(deaccessioning_path(params_whitelist)) && return
       else
-        params[:items].keys.each do |item_id|
-          item = Item.find(item_id)
-          request = BuildDeaccessioningRequest.call(item_id,
-                                                    params[:disposition_id],
-                                                    params[:comment])[0]
+        items = Item.where(id: params[:items].keys)
+        items.each do |item|
+          request = BuildDeaccessioningRequest.call(item.id,
+                                                    params_whitelist[:disposition_id],
+                                                    params_whitelist[:comment])[0]
           if !item.stocked?
-            DeaccessionNotStockedItem.call(request.id, item_id, params[:disposition_id], current_user)
+            DeaccessionNotStockedItem.call(request.id, item.id, params_whitelist[:disposition_id], current_user)
           end
         end
-        redirect_to deaccessioning_path() and return
+        redirect_to(deaccessioning_path) && return
       end
     else
       flash[:error] = "Select a Disposition"
-      params.delete(:action)
-      params.delete(:controller)
-      redirect_to deaccessioning_path(params) and return
+      redirect_to(deaccessioning_path(params_whitelist)) && return
     end
   end
 end
