@@ -77,7 +77,7 @@ gem "whenever", require: false
 
 group :deployment do
   # Use Capistrano for deployment
-  gem "capistrano", "~> 3.11"
+  gem "capistrano", "= 3.11.2"
   gem "capistrano-maintenance", "~> 1.0"
   gem "capistrano-rails", "~> 1.1"
 end
