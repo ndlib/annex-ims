@@ -11,6 +11,9 @@ feature "Items in Tray", type: :feature do
   let!(:item) { FactoryBot.create(:item, tray: tray) }
   let!(:bad_item) { FactoryBot.create(:item) }
   let!(:bad_item_2) { FactoryBot.create(:item) }
+  let!(:bad_item_3) { FactoryBot.create(:item) }
+  let!(:bad_item_4) { FactoryBot.create(:item) }
+  let!(:bad_item_5) { FactoryBot.create(:item) }
 
   describe "as an admin" do
     before(:each) do
@@ -36,6 +39,19 @@ feature "Items in Tray", type: :feature do
       click_button "Submit"
       expect(page).to have_content "Barcode #{bad_item.barcode} is not associated to this tray. Put item with barcode #{bad_item.barcode} on problem shelf."
       expect(page).to have_content "Barcode #{bad_item_2.barcode} is not associated to this tray. Put item with barcode #{bad_item_2.barcode} on problem shelf."
+      fill_in "Item", with: bad_item_2.barcode
+      click_button "Save"
+      fill_in "Item", with: bad_item_3.barcode
+      click_button "Save"
+      fill_in "Item", with: bad_item_4.barcode
+      click_button "Save"
+      fill_in "Item", with: bad_item_5.barcode
+      click_button "Save"
+      expect(page).to have_content "Barcode #{bad_item.barcode} is not associated to this tray. Put item with barcode #{bad_item.barcode} on problem shelf."
+      expect(page).to have_content "Barcode #{bad_item_2.barcode} is not associated to this tray. Put item with barcode #{bad_item_2.barcode} on problem shelf."
+      expect(page).to have_content "Barcode #{bad_item_3.barcode} is not associated to this tray. Put item with barcode #{bad_item_3.barcode} on problem shelf."
+      expect(page).to have_content "Barcode #{bad_item_4.barcode} is not associated to this tray. Put item with barcode #{bad_item_4.barcode} on problem shelf."
+      expect(page).to have_content "Barcode #{bad_item_5.barcode} is not associated to this tray. Put item with barcode #{bad_item_5.barcode} on problem shelf."
     end
   end
 end
