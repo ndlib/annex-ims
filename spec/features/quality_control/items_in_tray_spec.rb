@@ -40,13 +40,13 @@ feature "Items in Tray", type: :feature do
       expect(page).to have_content "Barcode #{bad_item.barcode} is not associated to this tray. Put item with barcode #{bad_item.barcode} on problem shelf."
       expect(page).to have_content "Barcode #{bad_item_2.barcode} is not associated to this tray. Put item with barcode #{bad_item_2.barcode} on problem shelf."
       fill_in "Item", with: bad_item_2.barcode
-      click_button "Save"
+      click_button "Submit"
       fill_in "Item", with: bad_item_3.barcode
-      click_button "Save"
+      click_button "Submit"
       fill_in "Item", with: bad_item_4.barcode
-      click_button "Save"
+      click_button "Submit"
       fill_in "Item", with: bad_item_5.barcode
-      click_button "Save"
+      click_button "Submit"
       expect(page).to have_content "Barcode #{bad_item.barcode} is not associated to this tray. Put item with barcode #{bad_item.barcode} on problem shelf."
       expect(page).to have_content "Barcode #{bad_item_2.barcode} is not associated to this tray. Put item with barcode #{bad_item_2.barcode} on problem shelf."
       expect(page).to have_content "Barcode #{bad_item_3.barcode} is not associated to this tray. Put item with barcode #{bad_item_3.barcode} on problem shelf."
