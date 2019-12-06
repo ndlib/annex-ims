@@ -139,12 +139,12 @@ class TraysController < ApplicationController
     @used = @tray.used
     @unlimited = @tray.tray_type.unlimited
     if @unlimited
-      @capacity = 'unlimited'
+      @capacity = "unlimited"
       @progress = 0.0
     else
       @capacity = @tray.capacity
-      @progress = @used.to_f / @capacity.to_f
-      @progress = (@progress <= 1.0) ? @progress : 1.0
+      @progress = @used.to_f / @capacity
+      @progress = @progress <= 1.0 ? @progress : 1.0
     end
     @style = @tray.style
     @size = TraySize.call(@tray.barcode)

@@ -30,7 +30,8 @@ class Tray < ApplicationRecord
 
   # Not entirely sure this is where this should go
   def style
-    return 'success' if tray_type.unlimited
+    return "success" if tray_type.unlimited
+
     result = case used
              when 0..capacity then "success"
              when capacity..(capacity + buffer - 1) then "warning"
