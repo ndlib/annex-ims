@@ -1,10 +1,29 @@
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
+require "omniauth-oktaoauth"
+
 Devise.setup do |config|
   # The secret key used by Devise. Devise uses this key to generate
   # random tokens. Changing this key will render invalid all existing
   # confirmation, reset password and unlock tokens in the database.
   # config.secret_key = "011b6001f75749566e092721113095fc81cef7c845b0854f0e3280861558b976744c6d080c9f921a7a07bc251d1a07ce558d425ce92b80f1e5ec3e519b001f7d"
+
+  # Okta
+  okta_issuer = Rails.application.secrets.okta[:base_auth_url] + Rails.application.secrets.okta[:auth_server_id]
+  config.omniauth(:oktaoauth,
+                  Rails.application.secrets.okta[:client_id],
+                  Rails.application.secrets.okta[:client_secret],
+                  scope: 'openid profile email netid',
+                  fields: ['profile', 'email', 'netid'],
+                  client_options: {
+                    site: okta_issuer,
+                    authorize_url: okta_issuer + "/v1/authorize",
+                    token_url: okta_issuer + "/v1/token",
+                  },
+                  redirect_uri: Rails.application.secrets.okta[:redirect_url],
+                  auth_server_id: Rails.application.secrets.okta[:auth_server_id],
+                  issuer: okta_issuer,
+                  strategy_class: OmniAuth::Strategies::Oktaoauth)
 
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,

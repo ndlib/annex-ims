@@ -39,7 +39,7 @@ group :application do
 
   # Devise for authentication, CAS for use in ND
   gem "devise"
-  gem "devise_cas_authenticatable"
+  gem "omniauth-oktaoauth"
 
   # For consuming the API for items
   gem "faraday"
@@ -86,6 +86,7 @@ group :development, :test, :staging do
   # For realistic fake data
   gem "faker", "~> 1.4"
 
+  gem "haml_lint", require: false
   gem "rubocop", "= 0.75.0" # this is the latest version hound supports
   gem "rubocop-rails"
 end

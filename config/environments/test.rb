@@ -56,8 +56,3 @@ Rails.application.configure do
   # Configures time before user is logged out due to inactivity
   config.user_timeout = 10.hours
 end
-
-Devise.setup do |config|
-  # CAS auth
-  config.cas_base_url = "https://login.nd.edu/cas"
-end

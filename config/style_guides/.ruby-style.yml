@@ -416,6 +416,7 @@ Metrics/BlockLength:
   Enabled: true
   Exclude:
     - spec/**/*
+    - Gemfile
 Metrics/BlockNesting:
   Description: "Avoid excessive block nesting"
   Enabled: false
@@ -438,6 +439,7 @@ Metrics/LineLength:
   Enabled: true
   Exclude:
     - spec/**/*
+    - Gemfile
   Max: 160
   StyleGuide: "https://github.com/bbatsov/ruby-style-guide#80-character-limits"
   URISchemes:
