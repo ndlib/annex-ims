@@ -487,7 +487,7 @@ DEPENDENCIES
   bootstrap-sass (~> 3.4.1)
   bootstrap_progressbar
   byebug
-  capistrano (~> 3.11)
+  capistrano (= 3.11.2)
   capistrano-maintenance (~> 1.0)
   capistrano-rails (~> 1.1)
   capybara (~> 2.4)
