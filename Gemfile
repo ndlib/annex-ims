@@ -92,13 +92,6 @@ group :development, :test, :staging do
 end
 
 group :development, :test do
-  gem "guard", "2.6.1"
-  gem "guard-bundler", "2.0.0"
-  gem "guard-coffeescript", "1.4.0"
-  gem "guard-rails", "0.6.0"
-  gem "guard-rspec", "4.3.1"
-  gem "guard-spring", "0.0.4"
-  gem "guard-sunspot", github: "ndlib/guard-sunspot"
   gem "hesburgh_infrastructure", github: "ndlib/hesburgh_infrastructure"
   gem "spring-commands-rspec"
 
