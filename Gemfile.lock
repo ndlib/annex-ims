@@ -1,5 +1,5 @@
 GIT
-  remote: https://github.com/ndlib/hesburgh_infrastructure.git
+  remote: git://github.com/ndlib/hesburgh_infrastructure.git
   revision: 3ca3bc3b9df36b9bfb2abed248ea5e79773346f2
   specs:
     hesburgh_infrastructure (0.2.5)
@@ -490,4 +490,4 @@ DEPENDENCIES
   whenever
 
 BUNDLED WITH
-   2.0.2
+   1.17.3
