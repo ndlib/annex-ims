@@ -8,13 +8,13 @@ class RequestsController < ApplicationController
       flash[:error] = "Request NOT removed"
     end
 
-    redirect_to :back
+    redirect_back(fallback_location: batches_url)
   end
 
   def sync
     requests = GetRequests.call
     flash[:notice] = I18n.t("requests.synchronized", count: requests.count)
 
-    redirect_to :back
+    redirect_back(fallback_location: batches_url)
   end
 end
