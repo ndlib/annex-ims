@@ -125,7 +125,7 @@ class ShelvesController < ApplicationController
   def check_trays
     @shelf = Shelf.where(barcode: params[:barcode]).take
     @scanned = []
-    @extras = []
+    @errors = []
   end
 
   def validate_trays
@@ -133,20 +133,19 @@ class ShelvesController < ApplicationController
     tray_barcode = params[:tray_barcode]
     tray = Tray.where(barcode: tray_barcode).take
     @scanned = params[:scanned].presence || []
-    @extras = params[:extras].presence || []
+    @errors = params[:errors].presence || []
 
     if tray.nil?
       if IsTrayBarcode.call(tray_barcode)
-        errors = build_extras_errors(@extras)
-        errors.push(I18n.t("errors.barcode_not_found", barcode: tray_barcode))
-        flash.now[:error] = errors.join("<br>").html_safe if errors.count > 0
+        @errors.push(I18n.t("errors.barcode_not_found", barcode: tray_barcode))
         tray = Tray.create!(barcode: tray_barcode)
         ActivityLogger.create_tray(tray: tray, user: current_user)
       else
-        errors = build_extras_errors(@extras)
-        errors.push(I18n.t("errors.barcode_not_valid", barcode: tray_barcode))
-        flash.now[:error] = errors.join("<br>").html_safe if errors.count > 0
+        @errors.push(I18n.t("errors.barcode_not_valid", barcode: tray_barcode))
       end
+
+      @errors = @errors.uniq
+      flash.now[:error] = @errors.join("<br>").html_safe if @errors.count > 0
       render :check_trays
       return
     end
@@ -154,24 +153,13 @@ class ShelvesController < ApplicationController
     if @shelf.trays.include?(tray)
       @scanned.push(tray_barcode)
       @scanned = @scanned.uniq
-      errors = build_extras_errors(@extras)
-      flash.now[:error] = errors.join("<br>").html_safe if errors.count > 0
     else
-      @extras.push(tray_barcode)
-      @extras = @extras.uniq.sort!
+      @errors.push(I18n.t("errors.barcode_not_associated_to_shelf", barcode: tray_barcode))
       but_message = tray.shelf.present? ? "but is associated with shelf '#{tray.shelf.barcode}'" : "but is not associated with a shelf."
-      errors = build_extras_errors(@extras)
-      flash.now[:error] = errors.join("<br>").html_safe if errors.count > 0
     end
 
+    @errors = @errors.uniq
+    flash.now[:error] = @errors.join("<br>").html_safe if @errors.count > 0
     render :check_trays
-  end
-
-  def build_extras_errors(extras)
-    errors = []
-    if extras.count > 0
-      errors = extras.map { |extra| I18n.t("errors.barcode_not_associated_to_shelf", barcode: extra) }
-    end
-    errors
   end
 end
