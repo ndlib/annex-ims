@@ -25,7 +25,8 @@
       %span.pull-right{id: 'used'}= "#{@used} / #{@capacity}"
     .actions
       = submit_tag 'Save', class: 'btn btn-primary'
-      = progress_bar @progress, alternative: @style, style: 'min-width: 75%',
+      - if !@unlimited
+        = progress_bar @progress, alternative: @style, style: 'min-width: 75%',
       class: 'pull-right'
 %span{clear: 'both'}
 = button_to "Done", count_tray_item_path, method: :get,
