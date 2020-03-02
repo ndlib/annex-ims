@@ -11,7 +11,7 @@
     = f.text_field :name
   .field
     = f.label :fields
-    = f.text_area :fields
+    = f.select :fields, options_from_collection_for_select(Report::FIELDS, 'first', 'last', @report.fields), { include_hidden: false }, { multiple: true }
   .field
     = f.label :start_date
     = f.date_select :start_date
@@ -26,3 +26,5 @@
     = f.text_field :status
   .actions
     = f.submit 'Save'
+  :javascript
+    $('#report_fields').multiSelect();

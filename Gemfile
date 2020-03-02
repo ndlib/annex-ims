@@ -37,6 +37,9 @@ group :application do
   # Someone else Rails-ified Datatables
   gem "jquery-datatables-rails", "~> 3.4.0"
 
+  # Multiselect for Rails asset pipeline
+  gem "multi-select-rails"
+
   # Devise for authentication, CAS for use in ND
   gem "devise"
   gem "omniauth-oktaoauth"
