@@ -14,4 +14,8 @@ class Report < ApplicationRecord
     time_to_pull: "Time to Pull",
     time_to_fill: "Time to Fill"
   }
+
+  def run
+    p BuildReport.call(fields, start_date, end_date, activity, status)
+  end
 end

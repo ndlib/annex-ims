@@ -14,10 +14,10 @@
     = f.select :fields, options_from_collection_for_select(Report::FIELDS, 'first', 'last', @report.fields), { include_hidden: false }, { multiple: true }
   .field
     = f.label :start_date
-    = f.date_select :start_date
+    = f.date_select :start_date, { include_blank: true, default: nil }
   .field
     = f.label :end_date
-    = f.date_select :end_date
+    = f.date_select :end_date, { include_blank: true, default: nil }
   .field
     = f.label :activity
     = f.text_field :activity
