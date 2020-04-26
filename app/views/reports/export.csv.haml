@@ -1,0 +1,6 @@
+= CSV.generate_line(@report.fields.map { |field| Report::FIELDS[field] }, {:force_quotes=>true}).strip.html_safe
+- @results.each do |result|
+  - row = []
+  - @report.fields.each do |field|
+    - row << result[field]&.gsub('"', '')
+  = CSV.generate_line(row, {:force_quotes=>true}).strip.html_safe

@@ -2,6 +2,8 @@
 
 Rails.application.routes.draw do
   resources :reports
+  get "reposrts/:id/export", to: "reports#export", as: "export_report"
+
   resources :tray_types do
     member do
       post 'activation'

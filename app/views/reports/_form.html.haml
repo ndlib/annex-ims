@@ -20,7 +20,7 @@
     = f.date_select :end_date, { include_blank: true, default: nil }
   .field
     = f.label :activity
-    = f.text_field :activity
+    = f.select :activity, options_from_collection_for_select(ActivityLog::ACTIONS, 'to_str', 'titleize', @report.activity), { include_hidden: false }
   .field
     = f.label :status
     = f.text_field :status

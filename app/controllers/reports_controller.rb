@@ -1,5 +1,5 @@
 class ReportsController < ApplicationController
-  before_action :set_report, only: [:show, :edit, :update, :destroy]
+  before_action :set_report, only: [:show, :edit, :update, :destroy, :export]
 
   # GET /reports
   # GET /reports.json
@@ -10,6 +10,29 @@ class ReportsController < ApplicationController
   # GET /reports/1
   # GET /reports/1.json
   def show
+    @results = BuildReport.call(
+      @report.fields,
+      @report.start_date,
+      @report.end_date,
+      @report.activity,
+      @report.status
+    )
+  end
+
+  def export
+    @results = BuildReport.call(
+      @report.fields,
+      @report.start_date,
+      @report.end_date,
+      @report.activity,
+      @report.status
+    )
+
+    headers["Content-Disposition"] = \
+      "attachment; filename=\"#{@report.name}.csv\""
+    headers["Content-Type"] ||= "text/csv"
+
+    render "export.csv"
   end
 
   # GET /reports/new

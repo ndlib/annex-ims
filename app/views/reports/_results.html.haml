@@ -1,0 +1,11 @@
+.results
+  %table.table.table-striped.condensed.datatable{"id" => "results"}
+    %thead
+      %tr
+        - @report.fields.each do |field|
+          %th= Report::FIELDS[field]
+    %tbody
+      - @results.each do |result|
+        %tr
+          - @report.fields.each do |field|
+            %th= result[field]&.gsub('"', '')

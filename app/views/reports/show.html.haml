@@ -14,11 +14,23 @@
   = @report.end_date
 %p
   %b Activity:
-  = @report.activity
+  = @report.activity.titleize
 %p
   %b Status:
   = @report.status
 
+- if @results.count == 0
+  No Results
+  %br
+- else
+  = render 'results'
+  = button_to 'Export', export_report_path(:id => @report.id), method: :get, class: 'btn pull-right btn-primary'
+
 = link_to 'Edit', edit_report_path(@report)
 \|
 = link_to 'Back', reports_path
+- if @results.count !=0
+  :javascript
+      $(document).ready(function() {
+        window.table = $('#results').DataTable({ "stateSave": true });
+      } );

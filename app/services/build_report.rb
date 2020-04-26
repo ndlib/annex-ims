@@ -16,16 +16,16 @@ class BuildReport
   def build!
     sql = <<~SQL.gsub(/^[\s\t]*/, '').gsub(/[\s\t]*\n/, ' ').strip
       SELECT
-        b.created_at AS "req",
+        b.created_at AS "requested",
         p.created_at AS "pull",
-        a.created_at AS "fill",
-        a.data->'request'->'source' AS "src",
-        a.data->'request'->'req_type' AS "type",
+        a.created_at AS "filled",
+        a.data->'request'->'source' AS "source",
+        a.data->'request'->'req_type' AS "request_type",
         a.data->'request'->'del_type' AS "del",
-        a.data->'request'->'patron_status' AS "patron",
-        a.data->'request'->'patron_institution' AS "inst",
-        a.data->'request'->'patron_department' AS "dept",
-        a.data->'request'->'pickup_location' AS "dest",
+        a.data->'request'->'patron_status' AS "patron_status",
+        a.data->'request'->'patron_institution' AS "institution",
+        a.data->'request'->'patron_department' AS "department",
+        a.data->'request'->'pickup_location' AS "pickup_location",
         TRIM(SUBSTR(i.call_number,1,2)) AS "class"
       FROM activity_logs a
         LEFT JOIN items i ON CAST(a.data->'request'->>'item_id' AS INTEGER) = i.id
@@ -38,5 +38,7 @@ class BuildReport
         b.created_at,
         a.created_at
     SQL
+
+    results = ActiveRecord::Base.connection.execute(sql).to_a
   end
 end

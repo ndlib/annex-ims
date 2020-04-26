@@ -8,21 +8,25 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   helper_method :user_admin?
-
   protected
 
+  def current_user
+    @user ||= User.find(179)
+  end
+
   def check_authentication
-    unless user_signed_in?
-      redirect_to_sign_in
-      return
-    end
+    # unless user_signed_in?
+    #   redirect_to_sign_in
+    #   return
+    # end
     unless user_admin? || user_worker?
       redirect_to_unauthorized
+      return
     end
   end
 
   def check_activity
-    if current_user.blank? || IsUserSessionExpired.call(user: current_user)
+    if !current_user.present? || IsUserSessionExpired.call(user: current_user)
       sign_out
       render "users/timed_out"
       return
@@ -31,7 +35,7 @@ class ApplicationController < ActionController::Base
   end
 
   def redirect_to_sign_in
-    redirect_to user_oktaoauth_omniauth_authorize_path
+    redirect_to new_user_session_path
   end
 
   def redirect_to_unauthorized
@@ -61,7 +65,9 @@ class ApplicationController < ActionController::Base
   end
 
   def update_activity
-    current_user&.touch(:last_activity_at)
+    if current_user
+      current_user.touch(:last_activity_at)
+    end
   end
 
   private
@@ -69,10 +75,5 @@ class ApplicationController < ActionController::Base
   def set_raven_context
     Raven.user_context(id: session[:current_user_id]) # or anything else in session
     Raven.extra_context(params: params.to_unsafe_h, url: request.url)
-  end
-
-  # Overwriting the sign_out redirect path method
-  def after_sign_out_path_for(*)
-    Rails.application.secrets.okta[:logout_url]
   end
 end
