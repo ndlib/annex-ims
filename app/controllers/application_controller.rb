@@ -10,10 +10,6 @@ class ApplicationController < ActionController::Base
   helper_method :user_admin?
   protected
 
-  def current_user
-    @user ||= User.find(179)
-  end
-
   def check_authentication
     # unless user_signed_in?
     #   redirect_to_sign_in
