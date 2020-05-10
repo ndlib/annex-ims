@@ -104,7 +104,7 @@ en:
     transfers_show: "Shelf Transfer Status"
     transfers_view_active: "Active Shelf Transfers"
     bins_index: "Process Batch"
-    reports_index: "Reporting"
+    reporting_index: "Reporting"
     update_index: "Update Barcode"
     deaccessioning_index: "Remove from Annex"
     update_show_old: "Update Barcode"
@@ -112,6 +112,7 @@ en:
     update_show_existing: "Update Barcode"
     shelves_check_trays_new: "Shelf Check Trays"
     trays_check_items_new: "Tray Check Items"
+    reports_index: "Report Builder"
   main_menu:
     deaccessioning: "Remove from Annex"
   deaccessioning:

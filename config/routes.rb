@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :reports
+
   resources :tray_types do
     member do
       post "activation"
@@ -113,8 +115,8 @@ Rails.application.routes.draw do
   post "bins/remove_match", to: "bins#remove_match", as: "bin_remove"
   post "bins/process_match", to: "bins#process_match", as: "bin_process"
 
-  get "reports", to: "reports#index", as: "reports"
-  get "reports/call_report", to: "reports#call_report", as: "call_report"
+  get "reporting", to: "reporting#index", as: "reporting"
+  get "reporting/call_report", to: "reporting#call_report", as: "call_report"
 
   get "users", to: "users#index", as: "users"
   put "users", to: "users#update", as: "update_users"
