@@ -53,9 +53,19 @@
       %span.glyphicon.glyphicon-plus
       Reports
     #reports.collapse
-      %a.list-group-item{ :href => reports_path } Report By Barcode
+      %a.list-group-item{ :href => reporting_path } Report By Barcode
       %a.list-group-item{ :href => issues_path } Items with Issues
       %a.list-group-item{ :href => trays_issues_path } Trays with Issues
+      %a.list-group-item{ :href => reports_path } Report Builder
+      - if Report.all.count > 0
+        %a.list-group-item.list-group-item-success{ "data-parent" => "#reports",
+          "data-toggle" => "collapse",
+          :href => "#saved-reports" }
+          %span.glyphicon.glyphicon-plus
+          Saved Reports
+        #saved-reports.collapse
+          - Report.all.each do |report|
+            %a.list-group-item{ :href => report_path(report.id) } #{report.name}
     - if user_admin?
       %a.list-group-item.list-group-item-success{ "data-parent" => "#MainMenu",
         "data-toggle" => "collapse",

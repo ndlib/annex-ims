@@ -984,7 +984,7 @@ Style/SpecialGlobalVars:
 Style/StringLiterals:
   Description: "Checks if uses of quotes match the configured preference."
   Enabled: true
-  EnforcedStyle: double_quotes
+  EnforcedStyle: single_quotes
   StyleGuide: "https://github.com/bbatsov/ruby-style-guide#consistent-string-literals"
   SupportedStyles:
     - single_quotes
