@@ -12,23 +12,32 @@ class ReportsController < ApplicationController
   # GET /reports/1
   # GET /reports/1.json
   def show
-    @results = BuildReport.call(
+    output = BuildReport.call(
       @report.fields,
       @report.start_date,
       @report.end_date,
       @report.activity,
       @report.status
     )
+    @results = output[:results]
+    @sql = output[:sql]
+
+    @report.fields << 'activity'
   end
 
   def export
-    @results = BuildReport.call(
+    output = BuildReport.call(
       @report.fields,
       @report.start_date,
       @report.end_date,
       @report.activity,
       @report.status
     )
+
+    @results = output[:results]
+    @sql = output[:sql]
+
+    @report.fields << 'activity'
 
     headers['Content-Disposition'] = \
       "attachment; filename=\"#{@report.name}.csv\""

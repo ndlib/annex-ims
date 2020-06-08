@@ -15,6 +15,7 @@ class Report < ApplicationRecord
   FIELDS = {
     'requested' => 'Requested',
     'filled' => 'Filled',
+    'pulled' => 'Pulled',
     'source' => 'Source',
     'request_type' => 'Request Type',
     'patron_status' => 'Patron Status',

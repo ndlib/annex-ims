@@ -3,7 +3,7 @@
     %thead
       %tr
         - @report.fields.each do |field|
-          %th= Report::FIELDS[field]
+          %th= (field == 'activity') ? @report.activity.to_str.titleize : Report::FIELDS[field]
     %tbody
       - @results.each do |result|
         %tr

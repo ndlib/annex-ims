@@ -1,4 +1,4 @@
-= CSV.generate_line(@report.fields.map { |field| Report::FIELDS[field] }, {:force_quotes=>true}).strip.html_safe
+= CSV.generate_line(@report.fields.map { |field| (field == 'activity') ? @report.activity.to_str.titleize : Report::FIELDS[field] }, {:force_quotes=>true}).strip.html_safe
 - @results.each do |result|
   - row = []
   - @report.fields.each do |field|

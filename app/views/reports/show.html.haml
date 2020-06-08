@@ -25,6 +25,11 @@
 - else
   = render 'results'
   = button_to 'Export', export_report_path(:id => @report.id), method: :get, class: 'btn pull-right btn-primary'
+%button{"data-toggle" => "collapse", :href => "#sql" } Show SQL
+#sql.collapse
+  %p
+  = @sql
+%br
 
 = link_to 'Edit', edit_report_path(@report)
 \|
