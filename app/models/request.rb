@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Request < ApplicationRecord
   validates :criteria_type, presence: true
   validates :criteria, presence: true
@@ -9,23 +11,28 @@ class Request < ApplicationRecord
   has_many :items, through: :matches
   has_many :batches, through: :matches
 
-  belongs_to :filled_by_item, class_name: "Item", foreign_key: "item_id"
-  belongs_to :filled_in_batch, class_name: "Batch", foreign_key: "batch_id"
+  belongs_to :filled_by_item, class_name: 'Item', foreign_key: 'item_id'
+  belongs_to :filled_in_batch, class_name: 'Batch', foreign_key: 'batch_id'
 
   enum status: { received: 0, completed: 1 }
 
+  STATUSES = {
+    '0' => 'Received',
+    '1' => 'Completed'
+  }.freeze
+
   def bin_type
     bt = case source.downcase
-         when "aleph"
-           "ALEPH-LOAN"
-         when "illiad"
-           if del_type != "loan"
-             "ILL-SCAN"
+         when 'aleph'
+           'ALEPH-LOAN'
+         when 'illiad'
+           if del_type != 'loan'
+             'ILL-SCAN'
            else
-             "ILL-LOAN"
+             'ILL-LOAN'
                 end
          else
-           "REM-STOCK"
+           'REM-STOCK'
          end
 
     bt

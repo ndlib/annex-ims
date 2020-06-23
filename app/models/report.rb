@@ -4,11 +4,12 @@ class Report < ApplicationRecord
   serialize :fields
 
   validates :name, presence: true
-  validates :start_date, presence: true
-  validates :end_date, presence: true
   validates :activity,
             presence: true,
             inclusion: ActivityLog::ACTIONS
+  validates :status,
+            inclusion: Request::STATUSES.keys,
+            allow_blank: true
 
   before_save :constrain_fields
 

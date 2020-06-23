@@ -14,16 +14,16 @@
     = f.select :fields, options_from_collection_for_select(Report::FIELDS, 'first', 'last', @report.fields), { include_hidden: false }, { multiple: true }
   .field
     = f.label :start_date
-    = f.date_select :start_date, { include_blank: true, default: nil }
+    = f.date_select :start_date, { include_blank: true, default: nil, use_short_month: true }
   .field
     = f.label :end_date
-    = f.date_select :end_date, { include_blank: true, default: nil }
+    = f.date_select :end_date, { include_blank: true, default: nil, use_short_month: true }
   .field
     = f.label :activity
     = f.select :activity, options_from_collection_for_select(ActivityLog::ACTIONS, 'to_str', 'titleize', @report.activity), { include_hidden: false }
   .field
     = f.label :status
-    = f.text_field :status
+    = f.select :status, options_from_collection_for_select(Request::STATUSES, 'first', 'last', @report.status), { include_hidden: false, include_blank: true, default: nil }
   .actions
     = f.submit 'Save'
   :javascript

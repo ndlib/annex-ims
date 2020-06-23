@@ -103,6 +103,48 @@ class ReportsController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def report_params
+    preprocess_start_date(params)
+    preprocess_end_date(params)
+
     params.require(:report).permit(:name, :start_date, :end_date, :activity, :status, fields: [])
+  end
+
+  def preprocess_start_date(params)
+    if params[:report]['start_date(1i)'].present?
+      params[:report]['start_date'] = Date.new(
+        params[:report]['start_date(1i)'].to_i,
+        params[:report]['start_date(2i)'].present? ? params[:report]['start_date(2i)'].to_i : 1,
+        params[:report]['start_date(3i)'].present? ? params[:report]['start_date(3i)'].to_i : 1
+      ).to_s
+
+      params[:report].delete('start_date(1i)')
+      params[:report].delete('start_date(2i)')
+      params[:report].delete('start_date(3i)')
+    end
+
+    params
+  end
+
+  def preprocess_end_date(params)
+    if params[:report]['end_date(1i)'].present?
+      year = params[:report]['end_date(1i)'].to_i
+      month = params[:report]['end_date(2i)'].present? ? params[:report]['end_date(2i)'].to_i : 12
+      day = if params[:report]['end_date(3i)'].present? && params[:report]['end_date(3i)'].to_i <= Time.days_in_month(month, year)
+              params[:report]['end_date(3i)'].to_i
+            else
+              Time.days_in_month(month, year)
+            end
+
+      params[:report]['end_date'] = Date.new(
+        year,
+        month,
+        day
+      ).to_s
+
+      params[:report].delete('end_date(1i)')
+      params[:report].delete('end_date(2i)')
+      params[:report].delete('end_date(3i)')
+    end
+    params
   end
 end

@@ -37,7 +37,7 @@ class BuildReport
     sql = to_sql
     results = ActiveRecord::Base.connection.execute(to_sql).to_a
 
-    return {
+    {
       results: results,
       sql: sql
     }
@@ -65,8 +65,8 @@ class BuildReport
     @selects.append('b.created_at AS "requested"')
 
     @joins.append("LEFT JOIN activity_logs b ON CAST(a.data->'request'->>'id' AS INTEGER) = CAST(b.data->'request'->>'id' AS INTEGER) AND b.action = 'ReceivedRequest'")
-    @joins.append("LEFT JOIN activity_logs p ON CAST(a.data->'request'->>'item_id' AS INTEGER) = CAST(p.data->'item'->>'id' AS INTEGER) AND p.action = 'AssociatedItemAndBin' AND p.created_at BETWEEN b.created_at AND a.created_at")
-    
+    @joins.append("LEFT JOIN activity_logs p ON CAST(a.data->'item'->>'id' AS INTEGER) = CAST(p.data->'item'->>'id' AS INTEGER) AND p.action = 'AssociatedItemAndBin' AND p.created_at BETWEEN b.created_at AND a.created_at")
+
     @orders.append('b.created_at')
   end
 
@@ -74,8 +74,8 @@ class BuildReport
     @selects.append('p.created_at AS "pulled"')
 
     @joins.append("LEFT JOIN activity_logs b ON CAST(a.data->'request'->>'id' AS INTEGER) = CAST(b.data->'request'->>'id' AS INTEGER) AND b.action = 'ReceivedRequest'")
-    @joins.append("LEFT JOIN activity_logs p ON CAST(a.data->'request'->>'item_id' AS INTEGER) = CAST(p.data->'item'->>'id' AS INTEGER) AND p.action = 'AssociatedItemAndBin' AND p.created_at BETWEEN b.created_at AND a.created_at")
- 
+    @joins.append("LEFT JOIN activity_logs p ON CAST(a.data->'item'->>'id' AS INTEGER) = CAST(p.data->'item'->>'id' AS INTEGER) AND p.action = 'AssociatedItemAndBin' AND p.created_at BETWEEN b.created_at AND a.created_at")
+
     @orders.append('p.created_at')
   end
 
@@ -114,16 +114,12 @@ class BuildReport
   def handle_class
     @selects.append('TRIM(SUBSTR(i.call_number,1,2)) AS "class"')
 
-    @joins.append("LEFT JOIN items i ON CAST(a.data->'request'->>'item_id' AS INTEGER) = i.id")
+    @joins.append("LEFT JOIN items i ON CAST(a.data->'item'->>'id' AS INTEGER) = i.id")
   end
 
-  def handle_time_to_pull
-  
-  end
+  def handle_time_to_pull; end
 
-  def handle_time_to_fill
-  
-  end
+  def handle_time_to_fill; end
 
   def handle_start_date
     @where_conditions.append('a.created_at >= :start_date')
@@ -137,7 +133,5 @@ class BuildReport
     @where_values[:end_date] = @end_date
   end
 
-  def handle_status
-
-  end
+  def handle_status; end
 end

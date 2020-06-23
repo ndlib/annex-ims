@@ -17,7 +17,7 @@
   = @report.activity.titleize
 %p
   %b Status:
-  = @report.status
+  = Request::STATUSES[@report.status]
 
 - if @results.count == 0
   No Results
