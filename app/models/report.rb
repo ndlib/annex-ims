@@ -7,8 +7,11 @@ class Report < ApplicationRecord
   validates :activity,
             presence: true,
             inclusion: ActivityLog::ACTIONS
-  validates :status,
+  validates :request_status,
             inclusion: Request::STATUSES.keys,
+            allow_blank: true
+  validates :item_status,
+            inclusion: Item::STATUSES.keys,
             allow_blank: true
 
   before_save :constrain_fields
@@ -29,7 +32,7 @@ class Report < ApplicationRecord
   }.freeze
 
   def run
-    p BuildReport.call(fields, start_date, end_date, activity, status)
+    p BuildReport.call(fields, start_date, end_date, activity, request_status, item_status)
   end
 
   def constrain_fields

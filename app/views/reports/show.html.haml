@@ -16,8 +16,11 @@
   %b Activity:
   = @report.activity.titleize
 %p
-  %b Status:
-  = Request::STATUSES[@report.status]
+  %b Request Status:
+  = Request::STATUSES[@report.request_status]
+%p
+  %b Item Status:
+  = Item::STATUSES[@report.item_status]
 
 - if @results.count == 0
   No Results

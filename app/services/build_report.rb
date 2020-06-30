@@ -5,7 +5,8 @@ class BuildReport
               :start_date,
               :end_date,
               :activity,
-              :status,
+              :request_status,
+              :item_status,
               :selects,
               :joins,
               :from,
@@ -13,16 +14,17 @@ class BuildReport
               :where_values,
               :orders
 
-  def self.call(fields, start_date, end_date, activity, status)
-    new(fields, start_date, end_date, activity, status).build!
+  def self.call(fields, start_date, end_date, activity, request_status, item_status)
+    new(fields, start_date, end_date, activity, request_status, item_status).build!
   end
 
-  def initialize(fields, start_date, end_date, activity, status)
+  def initialize(fields, start_date, end_date, activity, request_status, item_status)
     @fields = fields
     @start_date = start_date
     @end_date = end_date
     @activity = activity
-    @status = status
+    @request_status = request_status
+    @item_status = item_status
 
     @selects = ['a.created_at AS "activity"']
     @joins = []
@@ -50,7 +52,8 @@ class BuildReport
 
     handle_start_date if @start_date.present?
     handle_end_date if @end_date.present?
-    handle_status if @status.present?
+    handle_request_status if @request_status.present?
+    handle_item_status if @item_status.present?
 
     @wheres = [@where_conditions.uniq.join(' and '), @where_values]
 
@@ -133,5 +136,17 @@ class BuildReport
     @where_values[:end_date] = @end_date
   end
 
-  def handle_status; end
+  def handle_request_status
+    @where_conditions.append("a.data->'request'->>'status' = :request_status")
+
+    @where_values[:request_status] = Request::STATUSES[@request_status]
+  end
+
+  def handle_item_status
+    @joins.append("LEFT JOIN items i ON CAST(a.data->'item'->>'id' AS INTEGER) = i.id")
+
+    @where_conditions.append('i.status = :item_status')
+
+    @where_values[:item_status] = @item_status.to_i
+  end
 end

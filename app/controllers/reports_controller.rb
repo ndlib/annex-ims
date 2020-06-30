@@ -17,7 +17,8 @@ class ReportsController < ApplicationController
       @report.start_date,
       @report.end_date,
       @report.activity,
-      @report.status
+      @report.request_status,
+      @report.item_status
     )
     @results = output[:results]
     @sql = output[:sql]
@@ -31,7 +32,8 @@ class ReportsController < ApplicationController
       @report.start_date,
       @report.end_date,
       @report.activity,
-      @report.status
+      @report.request_status,
+      @report.item_status
     )
 
     @results = output[:results]
@@ -106,7 +108,7 @@ class ReportsController < ApplicationController
     preprocess_start_date(params)
     preprocess_end_date(params)
 
-    params.require(:report).permit(:name, :start_date, :end_date, :activity, :status, fields: [])
+    params.require(:report).permit(:name, :start_date, :end_date, :activity, :request_status, :item_status, fields: [])
   end
 
   def preprocess_start_date(params)

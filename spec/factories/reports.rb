@@ -7,6 +7,7 @@ FactoryBot.define do
     start_date '2020-05-10'
     end_date '2020-05-10'
     activity 'AcceptedItem'
-    status 'MyString'
+    request_status ''
+    item_status ''
   end
 end

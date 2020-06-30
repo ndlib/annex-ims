@@ -25,10 +25,10 @@ class Item < ApplicationRecord
   ].freeze
 
   STATUSES = {
-    0 => 'Stocked',
-    1 => 'Unstocked',
-    2 => 'Shipped',
-    3 => 'Deaccessioned'
+    '0' => 'Stocked',
+    '1' => 'Unstocked',
+    '2' => 'Shipped',
+    '3' => 'Deaccessioned'
   }.freeze
 
   enum status: { stocked: 0, unstocked: 1, shipped: 2, deaccessioned: 9 }

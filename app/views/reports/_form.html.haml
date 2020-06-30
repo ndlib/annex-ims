@@ -22,8 +22,11 @@
     = f.label :activity
     = f.select :activity, options_from_collection_for_select(ActivityLog::ACTIONS, 'to_str', 'titleize', @report.activity), { include_hidden: false }
   .field
-    = f.label :status
-    = f.select :status, options_from_collection_for_select(Request::STATUSES, 'first', 'last', @report.status), { include_hidden: false, include_blank: true, default: nil }
+    = f.label :request_status
+    = f.select :request_status, options_from_collection_for_select(Request::STATUSES, 'first', 'last', @report.request_status), { include_hidden: false, include_blank: true, default: nil }
+    .field
+    = f.label :item_status
+    = f.select :item_status, options_from_collection_for_select(Item::STATUSES, 'first', 'last', @report.item_status), { include_hidden: false, include_blank: true, default: nil }
   .actions
     = f.submit 'Save'
   :javascript
