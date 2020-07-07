@@ -120,9 +120,19 @@ class BuildReport
     @joins.append("LEFT JOIN items i ON CAST(a.data->'item'->>'id' AS INTEGER) = i.id")
   end
 
-  def handle_time_to_pull; end
+  def handle_time_to_pull
+    handle_requested
+    handle_pulled
 
-  def handle_time_to_fill; end
+    @selects.append("age(b.created_at, p.created_at) AS \"time_to_pull\"")
+  end
+
+  def handle_time_to_fill
+    handle_requested
+    handle_filled
+
+    @selects.append("age(b.created_at, f.created_at) AS \"time_to_fill\"")
+  end
 
   def handle_start_date
     @where_conditions.append('a.created_at >= :start_date')
