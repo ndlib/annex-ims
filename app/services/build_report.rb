@@ -14,6 +14,31 @@ class BuildReport
               :where_values,
               :orders
 
+  ITEM_ACTIVITES = %w[
+    AcceptedItem
+    ApiDeaccessionItem
+    ApiScanItem
+    ApiSendItem
+    ApiStockItem
+    AssociatedItemAndBin
+    AssociatedItemandTray
+    CreatedIssue
+    CreatedItem
+    DeaccessionedItem
+    DestroyedItem
+    DissociatedItemAndTray
+    MatchedItem
+    RemovedMatch
+    ScannedItem
+    SetItemDisposition
+    ShippedItem
+    SkippedItem
+    StockedItem
+    UnstockedItem
+    UpdatedBarcode
+    UpdatedItemMetadata
+  ].freeze
+
   def self.call(fields, start_date, end_date, activity, request_status, item_status)
     new(fields, start_date, end_date, activity, request_status, item_status).build!
   end
@@ -68,7 +93,6 @@ class BuildReport
     @selects.append('b.created_at AS "requested"')
 
     @joins.append("LEFT JOIN activity_logs b ON CAST(a.data->'request'->>'id' AS INTEGER) = CAST(b.data->'request'->>'id' AS INTEGER) AND b.action = 'ReceivedRequest'")
-    @joins.append("LEFT JOIN activity_logs p ON CAST(a.data->'item'->>'id' AS INTEGER) = CAST(p.data->'item'->>'id' AS INTEGER) AND p.action = 'AssociatedItemAndBin' AND p.created_at BETWEEN b.created_at AND a.created_at")
 
     @orders.append('b.created_at')
   end
@@ -77,7 +101,13 @@ class BuildReport
     @selects.append('p.created_at AS "pulled"')
 
     @joins.append("LEFT JOIN activity_logs b ON CAST(a.data->'request'->>'id' AS INTEGER) = CAST(b.data->'request'->>'id' AS INTEGER) AND b.action = 'ReceivedRequest'")
-    @joins.append("LEFT JOIN activity_logs p ON CAST(a.data->'item'->>'id' AS INTEGER) = CAST(p.data->'item'->>'id' AS INTEGER) AND p.action = 'AssociatedItemAndBin' AND p.created_at BETWEEN b.created_at AND a.created_at")
+
+    if ITEM_ACTIVITES.include?(@activity)
+      @joins.append("LEFT JOIN activity_logs p ON CAST(a.data->'item'->>'id' AS INTEGER) = CAST(p.data->'item'->>'id' AS INTEGER) AND p.action = 'AssociatedItemAndBin' AND p.created_at BETWEEN b.created_at AND a.created_at")
+    else
+      add_item_joins
+      @joins.append("LEFT JOIN activity_logs p ON CAST(m.data->'item'->>'id' AS INTEGER) = CAST(p.data->'item'->>'id' AS INTEGER) AND p.action = 'AssociatedItemAndBin' AND p.created_at BETWEEN b.created_at AND a.created_at")
+    end
 
     @orders.append('p.created_at')
   end
@@ -117,21 +147,25 @@ class BuildReport
   def handle_class
     @selects.append('TRIM(SUBSTR(i.call_number,1,2)) AS "class"')
 
-    @joins.append("LEFT JOIN items i ON CAST(a.data->'item'->>'id' AS INTEGER) = i.id")
+    if ITEM_ACTIVITES.include?(@activity)
+      @joins.append("LEFT JOIN items i ON CAST(a.data->'item'->>'id' AS INTEGER) = i.id")
+    else
+      add_item_joins
+    end
   end
 
   def handle_time_to_pull
     handle_requested
     handle_pulled
 
-    @selects.append("age(b.created_at, p.created_at) AS \"time_to_pull\"")
+    @selects.append('age(p.created_at, b.created_at) AS "time_to_pull"')
   end
 
   def handle_time_to_fill
     handle_requested
     handle_filled
 
-    @selects.append("age(b.created_at, f.created_at) AS \"time_to_fill\"")
+    @selects.append('age(f.created_at, b.created_at) AS "time_to_fill"')
   end
 
   def handle_start_date
@@ -153,10 +187,19 @@ class BuildReport
   end
 
   def handle_item_status
-    @joins.append("LEFT JOIN items i ON CAST(a.data->'item'->>'id' AS INTEGER) = i.id")
+    if ITEM_ACTIVITES.include?(@activity)
+      @joins.append("LEFT JOIN items i ON CAST(a.data->'item'->>'id' AS INTEGER) = i.id")
+    else
+      add_item_joins
+    end
 
     @where_conditions.append('i.status = :item_status')
 
     @where_values[:item_status] = @item_status.to_i
+  end
+
+  def add_item_joins
+    @joins.append("LEFT JOIN activity_logs m ON CAST(a.data->'request'->>'id' AS INTEGER) = CAST(m.data->'request'->>'id' AS INTEGER)")
+    @joins.append("LEFT JOIN items i ON CAST(m.data->'item'->>'id' AS INTEGER) = i.id AND m.action = 'MatchedItem'")
   end
 end
