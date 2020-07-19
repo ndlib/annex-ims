@@ -32,7 +32,7 @@ class Report < ApplicationRecord
   }.freeze
 
   def run
-    p BuildReport.call(fields, start_date, end_date, activity, request_status, item_status)
+    BuildReport.call(fields, start_date, end_date, activity, request_status, item_status)
   end
 
   def constrain_fields

@@ -12,14 +12,8 @@ class ReportsController < ApplicationController
   # GET /reports/1
   # GET /reports/1.json
   def show
-    output = BuildReport.call(
-      @report.fields,
-      @report.start_date,
-      @report.end_date,
-      @report.activity,
-      @report.request_status,
-      @report.item_status
-    )
+    output = @report.run
+
     @results = output[:results]
     @sql = output[:sql]
 
@@ -27,14 +21,7 @@ class ReportsController < ApplicationController
   end
 
   def export
-    output = BuildReport.call(
-      @report.fields,
-      @report.start_date,
-      @report.end_date,
-      @report.activity,
-      @report.request_status,
-      @report.item_status
-    )
+    output = @report.run
 
     @results = output[:results]
     @sql = output[:sql]

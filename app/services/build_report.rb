@@ -51,13 +51,16 @@ class BuildReport
     @request_status = request_status
     @item_status = item_status
 
-    @selects = ['a.created_at AS "activity"']
+    @selects = [
+      "DISTINCT Cast(a.data -> 'request' ->> 'id' AS INTEGER) AS \"request_id\"",
+      "Date_trunc('minute', a.created_at) AS \"activity\""
+    ]
     @joins = []
     @from = 'activity_logs a'
     @where_conditions = ['a.action = :activity']
     @where_values = { activity: @activity }
     @wheres = []
-    @orders = ['a.created_at']
+    @orders = ["Date_trunc('minute', a.created_at)"]
   end
 
   def build!
@@ -90,15 +93,15 @@ class BuildReport
   private
 
   def handle_requested
-    @selects.append('b.created_at AS "requested"')
+    @selects.append("Date_trunc('minute', b.created_at) AS \"requested\"")
 
     @joins.append("LEFT JOIN activity_logs b ON CAST(a.data->'request'->>'id' AS INTEGER) = CAST(b.data->'request'->>'id' AS INTEGER) AND b.action = 'ReceivedRequest'")
 
-    @orders.append('b.created_at')
+    @orders.append("Date_trunc('minute', b.created_at)")
   end
 
   def handle_pulled
-    @selects.append('p.created_at AS "pulled"')
+    @selects.append("Date_trunc('minute', p.created_at) AS \"pulled\"")
 
     @joins.append("LEFT JOIN activity_logs b ON CAST(a.data->'request'->>'id' AS INTEGER) = CAST(b.data->'request'->>'id' AS INTEGER) AND b.action = 'ReceivedRequest'")
 
@@ -109,15 +112,15 @@ class BuildReport
       @joins.append("LEFT JOIN activity_logs p ON CAST(m.data->'item'->>'id' AS INTEGER) = CAST(p.data->'item'->>'id' AS INTEGER) AND p.action = 'AssociatedItemAndBin' AND p.created_at BETWEEN b.created_at AND a.created_at")
     end
 
-    @orders.append('p.created_at')
+    @orders.append("Date_trunc('minute', p.created_at)")
   end
 
   def handle_filled
-    @selects.append('f.created_at AS "filled"')
+    @selects.append("Date_trunc('minute', f.created_at) AS \"filled\"")
 
     @joins.append("LEFT JOIN activity_logs f ON CAST(a.data->'request'->>'id' AS INTEGER) = CAST(f.data->'request'->>'id' AS INTEGER) AND f.action = 'FilledRequest'")
 
-    @orders.append('f.created_at')
+    @orders.append("Date_trunc('minute', f.created_at)")
   end
 
   def handle_source
@@ -158,14 +161,14 @@ class BuildReport
     handle_requested
     handle_pulled
 
-    @selects.append('age(p.created_at, b.created_at) AS "time_to_pull"')
+    @selects.append("age(Date_trunc('minute', p.created_at), Date_trunc('minute', b.created_at)) AS \"time_to_pull\"")
   end
 
   def handle_time_to_fill
     handle_requested
     handle_filled
 
-    @selects.append('age(f.created_at, b.created_at) AS "time_to_fill"')
+    @selects.append("age(Date_trunc('minute', f.created_at), Date_trunc('minute', b.created_at)) AS \"time_to_fill\"")
   end
 
   def handle_start_date
@@ -199,7 +202,7 @@ class BuildReport
   end
 
   def add_item_joins
-    @joins.append("LEFT JOIN activity_logs m ON CAST(a.data->'request'->>'id' AS INTEGER) = CAST(m.data->'request'->>'id' AS INTEGER)")
-    @joins.append("LEFT JOIN items i ON CAST(m.data->'item'->>'id' AS INTEGER) = i.id AND m.action = 'MatchedItem'")
+    @joins.append("LEFT JOIN requests r ON Cast(a.data -> 'request' ->> 'id' AS INTEGER) = r.id ")
+    @joins.append("LEFT JOIN items i ON r.item_id = i.id ")
   end
 end
