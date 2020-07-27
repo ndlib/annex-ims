@@ -143,37 +143,37 @@ class BuildReport
   def handle_source
     @tables_needed << 'requests'
 
-    @selects.append("r.source AS \"source\"")
+    @selects.append('r.source AS "source"')
   end
 
   def handle_request_type
     @tables_needed << 'requests'
 
-    @selects.append("r.req_type AS \"request_type\"")
+    @selects.append('r.req_type AS "request_type"')
   end
 
   def handle_patron_status
     @tables_needed << 'requests'
 
-    @selects.append("r.patron_status AS \"patron_status\"")
+    @selects.append('r.patron_status AS "patron_status"')
   end
 
   def handle_institution
     @tables_needed << 'requests'
 
-    @selects.append("r.patron_institution AS \"institution\"")
+    @selects.append('r.patron_institution AS "institution"')
   end
 
   def handle_department
     @tables_needed << 'requests'
 
-    @selects.append("r.patron_department AS \"department\"")
+    @selects.append('r.patron_department AS "department"')
   end
 
   def handle_pickup_location
     @tables_needed << 'requests'
 
-    @selects.append("r.pickup_location AS \"pickup_location\"")
+    @selects.append('r.pickup_location AS "pickup_location"')
   end
 
   def handle_class
@@ -214,14 +214,14 @@ class BuildReport
     else
       @tables_needed << 'requests'
 
-      @where_conditions.append("r.status = :request_status")
+      @where_conditions.append('r.status = :request_status')
     end
 
     @where_values[:request_status] = Request::STATUSES[@request_status]
   end
 
   def handle_item_status
-   @tables_needed << 'items'
+    @tables_needed << 'items'
 
     @where_conditions.append('i.status = :item_status')
 
@@ -236,14 +236,14 @@ class BuildReport
         @joins.append("LEFT JOIN items i ON Cast(a.data -> 'item' ->> 'id' AS INTEGER) = i.id ")
       elsif @tables_available.include?('requests')
         @joins.append("LEFT JOIN requests r ON Cast(a.data -> 'request' ->> 'id' AS INTEGER) = r.id ")
-        @joins.append("LEFT JOIN items i ON r.item_id = i.id")
+        @joins.append('LEFT JOIN items i ON r.item_id = i.id')
       elsif @tables_available.include?('trays')
         @joins.append("LEFT JOIN trays t ON Cast(a.data -> 'tray' ->> 'id' AS INTEGER) = t.id")
-        @joins.append("LEFT JOIN items i ON t.id = i.tray_id")
+        @joins.append('LEFT JOIN items i ON t.id = i.tray_id')
       elsif @tables_available.include?('shelves')
         @joins.append("LEFT JOIN shelves s ON Cast(a.data -> 'shelf' ->> 'id' AS INTEGER) = s.id")
-        @joins.append("LEFT JOIN trays t ON s.id = t.shelf_id")
-        @joins.append("LEFT JOIN items i ON t.id = i.tray_id")
+        @joins.append('LEFT JOIN trays t ON s.id = t.shelf_id')
+        @joins.append('LEFT JOIN items i ON t.id = i.tray_id')
       end
     end
 
@@ -254,16 +254,16 @@ class BuildReport
         @joins.append("LEFT JOIN requests r ON Cast(a.data -> 'request' ->> 'id' AS INTEGER) = r.id ")
       elsif @tables_available.include?('item')
         @joins.append("LEFT JOIN items i ON Cast(a.data -> 'item' ->> 'id' AS INTEGER) = i.id ")
-        @joins.append("LEFT JOIN requests r ON i.id = r.item_id")
+        @joins.append('LEFT JOIN requests r ON i.id = r.item_id')
       elsif @tables_available.include?('trays')
         @joins.append("LEFT JOIN trays t ON Cast(a.data -> 'tray' ->> 'id' AS INTEGER) = t.id")
-        @joins.append("LEFT JOIN items i ON t.id = i.tray_id")
-        @joins.append("LEFT JOIN requests r ON i.id = r.item_id")
+        @joins.append('LEFT JOIN items i ON t.id = i.tray_id')
+        @joins.append('LEFT JOIN requests r ON i.id = r.item_id')
       elsif @tables_available.include?('shelves')
         @joins.append("LEFT JOIN shelves s ON Cast(a.data -> 'shelf' ->> 'id' AS INTEGER) = s.id")
-        @joins.append("LEFT JOIN trays t ON s.id = t.shelf_id")
-        @joins.append("LEFT JOIN items i ON t.id = i.tray_id")
-        @joins.append("LEFT JOIN requests r ON i.id = r.item_id")
+        @joins.append('LEFT JOIN trays t ON s.id = t.shelf_id')
+        @joins.append('LEFT JOIN items i ON t.id = i.tray_id')
+        @joins.append('LEFT JOIN requests r ON i.id = r.item_id')
       end
     end
   end
