@@ -39,6 +39,10 @@ class BuildReport
     UpdatedItemMetadata
   ].freeze
 
+  BASE_SELECT = ["Date_trunc('minute', a.created_at) AS \"activity\""].freeze
+  BASE_WHERE_CONDITIONS = ['a.action = :activity'].freeze
+  BASE_ORDERS = ["Date_trunc('minute', a.created_at)"].freeze
+
   def self.call(fields, start_date, end_date, activity, request_status, item_status)
     new(fields, start_date, end_date, activity, request_status, item_status).build!
   end
@@ -51,21 +55,21 @@ class BuildReport
     @request_status = request_status
     @item_status = item_status
 
-    @selects = [
-      "DISTINCT Cast(a.data -> 'request' ->> 'id' AS INTEGER) AS \"request_id\"",
-      "Date_trunc('minute', a.created_at) AS \"activity\""
-    ]
+    @tables_available = ActivityLog::ACTION_TABLES[@activity]
+    @tables_needed = []
+
+    @selects = BASE_SELECT.dup
     @joins = []
     @from = 'activity_logs a'
-    @where_conditions = ['a.action = :activity']
+    @where_conditions = BASE_WHERE_CONDITIONS.dup
     @where_values = { activity: @activity }
     @wheres = []
-    @orders = ["Date_trunc('minute', a.created_at)"]
+    @orders = BASE_ORDERS.dup
   end
 
   def build!
     sql = to_sql
-    results = ActiveRecord::Base.connection.execute(to_sql).to_a
+    results = ActiveRecord::Base.connection.execute(sql).to_a
 
     {
       results: results,
@@ -78,14 +82,26 @@ class BuildReport
       send("handle_#{field}".to_sym)
     end
 
-    handle_start_date if @start_date.present?
-    handle_end_date if @end_date.present?
     handle_request_status if @request_status.present?
     handle_item_status if @item_status.present?
 
+    add_joins
+
+    # this one has no tables to join to, so just clear everything out or the query will break
+    if @activity == 'ApiGetRequestList'
+      @selects = BASE_SELECT.dup
+      @joins = []
+      @where_conditions = BASE_WHERE_CONDITIONS.dup
+      @where_values = { activity: @activity }
+      @orders = BASE_ORDERS.dup
+    end
+
+    handle_start_date if @start_date.present?
+    handle_end_date if @end_date.present?
+
     @wheres = [@where_conditions.uniq.join(' and '), @where_values]
 
-    sql = ActivityLog.select(@selects.uniq).from(@from).joins(@joins.uniq).where(@wheres).order(@orders.uniq).to_sql
+    sql = ActivityLog.select(@selects.uniq).from(@from).joins(@joins.uniq).where(@wheres).distinct.order(@orders.uniq).to_sql
 
     sql
   end
@@ -93,68 +109,77 @@ class BuildReport
   private
 
   def handle_requested
+    @tables_needed << 'requests'
+
     @selects.append("Date_trunc('minute', b.created_at) AS \"requested\"")
 
-    @joins.append("LEFT JOIN activity_logs b ON CAST(a.data->'request'->>'id' AS INTEGER) = CAST(b.data->'request'->>'id' AS INTEGER) AND b.action = 'ReceivedRequest'")
+    @joins.append("LEFT JOIN activity_logs b ON r.id = CAST(b.data->'request'->>'id' AS INTEGER) AND b.action = 'ReceivedRequest'")
 
     @orders.append("Date_trunc('minute', b.created_at)")
   end
 
   def handle_pulled
+    @tables_needed << 'items'
+    @tables_needed << 'requests'
+
     @selects.append("Date_trunc('minute', p.created_at) AS \"pulled\"")
 
-    @joins.append("LEFT JOIN activity_logs b ON CAST(a.data->'request'->>'id' AS INTEGER) = CAST(b.data->'request'->>'id' AS INTEGER) AND b.action = 'ReceivedRequest'")
-
-    if ITEM_ACTIVITES.include?(@activity)
-      @joins.append("LEFT JOIN activity_logs p ON CAST(a.data->'item'->>'id' AS INTEGER) = CAST(p.data->'item'->>'id' AS INTEGER) AND p.action = 'AssociatedItemAndBin' AND p.created_at BETWEEN b.created_at AND a.created_at")
-    else
-      add_item_joins
-      @joins.append("LEFT JOIN activity_logs p ON CAST(m.data->'item'->>'id' AS INTEGER) = CAST(p.data->'item'->>'id' AS INTEGER) AND p.action = 'AssociatedItemAndBin' AND p.created_at BETWEEN b.created_at AND a.created_at")
-    end
+    @joins.append("LEFT JOIN activity_logs b ON r.id = CAST(b.data->'request'->>'id' AS INTEGER) AND b.action = 'ReceivedRequest'")
+    @joins.append("LEFT JOIN activity_logs p ON i.id = CAST(p.data->'item'->>'id' AS INTEGER) AND p.action = 'AssociatedItemAndBin' AND p.created_at BETWEEN b.created_at AND a.created_at")
 
     @orders.append("Date_trunc('minute', p.created_at)")
   end
 
   def handle_filled
+    @tables_needed << 'requests'
+
     @selects.append("Date_trunc('minute', f.created_at) AS \"filled\"")
 
-    @joins.append("LEFT JOIN activity_logs f ON CAST(a.data->'request'->>'id' AS INTEGER) = CAST(f.data->'request'->>'id' AS INTEGER) AND f.action = 'FilledRequest'")
+    @joins.append("LEFT JOIN activity_logs f ON r.id = CAST(f.data->'request'->>'id' AS INTEGER) AND f.action = 'FilledRequest'")
 
     @orders.append("Date_trunc('minute', f.created_at)")
   end
 
   def handle_source
-    @selects.append("a.data->'request'->'source' AS \"source\"")
+    @tables_needed << 'requests'
+
+    @selects.append("r.source AS \"source\"")
   end
 
   def handle_request_type
-    @selects.append("a.data->'request'->'req_type' AS \"request_type\"")
+    @tables_needed << 'requests'
+
+    @selects.append("r.req_type AS \"request_type\"")
   end
 
   def handle_patron_status
-    @selects.append("a.data->'request'->'patron_status' AS \"patron_status\"")
+    @tables_needed << 'requests'
+
+    @selects.append("r.patron_status AS \"patron_status\"")
   end
 
   def handle_institution
-    @selects.append("a.data->'request'->'patron_institution' AS \"institution\"")
+    @tables_needed << 'requests'
+
+    @selects.append("r.patron_institution AS \"institution\"")
   end
 
   def handle_department
-    @selects.append("a.data->'request'->'patron_department' AS \"department\"")
+    @tables_needed << 'requests'
+
+    @selects.append("r.patron_department AS \"department\"")
   end
 
   def handle_pickup_location
-    @selects.append("a.data->'request'->'pickup_location' AS \"pickup_location\"")
+    @tables_needed << 'requests'
+
+    @selects.append("r.pickup_location AS \"pickup_location\"")
   end
 
   def handle_class
-    @selects.append('TRIM(SUBSTR(i.call_number,1,2)) AS "class"')
+    @tables_needed << 'items'
 
-    if ITEM_ACTIVITES.include?(@activity)
-      @joins.append("LEFT JOIN items i ON CAST(a.data->'item'->>'id' AS INTEGER) = i.id")
-    else
-      add_item_joins
-    end
+    @selects.append('TRIM(SUBSTR(i.call_number,1,2)) AS "class"')
   end
 
   def handle_time_to_pull
@@ -184,25 +209,62 @@ class BuildReport
   end
 
   def handle_request_status
-    @where_conditions.append("a.data->'request'->>'status' = :request_status")
+    if @tables_available.include?('requests')
+      @where_conditions.append("a.data->'request'->>'status' = :request_status")
+    else
+      @tables_needed << 'requests'
+
+      @where_conditions.append("r.status = :request_status")
+    end
 
     @where_values[:request_status] = Request::STATUSES[@request_status]
   end
 
   def handle_item_status
-    if ITEM_ACTIVITES.include?(@activity)
-      @joins.append("LEFT JOIN items i ON CAST(a.data->'item'->>'id' AS INTEGER) = i.id")
-    else
-      add_item_joins
-    end
+   @tables_needed << 'items'
 
     @where_conditions.append('i.status = :item_status')
 
     @where_values[:item_status] = @item_status.to_i
   end
 
-  def add_item_joins
-    @joins.append("LEFT JOIN requests r ON Cast(a.data -> 'request' ->> 'id' AS INTEGER) = r.id ")
-    @joins.append("LEFT JOIN items i ON r.item_id = i.id ")
+  def add_joins
+    if @tables_needed.include?('items')
+      @selects << 'i.id AS "item_id"'
+
+      if @tables_available.include?('items')
+        @joins.append("LEFT JOIN items i ON Cast(a.data -> 'item' ->> 'id' AS INTEGER) = i.id ")
+      elsif @tables_available.include?('requests')
+        @joins.append("LEFT JOIN requests r ON Cast(a.data -> 'request' ->> 'id' AS INTEGER) = r.id ")
+        @joins.append("LEFT JOIN items i ON r.item_id = i.id")
+      elsif @tables_available.include?('trays')
+        @joins.append("LEFT JOIN trays t ON Cast(a.data -> 'tray' ->> 'id' AS INTEGER) = t.id")
+        @joins.append("LEFT JOIN items i ON t.id = i.tray_id")
+      elsif @tables_available.include?('shelves')
+        @joins.append("LEFT JOIN shelves s ON Cast(a.data -> 'shelf' ->> 'id' AS INTEGER) = s.id")
+        @joins.append("LEFT JOIN trays t ON s.id = t.shelf_id")
+        @joins.append("LEFT JOIN items i ON t.id = i.tray_id")
+      end
+    end
+
+    if @tables_needed.include?('requests')
+      @selects << 'r.id AS "request_id"'
+
+      if @tables_available.include?('requests')
+        @joins.append("LEFT JOIN requests r ON Cast(a.data -> 'request' ->> 'id' AS INTEGER) = r.id ")
+      elsif @tables_available.include?('item')
+        @joins.append("LEFT JOIN items i ON Cast(a.data -> 'item' ->> 'id' AS INTEGER) = i.id ")
+        @joins.append("LEFT JOIN requests r ON i.id = r.item_id")
+      elsif @tables_available.include?('trays')
+        @joins.append("LEFT JOIN trays t ON Cast(a.data -> 'tray' ->> 'id' AS INTEGER) = t.id")
+        @joins.append("LEFT JOIN items i ON t.id = i.tray_id")
+        @joins.append("LEFT JOIN requests r ON i.id = r.item_id")
+      elsif @tables_available.include?('shelves')
+        @joins.append("LEFT JOIN shelves s ON Cast(a.data -> 'shelf' ->> 'id' AS INTEGER) = s.id")
+        @joins.append("LEFT JOIN trays t ON s.id = t.shelf_id")
+        @joins.append("LEFT JOIN items i ON t.id = i.tray_id")
+        @joins.append("LEFT JOIN requests r ON i.id = r.item_id")
+      end
+    end
   end
 end
