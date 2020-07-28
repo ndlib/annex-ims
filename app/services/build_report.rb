@@ -210,14 +210,19 @@ class BuildReport
 
   def handle_request_status
     if @tables_available.include?('requests')
+
       @where_conditions.append("a.data->'request'->>'status' = :request_status")
+
+      @where_values[:request_status] = Request::STATUSES[@request_status]
     else
       @tables_needed << 'requests'
 
       @where_conditions.append('r.status = :request_status')
+      
+      @where_values[:request_status] = @request_status.to_i
     end
 
-    @where_values[:request_status] = Request::STATUSES[@request_status]
+    
   end
 
   def handle_item_status
@@ -233,17 +238,17 @@ class BuildReport
       @selects << 'i.id AS "item_id"'
 
       if @tables_available.include?('items')
-        @joins.append("LEFT JOIN items i ON Cast(a.data -> 'item' ->> 'id' AS INTEGER) = i.id ")
+        @joins.prepend("LEFT JOIN items i ON Cast(a.data -> 'item' ->> 'id' AS INTEGER) = i.id ")
       elsif @tables_available.include?('requests')
-        @joins.append("LEFT JOIN requests r ON Cast(a.data -> 'request' ->> 'id' AS INTEGER) = r.id ")
-        @joins.append('LEFT JOIN items i ON r.item_id = i.id')
+        @joins.prepend('LEFT JOIN items i ON r.item_id = i.id')
+        @joins.prepend("LEFT JOIN requests r ON Cast(a.data -> 'request' ->> 'id' AS INTEGER) = r.id ")   
       elsif @tables_available.include?('trays')
-        @joins.append("LEFT JOIN trays t ON Cast(a.data -> 'tray' ->> 'id' AS INTEGER) = t.id")
-        @joins.append('LEFT JOIN items i ON t.id = i.tray_id')
+        @joins.prepend('LEFT JOIN items i ON t.id = i.tray_id')
+        @joins.prepend("LEFT JOIN trays t ON Cast(a.data -> 'tray' ->> 'id' AS INTEGER) = t.id")     
       elsif @tables_available.include?('shelves')
-        @joins.append("LEFT JOIN shelves s ON Cast(a.data -> 'shelf' ->> 'id' AS INTEGER) = s.id")
-        @joins.append('LEFT JOIN trays t ON s.id = t.shelf_id')
-        @joins.append('LEFT JOIN items i ON t.id = i.tray_id')
+        @joins.prepend('LEFT JOIN items i ON t.id = i.tray_id')
+        @joins.prepend('LEFT JOIN trays t ON s.id = t.shelf_id')
+        @joins.prepend("LEFT JOIN shelves s ON Cast(a.data -> 'shelf' ->> 'id' AS INTEGER) = s.id")
       end
     end
 
@@ -251,19 +256,19 @@ class BuildReport
       @selects << 'r.id AS "request_id"'
 
       if @tables_available.include?('requests')
-        @joins.append("LEFT JOIN requests r ON Cast(a.data -> 'request' ->> 'id' AS INTEGER) = r.id ")
-      elsif @tables_available.include?('item')
-        @joins.append("LEFT JOIN items i ON Cast(a.data -> 'item' ->> 'id' AS INTEGER) = i.id ")
-        @joins.append('LEFT JOIN requests r ON i.id = r.item_id')
+        @joins.prepend("LEFT JOIN requests r ON Cast(a.data -> 'request' ->> 'id' AS INTEGER) = r.id ")
+      elsif @tables_available.include?('items')
+        @joins.prepend('LEFT JOIN requests r ON i.id = r.item_id')
+        @joins.prepend("LEFT JOIN items i ON Cast(a.data -> 'item' ->> 'id' AS INTEGER) = i.id ")
       elsif @tables_available.include?('trays')
-        @joins.append("LEFT JOIN trays t ON Cast(a.data -> 'tray' ->> 'id' AS INTEGER) = t.id")
-        @joins.append('LEFT JOIN items i ON t.id = i.tray_id')
-        @joins.append('LEFT JOIN requests r ON i.id = r.item_id')
+        @joins.prepend('LEFT JOIN requests r ON i.id = r.item_id')
+        @joins.prepend('LEFT JOIN items i ON t.id = i.tray_id')
+        @joins.prepend("LEFT JOIN trays t ON Cast(a.data -> 'tray' ->> 'id' AS INTEGER) = t.id") 
       elsif @tables_available.include?('shelves')
-        @joins.append("LEFT JOIN shelves s ON Cast(a.data -> 'shelf' ->> 'id' AS INTEGER) = s.id")
-        @joins.append('LEFT JOIN trays t ON s.id = t.shelf_id')
-        @joins.append('LEFT JOIN items i ON t.id = i.tray_id')
-        @joins.append('LEFT JOIN requests r ON i.id = r.item_id')
+        @joins.prepend('LEFT JOIN requests r ON i.id = r.item_id')
+        @joins.prepend('LEFT JOIN items i ON t.id = i.tray_id')
+        @joins.prepend('LEFT JOIN trays t ON s.id = t.shelf_id')
+        @joins.prepend("LEFT JOIN shelves s ON Cast(a.data -> 'shelf' ->> 'id' AS INTEGER) = s.id")
       end
     end
   end
