@@ -15,7 +15,7 @@ RSpec.describe BuildReport do
       builder = BuildReport.new(fields, start_date, end_date, activity, request_status, item_status)
       sql = builder.to_sql
 
-      expected_sql = "SELECT a.created_at AS \"activity\" FROM activity_logs a WHERE (a.action = 'FilledRequest') ORDER BY a.created_at"
+      expected_sql = "SELECT DISTINCT Date_trunc('minute', a.created_at) AS \"activity\" FROM activity_logs a WHERE (a.action = 'FilledRequest') ORDER BY Date_trunc('minute', a.created_at)"
 
       expect(sql).to eql(expected_sql)
     end
