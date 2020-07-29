@@ -1,26 +1,35 @@
+# frozen_string_literal: true
+
 class Item < ApplicationRecord
-  CONDITIONS = [
-    "COVER-DET",
-    "COVER-MISS",
-    "COVER-TORN",
-    "NEEDS-ENCLS",
-    "PAGES-BRITTLE",
-    "PAGES-DET",
-    "PAGES-MISSING",
-    "PAGES-TORN",
-    "REDROT",
-    "SPINE-DET",
-    "UNBOUND",
-    "OTHER"
+  CONDITIONS = %w[
+    COVER-DET
+    COVER-MISS
+    COVER-TORN
+    NEEDS-ENCLS
+    PAGES-BRITTLE
+    PAGES-DET
+    PAGES-MISSING
+    PAGES-TORN
+    REDROT
+    SPINE-DET
+    UNBOUND
+    OTHER
   ].freeze
 
-  METADATA_STATUSES = [
-    "pending",
-    "complete",
-    "not_found",
-    "not_for_annex",
-    "error",
+  METADATA_STATUSES = %w[
+    pending
+    complete
+    not_found
+    not_for_annex
+    error
   ].freeze
+
+  STATUSES = {
+    '0' => 'Stocked',
+    '1' => 'Unstocked',
+    '2' => 'Shipped',
+    '3' => 'Deaccessioned'
+  }.freeze
 
   enum status: { stocked: 0, unstocked: 1, shipped: 2, deaccessioned: 9 }
 
@@ -37,7 +46,10 @@ class Item < ApplicationRecord
   has_many :matches
   has_many :requests, through: :matches
   has_many :batches, through: :matches
-  has_many :filled_requests, class_name: "Request", foreign_key: "item_id"
+  has_many :filled_requests,
+           class_name: 'Request',
+           foreign_key: 'item_id',
+           dependent: :restrict_with_exception
 
   searchable do
     text :barcode
@@ -66,7 +78,7 @@ class Item < ApplicationRecord
   end
 
   def has_correct_prefix?
-    if !IsItemBarcode.call(barcode)
+    unless IsItemBarcode.call(barcode)
       errors.add(:barcode, "must not begin with #{IsShelfBarcode::PREFIX}, #{IsTrayBarcode.prefix}, or #{IsBinBarcode::PREFIX}")
     end
   end

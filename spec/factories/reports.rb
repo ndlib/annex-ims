@@ -3,10 +3,11 @@
 FactoryBot.define do
   factory :report do
     name 'MyString'
-    fields 'MyText'
+    fields ['Filled']
     start_date '2020-05-10'
     end_date '2020-05-10'
-    activity 'MyString'
-    status 'MyString'
+    activity 'AcceptedItem'
+    request_status ''
+    item_status ''
   end
 end

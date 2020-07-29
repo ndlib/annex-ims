@@ -17,5 +17,6 @@
 //= require dataTables/extras/dataTables.tableTools
 //= require bootstrap-sprockets
 //= require bootstrap-datepicker
+//= require multi-select
 //= require_tree .
 

@@ -11,18 +11,23 @@
     = f.text_field :name
   .field
     = f.label :fields
-    = f.text_area :fields
+    = f.select :fields, options_from_collection_for_select(Report::FIELDS, 'first', 'last', @report.fields), { include_hidden: false }, { multiple: true }
   .field
     = f.label :start_date
-    = f.date_select :start_date
+    = f.date_select :start_date, { include_blank: true, default: nil, use_short_month: true }
   .field
     = f.label :end_date
-    = f.date_select :end_date
+    = f.date_select :end_date, { include_blank: true, default: nil, use_short_month: true }
   .field
     = f.label :activity
-    = f.text_field :activity
+    = f.select :activity, options_from_collection_for_select(ActivityLog::ACTIONS, 'to_str', 'titleize', report.activity), { include_hidden: false }
   .field
-    = f.label :status
-    = f.text_field :status
+    = f.label :request_status
+    = f.select :request_status, options_from_collection_for_select(Request::STATUSES, 'first', 'last', report.request_status), { include_hidden: false, include_blank: true, default: nil }
+    .field
+    = f.label :item_status
+    = f.select :item_status, options_from_collection_for_select(Item::STATUSES, 'first', 'last', report.item_status), { include_hidden: false, include_blank: true, default: nil }
   .actions
     = f.submit 'Save'
+  :javascript
+    $('#report_fields').multiSelect();
