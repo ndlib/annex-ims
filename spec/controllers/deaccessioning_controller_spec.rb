@@ -49,9 +49,9 @@ RSpec.describe DeaccessioningController, type: :controller do
            }
     end
     it 'builds a deaccessioning request' do
-      expect(BuildDeaccessioningRequest).to receive(:call)
-        .with(item.id, disposition.id.to_s, comment)
-        .and_return([])
+      expect(BuildDeaccessioningRequest).to receive(:call).
+        with(item.id, disposition.id.to_s, comment).
+        and_return([])
       subject
     end
 

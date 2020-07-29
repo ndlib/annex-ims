@@ -17,9 +17,9 @@ RSpec.describe ShelvesController, type: :controller do
 
     allow_any_instance_of(GetItemFromBarcode).to receive(:item).and_return(item)
     @bogus_item_uri = api_item_metadata_url(bogus)
-    stub_request(:get, @bogus_item_uri)
-      .with(headers: { 'Accept' => '*/*', 'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'User-Agent' => 'Faraday v0.17.0' })
-      .to_return(status: 404, body: 'Not Found', headers: {})
+    stub_request(:get, @bogus_item_uri).
+      with(headers: { 'Accept' => '*/*', 'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'User-Agent' => 'Faraday v0.17.0' }).
+      to_return(status: 404, body: 'Not Found', headers: {})
   end
 
   describe 'POST scan' do

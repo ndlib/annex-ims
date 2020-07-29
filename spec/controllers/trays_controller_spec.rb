@@ -152,8 +152,8 @@ RSpec.describe TraysController, type: :controller do
       end
 
       it 'adds a tray_mismatch issue' do
-        expect(AddIssue).to receive(:call)
-          .with(item: item, user: user, type: 'tray_mismatch', message: anything)
+        expect(AddIssue).to receive(:call).
+          with(item: item, user: user, type: 'tray_mismatch', message: anything)
         subject
       end
 
@@ -187,15 +187,15 @@ RSpec.describe TraysController, type: :controller do
 
       it 'adds a tray_mismatch issue when it is not associated with a tray' do
         allow(item).to receive(:tray).and_return nil
-        expect(AddIssue).to receive(:call)
-          .with(item: item, user: user, type: 'tray_mismatch', message: /tray barcode/)
+        expect(AddIssue).to receive(:call).
+          with(item: item, user: user, type: 'tray_mismatch', message: /tray barcode/)
         subject
       end
 
       it 'adds a tray_mismatch issue with the tray it is associated with' do
         allow(item).to receive(:tray).and_return other_tray
-        expect(AddIssue).to receive(:call)
-          .with(item: item, user: user, type: 'tray_mismatch', message: /tray barcode.*other tray barcode/)
+        expect(AddIssue).to receive(:call).
+          with(item: item, user: user, type: 'tray_mismatch', message: /tray barcode.*other tray barcode/)
         subject
       end
     end
