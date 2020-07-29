@@ -218,11 +218,9 @@ class BuildReport
       @tables_needed << 'requests'
 
       @where_conditions.append('r.status = :request_status')
-      
+
       @where_values[:request_status] = @request_status.to_i
     end
-
-    
   end
 
   def handle_item_status
@@ -241,10 +239,10 @@ class BuildReport
         @joins.prepend("LEFT JOIN items i ON Cast(a.data -> 'item' ->> 'id' AS INTEGER) = i.id ")
       elsif @tables_available.include?('requests')
         @joins.prepend('LEFT JOIN items i ON r.item_id = i.id')
-        @joins.prepend("LEFT JOIN requests r ON Cast(a.data -> 'request' ->> 'id' AS INTEGER) = r.id ")   
+        @joins.prepend("LEFT JOIN requests r ON Cast(a.data -> 'request' ->> 'id' AS INTEGER) = r.id ")
       elsif @tables_available.include?('trays')
         @joins.prepend('LEFT JOIN items i ON t.id = i.tray_id')
-        @joins.prepend("LEFT JOIN trays t ON Cast(a.data -> 'tray' ->> 'id' AS INTEGER) = t.id")     
+        @joins.prepend("LEFT JOIN trays t ON Cast(a.data -> 'tray' ->> 'id' AS INTEGER) = t.id")
       elsif @tables_available.include?('shelves')
         @joins.prepend('LEFT JOIN items i ON t.id = i.tray_id')
         @joins.prepend('LEFT JOIN trays t ON s.id = t.shelf_id')
@@ -263,7 +261,7 @@ class BuildReport
       elsif @tables_available.include?('trays')
         @joins.prepend('LEFT JOIN requests r ON i.id = r.item_id')
         @joins.prepend('LEFT JOIN items i ON t.id = i.tray_id')
-        @joins.prepend("LEFT JOIN trays t ON Cast(a.data -> 'tray' ->> 'id' AS INTEGER) = t.id") 
+        @joins.prepend("LEFT JOIN trays t ON Cast(a.data -> 'tray' ->> 'id' AS INTEGER) = t.id")
       elsif @tables_available.include?('shelves')
         @joins.prepend('LEFT JOIN requests r ON i.id = r.item_id')
         @joins.prepend('LEFT JOIN items i ON t.id = i.tray_id')

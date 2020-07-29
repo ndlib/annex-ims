@@ -46,7 +46,11 @@ class Item < ApplicationRecord
   has_many :matches
   has_many :requests, through: :matches
   has_many :batches, through: :matches
-  has_many :filled_requests, class_name: 'Request', foreign_key: 'item_id'
+  has_many :filled_requests,
+    class_name: 'Request',
+    foreign_key: 'item_id',
+    inverse_of: :request,
+    dependent: :restrict_with_exception
 
   searchable do
     text :barcode

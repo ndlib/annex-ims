@@ -26,10 +26,10 @@
   No Results
   %br
 - else
-  = render 'results'
+  = render 'results', results: @results, report: @report
   = button_to 'Export', export_report_path(:id => @report.id), method: :get, class: 'btn pull-right btn-primary'
-%button{"data-toggle" => "collapse", :href => "#sql" } Show SQL
-#sql.collapse
+%button{ "data-toggle" => "collapse", :href => "#sql" } Show SQL
+.collapse#sql
   %p
   = @sql
 %br

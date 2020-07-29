@@ -1,11 +1,11 @@
 .results
-  %table.table.table-striped.condensed.datatable{"id" => "results"}
+  %table.table.table-striped.condensed.datatable{ "id" => "results" }
     %thead
       %tr
-        - @report.fields.each do |field|
-          %th= (field == 'activity') ? @report.activity.to_str.titleize : Report::FIELDS[field]
+        - report.fields.each do |field|
+          %th= (field == 'activity') ? report.activity.to_str.titleize : Report::FIELDS[field]
     %tbody
-      - @results.each do |result|
+      - results.each do |result|
         %tr
-          - @report.fields.each do |field|
+          - report.fields.each do |field|
             %th= result[field]&.gsub('"', '')
