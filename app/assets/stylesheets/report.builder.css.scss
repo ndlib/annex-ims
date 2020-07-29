@@ -1,22 +1,22 @@
 .reports-list {
-  border:solid 1px #ccc;
-  padding: 10px 15px;
-  font-size: 16px;
+  background-color: #337ab7;
+  border: solid 1px #ccc;
+  border-color: #2e6da4;
   border-radius: 4px;
   color: #fff;
-  background-color: #337ab7;
-  border-color: #2e6da4;
+  font-size: 16px;
+  padding: 10px 15px;
 }
 
 .reports-list td, .reports-list th {
-  padding:10px ;
-  border:solid #ccc;
+  border: solid #ccc;
   border-width: 0 0 1px 1px;
+  padding: 10px;
 }
 
 .reports-list th {
   background: #666;
-  color:#fff;
+  color: #fff;
 }
 
 .reports-list tr td:first-child {
@@ -25,9 +25,9 @@
 }
 
 #new_report, .edit_report {
+  min-width: 500px;
   padding:25px 0;
   width: 50%;
-  min-width: 500px;
 }
 
 #new_report .field, .edit_report .field {
@@ -40,9 +40,9 @@
 }
 
 #new_report .field input, .edit_report .field input {
-  border:solid 1px #333;
+  border: solid 1px #333;
+  padding: 5px;
   width: 79%;
-  padding: 5px
 }
 
 #new_report .field select, .edit_report .field select {
@@ -59,12 +59,12 @@
 }
 
 #new_report .actions input, .edit_report .actions input {
-  padding:10px 15px;
-  font-size: 16px;
-  border-radius: 4px;
-  color: #fff;
   background-color: #337ab7;
   border-color: #2e6da4;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 16px;
+  padding: 10px 15px;
 }
 
 #report_fields {
