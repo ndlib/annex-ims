@@ -50,8 +50,8 @@ jobs:
       # Put the database and secrets files in place
       - name: Create secrets.yml and database.yml
         run: |
-            cp config/secrets.yml.travis config/secrets.yml
-            cp config/database.yml.travis config/database.yml
+            cp config/secrets.yml.actions config/secrets.yml
+            cp config/database.yml.actions config/database.yml
         
       # Create the test database
       - name: Create test database
