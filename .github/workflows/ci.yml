@@ -1,0 +1,70 @@
+# Honeypot Github Actions Workflow
+
+name: Annex CI
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# for any branch (current state of this file will be used for build)
+on: [push, pull_request]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build-and-test"
+  build-and-test:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-20.04
+
+    # Create Postgres service container
+    services:
+      postgres:
+          image: postgres:9.4.26
+          env:
+            POSTGRES_PASSWORD: password
+          ports:
+            - 5432:5432
+          options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      
+      - name: Set up Ruby
+      # To automatically get bug fixes and new Ruby versions for ruby/setup-ruby,
+      # change this to (see https://github.com/ruby/setup-ruby#versioning):
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.6
+
+      # Install needed dependencies
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends qt5-default libqt5webkit5-dev
+      
+      # Install bundler gem
+      - name: Install bundler
+        run: gem install bundler -v 1.17.3
+
+      # Install gems
+      - name: Install dependencies
+        run: bundle install
+
+      # Put the database and secrets files in place
+      - name: Create secrets.yml and database.yml
+        run: |
+            cp config/secrets.yml.travis config/secrets.yml
+            cp config/database.yml.travis config/database.yml
+        
+      # Create the test database
+      - name: Create test database
+        env:
+          PGPASSWORD: password
+          PGHOST: localhost
+          PGUSER: postgres
+        run: psql -c 'create database travis_ci_test;' -U postgres
+    
+      # Run unit tests excluding tagged as indicated
+      - name: Run tests
+        env:
+          PGPASSWORD: password
+          PGHOST: localhost
+          PGUSER: postgres
+        run: bundle exec rspec spec
