@@ -9,10 +9,10 @@ IRIS - Integrated Retrieval and Inventory System for offsite storage facilities
 
 Requirements:
 
-* Ruby (~> 2.1.4)
+* Ruby (~> 2.6.6)
 * RabbitMQ (~> 3.5.0) - https://www.rabbitmq.com/download.html
 * Postgres - (~> 9.4) - http://www.postgresql.org/download/
-* Solr (~> 7.4) - http://archive.apache.org/dist/lucene/solr/
+* Solr (~> 8.7) - http://archive.apache.org/dist/lucene/solr/
 
 Installation:
 
@@ -48,12 +48,12 @@ export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
 The system uses chron to schedule some tasks that are necessary for system operation (e.g. - ensuring that sneakers is running and retrieving open requests from the ILS). The tasks that are configured to run under chron are documented in <app-dir>/config/schedule.rb.
 
 ## Upgrading SOLR for the development environment
-* Download the version of solr you want - Solr 7.4 download link: http://archive.apache.org/dist/lucene/solr/7.4.0/
-* Choose the solr-7.4.0.zip file
+* Download the version of solr you want - Solr 8.7 download link: http://archive.apache.org/dist/lucene/solr/8.7.0/
+* Choose the solr-8.7.0.zip file
 * Unzip the file into a staging directory
 * Run `cd $(bundle show sunspot_solr)` at the CLI
 * Rename the solr directory to solr-original
-* Run cp -Rp <path-to-solr-7.4.0-dir> ./solr
+* Run cp -Rp <path-to-solr-8.7.0-dir> ./solr
 
 If your core directories are set up correctly, you should be all set. If not, create a core directory in the solr directory that has the following structure:
 
