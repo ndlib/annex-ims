@@ -69,10 +69,8 @@ end
   "jhartzle",
   "dwolfe2",
   "rfox2",
-  "jkennel",
   "awetheri",
   "jgondron",
-  "hbeachey",
   "mkirkpa2"
 ].each do |username|
   u = User.where(username: username).first || User.new(username: username)
