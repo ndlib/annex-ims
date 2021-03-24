@@ -4,6 +4,10 @@ lock "3.11.2"
 set :application, "annex-ims"
 set :repo_url, "git@github.com:ndlib/annex-ims.git"
 
+if ENV["SCM_APPNAME"] && ENV["SCM_APPNAME"] != ""
+  set :application, ENV["SCM_APPNAME"]
+end
+
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 if ENV["SCM_BRANCH"] && ENV["SCM_BRANCH"] != ""
@@ -16,7 +20,7 @@ end
 
 # Default deploy_to directory is /var/www/my_app_name
 # set :deploy_to, "/var/www/my_app_name"
-set :deploy_to, "/home/app/annex-ims"
+set :deploy_to, -> { "/home/app/#{fetch(:application)}" }
 
 set :ssh_options, verify_host_key: :never
 

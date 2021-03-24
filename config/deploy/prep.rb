@@ -16,7 +16,12 @@
 
 # server 'example.com', user: 'deploy', roles: %w{web app}, my_property: :my_value
 # server 'annex-staging.library.nd.edu', user: 'app', roles: %w{web app db}
-server "annex-prep.lc.nd.edu", user: "app", roles: %w{web app db}
+
+if fetch(:application) == "archives-ims"
+  server "archives-ims-prep.lc.nd.edu", user: "app", roles: %w{web app db}
+else
+  server "annex-prep.lc.nd.edu", user: "app", roles: %w{web app db}
+end
 
 set :rack_env, :prep
 
