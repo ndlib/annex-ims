@@ -14,7 +14,11 @@
 # server list. The second argument is a, or duck-types, Hash and is
 # used to set extended properties on the server.
 
-server "annex-prod.lc.nd.edu", user: "app", roles: %w{web app db}
+if fetch(:application) == "archives-ims"
+  server "archives-ims.lc.nd.edu", user: "app", roles: %w{web app db}
+else
+  server "annex-prod.lc.nd.edu", user: "app", roles: %w{web app db}
+end
 
 set :rack_env, :production
 
