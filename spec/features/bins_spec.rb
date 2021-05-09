@@ -16,7 +16,7 @@ feature "Bins", type: :feature do
       @bin = bin
       @match = match
 
-      stub_request(:post, api_send_url). with(body: { "barcode" => @match.item.barcode.to_s, "delivery_type" => "send", "item_id" => @match.item.id.to_s, "request_type" => "doc_del", "source" => "aleph", "transaction_num" => "", "tray_code" => @match.item.tray.barcode.to_s }, headers: { "User-Agent" => "Faraday v0.17.0" }). to_return { |_response| { status: 200, body: { results: { status: "OK", message: "Item stocked" } }.to_json, headers: {} } }
+      stub_request(:post, api_send_url). with(body: { "barcode" => @match.item.barcode.to_s, "delivery_type" => "send", "item_id" => @match.item.id.to_s, "request_type" => "doc_del", "source" => "aleph", "transaction_num" => "", "tray_code" => @match.item.tray.barcode.to_s }, headers: { "User-Agent" => "Faraday v0.17.4" }). to_return { |_response| { status: 200, body: { results: { status: "OK", message: "Item stocked" } }.to_json, headers: {} } }
     end
 
     after(:each) do

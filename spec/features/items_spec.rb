@@ -17,14 +17,14 @@ feature "Items", type: :feature do
 
       stub_request(:post, api_stock_url).
         with(body: { barcode: @item.barcode.to_s, item_id: @item.id.to_s, tray_code: @item.tray.barcode.to_s },
-             headers: { "Content-Type" => "application/x-www-form-urlencoded", "User-Agent" => "Faraday v0.17.0" }).
+             headers: { "Content-Type" => "application/x-www-form-urlencoded", "User-Agent" => "Faraday v0.17.4" }).
         to_return(status: 200, body: { results: { status: "OK", message: "Item stocked" } }.to_json, headers: {})
 
       response_body = api_fixture_data("item_metadata.json")
 
       item_uri = api_item_url(@item)
       stub_request(:get, item_uri).
-        with(headers: { "User-Agent" => "Faraday v0.17.0" }).
+        with(headers: { "User-Agent" => "Faraday v0.17.4" }).
         to_return { { status: 200, body: response_body, headers: {} } }
     end
 
