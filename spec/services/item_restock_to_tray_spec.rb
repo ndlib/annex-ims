@@ -15,7 +15,7 @@ RSpec.describe ItemRestockToTray do
 
     stub_request(:post, api_stock_url).
       with(body: { "barcode" => @item.barcode.to_s, "item_id" => @item.id.to_s, "tray_code" => @item.tray.barcode.to_s },
-           headers: { "Content-Type" => "application/x-www-form-urlencoded", "User-Agent" => "Faraday v0.17.0" }).
+           headers: { "Content-Type" => "application/x-www-form-urlencoded", "User-Agent" => "Faraday v0.17.4" }).
       to_return { |_response| { status: 200, body: { results: { status: "OK", message: "Item stocked" } }.to_json, headers: {} } }
 
     @user_id = 1 # Just fake having a user here
