@@ -4,6 +4,7 @@ class BuildReport
   attr_reader :fields,
               :start_date,
               :end_date,
+              :preset_date_range,
               :activity,
               :request_status,
               :item_status,
@@ -43,14 +44,15 @@ class BuildReport
   BASE_WHERE_CONDITIONS = ['a.action = :activity'].freeze
   BASE_ORDERS = ["Date_trunc('minute', a.created_at)"].freeze
 
-  def self.call(fields, start_date, end_date, activity, request_status, item_status)
-    new(fields, start_date, end_date, activity, request_status, item_status).build!
+  def self.call(fields, start_date, end_date, preset_date_range, activity, request_status, item_status)
+    new(fields, start_date, end_date, preset_date_range, activity, request_status, item_status).build!
   end
 
-  def initialize(fields, start_date, end_date, activity, request_status, item_status)
+  def initialize(fields, start_date, end_date, preset_date_range, activity, request_status, item_status)
     @fields = fields
     @start_date = start_date
     @end_date = end_date
+    @preset_date_range = preset_date_range
     @activity = activity
     @request_status = request_status
     @item_status = item_status
@@ -95,6 +97,8 @@ class BuildReport
       @where_values = { activity: @activity }
       @orders = BASE_ORDERS.dup
     end
+
+    handle_preset_date_range if @preset_date_range.present?
 
     handle_start_date if @start_date.present?
     handle_end_date if @end_date.present?
@@ -229,6 +233,17 @@ class BuildReport
     @where_conditions.append('i.status = :item_status')
 
     @where_values[:item_status] = @item_status.to_i
+  end
+
+  def handle_preset_date_range
+    case @preset_date_range
+    when 'current_month'
+      @start_date = Time.zone.today.beginning_of_month.to_date
+      @end_date = Time.zone.today.to_date
+    when 'previous_month'
+      @start_date = 1.month.ago.beginning_of_month.to_date
+      @end_date = 1.month.ago.end_of_month.to_date
+    end
   end
 
   def add_joins

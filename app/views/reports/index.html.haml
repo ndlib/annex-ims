@@ -7,6 +7,7 @@
       %th Fields
       %th Start date
       %th End date
+      %th Preset date range
       %th Activity
       %th Request Status
       %th Item Status
@@ -21,6 +22,7 @@
         %td= report.fields
         %td= report.start_date
         %td= report.end_date
+        %td= Report::PRESET_DATE_RANGES[report.preset_date_range]
         %td= report.activity
         %td= report.request_status
         %td= report.item_status
