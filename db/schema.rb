@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_30_192218) do
+ActiveRecord::Schema.define(version: 2021_05_28_161202) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -117,6 +117,7 @@ ActiveRecord::Schema.define(version: 2020_06_30_192218) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "item_status"
+    t.string "preset_date_range"
   end
 
   create_table "requests", id: :serial, force: :cascade do |t|
