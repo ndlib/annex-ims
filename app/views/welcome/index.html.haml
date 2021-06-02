@@ -64,7 +64,7 @@
           %span.glyphicon.glyphicon-plus
           Saved Reports
         #saved-reports.collapse
-          - Report.all.each do |report|
+          - Report.all.order(name: :asc).each do |report|
             %a.list-group-item{ :href => report_path(report.id) } #{report.name}
     - if user_admin?
       %a.list-group-item.list-group-item-success{ "data-parent" => "#MainMenu",
