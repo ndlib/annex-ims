@@ -32,8 +32,14 @@ class Report < ApplicationRecord
   }.freeze
 
   PRESET_DATE_RANGES = {
+    'current_day' => 'Current Day',
+    'previous_day' => 'Previous Day',
+    'current_week' => 'Current Week',
+    'previous_week' => 'Previous Week',
     'current_month' => 'Current Month',
-    'previous_month' => 'Previous Month'
+    'previous_month' => 'Previous Month',
+    'current_year' => 'Current Year to Date',
+    'current_fiscal_year' => 'Current FY to Date'
   }.freeze
 
   def run

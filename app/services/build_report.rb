@@ -237,12 +237,33 @@ class BuildReport
 
   def handle_preset_date_range
     case @preset_date_range
+    when 'current_day'
+      @start_date = Time.zone.today.to_date
+      @end_date = Time.zone.today.to_date
+    when 'previous_day'
+      @start_date = Time.zone.yesterday.to_date
+      @end_date = Time.zone.yesterday.to_date
+    when 'current_week'
+      @start_date = Time.zone.today.beginning_of_week(start_day = :monday).to_date
+      @end_date = Time.zone.today.to_date
+    when 'previous_week'
+      @start_date = Time.zone.today.beginning_of_week(start_day = :monday).last_week.to_date
+      @end_date = (Time.zone.today.beginning_of_week(start_day = :monday).last_week + 6).to_date
     when 'current_month'
       @start_date = Time.zone.today.beginning_of_month.to_date
       @end_date = Time.zone.today.to_date
     when 'previous_month'
       @start_date = 1.month.ago.beginning_of_month.to_date
       @end_date = 1.month.ago.end_of_month.to_date
+    when 'current_year'
+      @start_date = Time.zone.today.beginning_of_year.to_date
+      @end_date = Time.zone.today.to_date
+    when 'current_fiscal_year'
+      start = Time.zone.today
+      start = start.change(year: start.year - 1) if start.month < 7
+      start = start.change(month: 7).beginning_of_month
+      @start_date = start.to_date
+      @end_date = Time.zone.today.to_date
     end
   end
 
