@@ -14,7 +14,7 @@
   = @report.end_date
 %p
   %b Preset date range:
-  = @report.preset_date_range
+  = Report::PRESET_DATE_RANGES[@report.preset_date_range]
 %p
   %b Activity:
   = @report.activity.titleize
