@@ -19,6 +19,9 @@
     = f.label :end_date
     = f.date_select :end_date, { include_blank: true, default: nil, use_short_month: true }
   .field
+    = f.label :preset_date_range
+    = f.select :preset_date_range, options_from_collection_for_select(Report::PRESET_DATE_RANGES, 'first', 'last', @report.preset_date_range), { include_hidden: false, include_blank: 'Chooose a time period', default: nil }
+  .field
     = f.label :activity
     = f.select :activity, options_from_collection_for_select(ActivityLog::ACTIONS, 'to_str', 'titleize', @report.activity), { include_hidden: false }
   .field

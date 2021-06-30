@@ -31,8 +31,19 @@ class Report < ApplicationRecord
     'time_to_fill' => 'Time to Fill'
   }.freeze
 
+  PRESET_DATE_RANGES = {
+    'current_day' => 'Current Day',
+    'previous_day' => 'Previous Day',
+    'current_week' => 'Current Week',
+    'previous_week' => 'Previous Week',
+    'current_month' => 'Current Month',
+    'previous_month' => 'Previous Month',
+    'current_year' => 'Current Year to Date',
+    'current_fiscal_year' => 'Current FY to Date'
+  }.freeze
+
   def run
-    BuildReport.call(fields, start_date, end_date, activity, request_status, item_status)
+    BuildReport.call(fields, start_date, end_date, preset_date_range, activity, request_status, item_status)
   end
 
   def constrain_fields

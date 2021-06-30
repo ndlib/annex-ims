@@ -4,6 +4,7 @@ class BuildReport
   attr_reader :fields,
               :start_date,
               :end_date,
+              :preset_date_range,
               :activity,
               :request_status,
               :item_status,
@@ -43,14 +44,15 @@ class BuildReport
   BASE_WHERE_CONDITIONS = ['a.action = :activity'].freeze
   BASE_ORDERS = ["Date_trunc('minute', a.created_at)"].freeze
 
-  def self.call(fields, start_date, end_date, activity, request_status, item_status)
-    new(fields, start_date, end_date, activity, request_status, item_status).build!
+  def self.call(fields, start_date, end_date, preset_date_range, activity, request_status, item_status)
+    new(fields, start_date, end_date, preset_date_range, activity, request_status, item_status).build!
   end
 
-  def initialize(fields, start_date, end_date, activity, request_status, item_status)
+  def initialize(fields, start_date, end_date, preset_date_range, activity, request_status, item_status)
     @fields = fields
     @start_date = start_date
     @end_date = end_date
+    @preset_date_range = preset_date_range
     @activity = activity
     @request_status = request_status
     @item_status = item_status
@@ -95,6 +97,8 @@ class BuildReport
       @where_values = { activity: @activity }
       @orders = BASE_ORDERS.dup
     end
+
+    handle_preset_date_range if @preset_date_range.present?
 
     handle_start_date if @start_date.present?
     handle_end_date if @end_date.present?
@@ -229,6 +233,38 @@ class BuildReport
     @where_conditions.append('i.status = :item_status')
 
     @where_values[:item_status] = @item_status.to_i
+  end
+
+  def handle_preset_date_range
+    case @preset_date_range
+    when 'current_day'
+      @start_date = Time.zone.today.beginning_of_day
+      @end_date = Time.zone.today.end_of_day
+    when 'previous_day'
+      @start_date = Time.zone.yesterday.beginning_of_day
+      @end_date = Time.zone.yesterday.end_of_day
+    when 'current_week'
+      @start_date = Time.zone.today.beginning_of_week(start_day = :monday).beginning_of_day
+      @end_date = Time.zone.today.end_of_day
+    when 'previous_week'
+      @start_date = Time.zone.today.beginning_of_week(start_day = :monday).last_week.beginning_of_day
+      @end_date = (Time.zone.today.beginning_of_week(start_day = :monday).last_week + 6).end_of_day
+    when 'current_month'
+      @start_date = Time.zone.today.beginning_of_month.beginning_of_day
+      @end_date = Time.zone.today.end_of_day
+    when 'previous_month'
+      @start_date = 1.month.ago.beginning_of_month.beginning_of_day
+      @end_date = 1.month.ago.end_of_month.end_of_day
+    when 'current_year'
+      @start_date = Time.zone.today.beginning_of_year.beginning_of_day
+      @end_date = Time.zone.today.end_of_day
+    when 'current_fiscal_year'
+      start = Time.zone.today
+      start = start.change(year: start.year - 1) if start.month < 7
+      start = start.change(month: 7).beginning_of_month
+      @start_date = start.beginning_of_day
+      @end_date = Time.zone.today.end_of_day
+    end
   end
 
   def add_joins

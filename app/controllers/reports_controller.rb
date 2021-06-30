@@ -6,7 +6,7 @@ class ReportsController < ApplicationController
   # GET /reports
   # GET /reports.json
   def index
-    @reports = Report.all
+    @reports = Report.all.order(name: :asc)
   end
 
   # GET /reports/1
@@ -95,7 +95,7 @@ class ReportsController < ApplicationController
     preprocess_start_date(params)
     preprocess_end_date(params)
 
-    params.require(:report).permit(:name, :start_date, :end_date, :activity, :request_status, :item_status, fields: [])
+    params.require(:report).permit(:name, :start_date, :end_date, :preset_date_range, :activity, :request_status, :item_status, fields: [])
   end
 
   def preprocess_start_date(params)
